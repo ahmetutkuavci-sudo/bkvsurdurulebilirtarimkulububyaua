@@ -2902,50 +2902,7 @@
             });
         }
 
-        // ========================================================
-        // 📋 GÖREV YÖNETİMİ
-        // ========================================================
-        let tasks = [];
-        try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
         
-        function renderTasks() {
-            try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
-            const container = document.getElementById('task-list-container'); 
-            const currentUser = sessionStorage.getItem('currentUser'); 
-            const isAdmin = sessionStorage.getItem('currentRole') === 'admin';
-            if (!container) return;
-            container.innerHTML = '';
-            
-            if(tasks.length === 0) { 
-                container.innerHTML = '<p style="text-align:center; opacity:0.6;">Henüz görev yok.</p>'; 
-                return; 
-            }
-            
-            tasks.forEach(task => {
-                const li = document.createElement('li'); li.className = 'task-item';
-                const canToggle = isAdmin || (task.assignee && task.assignee === currentUser);
-                const editBtnHtml = isAdmin ? `<button class="aero-btn btn-yellow" style="padding: 5px 10px; font-size: 13px; margin-right: 5px;" onclick="editTask('${task.id}')">Düzenle ✏️</button>` : '';
-                const deleteBtnHtml = isAdmin ? `<button class="aero-btn btn-red" style="padding: 5px 15px; font-size: 13px;" onclick="deleteTask('${task.id}')">Sil ✖</button>` : '';
-                const assigneeHtml = task.assignee ? `<span class="task-assignee">👤 ${task.assignee}</span>` : `<span class="task-assignee" style="opacity:0.5;">Atanmadı</span>`;
-                    
-                li.innerHTML = `<div class="task-left"><input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} ${canToggle ? '' : 'disabled'} onchange="toggleTask('${task.id}')"><div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;"><span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>${assigneeHtml}</div></div><div style="display: flex;">${editBtnHtml}${deleteBtnHtml}</div>`;
-                container.appendChild(li);
-            });
-        }
-
-        function addTask() {
-            const input = document.getElementById('new-task-input'); 
-            const assigneeSelect = document.getElementById('new-task-assignee');
-            const val = input.value.trim(); const assigneeVal = assigneeSelect.value;
-            if(val) { 
-                try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
-                tasks.push({ id: Date.now(), text: val, assignee: assigneeVal, completed: false }); 
-                localStorage.setItem('bkvTasks', JSON.stringify(tasks));
-                input.value = ""; assigneeSelect.value = ""; 
-                renderTasks(); 
-                showNotification("Görev eklendi!", "success");
-            }
-        }
 
         function toggleTask(id) {
             if (!checkMemberActionPermission()) { renderTasks(); return; }
