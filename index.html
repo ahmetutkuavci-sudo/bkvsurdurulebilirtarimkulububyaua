@@ -5791,6 +5791,78 @@
             }
         };
 
+        // ========================================================
+        // 6b. KAYAN DUYURU METNİ (bkvTickerText -> "system_settings/ticker")
+        // ========================================================
+        const DEFAULT_TICKER_TEXT = "DUYURU: BKV Tarım Kulübü paneline hoş geldiniz.";
+
+        window.loadTicker = function() {
+            const text = localStorage.getItem('bkvTickerText') || DEFAULT_TICKER_TEXT;
+            const tickerEl = document.getElementById('main-ticker-text');
+            const inputEl = document.getElementById('settings-ticker-input');
+            if (tickerEl) tickerEl.innerText = text;
+            // Kullanıcı o an yazıyorsa onun yazdığını ezme
+            if (inputEl && document.activeElement !== inputEl) inputEl.value = text;
+        };
+
+        window.saveTickerText = async function() {
+            const isAdmin = sessionStorage.getItem('currentRole') === 'admin';
+            if (!isAdmin) {
+                showNotification("⚠️ Duyuru metnini değiştirme yetkisi yalnızca yöneticilere aittir!", "warning");
+                return;
+            }
+            const inputEl = document.getElementById('settings-ticker-input');
+            const newText = inputEl ? inputEl.value : '';
+
+            // Anında yerelde göster
+            localStorage.setItem('bkvTickerText', newText);
+            const tickerEl = document.getElementById('main-ticker-text');
+            if (tickerEl) tickerEl.innerText = newText;
+
+            // Buluta yaz -> diğer tüm cihazlar onSnapshot ile anında alır
+            try {
+                await setDoc(doc(db, "system_settings", "ticker"), {
+                    text: newText,
+                    updatedAt: Date.now(),
+                    updatedBy: sessionStorage.getItem('currentUser') || 'Yönetici'
+                }, { merge: true });
+                showNotification("Duyuru metni güncellendi ve tüm cihazlara yayınlandı!", "success");
+            } catch (err) {
+                console.error("Firestore ticker kaydetme hatası:", err);
+                showNotification("Duyuru yerel kaydedildi ancak buluta iletilemedi: " + err.message, "error");
+            }
+        };
+
+        // Realtime Listener: Kayan Duyuru
+        let tickerInitialSynced = false;
+        onSnapshot(doc(db, "system_settings", "ticker"), async (docSnap) => {
+            if (!docSnap.exists() && !tickerInitialSynced) {
+                tickerInitialSynced = true;
+                // Bulutta henüz yoksa, yerelde özel bir metin varsa buluta aktar
+                const localText = localStorage.getItem('bkvTickerText');
+                if (localText && localText !== DEFAULT_TICKER_TEXT) {
+                    try {
+                        await setDoc(doc(db, "system_settings", "ticker"), {
+                            text: localText,
+                            updatedAt: Date.now(),
+                            updatedBy: 'Sistem Aktarımı'
+                        });
+                    } catch (e) { console.error("Ticker ilk aktarım hatası:", e); }
+                }
+                return;
+            }
+            tickerInitialSynced = true;
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if (typeof data.text === 'string') {
+                    localStorage.setItem('bkvTickerText', data.text);
+                    window.loadTicker();
+                }
+            }
+        }, (err) => {
+            console.error("Firestore ticker onSnapshot hatası:", err);
+        });
+
         // Realtime Listener: Sistem Kısıtlaması
         let cutoffInitialSynced = false;
         onSnapshot(doc(db, "system_settings", "cutoff"), async (docSnap) => {
