@@ -2902,50 +2902,7 @@
             });
         }
 
-        // ========================================================
-        // 📋 GÖREV YÖNETİMİ
-        // ========================================================
-        let tasks = [];
-        try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
-        
-        function renderTasks() {
-            try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
-            const container = document.getElementById('task-list-container'); 
-            const currentUser = sessionStorage.getItem('currentUser'); 
-            const isAdmin = sessionStorage.getItem('currentRole') === 'admin';
-            if (!container) return;
-            container.innerHTML = '';
-            
-            if(tasks.length === 0) { 
-                container.innerHTML = '<p style="text-align:center; opacity:0.6;">Henüz görev yok.</p>'; 
-                return; 
-            }
-            
-            tasks.forEach(task => {
-                const li = document.createElement('li'); li.className = 'task-item';
-                const canToggle = isAdmin || (task.assignee && task.assignee === currentUser);
-                const editBtnHtml = isAdmin ? `<button class="aero-btn btn-yellow" style="padding: 5px 10px; font-size: 13px; margin-right: 5px;" onclick="editTask('${task.id}')">Düzenle ✏️</button>` : '';
-                const deleteBtnHtml = isAdmin ? `<button class="aero-btn btn-red" style="padding: 5px 15px; font-size: 13px;" onclick="deleteTask('${task.id}')">Sil ✖</button>` : '';
-                const assigneeHtml = task.assignee ? `<span class="task-assignee">👤 ${task.assignee}</span>` : `<span class="task-assignee" style="opacity:0.5;">Atanmadı</span>`;
-                    
-                li.innerHTML = `<div class="task-left"><input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} ${canToggle ? '' : 'disabled'} onchange="toggleTask('${task.id}')"><div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;"><span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>${assigneeHtml}</div></div><div style="display: flex;">${editBtnHtml}${deleteBtnHtml}</div>`;
-                container.appendChild(li);
-            });
-        }
-
-        function addTask() {
-            const input = document.getElementById('new-task-input'); 
-            const assigneeSelect = document.getElementById('new-task-assignee');
-            const val = input.value.trim(); const assigneeVal = assigneeSelect.value;
-            if(val) { 
-                try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
-                tasks.push({ id: Date.now(), text: val, assignee: assigneeVal, completed: false }); 
-                localStorage.setItem('bkvTasks', JSON.stringify(tasks));
-                input.value = ""; assigneeSelect.value = ""; 
-                renderTasks(); 
-                showNotification("Görev eklendi!", "success");
-            }
-        }
+      
 
         function toggleTask(id) {
             if (!checkMemberActionPermission()) { renderTasks(); return; }
@@ -5094,49 +5051,8 @@
             }
         };
 
-        // Realtime Listener: Günlük Görevler
-        let tasksInitialSynced = false;
-        onSnapshot(collection(db, "tasks"), async (snapshot) => {
-            if (snapshot.empty && !tasksInitialSynced) {
-                tasksInitialSynced = true;
-                let localTasks = [];
-                try { localTasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e){}
-                
-                if (localTasks.length === 0) {
-                    localTasks = [
-                        { id: 1771683419672, text: 'ÇAY OCAĞINDAN ÇAY ALINMASI', assignee: 'AHMET UTKU AVCI', completed: false, completions: {} },
-                        { id: 1771683433823, text: 'YEMEK HANEDEN ÇAY ALINMASI', assignee: 'BADE SU BULUT', completed: false, completions: {} },
-                        { id: 1771683460344, text: 'SOLUCAN YATAKLARININ NEM KONTROLÜ VE HAVALANDIRILMASI', assignee: 'FURKAN ÖZKARA', completed: false, completions: {} },
-                        { id: 1771683503890, text: 'MÜDÜR YARDIMCISI ODASINDAN ÇAY ALINMASI', assignee: 'DERYA IŞIK', completed: false, completions: {} },
-                        { id: 1771683530010, text: 'BOKASHİ KAPLARININ DOLDURULMASI', assignee: 'HİKMET DENİZ AĞAOĞLU', completed: false, completions: {} },
-                        { id: 1771683543531, text: 'MARULLARIN SULANMASI', assignee: 'AHMET UTKU AVCI', completed: false, completions: {} },
-                        { id: 1771683559068, text: 'SOLUCANLARIN BESLENMESİ', assignee: 'AHMET UTKU AVCI', completed: false, completions: {} },
-                        { id: 1771683582147, text: 'SOLUCAN ATÖLYESİNİN TEMİZLENMESİ', assignee: 'AHMET EREN KAYA', completed: false, completions: {} },
-                        { id: 1771683600101, text: 'BİTKİ ATÖLYESİNİN TEMİZLENMESİ', assignee: 'AHMET EREN KAYA', completed: false, completions: {} },
-                        { id: 1771683621573, text: 'SOLUCAN GÜBRESİ HAZIRLANMASI / PAKETLENMESİ', assignee: 'KEREM EGE ÇİLOĞLU', completed: false, completions: {} },
-                        { id: 1771706153110, text: 'ÇİÇEK SULAMA', assignee: 'FURKAN ÖZKARA', completed: false, completions: {} },
-                        { id: 1771841127573, text: 'SAYISAL BÖLÜMLER ODASINDAN ÇAY ALINMASI', assignee: 'KAYA BORA HOŞGÖR', completed: false, completions: {} },
-                        { id: 1771855117796, text: 'SIVI GÜBRE HAZIRLANMASI', assignee: 'KEREM EGE ÇİLOĞLU', completed: false, completions: {} }
-                    ];
-                }
-
-                localStorage.setItem('bkvTasks', JSON.stringify(localTasks));
-                window.renderTasks();
-
-                for (const t of localTasks) {
-                    try {
-                        await addDoc(collection(db, "tasks"), {
-                            text: t.text || '',
-                            completed: !!t.completed,
-                            assignee: t.assignee || '',
-                            completions: t.completions || {},
-                            createdAt: t.id || Date.now()
-                        });
-                    } catch(e) { console.error("Görev aktarım hatası:", e); }
-                }
-                return;
-            }
-            tasksInitialSynced = true;
+// Realtime Listener: Günlük Görevler
+        onSnapshot(collection(db, "tasks"), (snapshot) => {
             let taskList = [];
             snapshot.forEach(docSnap => {
                 taskList.push({ id: docSnap.id, ...docSnap.data() });
