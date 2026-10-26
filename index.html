@@ -1098,6 +1098,617 @@
             line-height: 1.6;
         }
 
+
+        /* =========================================
+           ♻️ BOKASHI BİYO-KOMPOST İSTASYONU MODERN TASARIMI
+           ========================================= */
+        .bokashi-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bokashi-header-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(232, 245, 233, 0.8) 100%);
+            border-radius: 20px;
+            padding: 22px 26px;
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+        .bokashi-header-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2e7d32 0%, #66bb6a 40%, #0288d1 80%, #2e7d32 100%);
+        }
+
+        .bokashi-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(46, 125, 50, 0.15);
+            padding-bottom: 16px;
+        }
+        .bokashi-main-title {
+            margin: 0;
+            color: #1b5e20;
+            font-size: 22px;
+            font-weight: 850;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.3px;
+        }
+        .bokashi-main-desc {
+            color: #2e7d32;
+            margin: 6px 0 0 0;
+            font-size: 13.5px;
+            line-height: 1.45;
+            max-width: 850px;
+            opacity: 0.92;
+        }
+        .bokashi-quick-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .bokashi-tag-pill {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(46, 125, 50, 0.25);
+            color: #1b5e20;
+            font-size: 11.5px;
+            font-weight: 750;
+            padding: 4px 12px;
+            border-radius: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        /* 4 KPI Sayaç Kutusu */
+        .bokashi-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+        }
+        .bokashi-stat-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+        }
+        .bokashi-stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+        }
+        .bokashi-stat-box .stat-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        .stat-blue .stat-icon-wrap { background: #e1f5fe; color: #0288d1; }
+        .stat-green .stat-icon-wrap { background: #e8f5e9; color: #2e7d32; }
+        .stat-amber .stat-icon-wrap { background: #fff8e1; color: #f57f17; }
+        .stat-purple .stat-icon-wrap { background: #f3e8ff; color: #7e22ce; }
+
+        .bokashi-stat-box .stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .bokashi-stat-box .stat-num {
+            font-size: 22px;
+            font-weight: 850;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+        .stat-blue .stat-num { color: #0277bd; }
+        .stat-green .stat-num { color: #2e7d32; }
+        .stat-amber .stat-num { color: #e65100; }
+        .stat-purple .stat-num { color: #6b21a8; }
+
+        .bokashi-stat-box .stat-title {
+            font-size: 12.5px;
+            font-weight: 750;
+            color: #37474f;
+            margin-top: 2px;
+        }
+        .bokashi-stat-box .stat-sub {
+            font-size: 11px;
+            color: #78909c;
+            font-weight: 500;
+        }
+
+        /* Gelişmiş Form Kartı */
+        .bokashi-form-card {
+            padding: 22px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+        .bokashi-card-title-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            border-bottom: 1px dashed rgba(2, 136, 209, 0.2);
+            padding-bottom: 12px;
+        }
+        .card-icon-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(46, 125, 50, 0.15);
+        }
+        .card-title {
+            margin: 0;
+            color: #01579b;
+            font-size: 17px;
+            font-weight: 800;
+        }
+        .card-subtitle {
+            margin: 3px 0 0 0;
+            font-size: 12.5px;
+            color: #0277bd;
+            opacity: 0.85;
+        }
+
+        .bokashi-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .form-group-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .bokashi-form-label {
+            font-size: 12.5px;
+            font-weight: 750;
+            color: #01579b;
+        }
+
+        .bokashi-form-bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.65);
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.85);
+        }
+        .bokashi-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #2e7d32;
+            cursor: pointer;
+            user-select: none;
+            flex: 1;
+            min-width: 250px;
+        }
+        .bokashi-submit-btn {
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 800;
+            border-radius: 14px;
+            white-space: nowrap;
+        }
+
+        /* Liste Bölümü ve Filtreler */
+        .bokashi-list-section {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .bokashi-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0 4px;
+        }
+        .list-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .list-badge {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(2, 136, 209, 0.25);
+            color: #0277bd;
+            font-size: 11.5px;
+            font-weight: 750;
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+        .bokashi-filter-bar {
+            display: flex;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.65);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.85);
+        }
+        .bokashi-filter-btn {
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 750;
+            color: #0277bd;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .bokashi-filter-btn:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .bokashi-filter-btn.active {
+            background: #ffffff;
+            color: #01579b;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        /* Kova Kartları */
+        .bokashi-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        .bokashi-item-card {
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 18px;
+            padding: 18px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.25s ease;
+        }
+        .bokashi-item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.09);
+            background: #ffffff;
+        }
+        .bokashi-item-card.is-ready {
+            border: 1.5px solid #a5d6a7;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(232, 245, 233, 0.75) 100%);
+        }
+
+        .bokashi-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .bokashi-bucket-name {
+            margin: 0;
+            font-size: 16.5px;
+            font-weight: 800;
+            color: #01579b;
+            line-height: 1.25;
+        }
+        .bokashi-card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .meta-pill {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .meta-type { background: #e1f5fe; color: #0288d1; border: 1px solid rgba(2, 136, 209, 0.2); }
+        .meta-weight { background: #fff8e1; color: #f57f17; border: 1px solid rgba(245, 127, 23, 0.2); }
+        .meta-owner { background: #f3e8ff; color: #7e22ce; border: 1px solid rgba(126, 34, 206, 0.2); }
+
+        .bokashi-stage-badge {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .stage-green { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+        .stage-orange { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+        .stage-blue { background: #e1f5fe; color: #0288d1; border: 1px solid #81d4fa; }
+
+        .bokashi-progress-wrap {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 14px;
+            padding: 12px 14px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin: 12px 0;
+        }
+        .bokashi-progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .bokashi-bar-track {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.12);
+        }
+        .bokashi-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .bokashi-dates-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #546e7a;
+            margin-top: 6px;
+        }
+
+        .bokashi-card-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            border-top: 1px dashed rgba(0,0,0,0.08);
+            padding-top: 12px;
+        }
+        .bokashi-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 750;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+            border: 1px solid transparent;
+        }
+        .btn-harvest-tea {
+            background: #f3e8ff;
+            color: #6b21a8;
+            border-color: #d8b4fe;
+        }
+        .btn-harvest-tea:hover {
+            background: #e9d5ff;
+            transform: translateY(-1px);
+        }
+        .btn-delete-bucket {
+            background: #ffebee;
+            color: #c62828;
+            border-color: #ffcdd2;
+        }
+        .btn-delete-bucket:hover {
+            background: #ffcdd2;
+            transform: translateY(-1px);
+        }
+
+        /* Araçlar ve Rehberler */
+        .bokashi-tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 18px;
+        }
+        .bokashi-tool-card {
+            padding: 22px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+        }
+        .tool-title {
+            margin: 12px 0 4px 0;
+            color: #01579b;
+            font-size: 17px;
+            font-weight: 800;
+        }
+        .tool-desc {
+            margin: 0 0 16px 0;
+            font-size: 13px;
+            color: #0277bd;
+            opacity: 0.88;
+            line-height: 1.45;
+        }
+
+        .dilution-calculator-box {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid rgba(2, 136, 209, 0.15);
+        }
+        .calc-label {
+            font-size: 12px;
+            font-weight: 750;
+            color: #01579b;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .calc-result-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 1px solid #a5d6a7;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-top: 12px;
+        }
+        .calc-result-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .calc-result-icon {
+            font-size: 26px;
+        }
+        .calc-result-text {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+        .calc-result-value {
+            font-size: 19px;
+            font-weight: 850;
+            color: #1b5e20;
+        }
+        .calc-result-tip {
+            font-size: 12px;
+            color: #1b5e20;
+            line-height: 1.4;
+            border-top: 1px dashed rgba(46, 125, 50, 0.2);
+            padding-top: 6px;
+        }
+
+        .bokashi-rules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .rule-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 12.5px;
+            line-height: 1.45;
+            color: #263238;
+        }
+        .rule-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* Atık Rehberi */
+        .bokashi-waste-guide-card {
+            padding: 18px 22px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+        }
+        .waste-guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .waste-col {
+            padding: 16px;
+            border-radius: 14px;
+        }
+        .waste-allowed {
+            background: rgba(232, 245, 233, 0.75);
+            border: 1px solid #a5d6a7;
+        }
+        .waste-forbidden {
+            background: rgba(255, 235, 238, 0.75);
+            border: 1px solid #ffcdd2;
+        }
+        .waste-col-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            padding-bottom: 8px;
+        }
+        .waste-col-header h4 {
+            margin: 0;
+            font-size: 13.5px;
+            font-weight: 800;
+        }
+        .waste-allowed .waste-col-header h4 { color: #1b5e20; }
+        .waste-forbidden .waste-col-header h4 { color: #b71c1c; }
+        .waste-list {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 12.5px;
+            line-height: 1.55;
+            color: #37474f;
+        }
+
+        .bokashi-empty-card {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px dashed rgba(2, 136, 209, 0.35);
+            border-radius: 18px;
+            padding: 35px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .empty-icon {
+            font-size: 40px;
+        }
+        .empty-title {
+            margin: 0;
+            color: #01579b;
+            font-size: 16px;
+            font-weight: 800;
+        }
+        .empty-desc {
+            margin: 0;
+            color: #0277bd;
+            font-size: 13px;
+            max-width: 480px;
+            opacity: 0.88;
+            line-height: 1.45;
+        }
+
         /* ========================================================
            📱 MOBİL VE TABLET UYUMLULUK SİSTEMİ (RESPONSIVE DESIGN)
            ======================================================== */
@@ -1705,24 +2316,271 @@
     <div class="main-wrapper">
         <div class="main-content">
             
-            <!-- TAB 3: BOKASHI -->
+            <!-- TAB 3: BOKASHI (YENİLENEN KAPSAMLI BİYO-KOMPOST İSTASYONU) -->
             <div id="tab-bokashi" class="tab-content">
-                <div class="card glass">
-                    <h2>♻️ Bokashi Döngü Takip Sistemi</h2>
-                    <p style="color: #0277bd; margin-top: -10px; margin-bottom: 20px;">Kompost kovalarınızın fermantasyon sürecini başlatın, bitiş tarihini ve yüzde kaç tamamlandığını takip edin.</p>
+                <div class="bokashi-container">
                     
-                    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: rgba(255,255,255,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.5);">
-                        <input type="text" id="bokashi-ad" class="aero-input" placeholder="Kova Adı (Örn: Kafeterya Atıkları 1)" style="flex: 1; min-width: 200px;">
-                        <input type="date" id="bokashi-tarih" class="aero-input" style="width: 150px;">
-                        <select id="bokashi-sure" class="aero-input" style="width: 150px;">
-                            <option value="14">14 Gün (Standart)</option>
-                            <option value="21">21 Gün</option>
-                            <option value="28">28 Gün</option>
-                        </select>
-                        <button class="aero-btn" onclick="bokashiEkle()">Döngü Başlat</button>
+                    <!-- 1. Üst Bilgi Kartı & 4 KPI Canlı İstatistik Göstergesi -->
+                    <div class="bokashi-header-card">
+                        <div class="bokashi-title-row">
+                            <div>
+                                <h2 class="bokashi-main-title">♻️ BKV Bokashi Kompost & Biyo-Fermantasyon İstasyonu</h2>
+                                <p class="bokashi-main-desc">Okul kafeteryası, mutfak ve sera organik atıklarını anaerobik (oksijensiz) faydalı mikroorganizmalarla (EM-1) fermente ederek yüksek kaliteli toprak besini ve biyo-sıvı gübreye dönüştürün.</p>
+                            </div>
+                            <div class="bokashi-quick-tags">
+                                <span class="bokashi-tag-pill">🌱 Sıfır Atık Okulu</span>
+                                <span class="bokashi-tag-pill">🪱 Biyo-Dönüşüm</span>
+                                <span class="bokashi-tag-pill">⚡ %100 Anaerobik Fermantasyon</span>
+                            </div>
+                        </div>
+
+                        <!-- 4 Canlı Metrik Sayacı -->
+                        <div class="bokashi-stats-grid">
+                            <div class="bokashi-stat-box stat-blue">
+                                <div class="stat-icon-wrap">🪣</div>
+                                <div class="stat-content">
+                                    <span class="stat-num" id="stat-bokashi-aktif">0</span>
+                                    <span class="stat-title">Fermantasyondaki Kovalar</span>
+                                    <span class="stat-sub">Aktif Süreçte</span>
+                                </div>
+                            </div>
+                            <div class="bokashi-stat-box stat-green">
+                                <div class="stat-icon-wrap">🎉</div>
+                                <div class="stat-content">
+                                    <span class="stat-num" id="stat-bokashi-tamam">0</span>
+                                    <span class="stat-title">Hasada Hazır Kovalar</span>
+                                    <span class="stat-sub">Toprağa Gömülmeyi Bekliyor</span>
+                                </div>
+                            </div>
+                            <div class="bokashi-stat-box stat-amber">
+                                <div class="stat-icon-wrap">⚖️</div>
+                                <div class="stat-content">
+                                    <span class="stat-num" id="stat-bokashi-atik">0 kg</span>
+                                    <span class="stat-title">Dönüştürülen Organik Atık</span>
+                                    <span class="stat-sub">Çöpe Gitmesi Engellendi</span>
+                                </div>
+                            </div>
+                            <div class="bokashi-stat-box stat-purple">
+                                <div class="stat-icon-wrap">💧</div>
+                                <div class="stat-content">
+                                    <span class="stat-num" id="stat-bokashi-sivi">0 Hasat</span>
+                                    <span class="stat-title">Toplanan Sıvı Gübre</span>
+                                    <span class="stat-sub">Konsantre Kompost Çayı</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div id="bokashi-liste" class="dashboard-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));"></div>
+                    <!-- 2. Yeni Döngü Başlatma Formu (Gelişmiş & Zarif) -->
+                    <div class="bokashi-form-card glass">
+                        <div class="bokashi-card-title-row">
+                            <div class="card-icon-badge">✨</div>
+                            <div>
+                                <h3 class="card-title">Yeni Bokashi Kovası Tanımla ve Döngü Başlat</h3>
+                                <p class="card-subtitle">Kovayı doldurduktan sonra hava almayacak şekilde presleyin ve fermantasyon sürecini takip edin.</p>
+                            </div>
+                        </div>
+
+                        <div class="bokashi-form-grid">
+                            <div class="form-group-item">
+                                <label class="bokashi-form-label">🪣 Kova Adı / Kodu:</label>
+                                <input type="text" id="bokashi-ad" class="aero-input" placeholder="Örn: Kova #1 - Kafeterya Meyve & Sebze" style="width: 100%;">
+                            </div>
+
+                            <div class="form-group-item">
+                                <label class="bokashi-form-label">🥗 Atık Kaynağı & Türü:</label>
+                                <select id="bokashi-atik-turu" class="aero-input" style="width: 100%;">
+                                    <option value="Kafeterya Meyve-Sebze">🍎 Kafeterya Meyve & Sebze Artıkları</option>
+                                    <option value="Çay & Kahve Posası">☕ Çay & Kahve Posası Karışımı</option>
+                                    <option value="Pişmiş Yemek & Ekmek">🍞 Pişmiş Yemek & Ekmek Artıkları</option>
+                                    <option value="Sera & Bahçe Budama">🍃 Sera & Bahçe Budama Artıkları</option>
+                                    <option value="Karışık Mutfak Atığı" selected>🥗 Karışık Mutfak Organik Atığı</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group-item">
+                                <label class="bokashi-form-label">⚖️ Tahmini Atık Miktarı (kg):</label>
+                                <input type="number" id="bokashi-agirlik" class="aero-input" value="5" min="1" max="50" step="0.5" style="width: 100%;">
+                            </div>
+
+                            <div class="form-group-item">
+                                <label class="bokashi-form-label">📅 Başlangıç Tarihi:</label>
+                                <input type="date" id="bokashi-tarih" class="aero-input" style="width: 100%;">
+                            </div>
+
+                            <div class="form-group-item">
+                                <label class="bokashi-form-label">⏳ Fermantasyon Süresi:</label>
+                                <select id="bokashi-sure" class="aero-input" style="width: 100%;">
+                                    <option value="14" selected>14 Gün (Hızlı Standart Fermantasyon)</option>
+                                    <option value="21">21 Gün (Optimum Yoğun Fermantasyon)</option>
+                                    <option value="28">28 Gün (Büyük Hacimli Kova)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group-item">
+                                <label class="bokashi-form-label">👤 Sorumlu Ekip / Öğrenci:</label>
+                                <input type="text" id="bokashi-sorumlu" class="aero-input" placeholder="Örn: 10-A Tarım Kulübü Ekibi" style="width: 100%;">
+                            </div>
+                        </div>
+
+                        <div class="bokashi-form-bottom-row">
+                            <label class="bokashi-checkbox-label">
+                                <input type="checkbox" id="bokashi-kepek-check" checked class="task-checkbox">
+                                <span>🌾 <strong>Bokashi Kepeği (EM-1):</strong> Atık katmanına serpiştirildi ve kova hava almayacak şekilde preslendi.</span>
+                            </label>
+                            <button class="aero-btn btn-green bokashi-submit-btn" onclick="bokashiEkle()">
+                                <span>🚀 Yeni Döngüyü Başlat</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Kova Listesi ve Filtreleme Bölümü -->
+                    <div class="bokashi-list-section">
+                        <div class="bokashi-list-header">
+                            <div class="list-title-wrap">
+                                <h3 style="margin: 0; color: #01579b; font-size: 18px; display: flex; align-items: center; gap: 8px;">
+                                    <span>📋</span> Takipteki Bokashi Kovaları
+                                </h3>
+                                <span class="list-badge" id="bokashi-toplam-sayi">0 Kova Listeleniyor</span>
+                            </div>
+                            <div class="bokashi-filter-bar">
+                                <button class="bokashi-filter-btn active" id="btn-bokashi-filter-all" onclick="setBokashiFilter('ALL', this)">Tümü</button>
+                                <button class="bokashi-filter-btn" id="btn-bokashi-filter-active" onclick="setBokashiFilter('ACTIVE', this)">⏳ Fermantasyonda</button>
+                                <button class="bokashi-filter-btn" id="btn-bokashi-filter-completed" onclick="setBokashiFilter('COMPLETED', this)">🎉 Tamamlananlar</button>
+                            </div>
+                        </div>
+
+                        <!-- Kartlar Grid Listesi -->
+                        <div id="bokashi-liste" class="bokashi-cards-grid"></div>
+                    </div>
+
+                    <!-- 4. İnteraktif Bokashi Sıvısı (Kompost Çayı) Seyreltme Hesaplayıcısı & Rehber -->
+                    <div class="bokashi-tools-grid">
+                        
+                        <!-- Sıvı Seyreltme Hesaplayıcı -->
+                        <div class="card glass bokashi-tool-card">
+                            <div class="card-icon-badge">💧</div>
+                            <h3 class="tool-title">Bokashi Sıvısı (Kompost Çayı) Seyreltme Hesaplayıcı</h3>
+                            <p class="tool-desc">Kovalarınızın musluğundan aldığınız konsantre sıvı probiyotik gübredir. Bitkileri yakmaması için sulama suyuna doğru oranda seyreltilmelidir.</p>
+
+                            <div class="dilution-calculator-box">
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+                                    <div style="flex: 1; min-width: 140px;">
+                                        <label class="calc-label">Toplanan Bokashi Sıvısı (ml):</label>
+                                        <input type="number" id="calc-sivi-ml" class="aero-input" value="20" min="5" step="5" oninput="hesaplaBokashiSuyu()" style="width: 100%;">
+                                    </div>
+                                    <div style="flex: 1.5; min-width: 180px;">
+                                        <label class="calc-label">Kullanım Amacı:</label>
+                                        <select id="calc-kullanim-amac" class="aero-input" onchange="hesaplaBokashiSuyu()" style="width: 100%;">
+                                            <option value="500" selected>🌿 Bahçe & Sera Sebzeleri (1:500 Standart)</option>
+                                            <option value="1000">🪴 Salon & Saksı Çiçekleri (1:1000 Hassas)</option>
+                                            <option value="100">🌳 Meyve Ağaçları & Çalılar (1:100 Güçlü Besleme)</option>
+                                            <option value="1">🚿 Lavabo & Gider Açıcı (1:1 Seyreltilmemiş)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Sonuç Kutusu -->
+                                <div id="calc-sonuc-kutu" class="calc-result-box">
+                                    <div class="calc-result-main">
+                                        <span class="calc-result-icon">🚰</span>
+                                        <div>
+                                            <div class="calc-result-text">Eklenecek Temiz Su Miktarı:</div>
+                                            <div class="calc-result-value" id="calc-su-litre">10.0 Litre Su</div>
+                                        </div>
+                                    </div>
+                                    <div class="calc-result-tip" id="calc-tavsiye-metin">
+                                        💡 20 ml Bokashi sıvısını 10 Litre dinlenmiş temiz suya karıştırarak haftada 1 kez kök diplerine veya yapraktan spreyle uygulayabilirsiniz.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fermantasyon Altın Kuralları -->
+                        <div class="card glass bokashi-tool-card">
+                            <div class="card-icon-badge">📖</div>
+                            <h3 class="tool-title">Bokashi Fermantasyonu Altın Kuralları</h3>
+                            <p class="tool-desc">Kulübümüzde kusursuz ve kokusuz Bokashi kompostu üretimi için dikkat edilecek temel kurallar:</p>
+
+                            <div class="bokashi-rules-list">
+                                <div class="rule-item">
+                                    <span class="rule-icon">🔒</span>
+                                    <div>
+                                        <strong>1. Kesinlikle Hava Almamalı:</strong> Bokashi oksijensiz fermantasyondur. Her atık eklemesinde presleyin ve kapağı sıkıca kilitleyin.
+                                    </div>
+                                </div>
+                                <div class="rule-item">
+                                    <span class="rule-icon">🌾</span>
+                                    <div>
+                                        <strong>2. Yeterli Kepek Kullanın:</strong> Her 3-5 cm kalınlığındaki atık tabakasının üzerine 1-2 avuç Bokashi kepeği homojen olarak serpiştirin.
+                                    </div>
+                                </div>
+                                <div class="rule-item">
+                                    <span class="rule-icon">💧</span>
+                                    <div>
+                                        <strong>3. Sıvıyı Düzenli Tahliye Edin:</strong> Altta biriken sıvıyı 2-3 günde bir alın. Sıvının dipte birikmesi aşırı neme ve kokuya yol açabilir.
+                                    </div>
+                                </div>
+                                <div class="rule-item">
+                                    <span class="rule-icon">🤍</span>
+                                    <div>
+                                        <strong>4. Beyaz Küf = Başarı:</strong> Kova açıldığında yüzeyde oluşan beyaz pamuksu tabaka faydalı mayaların çalıştığını gösterir. Siyah/yeşil küf ise hava sızıntısı işaretidir.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Organik Atık Rehberi (Açılır / Kapanır Tablo) -->
+                    <div class="card glass bokashi-waste-guide-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleBokashiWasteGuide()">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 22px;">🔍</span>
+                                <div>
+                                    <h3 style="margin: 0; color: #01579b; font-size: 16px;">Bokashi Kovanıza Neler Atılabilir? (Organik Atık Rehberi)</h3>
+                                    <span style="font-size: 12.5px; opacity: 0.85; color: #0277bd;">Yeşil ve kırmızı listeyi incelemek için tıklayın</span>
+                                </div>
+                            </div>
+                            <span id="bokashi-guide-toggle-icon" style="font-size: 18px; font-weight: bold; color: #0288d1; transition: transform 0.3s;">▼</span>
+                        </div>
+
+                        <div id="bokashi-waste-guide-content" style="display: none; margin-top: 15px; border-top: 1px dashed rgba(2,136,209,0.25); padding-top: 15px;">
+                            <div class="waste-guide-grid">
+                                <div class="waste-col waste-allowed">
+                                    <div class="waste-col-header">
+                                        <span class="waste-col-icon">✅</span>
+                                        <h4>GÜVENLE ATILABİLİR (YEŞİL LİSTE)</h4>
+                                    </div>
+                                    <ul class="waste-list">
+                                        <li>🍎 Taze ve pişmiş tüm meyve ve sebze artıkları, kabuklar</li>
+                                        <li>🥖 Ekmek, pide, makarna, pilav, tahıl ve unlu mamuller</li>
+                                        <li>🧀 Peynir, yoğurt kabukları ve hafif süt ürünleri artıkları</li>
+                                        <li>🍗 Küçük et, tavuk, balık parçaları ve ince kemikler</li>
+                                        <li>☕ Çay posaları, filtre kahve ve kahve telvesi</li>
+                                        <li>🥚 Kırılmış yumurta kabukları (kalsiyum kaynağı)</li>
+                                        <li>🍃 Solmuş çiçekler, sera yaprakları ve budama artıkları</li>
+                                    </ul>
+                                </div>
+
+                                <div class="waste-col waste-forbidden">
+                                    <div class="waste-col-header">
+                                        <span class="waste-col-icon">❌</span>
+                                        <h4>KESİNLİKLE ATILMAMALIDIR (KIRMIZI LİSTE)</h4>
+                                    </div>
+                                    <ul class="waste-list">
+                                        <li>🚫 Büyük kalın kasap kemikleri (öğütülemez/fermente olmaz)</li>
+                                        <li>🚫 Çorba, saf süt, meyve suyu gibi aşırı sıvı atıklar</li>
+                                        <li>🚫 Ağır yeşil/siyah küflenmiş, çürümüş atıklar</li>
+                                        <li>🚫 Plastik poşetler, streç film, ambalajlar ve metal teller</li>
+                                        <li>🚫 Sigara izmariti, kül, kimyasal ve deterjan artıkları</li>
+                                        <li>🚫 Evcil hayvan dışkıları ve kedi kumu</li>
+                                        <li>🚫 Tıbbi atıklar, sentetik peçeteler ve ıslak mendiller</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -3669,6 +4527,18 @@
                 if (sehirSelect && sehirSelect.value !== kayitliSehir) sehirSelect.value = kayitliSehir;
                 havaDurumuGetir(kayitliSehir);
             }
+            if (tabId === 'tab-bokashi') {
+                const dateInp = document.getElementById('bokashi-tarih');
+                if (dateInp && !dateInp.value) {
+                    const today = new Date();
+                    const y = today.getFullYear();
+                    const m = String(today.getMonth() + 1).padStart(2, '0');
+                    const d = String(today.getDate()).padStart(2, '0');
+                    dateInp.value = `${y}-${m}-${d}`;
+                }
+                if (typeof window.renderBokashi === 'function') window.renderBokashi();
+                if (typeof window.hesaplaBokashiSuyu === 'function') window.hesaplaBokashiSuyu();
+            }
             if (targetTab) targetTab.classList.add('active');
             if (btnElement) {
                 btnElement.classList.add('active');
@@ -4125,113 +4995,48 @@
         }
 
         // ========================================================
-        // ♻️ BOKASHI TAKİP KODLARI
+        // ♻️ BOKASHI TAKİP KÖPRÜSÜ (Firebase Entegrasyonu ile Senkronize)
         // ========================================================
-        let bokashiListesi = JSON.parse(localStorage.getItem('bkvBokashi')) || [];
-
         function bokashiEkle() {
-            if (!checkMemberActionPermission()) return;
-
-            const ad = document.getElementById('bokashi-ad').value;
-            const baslangic = document.getElementById('bokashi-tarih').value;
-            const gunSuresi = parseInt(document.getElementById('bokashi-sure').value);
-
-            if(!ad || !baslangic) {
-                showNotification("Lütfen kova adı ve başlangıç tarihi giriniz!", "warning");
-                return;
+            if (typeof window.bokashiEkle === 'function') {
+                return window.bokashiEkle();
             }
-
-            const basTarihi = new Date(baslangic);
-            const bitisTarihi = new Date(basTarihi);
-            bitisTarihi.setDate(bitisTarihi.getDate() + gunSuresi);
-
-            const yeniKova = {
-                id: Date.now(),
-                ad: ad,
-                baslangic: baslangic,
-                bitis: bitisTarihi.toISOString().split('T')[0],
-                sure: gunSuresi
-            };
-
-            bokashiListesi.push(yeniKova);
-            localStorage.setItem('bkvBokashi', JSON.stringify(bokashiListesi));
-
-            document.getElementById('bokashi-ad').value = '';
-            renderBokashi();
-            showNotification("Bokashi döngüsü başlatıldı!", "success");
         }
 
         function renderBokashi() {
-            const listeDiv = document.getElementById('bokashi-liste');
-            if(!listeDiv) return;
-            listeDiv.innerHTML = '';
-
-            if(bokashiListesi.length === 0) {
-                listeDiv.innerHTML = '<p style="text-align:center; grid-column: 1/-1; opacity:0.6;">Henüz aktif bir Bokashi döngüsü bulunmuyor.</p>';
-                return;
+            if (typeof window.renderBokashi === 'function') {
+                return window.renderBokashi();
             }
-
-            const bugun = new Date();
-            bugun.setHours(0,0,0,0);
-
-            bokashiListesi.forEach(dongu => {
-                const bas = new Date(dongu.baslangic);
-                const bit = new Date(dongu.bitis);
-                const toplamSure = (bit - bas) / (1000 * 60 * 60 * 24);
-                const gecenSure = (bugun - bas) / (1000 * 60 * 60 * 24);
-
-                let yuzde = Math.round((gecenSure / toplamSure) * 100);
-                if (yuzde < 0) yuzde = 0;
-                if (yuzde > 100) yuzde = 100;
-
-                let durumMetni = "";
-                let barRenk = "#29b6f6";
-                let textColor = "#0288d1";
-
-                if (yuzde >= 100) {
-                    durumMetni = "🎉 Fermantasyon Tamamlandı!";
-                    barRenk = "#66bb6a";
-                    textColor = "#2e7d32";
-                } else {
-                    const kalanGun = Math.ceil((bit - bugun) / (1000 * 60 * 60 * 24));
-                    durumMetni = `⏳ ${kalanGun} Gün Kaldı`;
-                    if(yuzde > 60) { barRenk = "#ffa726"; textColor = "#ef6c00"; }
-                }
-
-                const kart = document.createElement('div');
-                kart.className = 'card glass';
-                kart.style.border = '1px solid rgba(255,255,255,0.8)';
-                kart.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h3 style="margin:0 0 10px 0; color:#01579b; font-size:18px;">${dongu.ad}</h3>
-                        <button onclick="bokashiSil('${dongu.id}')" style="background:none; border:none; cursor:pointer; color:#d32f2f; font-size:16px;" title="Döngüyü Sil">🗑️</button>
-                    </div>
-                    <div style="font-size:13px; color:#0277bd; margin-bottom:10px;">
-                        <strong>Başlangıç:</strong> ${bas.toLocaleDateString('tr-TR')} <br>
-                        <strong>Bitiş:</strong> ${bit.toLocaleDateString('tr-TR')} (${dongu.sure} Gün)
-                    </div>
-                    <div style="margin-top:10px; background:rgba(255,255,255,0.5); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.7);">
-                        <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:14px; color:${textColor}; margin-bottom:8px;">
-                            <span>${durumMetni}</span>
-                            <span>%${yuzde}</span>
-                        </div>
-                        <div style="width: 100%; background-color: rgba(0,0,0,0.1); border-radius: 10px; height: 14px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);">
-                            <div style="width: ${yuzde}%; background-color: ${barRenk}; height: 100%; border-radius: 10px; transition: width 1s ease-in-out;"></div>
-                        </div>
-                    </div>
-                `;
-                listeDiv.appendChild(kart);
-            });
         }
 
         function bokashiSil(id) {
-            if (!checkMemberActionPermission()) return;
-            showCustomConfirm("Bokashi Döngüsü Sil", "Bu Bokashi döngüsünü silmek istediğinize emin misiniz?", () => {
-                bokashiListesi = bokashiListesi.filter(d => String(d.id) !== String(id));
-                localStorage.setItem('bkvBokashi', JSON.stringify(bokashiListesi));
-                renderBokashi();
-                showNotification("Bokashi döngüsü silindi.", "info");
-            });
+            if (typeof window.bokashiSil === 'function') {
+                return window.bokashiSil(id);
+            }
+        }
+
+        function bokashiSiviHasatEkle(id) {
+            if (typeof window.bokashiSiviHasatEkle === 'function') {
+                return window.bokashiSiviHasatEkle(id);
+            }
+        }
+
+        function setBokashiFilter(filter, btn) {
+            if (typeof window.setBokashiFilter === 'function') {
+                return window.setBokashiFilter(filter, btn);
+            }
+        }
+
+        function toggleBokashiWasteGuide() {
+            if (typeof window.toggleBokashiWasteGuide === 'function') {
+                return window.toggleBokashiWasteGuide();
+            }
+        }
+
+        function hesaplaBokashiSuyu() {
+            if (typeof window.hesaplaBokashiSuyu === 'function') {
+                return window.hesaplaBokashiSuyu();
+            }
         }
 
         // ========================================================
@@ -7241,9 +8046,61 @@
 
 
         // ========================================================
-        // 11. BOKASHI FERMANTASYON DÖNGÜ TAKİBİ FIREBASE ENTEGRASYONU
+        // 11. BOKASHI FERMANTASYON DÖNGÜ TAKİBİ FIREBASE ENTEGRASYONU (GELİŞMİŞ)
         // ========================================================
         let bokashiInitialSynced = false;
+        window.currentBokashiFilter = 'ALL';
+
+        window.setBokashiFilter = function(filterVal, btnEl) {
+            window.currentBokashiFilter = filterVal;
+            document.querySelectorAll('.bokashi-filter-btn').forEach(b => b.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+            window.renderBokashi();
+        };
+
+        window.toggleBokashiWasteGuide = function() {
+            const contentEl = document.getElementById('bokashi-waste-guide-content');
+            const iconEl = document.getElementById('bokashi-guide-toggle-icon');
+            if (!contentEl) return;
+            if (contentEl.style.display === 'none' || !contentEl.style.display) {
+                contentEl.style.display = 'block';
+                if (iconEl) iconEl.innerText = '▲';
+            } else {
+                contentEl.style.display = 'none';
+                if (iconEl) iconEl.innerText = '▼';
+            }
+        };
+
+        window.hesaplaBokashiSuyu = function() {
+            const siviInput = document.getElementById('calc-sivi-ml');
+            const amacSelect = document.getElementById('calc-kullanim-amac');
+            const suLitreEl = document.getElementById('calc-su-litre');
+            const tavsiyeEl = document.getElementById('calc-tavsiye-metin');
+
+            if (!siviInput || !amacSelect || !suLitreEl) return;
+
+            const ml = parseFloat(siviInput.value) || 0;
+            const oran = parseFloat(amacSelect.value) || 500;
+
+            if (oran === 1) {
+                // Lavabo gideri
+                suLitreEl.innerText = "Seyreltme Gerekmez (0 Litre Su)";
+                if (tavsiyeEl) {
+                    tavsiyeEl.innerHTML = `🚿 <b>${ml} ml</b> saf Bokashi sıvısını gece lavabo, küvet veya yer süzgecine doğrudan dökün. İçindeki faydalı bakteriler borulardaki yağ ve koku yapan tortuları biyolojik olarak temizler.`;
+                }
+            } else {
+                const gerekenSuLitre = (ml * oran) / 1000;
+                suLitreEl.innerText = `${gerekenSuLitre.toFixed(1)} Litre Su`;
+                if (tavsiyeEl) {
+                    let amacMetin = "haftalık sulama";
+                    if (oran === 1000) amacMetin = "salon ve hassas saksı bitkileri için";
+                    else if (oran === 500) amacMetin = "bahçe, sera ve sebze yatakları için";
+                    else if (oran === 100) amacMetin = "meyve ağaçları ve çalılar için güçlü besleme olarak";
+
+                    tavsiyeEl.innerHTML = `💡 <b>${ml} ml</b> Bokashi kompost sıvısını <b>${gerekenSuLitre.toFixed(1)} Litre</b> klorsuz/dinlenmiş temiz suya karıştırarak ${amacMetin} kök diplerine veya yapraktan spreyle uygulayabilirsiniz.`;
+                }
+            }
+        };
 
         window.renderBokashi = function() {
             const listeDiv = document.getElementById('bokashi-liste');
@@ -7253,15 +8110,16 @@
             let bList = [];
             try { bList = JSON.parse(localStorage.getItem('bkvBokashi')) || []; } catch(e) { bList = []; }
 
-            if(bList.length === 0) {
-                listeDiv.innerHTML = '<p style="text-align:center; grid-column: 1/-1; opacity:0.6;">Henüz aktif bir Bokashi döngüsü bulunmuyor.</p>';
-                return;
-            }
-
             const bugun = new Date();
             bugun.setHours(0,0,0,0);
 
-            bList.forEach(dongu => {
+            // İstatistik sayaçlarını hesapla
+            let aktifSayisi = 0;
+            let tamamlananSayisi = 0;
+            let toplamAtikKg = 0;
+            let toplamSiviHasat = 0;
+
+            const processBucket = (dongu) => {
                 const bas = new Date(dongu.baslangic);
                 const bit = new Date(dongu.bitis);
                 const toplamSure = (bit - bas) / (1000 * 60 * 60 * 24);
@@ -7271,44 +8129,148 @@
                 if (yuzde < 0) yuzde = 0;
                 if (yuzde > 100) yuzde = 100;
 
+                const isCompleted = (yuzde >= 100);
+                if (isCompleted) tamamlananSayisi++; else aktifSayisi++;
+
+                const agirlikVal = parseFloat(dongu.agirlik) || 5;
+                toplamAtikKg += agirlikVal;
+
+                const siviVal = parseInt(dongu.siviHasatSayisi) || 0;
+                toplamSiviHasat += siviVal;
+
+                return { dongu, bas, bit, toplamSure, gecenSure, yuzde, isCompleted };
+            };
+
+            const processedList = bList.map(processBucket);
+
+            // KPI Sayaçlarını Güncelle
+            const elAktif = document.getElementById('stat-bokashi-aktif');
+            const elTamam = document.getElementById('stat-bokashi-tamam');
+            const elAtik = document.getElementById('stat-bokashi-atik');
+            const elSivi = document.getElementById('stat-bokashi-sivi');
+            const elToplamSayi = document.getElementById('bokashi-toplam-sayi');
+
+            if (elAktif) elAktif.innerText = aktifSayisi;
+            if (elTamam) elTamam.innerText = tamamlananSayisi;
+            if (elAtik) elAtik.innerText = `${toplamAtikKg.toFixed(1)} kg`;
+            if (elSivi) elSivi.innerText = `${toplamSiviHasat} Hasat`;
+
+            // Filtre uygula
+            const filter = window.currentBokashiFilter || 'ALL';
+            const filteredList = processedList.filter(item => {
+                if (filter === 'ACTIVE') return !item.isCompleted;
+                if (filter === 'COMPLETED') return item.isCompleted;
+                return true;
+            });
+
+            if (elToplamSayi) {
+                elToplamSayi.innerText = `${filteredList.length} Kova Listeleniyor`;
+            }
+
+            if (filteredList.length === 0) {
+                listeDiv.innerHTML = `
+                    <div class="bokashi-empty-card">
+                        <span class="empty-icon">🪣</span>
+                        <h4 class="empty-title">${filter === 'COMPLETED' ? 'Henüz tamamlanan Bokashi döngüsü bulunmuyor' : filter === 'ACTIVE' ? 'Şu anda fermantasyonda olan kova bulunmuyor' : 'Henüz kayıtlı bir Bokashi döngüsü bulunmuyor'}</h4>
+                        <p class="empty-desc">Yukarıdaki formdan okul kafeteryası veya sera atıklarıyla yeni bir fermantasyon döngüsü başlatarak biyo-kompost ve sıvı gübre üretimine başlayabilirsiniz.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredList.forEach(item => {
+                const { dongu, bas, bit, yuzde, isCompleted } = item;
+
                 let durumMetni = "";
-                let barRenk = "#29b6f6";
+                let stageClass = "stage-blue";
+                let barGradient = "linear-gradient(90deg, #29b6f6, #0288d1)";
                 let textColor = "#0288d1";
 
-                if (yuzde >= 100) {
+                if (isCompleted) {
                     durumMetni = "🎉 Fermantasyon Tamamlandı!";
-                    barRenk = "#66bb6a";
+                    stageClass = "stage-green";
+                    barGradient = "linear-gradient(90deg, #66bb6a, #2e7d32)";
                     textColor = "#2e7d32";
                 } else {
                     const kalanGun = Math.ceil((bit - bugun) / (1000 * 60 * 60 * 24));
-                    durumMetni = `⏳ ${kalanGun} Gün Kaldı`;
-                    if(yuzde > 60) { barRenk = "#ffa726"; textColor = "#ef6c00"; }
+                    durumMetni = `⏳ ${kalanGun > 0 ? kalanGun : 0} Gün Kaldı`;
+                    if (yuzde > 60) {
+                        stageClass = "stage-orange";
+                        barGradient = "linear-gradient(90deg, #ffa726, #ef6c00)";
+                        textColor = "#ef6c00";
+                    }
                 }
 
+                const atikTuru = dongu.atikTuru || 'Karışık Mutfak Atığı';
+                const agirlik = dongu.agirlik ? `${dongu.agirlik} kg` : '5.0 kg';
+                const sorumlu = dongu.sorumlu || 'Kulüp Ekibi';
+                const siviSayisi = parseInt(dongu.siviHasatSayisi) || 0;
+
                 const kart = document.createElement('div');
-                kart.className = 'card glass';
-                kart.style.border = '1px solid rgba(255,255,255,0.8)';
+                kart.className = `bokashi-item-card ${isCompleted ? 'is-ready' : ''}`;
                 kart.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h3 style="margin:0 0 10px 0; color:#01579b; font-size:18px;">${dongu.ad || ''}</h3>
-                        <button onclick="bokashiSil('${dongu.id}')" style="background:none; border:none; cursor:pointer; color:#d32f2f; font-size:16px;" title="Döngüyü Sil">🗑️</button>
-                    </div>
-                    <div style="font-size:13px; color:#0277bd; margin-bottom:10px;">
-                        <strong>Başlangıç:</strong> ${bas.toLocaleDateString('tr-TR')} <br>
-                        <strong>Bitiş:</strong> ${bit.toLocaleDateString('tr-TR')} (${dongu.sure || ''} Gün)
-                    </div>
-                    <div style="margin-top:10px; background:rgba(255,255,255,0.5); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.7);">
-                        <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:14px; color:${textColor}; margin-bottom:8px;">
-                            <span>${durumMetni}</span>
-                            <span>%${yuzde}</span>
+                    <div>
+                        <div class="bokashi-card-top">
+                            <div>
+                                <h3 class="bokashi-bucket-name">${dongu.ad || 'İsimsiz Kova'}</h3>
+                                <div class="bokashi-card-meta">
+                                    <span class="meta-pill meta-type">🥗 ${atikTuru}</span>
+                                    <span class="meta-pill meta-weight">⚖️ ${agirlik}</span>
+                                    <span class="meta-pill meta-owner">👤 ${sorumlu}</span>
+                                </div>
+                            </div>
+                            <span class="bokashi-stage-badge ${stageClass}">${durumMetni}</span>
                         </div>
-                        <div style="width: 100%; background-color: rgba(0,0,0,0.1); border-radius: 10px; height: 14px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);">
-                            <div style="width: ${yuzde}%; background-color: ${barRenk}; height: 100%; border-radius: 10px; transition: width 1s ease-in-out;"></div>
+
+                        <div class="bokashi-progress-wrap">
+                            <div class="bokashi-progress-info">
+                                <span style="color: ${textColor}; font-weight: 800;">
+                                    ${isCompleted ? '🌱 Toprağa Gömülmeye Hazır' : yuzde > 60 ? '⚡ Aktif Olgunlaşma' : '🟡 İlk Fermantasyon Evresi'}
+                                </span>
+                                <span style="color: ${textColor}; font-weight: 850;">%${yuzde}</span>
+                            </div>
+                            <div class="bokashi-bar-track">
+                                <div class="bokashi-bar-fill" style="width: ${yuzde}%; background: ${barGradient};"></div>
+                            </div>
+                            <div class="bokashi-dates-row">
+                                <span>📅 Başlangıç: <b>${bas.toLocaleDateString('tr-TR')}</b></span>
+                                <span>🏁 Bitiş: <b>${bit.toLocaleDateString('tr-TR')}</b> (${dongu.sure || 14} Gün)</span>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="bokashi-card-actions">
+                        <button class="bokashi-action-btn btn-harvest-tea" onclick="bokashiSiviHasatEkle('${dongu.id}')" title="Kovanın alt musluğundan kompost sıvısı aldığınızda tıklayın">
+                            <span>💧 Sıvı Alındı (${siviSayisi})</span>
+                        </button>
+                        <button class="bokashi-action-btn btn-delete-bucket" onclick="bokashiSil('${dongu.id}')" title="Bu Bokashi döngüsünü sistemden kaldır">
+                            <span>🗑️ Sil</span>
+                        </button>
                     </div>
                 `;
                 listeDiv.appendChild(kart);
             });
+        };
+
+        window.bokashiSiviHasatEkle = async function(id) {
+            let bList = [];
+            try { bList = JSON.parse(localStorage.getItem('bkvBokashi')) || []; } catch(e) {}
+            const item = bList.find(b => String(b.id) === String(id));
+            if (!item) return;
+
+            item.siviHasatSayisi = (parseInt(item.siviHasatSayisi) || 0) + 1;
+            localStorage.setItem('bkvBokashi', JSON.stringify(bList));
+            window.renderBokashi();
+
+            showNotification(`💧 "${item.ad}" kovasından Bokashi sıvısı hasadı kaydedildi! (Toplam: ${item.siviHasatSayisi})`, "success");
+
+            try {
+                await updateDoc(doc(db, "bokashi", String(id)), {
+                    siviHasatSayisi: item.siviHasatSayisi
+                });
+            } catch(err) {
+                console.warn("Bokashi sıvı hasat bulut güncelleme hatası:", err);
+            }
         };
 
         window.bokashiEkle = async function() {
@@ -7317,10 +8279,18 @@
             const adInput = document.getElementById('bokashi-ad');
             const tarihInput = document.getElementById('bokashi-tarih');
             const sureInput = document.getElementById('bokashi-sure');
+            const atikTuruInput = document.getElementById('bokashi-atik-turu');
+            const agirlikInput = document.getElementById('bokashi-agirlik');
+            const sorumluInput = document.getElementById('bokashi-sorumlu');
+            const kepekCheck = document.getElementById('bokashi-kepek-check');
 
             const ad = adInput ? adInput.value.trim() : '';
             const baslangic = tarihInput ? tarihInput.value : '';
             const gunSuresi = sureInput ? parseInt(sureInput.value) : 14;
+            const atikTuru = atikTuruInput ? atikTuruInput.value : 'Karışık Mutfak Atığı';
+            const agirlik = agirlikInput ? (parseFloat(agirlikInput.value) || 5) : 5;
+            const sorumlu = (sorumluInput && sorumluInput.value.trim()) ? sorumluInput.value.trim() : (sessionStorage.getItem('currentUser') || 'Kulüp Ekibi');
+            const kepekEklendi = kepekCheck ? kepekCheck.checked : true;
 
             if(!ad || !baslangic) {
                 showNotification("Lütfen kova adı ve başlangıç tarihi giriniz!", "warning");
@@ -7338,6 +8308,11 @@
                 baslangic: baslangic,
                 bitis: bitisTarihi.toISOString().split('T')[0],
                 sure: gunSuresi,
+                atikTuru: atikTuru,
+                agirlik: agirlik,
+                sorumlu: sorumlu,
+                kepekEklendi: kepekEklendi,
+                siviHasatSayisi: 0,
                 createdAt: Date.now()
             };
 
@@ -7347,8 +8322,9 @@
             localStorage.setItem('bkvBokashi', JSON.stringify(bList));
 
             if (adInput) adInput.value = '';
+            if (sorumluInput) sorumluInput.value = '';
             window.renderBokashi();
-            showNotification("Yeni Bokashi döngüsü başlatıldı!", "success");
+            showNotification("🌱 Yeni Bokashi kovanız tanımlandı ve fermantasyon süreci başlatıldı!", "success");
 
             try {
                 const { id, ...dataToSend } = yeniKova;
@@ -7367,7 +8343,7 @@
 
         window.bokashiSil = function(id) {
             if (typeof checkMemberActionPermission === 'function' && !checkMemberActionPermission()) return;
-            showCustomConfirm("Bokashi Döngüsü Sil", "Bu Bokashi döngüsünü silmek istediğinize emin misiniz?", async () => {
+            showCustomConfirm("Bokashi Döngüsü Sil", "Bu Bokashi kovasını ve fermantasyon kaydını silmek istediğinize emin misiniz?", async () => {
                 let bList = [];
                 try { bList = JSON.parse(localStorage.getItem('bkvBokashi')) || []; } catch(e) {}
                 bList = bList.filter(d => String(d.id) !== String(id));
@@ -7375,7 +8351,7 @@
                 window.renderBokashi();
                 try {
                     await deleteDoc(doc(db, "bokashi", String(id)));
-                    showNotification("Bokashi döngüsü silindi.", "info");
+                    showNotification("Bokashi kova kaydı silindi.", "info");
                 } catch(err) {
                     console.error("Firestore bokashi silme hatası:", err);
                     showNotification("Döngü silinirken bulut hatası: " + err.message, "warning");
