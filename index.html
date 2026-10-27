@@ -3182,7 +3182,7 @@
                         <p style="font-size: 13px; opacity: 0.8; margin-top: 0; color: #e65100;">Kamera veya USB okuyucu ile barkodu okutun, fiyat ve bilgileri görün.</p>
                         
                         <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <input type="text" id="barcode-scan-result" class="aero-input" placeholder="Okutulan Barkod Buraya Düşecek..." style="font-size: 15px; text-align: center; font-weight: 900; color: #e65100; border-color: #ff9800;">
+                            <input type="text" id="barcode-scan-result" class="aero-input" onkeydown="if(event.key==='Enter'&&this.value.trim()){processScannedBarcode(this.value.trim());this.select();}" placeholder="Okutulan Barkod Buraya Düşecek..." style="font-size: 15px; text-align: center; font-weight: 900; color: #e65100; border-color: #ff9800;">
                             
                             <div id="reader" style="width: 100%; border-radius: 10px; overflow: hidden; background: rgba(0,0,0,0.05); border: 1px solid rgba(255, 152, 0, 0.3); display: none;"></div>
 
@@ -3715,6 +3715,34 @@
 
         let html5QrCode = null;
 
+        function playBeep(type) {
+            try {
+                var ctx = new (window.AudioContext || window.webkitAudioContext)();
+                function singleBeep(freq, startTime, duration) {
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, startTime);
+                    gain.gain.setValueAtTime(0, startTime);
+                    gain.gain.linearRampToValueAtTime(0.7, startTime + 0.005);
+                    gain.gain.setValueAtTime(0.7, startTime + duration - 0.01);
+                    gain.gain.linearRampToValueAtTime(0, startTime + duration);
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+                }
+                if (type === 'error') {
+                    // Kısa-kısa çift bip (hata)
+                    singleBeep(1800, ctx.currentTime, 0.08);
+                    singleBeep(1800, ctx.currentTime + 0.13, 0.08);
+                } else {
+                    // Tek kısa keskin bip (başarılı okuma)
+                    singleBeep(1900, ctx.currentTime, 0.09);
+                }
+            } catch(e) {}
+        }
+
         function processScannedBarcode(decodedText) {
             document.getElementById('barcode-scan-result').value = decodedText;
             
@@ -3724,6 +3752,7 @@
             const card = document.getElementById('product-info-card');
 
             if (found) {
+                playBeep('success');
                 document.getElementById('pi-name').innerText = found.name;
                 document.getElementById('pi-barcode').innerText = found.barcode;
                 
@@ -3736,6 +3765,7 @@
                 card.style.display = 'block';
                 showNotification(`Ürün Okundu: ${found.name}`, "success");
             } else {
+                playBeep('error');
                 document.getElementById('pi-name').innerText = "Kayıtsız Ürün!";
                 document.getElementById('pi-barcode').innerText = decodedText;
                 document.getElementById('pi-price').innerText = "-";
