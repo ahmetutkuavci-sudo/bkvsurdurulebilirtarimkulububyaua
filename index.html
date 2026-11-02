@@ -138,6 +138,15 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
             backdrop-filter: blur(10px);
         }
+        .header-user-card {
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .header-user-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,1) !important;
+        }
         .user-avatar-circle {
             width: 30px;
             height: 30px;
@@ -485,107 +494,177 @@
         /* =========================================
            TEMALAR (TURUNCU, YEŞİL, KIRMIZI, PEMBE)
            ========================================= */
-        body.theme-orange { background: radial-gradient(circle at top left, #fff3e0 0%, #ffcc80 40%, #ffa726 70%, #ef6c00 100%); color: #e65100; }
-        body.theme-orange #login-screen { background: radial-gradient(circle at top left, rgba(255, 243, 224, 0.85) 0%, rgba(255, 204, 128, 0.9) 40%, rgba(255, 152, 0, 0.95) 100%); }
-        body.theme-orange h1 { color: #e65100; } body.theme-orange h2 { color: #ef6c00; }
-        body.theme-orange .tab-btn { 
-            background: rgba(255,255,255,0.4); 
-            border: 1px solid rgba(255,255,255,0.8); 
-            border-radius: 12px 12px 0 0; 
-            padding: 8px 14px; 
-            color: #01579b; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            box-shadow: inset 0 2px 5px rgba(255,255,255,0.6);
-            white-space: nowrap; 
-            font-size: 13.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            flex: 0 1 auto;
-        }
-        body.theme-orange .aero-btn { background: linear-gradient(to bottom, #ffffff 0%, #ffe0b2 45%, #ffcc80 50%, #ffa726 100%); border-color: #ef6c00; color: #e65100; }
-        body.theme-orange .aero-btn:hover { background: linear-gradient(to bottom, #ffffff 0%, #fff3e0 45%, #ffe0b2 50%, #ffb74d 100%); }
-        body.theme-orange .aero-input { border-color: #ffb74d; color: #e65100; }
-        body.theme-orange .aero-input:focus { border-color: #ef6c00; box-shadow: 0 0 10px rgba(255, 152, 0, 0.4); }
-        body.theme-orange th { background: linear-gradient(to bottom, #ffa726, #ef6c00); }
-        body.theme-orange .bottom-bar { background: linear-gradient(to right, #e65100, #ff9800, #e65100); }
-        body.theme-orange .task-checkbox { accent-color: #ef6c00; }
-        body.theme-orange .task-assignee { color: #e65100; }
+        /* ========================================================
+           ✨ 2026 SOFİSTİKE FRUTIGER AERO TEMALARI (Aesthetic Glass)
+           ======================================================== */
 
-        body.theme-green { background: radial-gradient(circle at top left, #e8f5e9 0%, #a5d6a7 40%, #66bb6a 70%, #2e7d32 100%); color: #1b5e20; }
-        body.theme-green #login-screen { background: radial-gradient(circle at top left, rgba(232, 245, 233, 0.85) 0%, rgba(165, 214, 167, 0.9) 40%, rgba(76, 175, 80, 0.95) 100%); }
-        body.theme-green h1 { color: #1b5e20; } body.theme-green h2 { color: #2e7d32; }
-        body.theme-green .tab-btn { 
-            background: rgba(255,255,255,0.4); 
-            border: 1px solid rgba(255,255,255,0.8); 
-            border-radius: 12px 12px 0 0; 
-            padding: 8px 14px; 
-            color: #01579b; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            box-shadow: inset 0 2px 5px rgba(255,255,255,0.6);
-            white-space: nowrap; 
-            font-size: 13.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            flex: 0 1 auto;
+        /* 🍊 1. SICAK AMBER & GÜN BATIMI TEMASI (Sunset Amber Glass) */
+        body.theme-orange { 
+            background: radial-gradient(circle at top left, #fffaf0 0%, #ffedd5 35%, #fed7aa 65%, #fb923c 90%, #d97706 100%) !important; 
+            color: #78350f !important; 
         }
-        body.theme-green .aero-btn { background: linear-gradient(to bottom, #ffffff 0%, #c8e6c9 45%, #a5d6a7 50%, #66bb6a 100%); border-color: #2e7d32; color: #1b5e20; }
-        body.theme-green .aero-btn:hover { background: linear-gradient(to bottom, #ffffff 0%, #e8f5e9 45%, #c8e6c9 50%, #81c784 100%); }
-        body.theme-green .aero-input { border-color: #81c784; color: #1b5e20; }
-        body.theme-green .aero-input:focus { border-color: #2e7d32; box-shadow: 0 0 10px rgba(76, 175, 80, 0.4); }
-        body.theme-green th { background: linear-gradient(to bottom, #66bb6a, #2e7d32); }
-        body.theme-green .bottom-bar { background: linear-gradient(to right, #1b5e20, #4caf50, #1b5e20); }
-        body.theme-green .task-checkbox { accent-color: #2e7d32; }
-        body.theme-green .task-assignee { color: #1b5e20; }
-
-        body.theme-red { background: radial-gradient(circle at top left, #ffebee 0%, #ef9a9a 40%, #ef5350 70%, #c62828 100%); color: #b71c1c; }
-        body.theme-red #login-screen { background: radial-gradient(circle at top left, rgba(255, 235, 238, 0.85) 0%, rgba(239, 154, 154, 0.9) 40%, rgba(229, 57, 53, 0.95) 100%); }
-        body.theme-red h1 { color: #b71c1c; } body.theme-red h2 { color: #c62828; }
-        body.theme-red .tab-btn { 
-            background: rgba(255,255,255,0.4); 
-            border: 1px solid rgba(255,255,255,0.8); 
-            border-radius: 12px 12px 0 0; 
-            padding: 8px 14px; 
-            color: #01579b; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            box-shadow: inset 0 2px 5px rgba(255,255,255,0.6);
-            white-space: nowrap; 
-            font-size: 13.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            flex: 0 1 auto;
+        body.theme-orange #login-screen { 
+            background: radial-gradient(circle at top left, rgba(255, 250, 240, 0.9) 0%, rgba(255, 237, 213, 0.92) 40%, rgba(251, 146, 60, 0.95) 100%) !important; 
         }
-        body.theme-red .aero-btn { background: linear-gradient(to bottom, #ffffff 0%, #ffcdd2 45%, #ef9a9a 50%, #ef5350 100%); border-color: #c62828; color: #b71c1c; }
-        body.theme-red .aero-btn:hover { background: linear-gradient(to bottom, #ffffff 0%, #ffebee 45%, #ffcdd2 50%, #e57373 100%); }
-        body.theme-red .aero-input { border-color: #e57373; color: #b71c1c; }
-        body.theme-red .aero-input:focus { border-color: #c62828; box-shadow: 0 0 10px rgba(244, 67, 54, 0.4); }
-        body.theme-red th { background: linear-gradient(to bottom, #ef5350, #c62828); }
-        body.theme-red .bottom-bar { background: linear-gradient(to right, #b71c1c, #f44336, #b71c1c); }
-        body.theme-red .task-checkbox { accent-color: #c62828; }
-        body.theme-red .task-assignee { color: #b71c1c; }
+        body.theme-orange h1, body.theme-orange h2, body.theme-orange h3, body.theme-orange .modern-header-title { color: #9a3412 !important; }
+        body.theme-orange .tab-btn { color: #9a3412 !important; }
+        body.theme-orange .tab-btn.active {
+            background: #ffffff !important;
+            color: #c2410c !important;
+            box-shadow: 0 3px 10px rgba(194, 65, 12, 0.16) !important;
+            border: 1px solid rgba(255, 255, 255, 0.95) !important;
+        }
+        body.theme-orange .aero-btn { 
+            background: linear-gradient(to bottom, #ffffff 0%, #fff7ed 45%, #ffedd5 50%, #fed7aa 100%); 
+            border-color: #ea580c; 
+            color: #78350f; 
+        }
+        body.theme-orange .aero-btn:hover { 
+            background: linear-gradient(to bottom, #ffffff 0%, #ffffff 45%, #fff7ed 50%, #fde68a 100%); 
+        }
+        body.theme-orange .aero-input { 
+            border-color: #fdba74; 
+            color: #78350f; 
+        }
+        body.theme-orange .aero-input:focus { 
+            border-color: #ea580c; 
+            box-shadow: 0 0 10px rgba(234, 88, 12, 0.35); 
+        }
+        body.theme-orange th { 
+            background: linear-gradient(to bottom, #fb923c, #ea580c) !important; 
+            color: white !important; 
+        }
+        body.theme-orange .bottom-bar { 
+            background: linear-gradient(to right, #78350f, #ea580c, #78350f) !important; 
+        }
+        body.theme-orange .task-checkbox { accent-color: #ea580c; }
+        body.theme-orange .task-assignee { color: #9a3412; }
 
-        /* 🌸 FRUTIGER PEMBE TEMASI (Pink Aero) */
-        body.theme-pink { background: radial-gradient(circle at top left, #fce4ec 0%, #f8bbd0 35%, #f48fb1 60%, #e91e63 85%, #880e4f 100%); color: #880e4f; }
-        body.theme-pink #login-screen { background: radial-gradient(circle at top left, rgba(252, 228, 236, 0.9) 0%, rgba(248, 187, 208, 0.92) 40%, rgba(233, 30, 99, 0.95) 100%); }
-        body.theme-pink h1, body.theme-pink h2 { color: #ad1457; }
-        body.theme-pink .tab-btn { color: #ad1457; }
-        body.theme-pink .tab-btn.active { background: linear-gradient(to bottom, #ffffff 0%, #f8bbd0 50%, #f06292 100%); color: #880e4f; box-shadow: 0 4px 12px rgba(233, 30, 99, 0.35); }
-        body.theme-pink .aero-btn { background: linear-gradient(to bottom, #ffffff 0%, #fce4ec 45%, #f8bbd0 50%, #f06292 100%); border-color: #d81b60; color: #880e4f; }
-        body.theme-pink .aero-btn:hover { background: linear-gradient(to bottom, #ffffff 0%, #fff 45%, #fce4ec 50%, #f48fb1 100%); }
-        body.theme-pink .aero-input { border-color: #f48fb1; color: #880e4f; }
-        body.theme-pink .aero-input:focus { border-color: #d81b60; box-shadow: 0 0 12px rgba(233, 30, 99, 0.4); }
-        body.theme-pink th { background: linear-gradient(to bottom, #ec407a, #c2185b); color: white; }
-        body.theme-pink .bottom-bar { background: linear-gradient(to right, #880e4f, #e91e63, #880e4f); }
-        body.theme-pink .task-checkbox { accent-color: #e91e63; }
-        body.theme-pink .task-assignee { color: #ad1457; }
+        /* 🌿 2. DOĞA ZÜMRÜT & PINAR FERAH TEMASI (Fresh Emerald Aero) */
+        body.theme-green { 
+            background: radial-gradient(circle at top left, #ecfdf5 0%, #a7f3d0 35%, #6ee7b7 65%, #34d399 90%, #059669 100%) !important; 
+            color: #064e3b !important; 
+        }
+        body.theme-green #login-screen { 
+            background: radial-gradient(circle at top left, rgba(236, 253, 245, 0.9) 0%, rgba(167, 243, 208, 0.92) 40%, rgba(52, 211, 153, 0.95) 100%) !important; 
+        }
+        body.theme-green h1, body.theme-green h2, body.theme-green h3, body.theme-green .modern-header-title { color: #065f46 !important; }
+        body.theme-green .tab-btn { color: #065f46 !important; }
+        body.theme-green .tab-btn.active {
+            background: #ffffff !important;
+            color: #047857 !important;
+            box-shadow: 0 3px 10px rgba(4, 120, 87, 0.16) !important;
+            border: 1px solid rgba(255, 255, 255, 0.95) !important;
+        }
+        body.theme-green .aero-btn { 
+            background: linear-gradient(to bottom, #ffffff 0%, #ecfdf5 45%, #d1fae5 50%, #a7f3d0 100%); 
+            border-color: #059669; 
+            color: #064e3b; 
+        }
+        body.theme-green .aero-btn:hover { 
+            background: linear-gradient(to bottom, #ffffff 0%, #ffffff 45%, #ecfdf5 50%, #bbf7d0 100%); 
+        }
+        body.theme-green .aero-input { 
+            border-color: #6ee7b7; 
+            color: #064e3b; 
+        }
+        body.theme-green .aero-input:focus { 
+            border-color: #059669; 
+            box-shadow: 0 0 10px rgba(5, 150, 105, 0.35); 
+        }
+        body.theme-green th { 
+            background: linear-gradient(to bottom, #34d399, #059669) !important; 
+            color: white !important; 
+        }
+        body.theme-green .bottom-bar { 
+            background: linear-gradient(to right, #064e3b, #059669, #064e3b) !important; 
+        }
+        body.theme-green .task-checkbox { accent-color: #059669; }
+        body.theme-green .task-assignee { color: #065f46; }
+
+        /* 🍷 3. KRALİYET YAKUTU & BORDEAUX TEMASI (Royal Ruby Velvet) */
+        body.theme-red { 
+            background: radial-gradient(circle at top left, #fff1f2 0%, #ffe4e6 35%, #fecdd3 65%, #f43f5e 90%, #9f1239 100%) !important; 
+            color: #4c0519 !important; 
+        }
+        body.theme-red #login-screen { 
+            background: radial-gradient(circle at top left, rgba(255, 241, 242, 0.9) 0%, rgba(254, 205, 211, 0.92) 40%, rgba(244, 63, 94, 0.95) 100%) !important; 
+        }
+        body.theme-red h1, body.theme-red h2, body.theme-red h3, body.theme-red .modern-header-title { color: #9f1239 !important; }
+        body.theme-red .tab-btn { color: #9f1239 !important; }
+        body.theme-red .tab-btn.active {
+            background: #ffffff !important;
+            color: #be123c !important;
+            box-shadow: 0 3px 10px rgba(190, 18, 60, 0.16) !important;
+            border: 1px solid rgba(255, 255, 255, 0.95) !important;
+        }
+        body.theme-red .aero-btn { 
+            background: linear-gradient(to bottom, #ffffff 0%, #fff1f2 45%, #ffe4e6 50%, #fecdd3 100%); 
+            border-color: #be123c; 
+            color: #881337; 
+        }
+        body.theme-red .aero-btn:hover { 
+            background: linear-gradient(to bottom, #ffffff 0%, #ffffff 45%, #fff1f2 50%, #fda4af 100%); 
+        }
+        body.theme-red .aero-input { 
+            border-color: #fda4af; 
+            color: #881337; 
+        }
+        body.theme-red .aero-input:focus { 
+            border-color: #be123c; 
+            box-shadow: 0 0 10px rgba(190, 18, 60, 0.35); 
+        }
+        body.theme-red th { 
+            background: linear-gradient(to bottom, #fb7185, #be123c) !important; 
+            color: white !important; 
+        }
+        body.theme-red .bottom-bar { 
+            background: linear-gradient(to right, #4c0519, #be123c, #4c0519) !important; 
+        }
+        body.theme-red .task-checkbox { accent-color: #be123c; }
+        body.theme-red .task-assignee { color: #9f1239; }
+
+        /* 🌸 4. ZARİF ROSE GOLD & PASTEL PUDRA PEMBE (Aesthetic Blush Aero) */
+        body.theme-pink { 
+            background: radial-gradient(circle at top left, #fff1f5 0%, #fce7f0 35%, #f7c5d9 65%, #f19cb8 90%, #d87093 100%) !important; 
+            color: #6b2144 !important; 
+        }
+        body.theme-pink #login-screen { 
+            background: radial-gradient(circle at top left, rgba(255, 241, 245, 0.9) 0%, rgba(252, 231, 240, 0.92) 40%, rgba(241, 156, 184, 0.95) 100%) !important; 
+        }
+        body.theme-pink h1, body.theme-pink h2, body.theme-pink h3, body.theme-pink .modern-header-title { color: #831843 !important; }
+        body.theme-pink .tab-btn { color: #831843 !important; }
+        body.theme-pink .tab-btn.active { 
+            background: #ffffff !important; 
+            color: #9d174d !important; 
+            box-shadow: 0 3px 10px rgba(157, 23, 77, 0.16) !important; 
+            border: 1px solid rgba(255, 255, 255, 0.95) !important;
+        }
+        body.theme-pink .aero-btn { 
+            background: linear-gradient(to bottom, #ffffff 0%, #fff1f5 45%, #fce7f0 50%, #f7c5d9 100%); 
+            border-color: #d87093; 
+            color: #6b2144; 
+        }
+        body.theme-pink .aero-btn:hover { 
+            background: linear-gradient(to bottom, #ffffff 0%, #ffffff 45%, #fff1f5 50%, #f9d8e6 100%); 
+        }
+        body.theme-pink .aero-input { 
+            border-color: #f4b6cb; 
+            color: #6b2144; 
+        }
+        body.theme-pink .aero-input:focus { 
+            border-color: #d87093; 
+            box-shadow: 0 0 10px rgba(216, 112, 147, 0.35); 
+        }
+        body.theme-pink th { 
+            background: linear-gradient(to bottom, #f48fb1, #d87093) !important; 
+            color: white !important; 
+        }
+        body.theme-pink .bottom-bar { 
+            background: linear-gradient(to right, #6b2144, #be185d, #6b2144) !important; 
+        }
+        body.theme-pink .task-checkbox { accent-color: #be185d; }
+        body.theme-pink .task-assignee { color: #831843; }
 
         @media print {
             body { background: white !important; color: black !important; }
@@ -2194,6 +2273,88 @@
         </div>
     </div>
 
+    <!-- 👤 PROFİLİM, ŞİFRE DEĞİŞTİRME & TEMA MODALI -->
+    <div id="profile-modal" class="app-modal-backdrop" onclick="if(event.target===this) closeProfileModal()" style="display: none; align-items: center; justify-content: center; z-index: 99999; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+        <div class="glass" style="width: 92%; max-width: 540px; max-height: 90vh; overflow-y: auto; padding: 22px 24px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.25); border: 1.5px solid rgba(255,255,255,0.9); animation: modalFadeIn 0.25s ease;">
+            
+            <!-- Modal Üst Başlık & Kapat Butonu -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(1, 87, 155, 0.15); padding-bottom: 12px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 26px;">👤</span>
+                    <div>
+                        <h2 style="margin: 0; font-size: 19px; color: #01579b;">Profilim & Kişisel Tercihler</h2>
+                        <p style="margin: 0; font-size: 12px; opacity: 0.75;">Hesap bilgilerinizi görüntüleyin, temanızı ve şifrenizi güncelleyin.</p>
+                    </div>
+                </div>
+                <button onclick="closeProfileModal()" style="background: rgba(0,0,0,0.06); border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; color: #666; font-weight: bold; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='rgba(211,47,47,0.15)'; this.style.color='#d32f2f';" onmouseout="this.style.background='rgba(0,0,0,0.06)'; this.style.color='#666';">✕</button>
+            </div>
+
+            <!-- 1. Kişi Bilgileri Kartı -->
+            <div style="background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.95); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #81d4fa 0%, #0288d1 100%); display: flex; align-items: center; justify-content: center; font-size: 25px; box-shadow: 0 4px 10px rgba(2,136,209,0.3); color: white; flex-shrink: 0;" id="prof-avatar">🌱</div>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 3px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+                        <strong style="font-size: 16.5px; color: #01579b;" id="prof-name">Kullanıcı Adı</strong>
+                        <span id="prof-role-badge" style="font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: bold; background: rgba(2,136,209,0.12); color: #0288d1; border: 1px solid rgba(2,136,209,0.25);">Yetki</span>
+                    </div>
+                    <div style="font-size: 12.5px; color: #555; display: flex; gap: 12px; flex-wrap: wrap; margin-top: 2px;">
+                        <span>📧 <b id="prof-email" style="color: #333;">email@bkv.com</b></span>
+                        <span>🏫 <b id="prof-grade" style="color: #333;">Sınıf / Şube</b></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 🎨 Tema Değiştirme Menüsü (Ayarlardan Buraya Taşındı) -->
+            <div style="background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.95); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                <h3 style="margin: 0 0 4px 0; font-size: 14.5px; color: #01579b; display: flex; align-items: center; gap: 6px;">
+                    🎨 Renk Teması Seçimi
+                </h3>
+                <p style="margin: 0 0 10px 0; font-size: 12px; opacity: 0.8;">Frutiger Aero renk paletini tek tıkla özelleştirin.</p>
+                <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+                    <button class="aero-btn" onclick="changeTheme('blue')" style="flex: 1 1 85px; background: linear-gradient(to bottom, #81d4fa, #29b6f6); color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.15); font-size: 12px; padding: 8px 6px; border-radius: 8px;">💧 Buz Mavisi</button>
+                    <button class="aero-btn" onclick="changeTheme('green')" style="flex: 1 1 85px; background: linear-gradient(to bottom, #6ee7b7, #059669); color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.15); border-color: #047857; font-size: 12px; padding: 8px 6px; border-radius: 8px;">🌿 Doğa Zümrüt</button>
+                    <button class="aero-btn" onclick="changeTheme('orange')" style="flex: 1 1 85px; background: linear-gradient(to bottom, #fdba74, #ea580c); color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.15); border-color: #c2410c; font-size: 12px; padding: 8px 6px; border-radius: 8px;">🍊 Sıcak Amber</button>
+                    <button class="aero-btn" onclick="changeTheme('red')" style="flex: 1 1 85px; background: linear-gradient(to bottom, #fb7185, #be123c); color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.15); border-color: #9f1239; font-size: 12px; padding: 8px 6px; border-radius: 8px;">🍷 Kraliyet Yakutu</button>
+                    <button class="aero-btn btn-pink" onclick="changeTheme('pink')" style="flex: 1 1 115px; background: linear-gradient(to bottom, #fce7f0, #f48fb1); color: #831843; text-shadow: none; border-color: #d87093; font-weight: bold; font-size: 12px; padding: 8px 6px; border-radius: 8px;">🌸 Pudra Rose Gold</button>
+                </div>
+            </div>
+
+            <!-- 3. 🔑 Şifre Değiştirme Formu -->
+            <div style="background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.95); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                <h3 style="margin: 0 0 4px 0; font-size: 14.5px; color: #01579b; display: flex; align-items: center; gap: 6px;">
+                    🔑 Şifremi Değiştir
+                </h3>
+                <p style="margin: 0 0 10px 0; font-size: 12px; opacity: 0.8;">Hesap güvenliğiniz için şifrenizi güncelleyebilirsiniz.</p>
+                
+                <div id="prof-pass-error" class="form-message form-error" style="display: none; margin-bottom: 8px; padding: 6px 10px; font-size: 12px;"></div>
+                <div id="prof-pass-success" class="form-message form-success" style="display: none; margin-bottom: 8px; padding: 6px 10px; font-size: 12px;"></div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <input type="password" id="prof-old-pass" class="aero-input" placeholder="Mevcut Şifreniz" style="padding: 8px 10px; font-size: 13px; width: 100%;">
+                    <div style="display: flex; gap: 8px;">
+                        <input type="password" id="prof-new-pass" class="aero-input" placeholder="Yeni Şifre (En az 4 karakter)" style="flex: 1; padding: 8px 10px; font-size: 13px;">
+                        <input type="password" id="prof-confirm-pass" class="aero-input" placeholder="Yeni Şifre (Tekrar)" style="flex: 1; padding: 8px 10px; font-size: 13px;" onkeypress="if(event.key === 'Enter') updateUserPassword()">
+                    </div>
+                    <button class="aero-btn btn-green" onclick="updateUserPassword()" style="padding: 10px; font-size: 13px; font-weight: bold; width: 100%; margin-top: 4px;">
+                        💾 Yeni Şifreyi Kaydet
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. Alt İşlemler -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <button class="aero-btn btn-red" onclick="closeProfileModal(); lockSystem();" style="font-size: 12px; padding: 8px 14px;">
+                    🚪 Güvenli Çıkış Yap
+                </button>
+                <button class="aero-btn" onclick="closeProfileModal()" style="font-size: 12px; padding: 8px 18px;">
+                    Kapat
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
     <!-- Uygulama İçi Metin Giriş Modalı (Prompt) -->
     <div id="app-prompt-modal" class="app-modal-backdrop" style="display: none;">
         <div class="app-modal-box glass">
@@ -2268,10 +2429,13 @@
 
             <!-- Orta: Kullanıcı Bilgi Kartı & Canlı Bulut Durumu Rozeti -->
             <div class="header-center-section">
-                <div class="header-user-card">
-                    <div class="user-avatar-circle">🌱</div>
+                <div class="header-user-card" onclick="openProfileModal()" title="Profilim, Şifre Değiştirme ve Tema Ayarları (Tıklayın)" style="cursor: pointer;">
+                    <div class="user-avatar-circle" id="header-avatar-circle">🌱</div>
                     <div class="user-info-text">
-                        <span id="current-user-badge" class="user-name">👤 Kullanıcı</span>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <span id="current-user-badge" class="user-name">👤 Kullanıcı</span>
+                            <span style="font-size: 10px; opacity: 0.65;">⚙️</span>
+                        </div>
                         <div class="user-tags">
                             <span id="current-grade-badge" class="user-grade-tag">🏫 Sınıf</span>
                             <span id="current-role-badge" class="user-role-tag">Yetki</span>
@@ -3163,6 +3327,10 @@
                             </div>
                             <input type="text" id="new-prod-name" class="aero-input" placeholder="Ürün Adı (Örn: Domates Fidesi)" style="border-color: #ff9800; color: #e65100;">
                             <input type="text" id="new-prod-price" class="aero-input" placeholder="Fiyatı (Örn: 150 TL)" style="border-color: #ff9800; color: #e65100;">
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <label style="font-size: 12px; color: #e65100; font-weight: bold; width: 70px; flex-shrink:0;">📦 Stok:</label>
+                                <input type="number" id="new-prod-stock" class="aero-input" placeholder="Stok Miktarı (Örn: 50)" min="0" style="border-color: #ff9800; color: #e65100; flex: 1;">
+                            </div>
                             
                             <div style="display: flex; gap: 10px; align-items: center;">
                                 <label style="font-size: 12px; color: #e65100; font-weight: bold; width: 70px;">Üretim Tarihi:</label>
@@ -3196,10 +3364,47 @@
                                 <div style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; color: #333;">
                                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 3px;"><b>🏷️ Barkod:</b> <span id="pi-barcode"></span></div>
                                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 3px;"><b>💰 Fiyat:</b> <span id="pi-price" style="color: #2e7d32; font-weight: 900; font-size: 18px;"></span></div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 3px;"><b>📦 Stok:</b> <span id="pi-stock" style="color: #1565c0; font-weight: bold;"></span></div>
                                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 3px;"><b>🏭 Üretim T.:</b> <span id="pi-mfg"></span></div>
                                     <div style="display: flex; justify-content: space-between;"><b>⏳ S.K.T:</b> <span id="pi-exp" style="color: #c62828; font-weight: bold;"></span></div>
                                 </div>
+                                <div style="margin-top: 12px; display: flex; gap: 8px; align-items: center;">
+                                    <label style="font-size: 13px; color: #e65100; font-weight: bold; flex-shrink:0;">Satış Adedi:</label>
+                                    <input type="number" id="sale-qty" class="aero-input" value="1" min="1" style="border-color: #ff9800; color: #e65100; width: 80px; text-align: center; padding: 6px;">
+                                    <button class="aero-btn btn-green" onclick="addToCart()" style="flex:1; font-size: 13px;">🛒 Sepete Ekle</button>
+                                </div>
                             </div>
+
+                            <!-- Satış Sepeti -->
+                            <div id="sale-cart-container" style="display:none; margin-top: 12px; background: rgba(255,255,255,0.9); padding: 14px; border-radius: 10px; border: 2px solid #ff9800;">
+                                <h4 style="margin: 0 0 10px 0; color: #e65100; display: flex; justify-content: space-between; align-items: center;">
+                                    🛒 Satış Sepeti
+                                    <button class="aero-btn btn-red" onclick="clearCart()" style="font-size: 11px; padding: 4px 10px;">Sepeti Temizle</button>
+                                </h4>
+                                <div id="sale-cart-items" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto;"></div>
+                                <div style="margin-top: 10px; padding-top: 10px; border-top: 2px solid rgba(255,152,0,0.3); display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 15px; font-weight: bold; color: #333;">💰 Toplam: <span id="cart-total" style="color: #2e7d32; font-size: 18px; font-weight: 900;">0 TL</span></span>
+                                    <button class="aero-btn btn-orange" onclick="completeSale()" style="font-size: 14px; padding: 8px 20px;">✅ Satışı Tamamla</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Satış Geçmişi -->
+                    <div class="card glass" style="border: 1px solid rgba(255, 152, 0, 0.5);">
+                        <h2 style="color: #e65100; border-bottom: 2px solid rgba(255, 152, 0, 0.3);">📊 Satış Geçmişi</h2>
+                        <p style="font-size: 13px; opacity: 0.8; margin-top: 0; color: #e65100;">Gerçekleşen satışların kaydı. Stok otomatik olarak güncellenir.</p>
+                        <div style="display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
+                            <span style="font-size: 13px; color: #555; padding: 5px 10px; background: rgba(255,152,0,0.08); border-radius: 8px; border: 1px solid rgba(255,152,0,0.2);">
+                                Toplam Satış: <b id="total-sales-count" style="color:#e65100;">0</b> işlem
+                            </span>
+                            <span style="font-size: 13px; color: #555; padding: 5px 10px; background: rgba(46,125,50,0.08); border-radius: 8px; border: 1px solid rgba(46,125,50,0.2);">
+                                Toplam Ciro: <b id="total-sales-revenue" style="color:#2e7d32;">0 TL</b>
+                            </span>
+                            <button class="aero-btn btn-red" onclick="clearSalesHistory()" style="margin-left: auto; font-size: 11px; padding: 4px 12px;">🗑️ Geçmişi Temizle</button>
+                        </div>
+                        <div id="sales-history-list" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+                            <p style="text-align:center; opacity:0.6; color: #e65100;">Henüz satış yapılmamış.</p>
                         </div>
                     </div>
 
@@ -3230,18 +3435,16 @@
                         </div>
                         <div class="settings-grid-row">
 
-                            <!-- 🎨 Tema Seçimi -->
+                            <!-- 🎨 Profilim & Tema Yönlendirmesi -->
                             <div class="card glass" style="display: flex; flex-direction: column; justify-content: space-between;">
                                 <div>
-                                    <h2>🎨 Tema Seçimi</h2>
-                                    <p style="font-size: 13px; opacity: 0.8; margin-top: 0;">Frutiger Aero renk paletini tek tıkla özelleştirin.</p>
-                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
-                                        <button class="aero-btn" onclick="changeTheme('blue')" style="flex: 1 1 90px; background: linear-gradient(to bottom, #81d4fa, #29b6f6); color: white; text-shadow: none; font-size: 13px; padding: 10px;">💧 Mavi</button>
-                                        <button class="aero-btn" onclick="changeTheme('green')" style="flex: 1 1 90px; background: linear-gradient(to bottom, #a5d6a7, #66bb6a); color: white; text-shadow: none; border-color: #2e7d32; font-size: 13px; padding: 10px;">🌿 Yeşil</button>
-                                        <button class="aero-btn" onclick="changeTheme('red')" style="flex: 1 1 90px; background: linear-gradient(to bottom, #ef9a9a, #ef5350); color: white; text-shadow: none; border-color: #c62828; font-size: 13px; padding: 10px;">🔥 Kırmızı</button>
-                                        <button class="aero-btn" onclick="changeTheme('orange')" style="flex: 1 1 90px; background: linear-gradient(to bottom, #ffcc80, #ffa726); color: white; text-shadow: none; border-color: #ef6c00; font-size: 13px; padding: 10px;">🍊 Turuncu</button>
-                                        <button class="aero-btn btn-pink" onclick="changeTheme('pink')" style="flex: 1 1 120px; background: linear-gradient(to bottom, #f8bbd0, #f06292); color: #880e4f; text-shadow: none; border-color: #d81b60; font-size: 13px; padding: 10px;">🌸 Frutiger Pembe</button>
-                                    </div>
+                                    <h2>🎨 Görünüm & Kişisel Tercihler</h2>
+                                    <p style="font-size: 13px; opacity: 0.85; margin-top: 0; line-height: 1.5;">
+                                        Renk teması seçimi, hesap bilgileri ve şifre değiştirme işlemleri üst bardaki <b>Profilim</b> menüsüne taşınmıştır.
+                                    </p>
+                                    <button class="aero-btn" onclick="openProfileModal()" style="margin-top: 10px; font-size: 13px; padding: 10px 16px; display: inline-flex; align-items: center; gap: 8px; font-weight: bold;">
+                                        👤 Profilim & Tema Menüsünü Aç
+                                    </button>
                                 </div>
                             </div>
 
@@ -3590,6 +3793,8 @@
             const price = document.getElementById('new-prod-price').value.trim();
             const mfg = document.getElementById('new-prod-mfg').value;
             const exp = document.getElementById('new-prod-exp').value;
+            const stockInput = document.getElementById('new-prod-stock') ? document.getElementById('new-prod-stock').value : '';
+            const stock = stockInput !== '' ? parseInt(stockInput, 10) : 0;
 
             if (!barcode || !name || !price) {
                 return showNotification("⚠️ Barkod, Ürün Adı ve Fiyat alanları zorunludur!", "warning");
@@ -3598,7 +3803,7 @@
             let products = JSON.parse(localStorage.getItem('bkvProducts')) || [];
             let existingIndex = products.findIndex(p => p.barcode === barcode);
 
-            let newProduct = { barcode, name, price, mfg, exp };
+            let newProduct = { barcode, name, price, stock, mfg, exp };
 
             if (existingIndex > -1) {
                 showCustomConfirm("Ürün Güncelleme", "Bu barkoda ait ürün zaten var. Bilgilerini güncellemek ister misiniz?", () => {
@@ -3621,6 +3826,7 @@
             document.getElementById('new-prod-barcode').value = '';
             document.getElementById('new-prod-name').value = '';
             document.getElementById('new-prod-price').value = '';
+            if (document.getElementById('new-prod-stock')) document.getElementById('new-prod-stock').value = '';
             document.getElementById('new-prod-mfg').value = '';
             document.getElementById('new-prod-exp').value = '';
         }
@@ -3649,14 +3855,31 @@
                 let mfgDate = p.mfg ? p.mfg.split('-').reverse().join('.') : 'Belirtilmedi';
                 let expDate = p.exp ? p.exp.split('-').reverse().join('.') : 'Belirtilmedi';
 
+                const stockNum = (p.stock !== undefined && p.stock !== null) ? parseInt(p.stock) : 0;
+                const stockColor = stockNum <= 0 ? '#c62828' : (stockNum <= 5 ? '#f57c00' : '#2e7d32');
+                const stockText = stockNum <= 0 ? '❌ Stok Yok' : (stockNum <= 5 ? `⚠️ ${stockNum} adet` : `✅ ${stockNum} adet`);
+                const stockInputControls = isAdmin ? `
+                    <div style="display:flex; align-items:center; gap:5px; background:rgba(255,152,0,0.1); padding:3px 7px; border-radius:6px; border:1px solid rgba(255,152,0,0.3);">
+                        <label style="font-size:11px; color:#e65100; font-weight:bold;">Stok:</label>
+                        <input type="number" id="norm-stock-${bcode}" value="${stockNum}" min="0" 
+                            style="width:55px; padding:3px 4px; border:1px solid #ff9800; border-radius:4px; font-weight:bold; text-align:center; color:#e65100; font-size:12px; background:#fff;" 
+                            onkeypress="if(event.key === 'Enter') setProductStock('${bcode}', this.value)" 
+                            title="Yeni stok miktarını yazıp Enter'a veya Kaydet'e basın">
+                        <button onclick="setProductStock('${bcode}', document.getElementById('norm-stock-${bcode}').value)" 
+                            title="Yeni Stok Miktarını Kaydet" 
+                            style="background:#e65100; color:#fff; border:none; border-radius:4px; padding:3px 8px; font-size:11px; font-weight:bold; cursor:pointer;">
+                            💾 Kaydet
+                        </button>
+                    </div>` : '';
                 container.innerHTML += `
                     <div class="product-list-item">
                         <div style="flex:1;">
                             <strong>🏷️ ${p.name}</strong> <br>
-                            <small><b>Barkod:</b> ${p.barcode} &nbsp;|&nbsp; <b>Üretim:</b> ${mfgDate} &nbsp;|&nbsp; <b>SKT:</b> ${expDate}</small>
+                            <small><b>Barkod:</b> ${p.barcode} &nbsp;|&nbsp; <b>Mevcut Stok:</b> <span style="color:${stockColor}; font-weight:bold;">${stockText}</span> &nbsp;|&nbsp; <b>SKT:</b> ${expDate}</small>
                         </div>
-                        <div style="display:flex; align-items:center;">
+                        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                             <span class="product-list-price">${fyt}</span>
+                            ${stockInputControls}
                             ${deleteBtn}
                         </div>
                     </div>
@@ -3712,6 +3935,183 @@
             window.print();
             document.body.classList.remove('printing-barcode');
         }
+        // ========================================================
+        // SATIS VE STOK YONETIMI
+        // ========================================================
+
+        let saleCart = [];
+
+        function addToCart() {
+            const scanResult = document.getElementById('barcode-scan-result').value.trim();
+            if (!scanResult) { showNotification("Önce bir ürün okutun!", "warning"); return; }
+            let products = JSON.parse(localStorage.getItem('bkvProducts')) || [];
+            let found = products.find(p => p.barcode === scanResult);
+            if (!found) { showNotification("Bu barkoda ait kayıtlı ürün bulunamadı!", "warning"); return; }
+            const qtyEl = document.getElementById('sale-qty');
+            const qty = parseInt(qtyEl ? qtyEl.value : 1) || 1;
+            const stockNum = (found.stock !== undefined && found.stock !== null) ? parseInt(found.stock) : 0;
+            if (stockNum <= 0) { showNotification(found.name + " için stok bulunmuyor!", "error"); return; }
+            if (qty > stockNum) { showNotification("Yetersiz stok! Mevcut stok: " + stockNum + " adet", "error"); return; }
+            let existingItem = saleCart.find(i => i.barcode === found.barcode);
+            if (existingItem) {
+                const totalQty = existingItem.qty + qty;
+                if (totalQty > stockNum) { showNotification("Toplam adet mevcut stoku aşıyor! (Stok: " + stockNum + ")", "error"); return; }
+                existingItem.qty = totalQty;
+            } else {
+                const rawPrice = parseFloat(String(found.price).replace(/[^\d.]/g, '')) || 0;
+                saleCart.push({ barcode: found.barcode, name: found.name, price: rawPrice, qty, unitPrice: rawPrice });
+            }
+            renderCart();
+            showNotification(found.name + " x" + qty + " sepete eklendi!", "success");
+        }
+
+        function renderCart() {
+            const container = document.getElementById('sale-cart-container');
+            const itemsDiv = document.getElementById('sale-cart-items');
+            const totalEl = document.getElementById('cart-total');
+            if (saleCart.length === 0) { if(container) container.style.display = 'none'; return; }
+            if(container) container.style.display = 'block';
+            let totalPrice = 0;
+            if(itemsDiv) itemsDiv.innerHTML = '';
+            saleCart.forEach((item, idx) => {
+                const lineTotal = item.unitPrice * item.qty;
+                totalPrice += lineTotal;
+                if(itemsDiv) itemsDiv.innerHTML += '<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,152,0,0.06); padding:7px 10px; border-radius:7px; border:1px solid rgba(255,152,0,0.2);">'
+                    + '<span style="font-size:13px; color:#333; flex:1;"><b>' + item.name + '</b></span>'
+                    + '<span style="font-size:12px; color:#555; margin: 0 8px;">' + item.qty + ' × ' + item.unitPrice.toFixed(2) + ' TL</span>'
+                    + '<span style="font-size:13px; font-weight:bold; color:#2e7d32; margin-right:8px;">' + lineTotal.toFixed(2) + ' TL</span>'
+                    + '<button onclick="removeFromCart(' + idx + ')" style="background:rgba(198,40,40,0.1); border:1px solid #ef5350; border-radius:5px; padding:2px 7px; color:#c62828; cursor:pointer; font-size:13px;">x</button>'
+                    + '</div>';
+            });
+            if(totalEl) totalEl.innerText = totalPrice.toFixed(2) + " TL";
+        }
+
+        function removeFromCart(idx) {
+            saleCart.splice(idx, 1);
+            renderCart();
+        }
+
+        function clearCart() {
+            saleCart = [];
+            renderCart();
+        }
+
+        function completeSale() {
+            if (saleCart.length === 0) { showNotification("Sepet boş!", "warning"); return; }
+            let products = JSON.parse(localStorage.getItem('bkvProducts')) || [];
+            for (let item of saleCart) {
+                let prod = products.find(p => p.barcode === item.barcode);
+                if (!prod) { showNotification(item.name + " artık sistemde bulunamadı!", "error"); return; }
+                const currentStock = (prod.stock !== undefined && prod.stock !== null) ? parseInt(prod.stock) : 0;
+                if (item.qty > currentStock) { showNotification(item.name + " için yeterli stok yok! (Mevcut: " + currentStock + ", İstek: " + item.qty + ")", "error"); return; }
+            }
+            saleCart.forEach(item => {
+                let prod = products.find(p => p.barcode === item.barcode);
+                if (prod) { prod.stock = parseInt(prod.stock || 0) - item.qty; if (prod.stock < 0) prod.stock = 0; }
+            });
+            localStorage.setItem('bkvProducts', JSON.stringify(products));
+            let salesHistory = JSON.parse(localStorage.getItem('bkvSalesHistory')) || [];
+            const totalAmount = saleCart.reduce((sum, i) => sum + (i.unitPrice * i.qty), 0);
+            salesHistory.unshift({ id: Date.now(), date: new Date().toLocaleString('tr-TR'), items: saleCart.map(i => ({ ...i })), total: totalAmount });
+            localStorage.setItem('bkvSalesHistory', JSON.stringify(salesHistory));
+            showNotification("Satış tamamlandı! Toplam: " + totalAmount.toFixed(2) + " TL", "success");
+            saleCart = [];
+            renderCart();
+            loadRegisteredProducts();
+            loadSalesHistory();
+        }
+
+        function loadSalesHistory() {
+            const salesHistory = JSON.parse(localStorage.getItem('bkvSalesHistory')) || [];
+            const listEl = document.getElementById('sales-history-list');
+            const countEl = document.getElementById('total-sales-count');
+            const revenueEl = document.getElementById('total-sales-revenue');
+            if (!listEl) return;
+            const totalRevenue = salesHistory.reduce((sum, s) => sum + (s.total || 0), 0);
+            if (countEl) countEl.innerText = salesHistory.length;
+            if (revenueEl) revenueEl.innerText = totalRevenue.toFixed(2) + ' TL';
+            if (salesHistory.length === 0) {
+                listEl.innerHTML = '<p style="text-align:center; opacity:0.6; color: #e65100;">Henüz satış yapılmamış.</p>';
+                return;
+            }
+            listEl.innerHTML = '';
+            salesHistory.forEach(sale => {
+                const itemsText = sale.items.map(i => i.name + ' x' + i.qty).join(', ');
+                listEl.innerHTML += '<div style="background:rgba(255,152,0,0.05); border:1px solid rgba(255,152,0,0.2); border-radius:8px; padding:10px;">'
+                    + '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">'
+                    + '<span style="font-size:12px; color:#777;">📅 ' + sale.date + '</span>'
+                    + '<span style="font-size:14px; font-weight:900; color:#2e7d32;">' + (sale.total||0).toFixed(2) + ' TL</span>'
+                    + '</div><div style="font-size:12px; color:#555;">' + itemsText + '</div></div>';
+            });
+        }
+
+        function clearSalesHistory() {
+            showCustomConfirm("Satış Geçmişi", "Tüm satış geçmişini silmek istediğinize emin misiniz?", () => {
+                localStorage.removeItem('bkvSalesHistory');
+                loadSalesHistory();
+                showNotification("Satış geçmişi temizlendi.", "info");
+            });
+        }
+
+        function setProductStock(barcode, newStockVal) {
+            const currentRole = sessionStorage.getItem('currentRole');
+            if (currentRole !== 'admin') { 
+                showNotification("⚠️ Stok güncelleme yetkisi yalnızca tam yetkili yöneticilere aittir!", "warning"); 
+                return; 
+            }
+            if (newStockVal === undefined || newStockVal === null || String(newStockVal).trim() === '') {
+                showNotification("Lütfen geçerli bir stok adedi girin!", "warning");
+                return;
+            }
+            const stockNum = parseInt(newStockVal, 10);
+            if (isNaN(stockNum) || stockNum < 0) {
+                showNotification("Stok miktarı 0 veya daha büyük bir sayı olmalıdır!", "warning");
+                return;
+            }
+            let products = JSON.parse(localStorage.getItem('bkvProducts')) || [];
+            let prod = products.find(p => String(p.barcode) === String(barcode));
+            if (!prod) {
+                showNotification("Ürün bulunamadı!", "error");
+                return;
+            }
+            prod.stock = stockNum;
+            localStorage.setItem('bkvProducts', JSON.stringify(products));
+
+            // Firebase senkronizasyonu
+            if (typeof window._firebaseUpdateStock === 'function') {
+                window._firebaseUpdateStock(barcode, stockNum);
+            }
+
+            if (typeof window.loadRegisteredProducts === 'function') {
+                window.loadRegisteredProducts();
+            } else if (typeof loadRegisteredProducts === 'function') {
+                loadRegisteredProducts();
+            }
+            showNotification(`✅ "${prod.name}" stok miktarı ${stockNum} adet olarak güncellendi!`, "success");
+        }
+
+        function promptSetStock(barcode) {
+            const currentRole = sessionStorage.getItem('currentRole');
+            if (currentRole !== 'admin') { 
+                showNotification("⚠️ Stok güncelleme yetkisi yalnızca yöneticilere aittir!", "warning"); 
+                return; 
+            }
+            let products = JSON.parse(localStorage.getItem('bkvProducts')) || [];
+            let prod = products.find(p => String(p.barcode) === String(barcode));
+            if (!prod) return;
+            const currentStock = (prod.stock !== undefined && prod.stock !== null) ? prod.stock : 0;
+            const inputVal = prompt(`"${prod.name}" için yeni stok miktarını giriniz:`, currentStock);
+            if (inputVal !== null && inputVal.trim() !== '') {
+                setProductStock(barcode, inputVal.trim());
+            }
+        }
+
+        function adjustStock(barcode, delta) {
+            // Birer birer yerine doğrudan stok güncelleme penceresini aç
+            promptSetStock(barcode);
+        }
+
+
 
         let html5QrCode = null;
 
@@ -3760,10 +4160,22 @@
                 if(!String(fyt).toUpperCase().includes('TL') && !String(fyt).includes('₺')) fyt += " TL";
                 document.getElementById('pi-price').innerText = fyt;
 
+                const stockNum6 = (found.stock !== undefined && found.stock !== null) ? parseInt(found.stock) : 0;
+                const piStock6 = document.getElementById('pi-stock');
+                if (piStock6) {
+                    piStock6.innerText = stockNum6 > 0 ? stockNum6 + ' adet' : 'Stok Yok';
+                    piStock6.style.color = stockNum6 <= 0 ? '#c62828' : (stockNum6 <= 5 ? '#f57c00' : '#1565c0');
+                }
+                const saleQtyEl6 = document.getElementById('sale-qty');
+                if (saleQtyEl6) { saleQtyEl6.value = 1; saleQtyEl6.max = stockNum6 > 0 ? stockNum6 : 9999; }
                 document.getElementById('pi-mfg').innerText = found.mfg ? found.mfg.split('-').reverse().join('.') : "Belirtilmedi";
                 document.getElementById('pi-exp').innerText = found.exp ? found.exp.split('-').reverse().join('.') : "Belirtilmedi";
                 card.style.display = 'block';
-                showNotification(`Ürün Okundu: ${found.name}`, "success");
+                if (stockNum6 <= 0) {
+                    showNotification(`⚠️ ${found.name} — STOK YOK!`, "warning");
+                } else {
+                    showNotification(`✅ Ürün Okundu: ${found.name} (${stockNum6} adet stok)`, "success");
+                }
             } else {
                 playBeep('error');
                 document.getElementById('pi-name').innerText = "Kayıtsız Ürün!";
@@ -3959,6 +4371,145 @@
             } else { 
                 showFormError('login-error', "Hatalı e-posta adresi veya şifre girdiniz!"); 
             }
+        }
+
+        
+        // ========================================================
+        // 👤 PROFİLİM & KİŞİSEL AYARLAR YÖNETİMİ
+        // ========================================================
+        function openProfileModal() {
+            const modal = document.getElementById('profile-modal');
+            if (!modal) return;
+
+            const currentUser = sessionStorage.getItem('currentUser') || 'Kullanıcı';
+            const currentEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase();
+            const currentGrade = sessionStorage.getItem('currentGrade') || 'Belirtilmedi';
+            const currentRole = sessionStorage.getItem('currentRole') || 'guest';
+
+            const nameEl = document.getElementById('prof-name');
+            const emailEl = document.getElementById('prof-email');
+            const gradeEl = document.getElementById('prof-grade');
+            const roleEl = document.getElementById('prof-role-badge');
+            const avatarEl = document.getElementById('prof-avatar');
+
+            if (nameEl) nameEl.innerText = currentUser;
+            if (emailEl) emailEl.innerText = currentEmail || 'E-posta belirtilmedi';
+            if (gradeEl) gradeEl.innerText = currentGrade;
+
+            if (roleEl) {
+                if (currentRole === 'admin') {
+                    roleEl.innerText = '👑 Yetkili Yönetici';
+                    roleEl.style.background = 'rgba(216, 67, 21, 0.12)';
+                    roleEl.style.color = '#d84315';
+                    roleEl.style.borderColor = 'rgba(216, 67, 21, 0.3)';
+                    if (avatarEl) avatarEl.innerText = '👑';
+                } else if (currentRole === 'member') {
+                    roleEl.innerText = '🌱 Kulüp Üyesi';
+                    roleEl.style.background = 'rgba(46, 125, 50, 0.12)';
+                    roleEl.style.color = '#2e7d32';
+                    roleEl.style.borderColor = 'rgba(46, 125, 50, 0.3)';
+                    if (avatarEl) avatarEl.innerText = '🌱';
+                } else {
+                    roleEl.innerText = '👤 Ziyaretçi / Misafir';
+                    roleEl.style.background = 'rgba(2, 136, 209, 0.12)';
+                    roleEl.style.color = '#0288d1';
+                    roleEl.style.borderColor = 'rgba(2, 136, 209, 0.3)';
+                    if (avatarEl) avatarEl.innerText = '👤';
+                }
+            }
+
+            // Temizle
+            const errEl = document.getElementById('prof-pass-error');
+            const succEl = document.getElementById('prof-pass-success');
+            const oldPass = document.getElementById('prof-old-pass');
+            const newPass = document.getElementById('prof-new-pass');
+            const confPass = document.getElementById('prof-confirm-pass');
+            if (errEl) errEl.style.display = 'none';
+            if (succEl) succEl.style.display = 'none';
+            if (oldPass) oldPass.value = '';
+            if (newPass) newPass.value = '';
+            if (confPass) confPass.value = '';
+
+            modal.style.display = 'flex';
+        }
+
+        function closeProfileModal() {
+            const modal = document.getElementById('profile-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function updateUserPassword() {
+            const oldPass = (document.getElementById('prof-old-pass').value || '');
+            const newPass = (document.getElementById('prof-new-pass').value || '');
+            const confPass = (document.getElementById('prof-confirm-pass').value || '');
+            const errEl = document.getElementById('prof-pass-error');
+            const succEl = document.getElementById('prof-pass-success');
+
+            if (errEl) errEl.style.display = 'none';
+            if (succEl) succEl.style.display = 'none';
+
+            if (!oldPass || !newPass || !confPass) {
+                if (errEl) {
+                    errEl.innerText = '⚠️ Lütfen mevcut şifrenizi ve yeni şifre alanlarının tamamını doldurunuz!';
+                    errEl.style.display = 'block';
+                }
+                return;
+            }
+
+            if (newPass.length < 4) {
+                if (errEl) {
+                    errEl.innerText = '⚠️ Yeni şifre en az 4 karakter olmalıdır!';
+                    errEl.style.display = 'block';
+                }
+                return;
+            }
+
+            if (newPass !== confPass) {
+                if (errEl) {
+                    errEl.innerText = '⚠️ Yeni şifre ile şifre tekrarı birbiriyle uyuşmuyor!';
+                    errEl.style.display = 'block';
+                }
+                return;
+            }
+
+            const currentEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase();
+            let users = getSafeUsers();
+            let user = users.find(u => (u.email || '').toLowerCase() === currentEmail);
+
+            if (!user) {
+                if (errEl) {
+                    errEl.innerText = '⚠️ Kullanıcı hesabı bulunamadı!';
+                    errEl.style.display = 'block';
+                }
+                return;
+            }
+
+            if (user.password !== oldPass) {
+                if (errEl) {
+                    errEl.innerText = '❌ Mevcut şifrenizi hatalı girdiniz!';
+                    errEl.style.display = 'block';
+                }
+                return;
+            }
+
+            // Şifreyi güncelle
+            user.password = newPass;
+            localStorage.setItem('bkvUsers', JSON.stringify(users));
+
+            // Firebase modülü varsa bulut veritabanını da güncelle
+            if (typeof window._firebaseUpdateUserPassword === 'function') {
+                window._firebaseUpdateUserPassword(currentEmail, newPass);
+            }
+
+            if (succEl) {
+                succEl.innerText = '✅ Şifreniz başarıyla güncellendi!';
+                succEl.style.display = 'block';
+            }
+            document.getElementById('prof-old-pass').value = '';
+            document.getElementById('prof-new-pass').value = '';
+            document.getElementById('prof-confirm-pass').value = '';
+
+            showNotification('✅ Şifreniz başarıyla güncellendi!', 'success');
         }
 
         function lockSystem() {
@@ -4199,6 +4750,60 @@
         }
 
       
+
+        // ========================================================
+        // 📋 GÖREV YÖNETİMİ (Yerel & Başlangıç Fallback)
+        // ========================================================
+        let tasks = [];
+        try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
+        
+        function renderTasks() {
+            if (typeof window.renderTasks === 'function' && window.renderTasks !== renderTasks) {
+                return window.renderTasks();
+            }
+            try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
+            const container = document.getElementById('task-list-container'); 
+            const currentUser = sessionStorage.getItem('currentUser'); 
+            const isAdmin = sessionStorage.getItem('currentRole') === 'admin';
+            if (!container) return;
+            container.innerHTML = '';
+            
+            if(tasks.length === 0) { 
+                container.innerHTML = '<p style="text-align:center; opacity:0.6;">Henüz görev yok.</p>'; 
+                return; 
+            }
+            
+            tasks.forEach(task => {
+                const li = document.createElement('li'); li.className = 'task-item';
+                const canToggle = isAdmin || (task.assignee && task.assignee === currentUser);
+                const editBtnHtml = isAdmin ? `<button class="aero-btn btn-yellow" style="padding: 5px 10px; font-size: 13px; margin-right: 5px;" onclick="editTask('${task.id}')">Düzenle ✏️</button>` : '';
+                const deleteBtnHtml = isAdmin ? `<button class="aero-btn btn-red" style="padding: 5px 15px; font-size: 13px;" onclick="deleteTask('${task.id}')">Sil ✖</button>` : '';
+                const assigneeHtml = task.assignee ? `<span class="task-assignee">👤 ${task.assignee}</span>` : `<span class="task-assignee" style="opacity:0.5;">Atanmadı</span>`;
+                    
+                li.innerHTML = `<div class="task-left"><input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} ${canToggle ? '' : 'disabled'} onchange="toggleTask('${task.id}')"><div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;"><span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>${assigneeHtml}</div></div><div style="display: flex;">${editBtnHtml}${deleteBtnHtml}</div>`;
+                container.appendChild(li);
+            });
+        }
+
+        function addTask() {
+            if (typeof window.addTask === 'function' && window.addTask !== addTask) {
+                return window.addTask();
+            }
+            const input = document.getElementById('new-task-input'); 
+            const assigneeSelect = document.getElementById('new-task-assignee');
+            if (!input) return;
+            const val = input.value.trim(); 
+            const assigneeVal = assigneeSelect ? assigneeSelect.value : "";
+            if(val) { 
+                try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
+                tasks.push({ id: Date.now(), text: val, assignee: assigneeVal, completed: false }); 
+                localStorage.setItem('bkvTasks', JSON.stringify(tasks));
+                input.value = ""; 
+                if (assigneeSelect) assigneeSelect.value = ""; 
+                renderTasks(); 
+                showNotification("Görev eklendi!", "success");
+            }
+        }
 
         function toggleTask(id) {
             if (!checkMemberActionPermission()) { renderTasks(); return; }
@@ -5025,46 +5630,62 @@
         }
 
         // ========================================================
-        // ♻️ BOKASHI TAKİP KÖPRÜSÜ (Firebase Entegrasyonu ile Senkronize)
+        // ♻️ BOKASHI TAKİP KÖPRÜSÜ & GÜVENLİ FALLBACK (Firebase ile Senkronize)
         // ========================================================
+        let bokashiListesi = [];
+        try { bokashiListesi = JSON.parse(localStorage.getItem('bkvBokashi')) || []; } catch(e) { bokashiListesi = []; }
+
         function bokashiEkle() {
-            if (typeof window.bokashiEkle === 'function') {
+            if (typeof window._firebaseBokashiEkle === 'function') return window._firebaseBokashiEkle();
+            if (typeof window.bokashiEkle === 'function' && window.bokashiEkle !== bokashiEkle) {
                 return window.bokashiEkle();
             }
         }
 
         function renderBokashi() {
-            if (typeof window.renderBokashi === 'function') {
+            if (typeof window._firebaseRenderBokashi === 'function') return window._firebaseRenderBokashi();
+            if (typeof window.renderBokashi === 'function' && window.renderBokashi !== renderBokashi) {
                 return window.renderBokashi();
+            }
+            const listeDiv = document.getElementById('bokashi-liste');
+            if(!listeDiv) return;
+            try { bokashiListesi = JSON.parse(localStorage.getItem('bkvBokashi')) || []; } catch(e) { bokashiListesi = []; }
+            if(bokashiListesi.length === 0) {
+                listeDiv.innerHTML = '<p style="text-align:center; grid-column: 1/-1; opacity:0.6;">Henüz aktif bir Bokashi döngüsü bulunmuyor.</p>';
             }
         }
 
         function bokashiSil(id) {
-            if (typeof window.bokashiSil === 'function') {
+            if (typeof window._firebaseBokashiSil === 'function') return window._firebaseBokashiSil(id);
+            if (typeof window.bokashiSil === 'function' && window.bokashiSil !== bokashiSil) {
                 return window.bokashiSil(id);
             }
         }
 
         function bokashiSiviHasatEkle(id) {
-            if (typeof window.bokashiSiviHasatEkle === 'function') {
+            if (typeof window._firebaseBokashiSiviHasatEkle === 'function') return window._firebaseBokashiSiviHasatEkle(id);
+            if (typeof window.bokashiSiviHasatEkle === 'function' && window.bokashiSiviHasatEkle !== bokashiSiviHasatEkle) {
                 return window.bokashiSiviHasatEkle(id);
             }
         }
 
         function setBokashiFilter(filter, btn) {
-            if (typeof window.setBokashiFilter === 'function') {
+            if (typeof window._firebaseSetBokashiFilter === 'function') return window._firebaseSetBokashiFilter(filter, btn);
+            if (typeof window.setBokashiFilter === 'function' && window.setBokashiFilter !== setBokashiFilter) {
                 return window.setBokashiFilter(filter, btn);
             }
         }
 
         function toggleBokashiWasteGuide() {
-            if (typeof window.toggleBokashiWasteGuide === 'function') {
+            if (typeof window.toggleBokashiWasteGuide === 'function' && window.toggleBokashiWasteGuide !== toggleBokashiWasteGuide) {
                 return window.toggleBokashiWasteGuide();
             }
+            const modal = document.getElementById('bokashi-guide-modal');
+            if (modal) modal.style.display = (modal.style.display === 'flex' ? 'none' : 'flex');
         }
 
         function hesaplaBokashiSuyu() {
-            if (typeof window.hesaplaBokashiSuyu === 'function') {
+            if (typeof window.hesaplaBokashiSuyu === 'function' && window.hesaplaBokashiSuyu !== hesaplaBokashiSuyu) {
                 return window.hesaplaBokashiSuyu();
             }
         }
@@ -6905,14 +7526,31 @@
                 const mfgDate = p.mfg ? p.mfg.split('-').reverse().join('.') : 'Belirtilmedi';
                 const expDate = p.exp ? p.exp.split('-').reverse().join('.') : 'Belirtilmedi';
 
+                const stockAmt = (p.stock !== undefined && p.stock !== null) ? parseInt(p.stock) : 0;
+                const stockColor = stockAmt <= 0 ? '#c62828' : (stockAmt <= 5 ? '#f57c00' : '#2e7d32');
+                const stockLabel = stockAmt <= 0 ? '❌ Stok Yok' : (stockAmt <= 5 ? `⚠️ ${stockAmt} adet` : `✅ ${stockAmt} adet`);
+                const adjustControls = isAdmin ? `
+                    <div style="display:flex; align-items:center; gap:5px; background:rgba(255,152,0,0.1); padding:3px 7px; border-radius:6px; border:1px solid rgba(255,152,0,0.3); margin-left:6px;">
+                        <label style="font-size:11px; color:#e65100; font-weight:bold;">Stok:</label>
+                        <input type="number" id="mod-stock-${safeBcode}" value="${stockAmt}" min="0" 
+                            style="width:55px; padding:3px 4px; border:1px solid #ff9800; border-radius:4px; font-weight:bold; text-align:center; color:#e65100; font-size:12px; background:#fff;" 
+                            onkeypress="if(event.key === 'Enter') setProductStock('${safeBcode}', this.value)" 
+                            title="Yeni stok adedini yazıp Enter'a veya Kaydet'e basın">
+                        <button onclick="setProductStock('${safeBcode}', document.getElementById('mod-stock-${safeBcode}').value)" 
+                            title="Yeni Stok Miktarını Kaydet" 
+                            style="background:#e65100; color:#fff; border:none; border-radius:4px; padding:3px 8px; font-size:11px; font-weight:bold; cursor:pointer;">
+                            💾 Kaydet
+                        </button>
+                    </div>` : '';
                 container.innerHTML += `
-                    <div class="product-list-item" style="display:flex; justify-content:space-between; align-items:center; background: rgba(255,255,255,0.7); padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid rgba(255,152,0,0.2);">
-                        <div style="flex:1;">
+                    <div class="product-list-item" style="display:flex; justify-content:space-between; align-items:center; background: rgba(255,255,255,0.7); padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid rgba(255,152,0,0.2); flex-wrap:wrap; gap:8px;">
+                        <div style="flex:1; min-width:200px;">
                             <strong style="color: #e65100; font-size: 14px;">🏷️ ${p.name}</strong> <br>
-                            <small style="color: #555;"><b>Barkod:</b> <span style="font-family: monospace; font-weight: bold; color: #d84315;">${p.barcode}</span> &nbsp;|&nbsp; <b>Üretim:</b> ${mfgDate} &nbsp;|&nbsp; <b>SKT:</b> ${expDate}</small>
+                            <small style="color: #555;"><b>Barkod:</b> <span style="font-family: monospace; font-weight: bold; color: #d84315;">${p.barcode}</span> &nbsp;|&nbsp; <b>Mevcut Stok:</b> <span style="color:${stockColor}; font-weight:bold;">${stockLabel}</span> &nbsp;|&nbsp; <b>SKT:</b> ${expDate}</small>
                         </div>
-                        <div style="display:flex; align-items:center;">
+                        <div style="display:flex; align-items:center; gap:6px;">
                             <span class="product-list-price" style="font-weight: bold; color: #2e7d32; font-size: 15px; margin-right: 5px;">${fyt}</span>
+                            ${adjustControls}
                             ${deleteBtn}
                         </div>
                     </div>
@@ -6941,10 +7579,18 @@
             try { products = JSON.parse(localStorage.getItem('bkvProducts')) || []; } catch(e) { products = []; }
             const existingIndex = products.findIndex(p => String(p.barcode) === String(barcode));
 
+            const stockInputEl = document.getElementById('new-prod-stock');
+            const stockVal = stockInputEl ? stockInputEl.value : '';
+            const stockNum = stockVal !== '' ? parseInt(stockVal, 10) : 0;
+            // Guncelleme durumunda mevcut stoku koru (sadece admin acikca degistirirse)
+            const existingStock = (existingIndex > -1 && products[existingIndex].stock !== undefined) ? parseInt(products[existingIndex].stock) : 0;
+            const finalStock = stockVal !== '' ? stockNum : existingStock;
+
             const newProduct = { 
                 barcode: barcode, 
                 name: name, 
-                price: price, 
+                price: price,
+                stock: finalStock,
                 mfg: mfg || '', 
                 exp: exp || '',
                 createdAt: (existingIndex > -1 && products[existingIndex].createdAt) ? products[existingIndex].createdAt : Date.now(),
@@ -6978,6 +7624,26 @@
             }
         };
         window.saveProduct = window._firebaseSaveProduct;
+
+        window._firebaseUpdateUserPassword = async function(email, newPass) {
+            try {
+                await updateDoc(doc(db, "users", email.toLowerCase()), {
+                    password: newPass,
+                    updatedAt: Date.now()
+                });
+            } catch(e) {
+                console.error("Firestore şifre güncelleme hatası:", e);
+            }
+        };
+
+        window._firebaseUpdateStock = async function(barcode, stockNum) {
+            try {
+                const docId = encodeURIComponent(barcode).replace(/\./g, '%2E');
+                await setDoc(doc(db, "products", docId), { stock: stockNum, updatedAt: Date.now() }, { merge: true });
+            } catch(e) {
+                console.error("Firestore stok güncelleme hatası:", e);
+            }
+        };
 
         window._firebaseDeleteProduct = function(barcode) {
             const currentRole = sessionStorage.getItem('currentRole');
@@ -7046,6 +7712,7 @@
             console.error("Firestore products onSnapshot hatası:", err);
             if (typeof window.loadRegisteredProducts === 'function') {
                 window.loadRegisteredProducts();
+            loadSalesHistory();
             }
         });
 
