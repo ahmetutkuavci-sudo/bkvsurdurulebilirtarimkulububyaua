@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans (Aero 2.0) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS (with preflight disabled to protect classic layout) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (window.tailwind) {
+            tailwind.config = {
+                corePlugins: { preflight: false },
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['Outfit', 'Plus Jakarta Sans', 'Segoe UI', 'sans-serif'],
+                        }
+                    }
+                }
+            };
+        }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.jpg">
@@ -2251,6 +2272,237 @@
             }
         }
 
+    
+        /* ========================================================
+           ✨ AERO 2.0 GLASSMORPHISM & DUAL INTERFACE SYSTEM
+           ======================================================== */
+        :root {
+            --bg-gradient: radial-gradient(circle at 15% 15%, #e0f2fe 0%, #7dd3fc 35%, #0284c7 75%, #0369a1 100%);
+            --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.4) 100%);
+            --glass-border: rgba(255, 255, 255, 0.85);
+            --glass-shadow: 0 16px 40px 0 rgba(2, 132, 199, 0.16), inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.9);
+            --text-main: #0c4a6e;
+            --accent-glow: rgba(56, 189, 248, 0.4);
+        }
+
+        body.theme-green {
+            --bg-gradient: radial-gradient(circle at 15% 15%, #ecfdf5 0%, #a7f3d0 35%, #6ee7b7 65%, #10b981 85%, #047857 100%);
+            --glass-shadow: 0 16px 40px 0 rgba(16, 185, 129, 0.18), inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.9);
+            --text-main: #064e3b;
+            --accent-glow: rgba(52, 211, 153, 0.4);
+        }
+
+        body.theme-orange {
+            --bg-gradient: radial-gradient(circle at 15% 15%, #fffaf0 0%, #ffedd5 35%, #fed7aa 65%, #fb923c 85%, #d97706 100%);
+            --glass-shadow: 0 16px 40px 0 rgba(245, 158, 11, 0.18), inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.9);
+            --text-main: #78350f;
+            --accent-glow: rgba(251, 191, 36, 0.4);
+        }
+
+        body.theme-red {
+            --bg-gradient: radial-gradient(circle at 15% 15%, #fff1f2 0%, #ffe4e6 35%, #fecdd3 65%, #f43f5e 85%, #9f1239 100%);
+            --glass-shadow: 0 16px 40px 0 rgba(225, 29, 72, 0.18), inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.9);
+            --text-main: #881337;
+            --accent-glow: rgba(251, 113, 133, 0.4);
+        }
+
+        body.theme-pink {
+            --bg-gradient: radial-gradient(circle at 15% 15%, #fdf4ff 0%, #fce7f3 35%, #fbcfe8 65%, #f472b6 85%, #831843 100%);
+            --glass-shadow: 0 16px 40px 0 rgba(244, 114, 182, 0.2), inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.9);
+            --text-main: #831843;
+            --accent-glow: rgba(244, 114, 182, 0.4);
+        }
+
+        /* Ambient Animated Orbs */
+        .ambient-orbs-container {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.55;
+            pointer-events: none;
+            animation: orbFloat 18s ease-in-out infinite alternate;
+        }
+        @keyframes orbFloat {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(60px, -40px) scale(1.1); }
+            100% { transform: translate(-40px, 50px) scale(0.95); }
+        }
+
+        /* Aero Glass Utility */
+        .aero-glass {
+            background: var(--glass-bg, rgba(255, 255, 255, 0.72));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.85));
+            box-shadow: var(--glass-shadow);
+            border-radius: 20px;
+            position: relative;
+        }
+
+        /* Mode Visibility Switching */
+        body.ui-classic #modern-top-header { display: none !important; }
+        body.ui-classic #main-sidebar { display: none !important; }
+        body.ui-classic #dash-kpi-row { display: none !important; }
+        body.ui-classic .ambient-orbs-container { display: none !important; }
+        body.ui-classic #main-header { display: block !important; }
+
+        body.ui-modern {
+            font-family: 'Outfit', 'Plus Jakarta Sans', 'Segoe UI', sans-serif !important;
+        }
+        body.ui-modern #main-header { display: none !important; }
+        body.ui-modern #modern-top-header { display: flex !important; }
+        body.ui-modern .ambient-orbs-container { display: block !important; }
+        body.ui-modern #dash-kpi-row { display: grid !important; }
+
+        /* Fix Modern Top Header to prevent vertical wrapping */
+        body.ui-modern #modern-top-header {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+            flex-wrap: nowrap !important;
+            margin: 10px 14px 0 14px !important;
+            padding: 8px 16px !important;
+            border-radius: 18px !important;
+            flex-shrink: 0 !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+        }
+
+        /* Fix Main Wrapper and Content */
+        body.ui-modern .main-wrapper {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 14px !important;
+            padding: 10px 14px !important;
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+            align-items: stretch !important;
+            width: 100% !important;
+        }
+
+        body.ui-modern .main-content {
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            width: auto !important;
+            max-width: none !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            border-radius: 20px !important;
+            padding: 18px 22px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Modern Bottom Bar Styling */
+        body.ui-modern .bottom-bar {
+            height: 36px !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.45) 100%) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.85) !important;
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05) !important;
+            color: var(--text-main, #0c4a6e) !important;
+            padding: 0 16px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            flex-shrink: 0 !important;
+        }
+        body.ui-modern .bottom-bar .clock-panel {
+            background: rgba(0, 0, 0, 0.08) !important;
+            color: var(--text-main, #0c4a6e) !important;
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            border-radius: 8px !important;
+            padding: 2px 10px !important;
+            font-family: 'Outfit', monospace !important;
+        }
+        body.ui-modern .bottom-bar .ticker {
+            color: var(--text-main, #0c4a6e) !important;
+        }
+
+        body.ui-modern .main-wrapper {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 14px !important;
+            padding: 10px 14px 14px 14px !important;
+            height: calc(100vh - 84px) !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+            align-items: stretch !important;
+        }
+        body.ui-modern #main-sidebar {
+            display: flex !important;
+        }
+        body.ui-modern #main-sidebar.collapsed {
+            width: 72px !important;
+            padding: 14px 8px !important;
+        }
+        body.ui-modern #main-sidebar.collapsed .sidebar-hide-on-collapse {
+            display: none !important;
+        }
+        body.ui-modern #main-sidebar.collapsed .nav-link {
+            justify-content: center !important;
+            padding: 10px 0 !important;
+        }
+        body.ui-modern .main-content {
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            border-radius: 20px !important;
+            padding: 18px 22px !important;
+            background: var(--glass-bg, rgba(255, 255, 255, 0.72)) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.85)) !important;
+            box-shadow: var(--glass-shadow) !important;
+        }
+
+        /* Nav Link inside Modern Sidebar */
+        body.ui-modern .nav-link {
+            background: transparent;
+            color: var(--text-main, #0369a1);
+            border: none;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body.ui-modern .nav-link:hover {
+            background: rgba(255, 255, 255, 0.55);
+            transform: translateX(2px);
+        }
+        body.ui-modern .nav-link.active {
+            background: #ffffff !important;
+            color: #0284c7 !important;
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.18), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+            font-weight: 800 !important;
+        }
+        body.theme-green.ui-modern .nav-link.active {
+            color: #059669 !important;
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.18), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+        }
+        body.theme-orange.ui-modern .nav-link.active {
+            color: #d97706 !important;
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+        }
+        body.theme-red.ui-modern .nav-link.active {
+            color: #e11d48 !important;
+            box-shadow: 0 6px 16px rgba(225, 29, 72, 0.18), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+        }
+        body.theme-pink.ui-modern .nav-link.active {
+            color: #db2777 !important;
+            box-shadow: 0 6px 16px rgba(244, 114, 182, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+        }
+
     </style>
 </head>
 <body>
@@ -2301,6 +2553,23 @@
                         <span>📧 <b id="prof-email" style="color: #333;">email@bkv.com</b></span>
                         <span>🏫 <b id="prof-grade" style="color: #333;">Sınıf / Şube</b></span>
                     </div>
+                </div>
+            </div>
+
+            
+            <!-- 🖥️ Arayüz Görünümü & Modu (Klasik Frutiger Aero vs Aero 2.0) -->
+            <div style="background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.95); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                <h3 style="margin: 0 0 4px 0; font-size: 14.5px; color: #01579b; display: flex; align-items: center; gap: 6px;">
+                    🖥️ Arayüz Görünümü & Modu
+                </h3>
+                <p style="margin: 0 0 10px 0; font-size: 12px; opacity: 0.8;">Klasik Frutiger Aero ile modern Aero 2.0 Komuta Merkezi arasında dilediğiniz an geçiş yapın.</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="aero-btn ui-version-btn" data-version="classic" onclick="switchUIVersion('classic')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
+                        <span>💎</span> <span>Klasik Frutiger Aero (Üst Menü)</span>
+                    </button>
+                    <button class="aero-btn ui-version-btn" data-version="modern" onclick="switchUIVersion('modern')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
+                        <span>🚀</span> <span>Aero 2.0 Komuta Merkezi (Yan Menü)</span>
+                    </button>
                 </div>
             </div>
 
@@ -2411,6 +2680,62 @@
     </div>
 
     <!-- Ana Menü & Navigasyon Header (Yenilenen Modern & Mobil Uyumlu Üst Bar) -->
+    
+    <!-- 🚀 TOP HEADER BAR (Aero 2.0 Komuta Merkezi) -->
+    <header id="modern-top-header" class="aero-glass modern-only-header" style="margin: 10px 14px 0 14px; padding: 10px 18px; display: none; align-items: center; justify-content: space-between; gap: 14px; z-index: 30; border-radius: 20px;">
+        <!-- Brand Left -->
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" class="aero-btn" style="padding: 7px 11px; font-size: 16px; display: inline-flex; cursor: pointer; border-radius: 12px;" title="Menüyü Daralt/Genişlet">
+                ☰
+            </button>
+            <div style="width: 40px; height: 40px; border-radius: 14px; background: rgba(255,255,255,0.92); box-shadow: 0 4px 10px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;">
+                <img src="Logo.jpg" alt="BKV Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 14px;" onerror="this.style.display='none'; this.parentElement.innerHTML='🌱'; this.parentElement.style.fontSize='22px';">
+            </div>
+            <div>
+                <h1 style="font-weight: 800; font-size: 16px; margin: 0; line-height: 1.2; color: #0c4a6e;">BJK-KABATAŞ VAKFI ÖZEL OKULLARI</h1>
+                <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85; display: flex; align-items: center; gap: 6px; color: #0369a1;">
+                    <span>🌱 Sürdürülebilir Tarım Kulübü</span>
+                    <span style="opacity: 0.6;">•</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Center User Card (Clickable -> openProfileModal) & Cloud Pill -->
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="modern-header-user-card" onclick="openProfileModal()" title="Profilim, Şifre Değiştirme ve Tema Ayarları (Tıklayın)" style="cursor: pointer; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); padding: 5px 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 2px 6px rgba(0,0,0,0.04); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: #bae6fd; color: #0369a1; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 13px;">
+                    🌱
+                </div>
+                <div style="display: flex; flex-direction: column; text-align: left;">
+                    <span id="modern-user-badge" style="font-size: 12px; font-weight: 800; color: #1e293b; line-height: 1;">👤 Kullanıcı</span>
+                    <div style="display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+                        <span id="modern-grade-badge" style="font-size: 10px; font-weight: 700; background: #e0f2fe; color: #0369a1; padding: 1px 5px; border-radius: 5px; border: 1px solid #bae6fd;">Sınıf</span>
+                        <span id="modern-role-badge" style="font-size: 10px; font-weight: 800; background: #f59e0b; color: white; padding: 1px 5px; border-radius: 5px;">Yetki</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloud Pill -->
+            <div id="modern-cloud-pill" onclick="checkCloudSyncStatus(false)" style="display: flex; align-items: center; gap: 6px; background: rgba(209, 250, 229, 0.9); color: #065f46; border: 1px solid #6ee7b7; padding: 6px 12px; border-radius: 14px; font-size: 11px; font-weight: 800; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: #059669; display: inline-block;"></span>
+                <span id="modern-cloud-label">Bulut Aktif</span>
+            </div>
+        </div>
+
+        <!-- Right Actions -->
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="aero-btn" style="font-size: 11.5px; padding: 7px 12px;" onclick="toggleFullscreenUI()" title="Tam Ekran Modu">
+                <span>🔲</span> <span>Tam Ekran</span>
+            </button>
+            <button class="aero-btn" style="font-size: 11.5px; padding: 7px 12px; color: #6b21a8;" onclick="window.open('https://online.bkvakademi.com/', '_blank')">
+                <span>🎓</span> <span>Akademi</span>
+            </button>
+            <button class="aero-btn aero-btn-danger" style="font-size: 11.5px; padding: 7px 12px;" onclick="lockSystem()" title="Sistemi Kilitle / Çıkış">
+                <span>🚪</span> <span>Çıkış</span>
+            </button>
+        </div>
+    </header>
+
     <header class="glass modern-header" id="main-header">
         <div class="header-main-row">
             <!-- Sol: Okul & Kulüp Başlık Alanı -->
@@ -2478,6 +2803,45 @@
     </header>
 
     <div class="main-wrapper">
+
+        <!-- 🧭 COLLAPSIBLE GLASS SIDEBAR (Aero 2.0) -->
+        <aside id="main-sidebar" class="aero-glass modern-sidebar" style="width: 250px; flex-shrink: 0; display: none; flex-direction: column; justify-content: space-between; padding: 14px; border-radius: 20px; z-index: 20; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                <div class="sidebar-hide-on-collapse" style="padding: 6px 10px; font-size: 10.5px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0.75;">
+                    Komuta Navigasyonu
+                </div>
+                <nav style="display: flex; flex-direction: column; gap: 4px;" id="sidebar-nav-container">
+                    <button onclick="openTab('tab-dashboard', this)" class="nav-link active" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <span style="font-size: 17px;">📋</span> <span class="sidebar-hide-on-collapse">Anasayfa</span>
+                    </button>
+                    <button onclick="openTab('tab-student-portal', this); if(typeof loadStudentPortalData==='function') loadStudentPortalData();" class="nav-link" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 17px;" id="portal-sidebar-icon">👑</span>
+                            <span class="sidebar-hide-on-collapse" id="portal-sidebar-text">Yönetim Portalı</span>
+                        </div>
+                        <span id="sidebar-msg-badge" class="sidebar-hide-on-collapse" style="background: #0284c7; color: white; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">0</span>
+                    </button>
+                    <button onclick="openTab('tab-bokashi', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <span style="font-size: 17px;">♻️</span> <span class="sidebar-hide-on-collapse">Bokashi Kompost</span>
+                    </button>
+                    <button onclick="openTab('tab-hava-durumu', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <span style="font-size: 17px;">⛅</span> <span class="sidebar-hide-on-collapse">Meteoroloji</span>
+                    </button>
+                    <button onclick="openTab('tab-barcode', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <span style="font-size: 17px;">🏷️</span> <span class="sidebar-hide-on-collapse">Barkod / Stok</span>
+                    </button>
+                    <button onclick="openTab('tab-excel', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <span style="font-size: 17px;">📊</span> <span class="sidebar-hide-on-collapse">Tablo İzleyici</span>
+                    </button>
+                    <button id="sidebar-btn-settings" onclick="openTab('tab-settings', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <span style="font-size: 17px;">⚙️</span> <span class="sidebar-hide-on-collapse">Sistem Ayarları</span>
+                    </button>
+                </nav>
+            </div>
+
+            
+        </aside>
+
         <div class="main-content">
             
             <!-- TAB 3: BOKASHI (YENİLENEN KAPSAMLI BİYO-KOMPOST İSTASYONU) -->
@@ -2936,6 +3300,53 @@
 
             <!-- TAB 5: ANASAYFA (DASHBOARD) -->
             <div id="tab-dashboard" class="tab-content active">
+
+                <!-- 📊 KPI SUMMARY CARDS ROW (Aero 2.0 Komuta Merkezi) -->
+                <div id="dash-kpi-row" class="dash-kpi-row" style="display: none; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px;">
+                    <!-- KPI 1: Tasks -->
+                    <div class="kpi-card" style="cursor: pointer;" onclick="document.getElementById('task-list-container')?.scrollIntoView({behavior:'smooth'})" style="background: rgba(255,255,255,0.75); padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85;">Aktif Görevler</p>
+                            <h3 id="dash-kpi-tasks" style="font-size: 22px; font-weight: 900; margin: 2px 0;">0 / 0</h3>
+                            <span style="font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.12); color: #059669; padding: 2px 6px; border-radius: 6px;">Bugünlük Takip</span>
+                        </div>
+                        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(2, 132, 199, 0.12); color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 22px;">📋</div>
+                    </div>
+
+                    <!-- KPI 2: Bokashi -->
+                    <div class="kpi-card" style="cursor: pointer;" onclick="openTab('tab-bokashi')"
+ style="background: rgba(255,255,255,0.75); padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85;">Bokashi Atığı</p>
+                            <h3 id="dash-kpi-bokashi" style="font-size: 22px; font-weight: 900; margin: 2px 0; color: #059669;">0 kg</h3>
+                            <span style="font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.12); color: #059669; padding: 2px 6px; border-radius: 6px;">Dönüştürülen Çöp</span>
+                        </div>
+                        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); color: #059669; display: flex; align-items: center; justify-content: center; font-size: 22px;">♻️</div>
+                    </div>
+
+                    <!-- KPI 3: Weather -->
+                    <div class="kpi-card" style="cursor: pointer;" onclick="openTab('tab-hava-durumu')"
+ style="background: rgba(255,255,255,0.75); padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85;">Anlık Hava</p>
+                            <h3 id="dash-kpi-weather" style="font-size: 22px; font-weight: 900; margin: 2px 0; color: #d97706;">--°C</h3>
+                            <span id="dash-kpi-weather-text" style="font-size: 10px; font-weight: 800; background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 2px 6px; border-radius: 6px;">İstanbul</span>
+                        </div>
+                        <div id="dash-kpi-weather-icon" style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.15); color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 22px;">⛅</div>
+                    </div>
+
+                    <!-- KPI 4: Messages / Inbox -->
+                    <div class="kpi-card" style="cursor: pointer;" onclick="openTab('tab-student-portal')"
+ style="background: rgba(255,255,255,0.75); padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85;">Mesaj & Bildirim</p>
+                            <h3 id="dash-kpi-messages" style="font-size: 22px; font-weight: 900; margin: 2px 0; color: #7c3aed;">0 Yeni</h3>
+                            <span style="font-size: 10px; font-weight: 800; background: rgba(124, 58, 237, 0.12); color: #7c3aed; padding: 2px 6px; border-radius: 6px;">Portal Kutusu</span>
+                        </div>
+                        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(124, 58, 237, 0.15); color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 22px;">💬</div>
+                    </div>
+                </div>
+
                 <div class="dashboard-layout" style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px;">
                     <div class="card glass" style="height: fit-content;">
                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.7); padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
@@ -3448,6 +3859,10 @@
                                 </div>
                             </div>
 
+                            
+                            
+
+
                             <!-- 📢 Duyuru Ayarları -->
                             <div class="card glass" style="display: flex; flex-direction: column; justify-content: space-between;">
                                 <div>
@@ -3616,10 +4031,12 @@
 
         </div>
 
-        <div class="bottom-bar hide-on-print">
-            <div class="ticker-wrap"><div class="ticker" id="main-ticker-text">Yükleniyor...</div></div>
-            <div class="clock-panel" id="live-clock">--:--:--</div>
-        </div>
+    </div>
+
+    <!-- Ticker & Live Clock Bottom Bar -->
+    <div class="bottom-bar hide-on-print">
+        <div class="ticker-wrap"><div class="ticker" id="main-ticker-text">Yükleniyor...</div></div>
+        <div class="clock-panel" id="live-clock">--:--:--</div>
     </div>
 
     <script>
@@ -4252,6 +4669,135 @@
             }
         }
 
+        
+        /* ========================================================
+           🚀 AERO 2.0 DUAL-INTERFACE & KPI ENGINE
+           ======================================================== */
+        function switchUIVersion(version, showToast = true) {
+            if (version !== 'modern' && version !== 'classic') version = 'classic';
+            localStorage.setItem('bkvUIVersion', version);
+            document.body.classList.remove('ui-classic', 'ui-modern');
+            document.body.classList.add('ui-' + version);
+
+            // Update all switcher buttons in settings & profile modal
+            document.querySelectorAll('.ui-version-btn').forEach(btn => {
+                const bVer = btn.getAttribute('data-version');
+                if (bVer === version) {
+                    btn.classList.add('active');
+                    btn.style.boxShadow = '0 0 0 3px #0284c7, 0 4px 12px rgba(2, 132, 199, 0.3)';
+                    btn.style.borderColor = '#0284c7';
+                    btn.style.fontWeight = 'bold';
+                    btn.style.background = 'linear-gradient(180deg, #ffffff 0%, #e0f2fe 100%)';
+                } else {
+                    btn.classList.remove('active');
+                    btn.style.boxShadow = 'none';
+                    btn.style.borderColor = 'rgba(0,0,0,0.12)';
+                    btn.style.fontWeight = 'normal';
+                    btn.style.background = '';
+                }
+            });
+
+            if (version === 'modern') {
+                updateDashKPIs();
+                const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+                if (typeof havaDurumuGetir === 'function') {
+                    havaDurumuGetir(initWeatherCity);
+                } else {
+                    // havaDurumuGetir not defined yet (page still loading), retry with delays
+                    const retryDelays = [500, 1500, 3000, 5000];
+                    retryDelays.forEach(delay => {
+                        setTimeout(() => {
+                            if (typeof havaDurumuGetir === 'function') {
+                                const city = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+                                havaDurumuGetir(city);
+                            }
+                        }, delay);
+                    });
+                }
+            }
+
+            if (showToast) {
+                const label = version === 'modern' ? '🚀 Aero 2.0 Komuta Merkezi (Yan Menülü & KPI)' : '💎 Klasik Frutiger Aero (Üst Menülü)';
+                if (typeof showNotification === 'function') {
+                    showNotification(`Arayüz görünümü güncellendi: ${label}`, 'success');
+                }
+            }
+        }
+
+        function loadUIVersion() {
+            const ver = localStorage.getItem('bkvUIVersion') || 'classic';
+            switchUIVersion(ver, false);
+        }
+
+        function toggleSidebarCollapse() {
+            const sidebar = document.getElementById('main-sidebar');
+            if (!sidebar) return;
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function toggleFullscreenUI() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+            }
+        }
+
+        function updateDashKPIs() {
+            try {
+                // 1. Tasks KPI
+                const taskList = JSON.parse(localStorage.getItem('bkvTasks') || '[]');
+                const todayStr = (typeof getLocalDateStr === 'function') ? getLocalDateStr(new Date()) : new Date().toISOString().split('T')[0];
+                let todayTasks = taskList.filter(t => t.date === todayStr);
+                if (todayTasks.length === 0) todayTasks = taskList;
+                const completed = todayTasks.filter(t => t.completed).length;
+                const taskEl = document.getElementById('dash-kpi-tasks');
+                if (taskEl) taskEl.innerText = `${completed} / ${todayTasks.length}`;
+
+                // 2. Bokashi total waste KPI
+                // 2. Bokashi total waste KPI (using bkvBokashi)
+                const bokashiRecords = JSON.parse(localStorage.getItem('bkvBokashi') || localStorage.getItem('bkvBokashiRecords') || '[]');
+                let totalWaste = 0;
+                bokashiRecords.forEach(r => {
+                    const w = parseFloat(r.wasteKg || r.miktar || 0);
+                    if (!isNaN(w)) totalWaste += w;
+                });
+                const bokashiEl = document.getElementById('dash-kpi-bokashi');
+                if (bokashiEl) bokashiEl.innerText = `${totalWaste.toFixed(1)} kg`;
+
+                // 3. Weather KPI
+                const weatherEl = document.getElementById('dash-kpi-weather');
+                const weatherCityEl = document.getElementById('dash-kpi-weather-text');
+                const savedCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+                if (weatherCityEl) weatherCityEl.innerText = savedCity;
+                const cachedWeather = JSON.parse(localStorage.getItem('bkvLastWeatherData') || 'null');
+                if (cachedWeather && weatherEl) {
+                    weatherEl.innerText = `${cachedWeather.temp}°C`;
+                    const weatherIconEl = document.getElementById('dash-kpi-weather-icon');
+                    if (weatherIconEl && cachedWeather.icon) weatherIconEl.innerText = cachedWeather.icon;
+                    if (weatherCityEl && cachedWeather.city) weatherCityEl.innerText = cachedWeather.city;
+                }
+                const hdTempEl = document.getElementById('hd-anlik-derece');
+                if (hdTempEl && hdTempEl.innerText && hdTempEl.innerText !== '--°C' && weatherEl) {
+                    weatherEl.innerText = hdTempEl.innerText;
+                }
+
+                // 4. Messages unread KPI
+                const currentUser = sessionStorage.getItem('currentUser') || '';
+                const msgs = JSON.parse(localStorage.getItem('bkvStudentMessages') || '[]');
+                let unreadCount = 0;
+                msgs.forEach(m => {
+                    if (!m.readBy || !m.readBy.includes(currentUser)) unreadCount++;
+                });
+                const msgEl = document.getElementById('dash-kpi-messages');
+                if (msgEl) msgEl.innerText = `${unreadCount} Yeni`;
+                const sidebarMsgBadge = document.getElementById('sidebar-msg-badge');
+                if (sidebarMsgBadge) sidebarMsgBadge.innerText = unreadCount;
+            } catch (e) {
+                console.warn('updateDashKPIs error:', e);
+            }
+        }
+
         function loadTheme() { 
             changeTheme(localStorage.getItem('bkvTheme') || 'blue', false); 
         }
@@ -4359,6 +4905,9 @@
                 sessionStorage.setItem('currentRole', validUser.role || 'guest');
                 applyUserRoleUI();
                 renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
                 loadNotes();
                 loadShoppingList();
                 loadRegisteredProducts();
@@ -4605,8 +5154,52 @@
                 btn.style.display = isAdmin ? 'inline-block' : 'none';
             });
 
+            // Modern header updates
+            const modernUserBadge = document.getElementById('modern-user-badge');
+            if (modernUserBadge) modernUserBadge.innerText = `👤 ${username}`;
+            const modernGradeBadge = document.getElementById('modern-grade-badge');
+            const modernRoleBadge = document.getElementById('modern-role-badge');
+            if (modernGradeBadge && modernRoleBadge) {
+                if (isAdmin) {
+                    const isFounderOrTeacher = grade.toLowerCase().includes('öğretmen') || grade.toLowerCase().includes('kurucu') || username.toLowerCase().includes('ahmet utku');
+                    if (isFounderOrTeacher) {
+                        modernGradeBadge.style.display = 'none';
+                        modernRoleBadge.innerText = (grade.toLowerCase().includes('kurucu') || username.toLowerCase().includes('ahmet utku')) ? "👑 Kurucu" : "👑 Yönetici";
+                        modernRoleBadge.style.background = "#f59e0b";
+                    } else {
+                        modernGradeBadge.innerText = `🏫 ${grade}`;
+                        modernGradeBadge.style.display = (grade && grade !== 'Belirtilmedi') ? 'inline-block' : 'none';
+                        modernRoleBadge.innerText = "👑 Yönetici";
+                        modernRoleBadge.style.background = "#f59e0b";
+                    }
+                } else {
+                    modernGradeBadge.innerText = `🏫 ${grade}`;
+                    modernGradeBadge.style.display = (grade && grade !== 'Belirtilmedi') ? 'inline-block' : 'none';
+                    modernRoleBadge.innerText = "🌱 Üye";
+                    modernRoleBadge.style.background = "#94a3b8";
+                }
+            }
+
+            // Modern sidebar updates
+            const sidebarPortalText = document.getElementById('portal-sidebar-text');
+            const sidebarPortalIcon = document.getElementById('portal-sidebar-icon');
+            if (sidebarPortalText && sidebarPortalIcon) {
+                if (isAdmin) {
+                    sidebarPortalText.innerText = "Yönetim Portalı";
+                    sidebarPortalIcon.innerText = "👑";
+                } else {
+                    sidebarPortalText.innerText = "Öğrenci Portalı";
+                    sidebarPortalIcon.innerText = "🎓";
+                }
+            }
+            const sidebarSettingsBtn = document.getElementById('sidebar-btn-settings');
+            if (sidebarSettingsBtn) sidebarSettingsBtn.style.display = isAdmin ? 'flex' : 'none';
+
             updateUsersLists();
             renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
             loadNotes();
         }
 
@@ -4760,6 +5353,8 @@
         function renderTasks() {
             if (typeof window.renderTasks === 'function' && window.renderTasks !== renderTasks) {
                 return window.renderTasks();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
             }
             try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
             const container = document.getElementById('task-list-container'); 
@@ -4800,13 +5395,19 @@
                 localStorage.setItem('bkvTasks', JSON.stringify(tasks));
                 input.value = ""; 
                 if (assigneeSelect) assigneeSelect.value = ""; 
-                renderTasks(); 
+                renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); 
                 showNotification("Görev eklendi!", "success");
             }
         }
 
         function toggleTask(id) {
-            if (!checkMemberActionPermission()) { renderTasks(); return; }
+            if (!checkMemberActionPermission()) { renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); return; }
             const currentUser = sessionStorage.getItem('currentUser'); 
             const isAdmin = sessionStorage.getItem('currentRole') === 'admin';
             try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
@@ -4815,10 +5416,16 @@
                 if (isAdmin || (task.assignee && task.assignee === currentUser)) { 
                     task.completed = !task.completed; 
                     localStorage.setItem('bkvTasks', JSON.stringify(tasks));
-                    renderTasks(); 
+                    renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); 
                 } else { 
                     showNotification("Bu görevi sadece atandığı kişi veya yöneticiler işaretleyebilir!", "warning"); 
-                    renderTasks(); 
+                    renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); 
                 } 
             }
         }
@@ -4832,7 +5439,10 @@
                     if (newText && newText.trim()) { 
                         task.text = newText.trim(); 
                         localStorage.setItem('bkvTasks', JSON.stringify(tasks));
-                        renderTasks(); 
+                        renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); 
                         showNotification("Görev güncellendi!", "success");
                     }
                 });
@@ -4845,7 +5455,10 @@
                 try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
                 tasks = tasks.filter(t => t.id !== id); 
                 localStorage.setItem('bkvTasks', JSON.stringify(tasks));
-                renderTasks(); 
+                renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); 
                 showNotification("Görev silindi.", "info");
             });
         }
@@ -5155,6 +5768,9 @@
 
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('#main-sidebar .nav-link').forEach(link => {
+                link.classList.toggle('active', !!(link.getAttribute('onclick') && link.getAttribute('onclick').includes(tabId)));
+            });
             const targetTab = document.getElementById(tabId);
             if (tabId === 'tab-hava-durumu' && !window.havaDurumuYuklendi) {
                 const kayitliSehir = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
@@ -6177,6 +6793,21 @@
                 const weatherCode = current.weather_code !== undefined ? current.weather_code : 0;
                 const weatherInfo = wmoHavaDetaylari[weatherCode] || { text: "Açık", icon: "☀️", bg: "linear-gradient(135deg, rgba(225, 245, 254, 0.85), rgba(179, 229, 252, 0.85))" };
 
+                                // Update Dashboard KPI
+                const currentTemp = Math.round(current.temperature_2m || 0);
+                const dashWeather = document.getElementById('dash-kpi-weather');
+                if (dashWeather) dashWeather.innerText = `${currentTemp}°C`;
+                const dashWeatherCity = document.getElementById('dash-kpi-weather-text');
+                if (dashWeatherCity) dashWeatherCity.innerText = cityName;
+                const dashWeatherIcon = document.getElementById('dash-kpi-weather-icon');
+                if (dashWeatherIcon && weatherInfo.icon) dashWeatherIcon.innerText = weatherInfo.icon;
+                localStorage.setItem('bkvLastWeatherData', JSON.stringify({
+                    temp: currentTemp,
+                    city: cityName,
+                    icon: weatherInfo.icon || "☀️",
+                    text: weatherInfo.text || "Açık"
+                }));
+
                 // 1. Hero Card Updates
                 const heroCard = document.getElementById("hd-hero-card");
                 if(heroCard && weatherInfo.bg) {
@@ -6369,6 +7000,9 @@
             loadTicker(); 
             loadCutoffSettings(); 
             renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
             loadNotes();
             loadShoppingList();
             renderBokashi();
@@ -6399,7 +7033,10 @@
             if(e.key === 'bkvNotesShared') loadNotes();
             if(e.key === 'bkvProducts') loadRegisteredProducts();
             if(e.key === 'bkvTasks') { 
-                try { tasks = JSON.parse(e.newValue || '[]'); renderTasks(); } catch(err) {} 
+                try { tasks = JSON.parse(e.newValue || '[]'); renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); } catch(err) {} 
             }
             if(e.key === 'shoppingList') loadShoppingList();
             if(e.key === 'bkvCutoffSettings') loadCutoffSettings();
@@ -6699,18 +7336,27 @@
             curDate.setDate(curDate.getDate() + offsetDays);
             window.currentTaskDate = getLocalDateStr(curDate);
             window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
         };
 
         window.onTaskDateChanged = function(newDateVal) {
             if (newDateVal) {
                 window.currentTaskDate = newDateVal;
                 window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
             }
         };
 
         window.resetTaskDateToToday = function() {
             window.currentTaskDate = getLocalDateStr();
             window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
         };
 
         // ========================================================
@@ -6960,6 +7606,9 @@
             currentTasks.push(newTask);
             localStorage.setItem('bkvTasks', JSON.stringify(currentTasks));
             window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
 
             if (input) input.value = ''; 
             if (assigneeSelect) assigneeSelect.value = '';
@@ -6973,6 +7622,9 @@
                 if (item) item.id = docRef.id;
                 localStorage.setItem('bkvTasks', JSON.stringify(updated));
                 window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
                 if (typeof showNotification === 'function') showNotification("Görev başarıyla eklendi!", "success");
             } catch(err) {
                 console.error("Firestore görev ekleme hatası:", err);
@@ -6982,7 +7634,10 @@
 
         window.toggleTask = async function(id) {
             if (typeof checkMemberActionPermission === 'function' && !checkMemberActionPermission()) { 
-                window.renderTasks(); 
+                window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); 
                 return; 
             }
             let taskList = [];
@@ -7005,6 +7660,9 @@
 
                     localStorage.setItem('bkvTasks', JSON.stringify(taskList));
                     window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
 
                     try {
                         const updatePayload = {
@@ -7019,7 +7677,10 @@
                     }
                 } else { 
                     if (typeof showNotification === 'function') showNotification("Bu görevi sadece atandığı kişi veya yöneticiler işaretleyebilir!", "warning"); 
-                    window.renderTasks(); 
+                    window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); 
                 } 
             }
         };
@@ -7035,6 +7696,9 @@
                         task.text = newText.trim();
                         localStorage.setItem('bkvTasks', JSON.stringify(taskList));
                         window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
                         try {
                             await updateDoc(doc(db, "tasks", String(id)), { text: newText.trim() });
                             if (typeof showNotification === 'function') showNotification("Görev güncellendi!", "success");
@@ -7055,6 +7719,9 @@
                 taskList = taskList.filter(t => String(t.id) !== String(id));
                 localStorage.setItem('bkvTasks', JSON.stringify(taskList));
                 window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
                 try {
                     await deleteDoc(doc(db, "tasks", String(id)));
                     if (typeof showNotification === 'function') showNotification("Görev silindi.", "info");
@@ -7106,9 +7773,15 @@
             window.tasks = taskList;
             localStorage.setItem('bkvTasks', JSON.stringify(taskList));
             window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
         }, (err) => {
             console.error("Firestore tasks onSnapshot hatası:", err);
             window.renderTasks();
+            updateDashKPIs();
+            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
         });
 
         // ========================================================
@@ -9089,6 +9762,73 @@
             console.error("Firestore bokashi onSnapshot hatası:", err);
             if (typeof window.renderBokashi === 'function') window.renderBokashi();
         });
+    </script>
+
+
+    <!-- Auto Weather Fetch for Aero 2.0 KPI -->
+    <script>
+    (function() {
+        function autoFetchWeatherKPI() {
+            if (!document.body.classList.contains('ui-modern')) return;
+            const city = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            if (typeof havaDurumuGetir === 'function') {
+                havaDurumuGetir(city);
+            } else {
+                // Direct fetch as fallback if havaDurumuGetir is somehow unavailable
+                const coords = {
+                    'İstanbul': [41.01, 28.98],
+                    'Ankara': [39.93, 32.86],
+                    'İzmir': [38.42, 27.13],
+                    'Antalya': [36.88, 30.71],
+                    'Bursa': [40.19, 29.06]
+                };
+                const [lat, lon] = coords[city] || coords['İstanbul'];
+                fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`)
+                    .then(r => r.json())
+                    .then(data => {
+                        const temp = Math.round(data.current?.temperature_2m || 0);
+                        const wc = data.current?.weather_code || 0;
+                        const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'🌨️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
+                        const icon = icons[wc] || '☀️';
+                        const el = document.getElementById('dash-kpi-weather');
+                        if (el) el.innerText = temp + '°C';
+                        const cityEl = document.getElementById('dash-kpi-weather-text');
+                        if (cityEl) cityEl.innerText = city;
+                        const iconEl = document.getElementById('dash-kpi-weather-icon');
+                        if (iconEl) iconEl.innerText = icon;
+                        localStorage.setItem('bkvLastWeatherData', JSON.stringify({temp, city, icon}));
+                        // Also update main weather display
+                        const hdEl = document.getElementById('hd-anlik-derece');
+                        if (hdEl && (hdEl.innerText === '--°C' || hdEl.innerText === '22°C')) {
+                            hdEl.innerText = temp + '°C';
+                        }
+                    })
+                    .catch(() => {});
+            }
+            // Also ensure KPIs are updated
+            if (typeof updateDashKPIs === 'function') {
+                setTimeout(() => updateDashKPIs(), 2000);
+            }
+        }
+
+        // Run on page load
+        if (document.readyState === 'complete') {
+            setTimeout(autoFetchWeatherKPI, 800);
+        } else {
+            window.addEventListener('load', function() {
+                setTimeout(autoFetchWeatherKPI, 800);
+            });
+        }
+
+        // Also run after login (watch for sessionStorage currentUser changes)
+        const origSetItem = sessionStorage.setItem;
+        sessionStorage.setItem = function(key, value) {
+            origSetItem.call(this, key, value);
+            if (key === 'currentUser' && value) {
+                setTimeout(autoFetchWeatherKPI, 1500);
+            }
+        };
+    })();
     </script>
 
 </body>
