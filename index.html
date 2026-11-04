@@ -5144,10 +5144,9 @@
             const kurucuEmail = 'www.ahmetutkuavci@gmail.com'.toLowerCase();
             let adminIndex = users.findIndex(u => u.email.toLowerCase() === kurucuEmail);
 
-            if (adminIndex === -1) {
-                users.push({ username: 'AHMET UTKU AVCI', grade: 'Öğretmen / Kurucu', email: kurucuEmail, password: 'Ahmet2008', role: 'admin' });
-            } else {
-                users[adminIndex].password = 'Ahmet2008';
+            // Kurucu hesabı: şifre kodda TUTULMAZ. Hesap yalnızca bulut veritabanındaki kayıttan gelir;
+            // burada sadece yetki/sınıf bilgisi garanti altına alınır (şifreye dokunulmaz).
+            if (adminIndex !== -1) {
                 users[adminIndex].role = 'admin';
                 if (!users[adminIndex].grade) users[adminIndex].grade = 'Öğretmen / Kurucu';
             }
@@ -8444,18 +8443,9 @@
 
             let kurucu = userList.find(u => u.email && u.email.toLowerCase() === kurucuEmail);
             if (!kurucu) {
-                const founderObj = { 
-                    username: 'AHMET UTKU AVCI', 
-                    grade: 'Öğretmen / Kurucu', 
-                    email: kurucuEmail, 
-                    password: 'Ahmet2008', 
-                    role: 'admin',
-                    createdAt: Date.now()
-                };
-                try {
-                    await setDoc(doc(db, "users", kurucuEmail), founderObj, { merge: true });
-                } catch(e) { console.error("Kurucu oluşturma hatası:", e); }
-                userList.push({ _docId: kurucuEmail, ...founderObj });
+                // Güvenlik: kurucu kaydı silinmişse otomatik oluşturulmaz ve hiçbir cihazda şifre gösterilmez.
+                // Geri yükleme Firebase konsolundan elle yapılır (users koleksiyonu, belge kimliği = e-posta).
+                console.warn("Kurucu hesabı bulut veritabanında bulunamadı. Firebase konsolundan geri yükleyin.");
             }
 
             localStorage.setItem('bkvUsers', JSON.stringify(userList));
