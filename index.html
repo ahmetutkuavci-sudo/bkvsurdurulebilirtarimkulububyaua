@@ -2544,6 +2544,252 @@
             box-shadow: 0 6px 16px rgba(244, 114, 182, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
         }
 
+
+        /* ========================================================================
+           📱 YENİ ARAYÜZ (Aero 2.0 / ui-modern) — TELEFON & TABLET OPTİMİZASYONU
+           Not: Yalnızca body.ui-modern için geçerlidir; klasik arayüze dokunmaz.
+           ======================================================================== */
+        #mobile-nav-backdrop { display: none; }
+
+        /* --- Tablet / dar masaüstü: üst bar sıkışmasın --- */
+        @media (max-width: 1000px) {
+            body.ui-modern #modern-top-header .mh-btn-text { display: none; }
+            body.ui-modern #modern-top-header .mh-actions .aero-btn { padding: 8px 11px !important; }
+            body.ui-modern #modern-top-header .mh-sub { display: none !important; }
+            body.ui-modern .main-content { padding: 16px 16px !important; }
+        }
+
+        /* --- Telefon & küçük tablet: çekmece menü + tek sütun düzen --- */
+        @media (max-width: 768px) {
+            body.ui-modern {
+                height: 100vh; height: 100dvh;
+                -webkit-tap-highlight-color: transparent;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            /* Üst bar: 2 satır (marka + aksiyonlar / kullanıcı + bulut) */
+            body.ui-modern #modern-top-header {
+                flex-wrap: wrap !important;
+                margin: 6px 8px 0 8px !important;
+                padding: 8px 10px !important;
+                gap: 8px !important;
+                border-radius: 16px !important;
+                overflow: visible !important;
+            }
+            body.ui-modern #modern-top-header .mh-brand {
+                order: 1; flex: 1 1 0%; min-width: 0; gap: 8px !important;
+            }
+            body.ui-modern #modern-top-header .mh-brand > div:nth-child(2) {
+                width: 34px !important; height: 34px !important; border-radius: 11px !important; flex: 0 0 34px;
+            }
+            body.ui-modern #modern-top-header .mh-title { min-width: 0; flex: 1 1 auto; }
+            body.ui-modern #modern-top-header .mh-title h1 {
+                font-size: 12px !important; line-height: 1.25 !important;
+                display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            }
+            body.ui-modern #modern-top-header .mh-sub { display: none !important; }
+            body.ui-modern #sidebar-toggle-btn {
+                min-width: 40px; min-height: 40px; padding: 0 !important; justify-content: center; font-size: 18px !important; flex: 0 0 auto;
+            }
+            body.ui-modern #modern-top-header .mh-actions { order: 2; gap: 6px !important; flex: 0 0 auto; }
+            body.ui-modern #modern-top-header .mh-btn-fs { display: none !important; }
+            body.ui-modern #modern-top-header .mh-actions .aero-btn {
+                min-width: 40px; min-height: 40px; padding: 0 !important; justify-content: center; font-size: 16px !important;
+            }
+            body.ui-modern #modern-top-header .mh-center {
+                order: 3; flex: 1 1 100%; min-width: 0; gap: 8px !important; justify-content: space-between;
+            }
+            body.ui-modern #modern-top-header .modern-header-user-card {
+                flex: 1 1 auto; min-width: 0; padding: 4px 10px !important; border-radius: 13px !important; gap: 8px !important;
+            }
+            body.ui-modern #modern-top-header .modern-header-user-card > div:last-child { min-width: 0; }
+            body.ui-modern #modern-user-badge {
+                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%;
+            }
+            body.ui-modern #modern-cloud-pill {
+                flex: 0 0 auto; padding: 6px 10px !important; font-size: 11px !important; border-radius: 12px !important;
+            }
+
+            /* Ana kap: yan menü artık akışta değil (çekmece), içerik tam genişlik */
+            body.ui-modern .main-wrapper {
+                height: auto !important;
+                flex: 1 1 0% !important;
+                min-height: 0 !important;
+                padding: 6px 8px 8px 8px !important;
+                gap: 0 !important;
+            }
+            body.ui-modern .main-content {
+                padding: 12px 10px 28px 10px !important;
+                border-radius: 16px !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
+            }
+
+            /* Çekmece menü */
+            body.ui-modern #main-sidebar,
+            body.ui-modern #main-sidebar.collapsed {
+                position: fixed !important;
+                top: 0; left: 0; bottom: 0;
+                height: 100vh; height: 100dvh;
+                width: min(82vw, 300px) !important;
+                padding: 18px 12px 24px 12px !important;
+                border-radius: 0 22px 22px 0 !important;
+                background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%) !important;
+                backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+                overflow-y: auto; -webkit-overflow-scrolling: touch;
+                transform: translateX(-108%);
+                visibility: hidden;
+                transition: transform .28s cubic-bezier(.4,0,.2,1), visibility 0s linear .28s !important;
+                z-index: 1000 !important;
+                box-shadow: none !important;
+            }
+            body.ui-modern #main-sidebar.mobile-open {
+                transform: translateX(0);
+                visibility: visible;
+                transition: transform .28s cubic-bezier(.4,0,.2,1), visibility 0s !important;
+                box-shadow: 8px 0 40px rgba(2, 24, 43, 0.35) !important;
+            }
+            body.ui-modern #main-sidebar .sidebar-hide-on-collapse { display: revert !important; }
+            body.ui-modern #main-sidebar .nav-link,
+            body.ui-modern #main-sidebar.collapsed .nav-link {
+                padding: 13px 14px !important;
+                font-size: 15px !important;
+                justify-content: flex-start;
+                min-height: 48px;
+            }
+            body.ui-modern #main-sidebar .nav-link:hover { transform: none; }
+            body.ui-modern #main-sidebar .nav-link > div { flex: 1; }
+            body.ui-modern #mobile-nav-backdrop {
+                display: block;
+                position: fixed; inset: 0;
+                background: rgba(2, 24, 43, 0.5);
+                backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+                opacity: 0; pointer-events: none;
+                transition: opacity .25s ease;
+                z-index: 999;
+            }
+            body.ui-modern #mobile-nav-backdrop.show { opacity: 1; pointer-events: auto; }
+            body.ui-modern.mobile-nav-open .main-content { overflow: hidden !important; }
+
+            /* KPI kartları: 2 sütun, kompakt */
+            body.ui-modern #dash-kpi-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 8px !important;
+                margin-bottom: 14px !important;
+            }
+            body.ui-modern .kpi-card {
+                padding: 10px 10px 10px 12px; gap: 8px; border-radius: 14px; min-width: 0;
+            }
+            body.ui-modern .kpi-card:hover { transform: none; }
+            body.ui-modern .kpi-icon { flex: 0 0 36px; width: 36px; height: 36px; border-radius: 11px; font-size: 19px; }
+            body.ui-modern .kpi-label { font-size: 10.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+            body.ui-modern .kpi-value { font-size: 18px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+            body.ui-modern .kpi-chip { font-size: 9.5px; padding: 2px 7px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            body.ui-modern .kpi-body { gap: 2px; flex: 1 1 0%; }
+
+            /* Izgaralar tek sütun */
+            body.ui-modern .dashboard-layout,
+            body.ui-modern .dashboard-grid,
+            body.ui-modern .settings-grid,
+            body.ui-modern .settings-grid-row,
+            body.ui-modern .hd-hero-card,
+            body.ui-modern .bokashi-form-grid,
+            body.ui-modern .bokashi-cards-grid,
+            body.ui-modern .bokashi-tools-grid,
+            body.ui-modern .waste-guide-grid,
+            body.ui-modern #portal-section-messages > div,
+            body.ui-modern #portal-section-logbook > div,
+            body.ui-modern #portal-section-forms > div {
+                grid-template-columns: minmax(0, 1fr) !important;
+                gap: 12px !important;
+            }
+            body.ui-modern .bokashi-stats-grid {
+                grid-template-columns: minmax(0, 1fr) !important;
+                gap: 10px !important;
+            }
+            body.ui-modern .hd-metrics-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 8px !important;
+            }
+            body.ui-modern .time-boxes-grid { grid-template-columns: 1fr !important; }
+
+            /* Kartlar & başlıklar */
+            body.ui-modern .card { padding: 14px 12px !important; border-radius: 14px !important; }
+            body.ui-modern .card h2,
+            body.ui-modern .main-content h2 { font-size: 17px !important; }
+            body.ui-modern .main-content h3 { font-size: 15px !important; }
+            body.ui-modern .main-content [style*="min-width"] { min-width: 0 !important; }
+            body.ui-modern .main-content [style*="grid-template-columns: 1fr 1.3fr"],
+            body.ui-modern .main-content [style*="grid-template-columns: 1fr 1.4fr"],
+            body.ui-modern .main-content [style*="grid-template-columns: 1.3fr 1fr"] {
+                grid-template-columns: minmax(0, 1fr) !important;
+            }
+            body.ui-modern .main-content img, body.ui-modern .main-content video { max-width: 100%; height: auto; }
+
+            /* Form elemanları: iOS yakınlaştırmasını engelle + dokunma boyutu */
+            body.ui-modern .main-content input:not([type="checkbox"]):not([type="radio"]),
+            body.ui-modern .main-content select,
+            body.ui-modern .main-content textarea,
+            body.ui-modern .aero-input {
+                font-size: 16px !important;
+                min-height: 42px;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            body.ui-modern .main-content input:not([type="checkbox"]):not([type="radio"]),
+            body.ui-modern .main-content select,
+            body.ui-modern .main-content textarea { min-width: 0 !important; }
+            body.ui-modern .main-content .aero-btn { min-height: 40px; }
+            body.ui-modern .main-content [style*="display: flex"][style*="flex-wrap: wrap"] > .aero-input:not([type="date"]),
+            body.ui-modern .main-content [style*="display: flex"][style*="gap"] > input.aero-input:not([type="date"]) { flex: 1 1 100% !important; }
+            body.ui-modern .main-content input[type="date"].aero-input { flex: 1 1 120px; min-width: 0 !important; width: auto; }
+
+            /* Tablolar: yatay kaydırma */
+            body.ui-modern .main-content table {
+                display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+            }
+            body.ui-modern .main-content th,
+            body.ui-modern .main-content td { padding: 8px 8px; font-size: 13px; }
+            body.ui-modern .table-container { max-width: 100%; }
+
+            /* Alt sekme çubukları kaydırılabilir */
+            body.ui-modern .portal-subtabs {
+                flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch;
+                padding-bottom: 6px !important; scrollbar-width: none;
+            }
+            body.ui-modern .portal-subtabs::-webkit-scrollbar { display: none; }
+            body.ui-modern .portal-subtab-btn { flex-shrink: 0; padding: 8px 13px !important; font-size: 12.5px !important; }
+
+            /* Alt bilgi çubuğu */
+            body.ui-modern .bottom-bar { height: 32px !important; padding: 0 10px !important; font-size: 12px !important; }
+            body.ui-modern .bottom-bar .ticker { font-size: 12px !important; }
+            body.ui-modern .bottom-bar .ticker-wrap { margin-right: 10px !important; }
+            body.ui-modern .bottom-bar .clock-panel { padding: 2px 8px !important; font-size: 11px !important; }
+
+            /* Profil modalı */
+            body.ui-modern #profile-modal { height: 100dvh !important; padding: 8px; box-sizing: border-box; }
+            body.ui-modern #profile-modal > .glass { width: 100% !important; max-height: 94dvh !important; padding: 16px 14px !important; }
+        }
+
+        /* --- Çok dar telefonlar --- */
+        @media (max-width: 380px) {
+            body.ui-modern #modern-top-header .mh-title h1 { font-size: 11px !important; }
+            body.ui-modern .kpi-icon { display: none; }
+            body.ui-modern .kpi-value { font-size: 17px; }
+            body.ui-modern .hd-metrics-grid { grid-template-columns: minmax(0, 1fr) !important; }
+        }
+
+        /* --- Yatay (landscape) telefon: dikey alanı koru --- */
+        @media (max-width: 900px) and (max-height: 480px) and (orientation: landscape) {
+            body.ui-modern #modern-top-header { padding: 4px 10px !important; flex-wrap: nowrap !important; }
+            body.ui-modern #modern-top-header .mh-center { order: 2; flex: 0 1 auto; }
+            body.ui-modern #modern-top-header .mh-actions { order: 3; }
+            body.ui-modern #modern-top-header .modern-header-user-card { padding: 2px 8px !important; }
+            body.ui-modern .bottom-bar { display: none !important; }
+        }
+
     </style>
 </head>
 <body>
@@ -2726,16 +2972,16 @@
     <!-- 🚀 TOP HEADER BAR (Aero 2.0 Komuta Merkezi) -->
     <header id="modern-top-header" class="aero-glass modern-only-header" style="margin: 10px 14px 0 14px; padding: 10px 18px; display: none; align-items: center; justify-content: space-between; gap: 14px; z-index: 30; border-radius: 20px;">
         <!-- Brand Left -->
-        <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="mh-brand" style="display: flex; align-items: center; gap: 12px;">
             <button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" class="aero-btn" style="padding: 7px 11px; font-size: 16px; display: inline-flex; cursor: pointer; border-radius: 12px;" title="Menüyü Daralt/Genişlet">
                 ☰
             </button>
             <div style="width: 40px; height: 40px; border-radius: 14px; background: rgba(255,255,255,0.92); box-shadow: 0 4px 10px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;">
                 <img src="Logo.jpg" alt="BKV Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 14px;" onerror="this.style.display='none'; this.parentElement.innerHTML='🌱'; this.parentElement.style.fontSize='22px';">
             </div>
-            <div>
+            <div class="mh-title">
                 <h1 style="font-weight: 800; font-size: 16px; margin: 0; line-height: 1.2; color: #0c4a6e;">BJK-KABATAŞ VAKFI ÖZEL OKULLARI</h1>
-                <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85; display: flex; align-items: center; gap: 6px; color: #0369a1;">
+                <p class="mh-sub" style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85; display: flex; align-items: center; gap: 6px; color: #0369a1;">
                     <span>🌱 Sürdürülebilir Tarım Kulübü Bilgi Ve Yönetim Paneli</span>
                     <span style="opacity: 0.6;">•</span>
                 </p>
@@ -2743,7 +2989,7 @@
         </div>
 
         <!-- Center User Card (Clickable -> openProfileModal) & Cloud Pill -->
-        <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="mh-center" style="display: flex; align-items: center; gap: 10px;">
             <div class="modern-header-user-card" onclick="openProfileModal()" title="Profilim, Şifre Değiştirme ve Tema Ayarları (Tıklayın)" style="cursor: pointer; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); padding: 5px 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 2px 6px rgba(0,0,0,0.04); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
                 <div style="width: 28px; height: 28px; border-radius: 50%; background: #bae6fd; color: #0369a1; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 13px;">
                     🌱
@@ -2765,15 +3011,15 @@
         </div>
 
         <!-- Right Actions -->
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <button class="aero-btn" style="font-size: 11.5px; padding: 7px 12px;" onclick="toggleFullscreenUI()" title="Tam Ekran Modu">
-                <span>🔲</span> <span>Tam Ekran</span>
+        <div class="mh-actions" style="display: flex; align-items: center; gap: 8px;">
+            <button class="aero-btn mh-btn-fs" style="font-size: 11.5px; padding: 7px 12px;" onclick="toggleFullscreenUI()" title="Tam Ekran Modu">
+                <span>🔲</span> <span class="mh-btn-text">Tam Ekran</span>
             </button>
             <button class="aero-btn" style="font-size: 11.5px; padding: 7px 12px; color: #6b21a8;" onclick="window.open('https://online.bkvakademi.com/', '_blank')">
-                <span>🎓</span> <span>BKV AKADEMİ</span>
+                <span>🎓</span> <span class="mh-btn-text">BKV AKADEMİ</span>
             </button>
             <button class="aero-btn aero-btn-danger" style="font-size: 11.5px; padding: 7px 12px;" onclick="lockSystem()" title="Sistemi Kilitle / Çıkış">
-                <span>🚪</span> <span>Çıkış</span>
+                <span>🚪</span> <span class="mh-btn-text">Çıkış</span>
             </button>
         </div>
     </header>
@@ -2843,6 +3089,8 @@
             <button class="tab-btn" id="tab-btn-settings" onclick="openTab('tab-settings', this)"><span class="tab-icon">⚙️</span> <span class="tab-text">Ayarlar</span></button>
         </nav>
     </header>
+
+    <div id="mobile-nav-backdrop" onclick="toggleSidebarCollapse()" aria-hidden="true"></div>
 
     <div class="main-wrapper">
 
@@ -9888,6 +10136,59 @@
                 setTimeout(autoFetchWeatherKPI, 1500);
             }
         };
+    })();
+    </script>
+
+
+    <script>
+    /* 📱 Yeni arayüz: telefon çekmece menü davranışı (yalnızca ui-modern ve ≤768px) */
+    (function () {
+        var mq = window.matchMedia('(max-width: 768px)');
+        function sb() { return document.getElementById('main-sidebar'); }
+        function bd() { return document.getElementById('mobile-nav-backdrop'); }
+        function isModernMobile() { return mq.matches && document.body.classList.contains('ui-modern'); }
+        function closeNav() {
+            var s = sb(), b = bd();
+            if (s) s.classList.remove('mobile-open');
+            if (b) b.classList.remove('show');
+            document.body.classList.remove('mobile-nav-open');
+        }
+        function openNav() {
+            var s = sb(), b = bd();
+            if (!s) return;
+            s.classList.remove('collapsed');
+            s.classList.add('mobile-open');
+            if (b) b.classList.add('show');
+            document.body.classList.add('mobile-nav-open');
+        }
+        var originalToggle = window.toggleSidebarCollapse;
+        window.toggleSidebarCollapse = function () {
+            if (isModernMobile()) {
+                var s = sb();
+                if (s && s.classList.contains('mobile-open')) closeNav(); else openNav();
+                return;
+            }
+            if (typeof originalToggle === 'function') originalToggle.apply(this, arguments);
+        };
+        document.addEventListener('click', function (e) {
+            if (!isModernMobile()) return;
+            var link = e.target.closest ? e.target.closest('#main-sidebar .nav-link') : null;
+            if (link) {
+                setTimeout(function () {
+                    closeNav();
+                    var mc = document.querySelector('.main-content');
+                    if (mc) mc.scrollTop = 0;
+                }, 60);
+            }
+        });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeNav(); });
+        function onChange() {
+            closeNav();
+            var s = sb();
+            if (mq.matches && s) s.classList.remove('collapsed');
+        }
+        if (mq.addEventListener) mq.addEventListener('change', onChange); else if (mq.addListener) mq.addListener(onChange);
+        onChange();
     })();
     </script>
 
