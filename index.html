@@ -2346,6 +2346,47 @@
             position: relative;
         }
 
+        /* KPI özet kartları */
+        .dash-kpi-row {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+        .kpi-card {
+            --kc: #0284c7; --kc-bg: rgba(2,132,199,0.14);
+            position: relative; overflow: hidden; cursor: pointer;
+            display: flex; align-items: center; gap: 14px;
+            padding: 16px 18px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(255,255,255,0.62));
+            border: 1px solid rgba(255,255,255,0.95);
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(2,60,110,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .kpi-card::before {
+            content: ""; position: absolute; left: 0; top: 14px; bottom: 14px;
+            width: 4px; border-radius: 0 4px 4px 0; background: var(--kc);
+        }
+        .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(2,60,110,0.16), inset 0 1px 0 rgba(255,255,255,0.9); }
+        .kpi-card.kpi-blue   { --kc: #0284c7; --kc-bg: rgba(2,132,199,0.14); }
+        .kpi-card.kpi-green  { --kc: #059669; --kc-bg: rgba(16,185,129,0.16); }
+        .kpi-card.kpi-amber  { --kc: #d97706; --kc-bg: rgba(245,158,11,0.18); }
+        .kpi-card.kpi-violet { --kc: #7c3aed; --kc-bg: rgba(124,58,237,0.14); }
+        .kpi-icon {
+            flex: 0 0 52px; width: 52px; height: 52px; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; background: var(--kc-bg);
+        }
+        .kpi-body { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+        .kpi-label { margin: 0; font-size: 12px; font-weight: 700; color: #3b5b78; letter-spacing: .2px; }
+        .kpi-value { margin: 0; font-size: 26px; line-height: 1.1; font-weight: 800; color: var(--kc); white-space: nowrap; }
+        .kpi-chip {
+            font-size: 10.5px; font-weight: 700; padding: 2px 9px; border-radius: 999px;
+            background: var(--kc-bg); color: var(--kc);
+        }
+
         /* Mode Visibility Switching */
         body.ui-classic #modern-top-header { display: none !important; }
         body.ui-classic #main-sidebar { display: none !important; }
@@ -2506,6 +2547,7 @@
     </style>
 </head>
 <body>
+    <script>try{var _v=localStorage.getItem('bkvUIVersion');if(_v==='modern'||_v==='classic'){document.body.classList.add('ui-'+_v);}}catch(e){}</script>
 
     <!-- Uygulama İçi Bildirim Toast Alanı -->
     <div id="app-toast-container"></div>
@@ -3302,48 +3344,41 @@
             <div id="tab-dashboard" class="tab-content active">
 
                 <!-- 📊 KPI SUMMARY CARDS ROW (Aero 2.0 Komuta Merkezi) -->
-                <div id="dash-kpi-row" class="dash-kpi-row" style="display: none; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px;">
-                    <!-- KPI 1: Tasks -->
-                    <div class="kpi-card" style="cursor: pointer;" onclick="document.getElementById('task-list-container')?.scrollIntoView({behavior:'smooth'})" style="background: rgba(255,255,255,0.75); padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between;">
-                        <div>
-                            <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85;">Aktif Görevler</p>
-                            <h3 id="dash-kpi-tasks" style="font-size: 22px; font-weight: 900; margin: 2px 0;">0 / 0</h3>
-                            <span style="font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.12); color: #059669; padding: 2px 6px; border-radius: 6px;">Bugünlük Takip</span>
+                <div id="dash-kpi-row" class="dash-kpi-row">
+                    <div class="kpi-card kpi-blue" onclick="document.getElementById('task-list-container')?.scrollIntoView({behavior:'smooth'})">
+                        <div class="kpi-icon">📋</div>
+                        <div class="kpi-body">
+                            <p class="kpi-label">Aktif Görevler</p>
+                            <h3 class="kpi-value" id="dash-kpi-tasks">0 / 0</h3>
+                            <span class="kpi-chip">Bugünlük Takip</span>
                         </div>
-                        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(2, 132, 199, 0.12); color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 22px;">📋</div>
                     </div>
 
-                    <!-- KPI 2: Bokashi -->
-                    <div class="kpi-card" style="cursor: pointer;" onclick="openTab('tab-bokashi')"
- style="background: rgba(255,255,255,0.75); padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between;">
-                        <div>
-                            <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85;">Bokashi Atığı</p>
-                            <h3 id="dash-kpi-bokashi" style="font-size: 22px; font-weight: 900; margin: 2px 0; color: #059669;">0 kg</h3>
-                            <span style="font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.12); color: #059669; padding: 2px 6px; border-radius: 6px;">Dönüştürülen Çöp</span>
+                    <div class="kpi-card kpi-green" onclick="openTab('tab-bokashi')">
+                        <div class="kpi-icon">♻️</div>
+                        <div class="kpi-body">
+                            <p class="kpi-label">Bokashi Atığı</p>
+                            <h3 class="kpi-value" id="dash-kpi-bokashi">0 kg</h3>
+                            <span class="kpi-chip">Dönüştürülen Çöp</span>
                         </div>
-                        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); color: #059669; display: flex; align-items: center; justify-content: center; font-size: 22px;">♻️</div>
                     </div>
 
-                    <!-- KPI 3: Weather -->
-                    <div class="kpi-card" style="cursor: pointer;" onclick="openTab('tab-hava-durumu')"
- style="background: rgba(255,255,255,0.75); padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between;">
-                        <div>
-                            <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85;">Anlık Hava</p>
-                            <h3 id="dash-kpi-weather" style="font-size: 22px; font-weight: 900; margin: 2px 0; color: #d97706;">--°C</h3>
-                            <span id="dash-kpi-weather-text" style="font-size: 10px; font-weight: 800; background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 2px 6px; border-radius: 6px;">İstanbul</span>
+                    <div class="kpi-card kpi-amber" onclick="openTab('tab-hava-durumu')">
+                        <div class="kpi-icon" id="dash-kpi-weather-icon">⛅</div>
+                        <div class="kpi-body">
+                            <p class="kpi-label">Anlık Hava</p>
+                            <h3 class="kpi-value" id="dash-kpi-weather">--°C</h3>
+                            <span class="kpi-chip" id="dash-kpi-weather-text">İstanbul</span>
                         </div>
-                        <div id="dash-kpi-weather-icon" style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.15); color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 22px;">⛅</div>
                     </div>
 
-                    <!-- KPI 4: Messages / Inbox -->
-                    <div class="kpi-card" style="cursor: pointer;" onclick="openTab('tab-student-portal')"
- style="background: rgba(255,255,255,0.75); padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between;">
-                        <div>
-                            <p style="font-size: 11.5px; font-weight: 700; margin: 0; opacity: 0.85;">Mesaj & Bildirim</p>
-                            <h3 id="dash-kpi-messages" style="font-size: 22px; font-weight: 900; margin: 2px 0; color: #7c3aed;">0 Yeni</h3>
-                            <span style="font-size: 10px; font-weight: 800; background: rgba(124, 58, 237, 0.12); color: #7c3aed; padding: 2px 6px; border-radius: 6px;">Portal Kutusu</span>
+                    <div class="kpi-card kpi-violet" onclick="openTab('tab-student-portal')">
+                        <div class="kpi-icon">💬</div>
+                        <div class="kpi-body">
+                            <p class="kpi-label">Mesaj &amp; Bildirim</p>
+                            <h3 class="kpi-value" id="dash-kpi-messages">0 Yeni</h3>
+                            <span class="kpi-chip">Portal Kutusu</span>
                         </div>
-                        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(124, 58, 237, 0.15); color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 22px;">💬</div>
                     </div>
                 </div>
 
@@ -4782,20 +4817,42 @@
                     weatherEl.innerText = hdTempEl.innerText;
                 }
 
-                // 4. Messages unread KPI
-                const currentUser = sessionStorage.getItem('currentUser') || '';
-                const msgs = JSON.parse(localStorage.getItem('bkvStudentMessages') || '[]');
-                let unreadCount = 0;
-                msgs.forEach(m => {
-                    if (!m.readBy || !m.readBy.includes(currentUser)) unreadCount++;
-                });
-                const msgEl = document.getElementById('dash-kpi-messages');
-                if (msgEl) msgEl.innerText = `${unreadCount} Yeni`;
-                const sidebarMsgBadge = document.getElementById('sidebar-msg-badge');
-                if (sidebarMsgBadge) sidebarMsgBadge.innerText = unreadCount;
+                // 4. Okunmamış mesaj sayısı (KPI kartı + yan menü rozeti)
+                refreshMessageBadges();
             } catch (e) {
                 console.warn('updateDashKPIs error:', e);
             }
+        }
+
+        // Okunmamış mesaj sayısı: gelen kutusu mantığıyla aynı (e-posta + sınıf + toplu duyuru)
+        function refreshMessageBadges() {
+            try {
+                const email = (sessionStorage.getItem('currentEmail') || '').toLowerCase();
+                const grade = (sessionStorage.getItem('currentGrade') || '').toLowerCase();
+                let list = [];
+                try { list = JSON.parse(localStorage.getItem('bkvMessages')) || []; } catch (e) {}
+                let count = 0;
+                if (email) {
+                    count = list.filter(m => {
+                        if ((m.fromEmail || '').toLowerCase() === email) return false;
+                        const tv = String(m.targetValue || '').toLowerCase();
+                        const mine = m.targetType === 'ALL' ||
+                                     (m.targetType === 'USER' && tv === email) ||
+                                     (m.targetType === 'GRADE' && tv && grade.includes(tv));
+                        return mine && !(m.readBy || []).includes(email);
+                    }).length;
+                }
+                const kpi = document.getElementById('dash-kpi-messages');
+                if (kpi) kpi.innerText = `${count} Yeni`;
+                const badge = document.getElementById('sidebar-msg-badge');
+                if (badge) {
+                    badge.innerText = count;
+                    badge.style.background = count > 0 ? '#e11d48' : '#0284c7';
+                }
+                const inbox = document.getElementById('msg-inbox-count');
+                if (inbox) inbox.innerText = count;
+                return count;
+            } catch (e) { return 0; }
         }
 
         function loadTheme() { 
@@ -5926,6 +5983,7 @@
         }
 
         function loadPortalMessages() {
+            refreshMessageBadges();
             const container = document.getElementById('portal-messages-list');
             if (!container) return;
 
@@ -6991,6 +7049,7 @@
         // ========================================================
         window.onload = function() { 
             loadTheme(); 
+            loadUIVersion(); // Son kullanılan arayüzü (klasik/modern) geri yükle
             try {
                 localStorage.removeItem('bkvNavLayout');
                 localStorage.removeItem('bkvSidebarCollapsed');
@@ -8626,6 +8685,7 @@
         };
 
         window.loadPortalMessages = function() {
+            refreshMessageBadges();
             const container = document.getElementById('portal-messages-list');
             if (!container) return;
 
