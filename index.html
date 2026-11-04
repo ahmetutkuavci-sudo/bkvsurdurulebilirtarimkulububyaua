@@ -2817,24 +2817,24 @@
                     <button onclick="openTab('tab-student-portal', this); if(typeof loadStudentPortalData==='function') loadStudentPortalData();" class="nav-link" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <span style="font-size: 17px;" id="portal-sidebar-icon">👑</span>
-                            <span class="sidebar-hide-on-collapse" id="portal-sidebar-text">Yönetim Portalı</span>
+                            <span class="sidebar-hide-on-collapse" id="portal-sidebar-text">Yönetim İşlemleri</span>
                         </div>
                         <span id="sidebar-msg-badge" class="sidebar-hide-on-collapse" style="background: #0284c7; color: white; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">0</span>
                     </button>
                     <button onclick="openTab('tab-bokashi', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
-                        <span style="font-size: 17px;">♻️</span> <span class="sidebar-hide-on-collapse">Bokashi Kompost</span>
+                        <span style="font-size: 17px;">♻️</span> <span class="sidebar-hide-on-collapse">Bokashi Takip</span>
                     </button>
                     <button onclick="openTab('tab-hava-durumu', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
-                        <span style="font-size: 17px;">⛅</span> <span class="sidebar-hide-on-collapse">Meteoroloji</span>
+                        <span style="font-size: 17px;">⛅</span> <span class="sidebar-hide-on-collapse">Hava Durumu</span>
                     </button>
                     <button onclick="openTab('tab-barcode', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
-                        <span style="font-size: 17px;">🏷️</span> <span class="sidebar-hide-on-collapse">Barkod / Stok</span>
+                        <span style="font-size: 17px;">🏷️</span> <span class="sidebar-hide-on-collapse">Barkod/Satış</span>
                     </button>
                     <button onclick="openTab('tab-excel', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
-                        <span style="font-size: 17px;">📊</span> <span class="sidebar-hide-on-collapse">Tablo İzleyici</span>
+                        <span style="font-size: 17px;">📊</span> <span class="sidebar-hide-on-collapse">Tablo Görüntüleyici</span>
                     </button>
                     <button id="sidebar-btn-settings" onclick="openTab('tab-settings', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
-                        <span style="font-size: 17px;">⚙️</span> <span class="sidebar-hide-on-collapse">Sistem Ayarları</span>
+                        <span style="font-size: 17px;">⚙️</span> <span class="sidebar-hide-on-collapse">Ayarlar</span>
                     </button>
                 </nav>
             </div>
@@ -5185,10 +5185,10 @@
             const sidebarPortalIcon = document.getElementById('portal-sidebar-icon');
             if (sidebarPortalText && sidebarPortalIcon) {
                 if (isAdmin) {
-                    sidebarPortalText.innerText = "Yönetim Portalı";
+                    sidebarPortalText.innerText = "Yönetim İşlemleri";
                     sidebarPortalIcon.innerText = "👑";
                 } else {
-                    sidebarPortalText.innerText = "Öğrenci Portalı";
+                    sidebarPortalText.innerText = "Öğrenci İşlemleri";
                     sidebarPortalIcon.innerText = "🎓";
                 }
             }
