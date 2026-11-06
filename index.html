@@ -2855,28 +2855,33 @@
 
 
         /* =========================================
-           🌾 ÜRETİMLERİM (Girdi / Süreç / Çıktı)
+           🌾 ÜRETİMLERİM (Dönem / Girdi / Süreç / Çıktı / Analiz)
            ========================================= */
         .ur-wrap { display: flex; flex-direction: column; gap: 14px; max-width: 100%; }
         .ur-wrap *, .ur-wrap *::before, .ur-wrap *::after { box-sizing: border-box; }
         .ur-head { background: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.85); border-radius: 18px; padding: 16px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
         .ur-head h2 { margin: 0; border: none; padding: 0; color: #01579b; font-size: 21px; }
         .ur-head p { margin: 4px 0 12px 0; color: #0277bd; font-size: 13px; }
-        .ur-picker { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        .ur-picker select, .ur-picker input { flex: 1 1 220px; min-width: 0; }
+        .ur-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+        .ur-row > select, .ur-row > input { flex: 1 1 200px; min-width: 0; }
+        .ur-row > .aero-btn { flex: 0 0 auto; padding: 8px 12px; font-size: 12.5px; }
         .ur-sum { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
         .ur-sum-card { background: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.9); border-radius: 14px; padding: 12px 14px; min-width: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
         .ur-sum-card .lb { font-size: 12px; font-weight: 700; color: #546e7a; }
-        .ur-sum-card .vl { font-size: 15px; font-weight: 800; color: #01579b; margin-top: 4px; word-break: break-word; line-height: 1.35; }
+        .ur-sum-card .vl { font-size: 16px; font-weight: 800; color: #01579b; margin-top: 4px; word-break: break-word; line-height: 1.3; }
+        .ur-sum-card .sb { font-size: 11px; color: #78909c; margin-top: 2px; font-weight: 600; }
         .ur-sum-card.in .vl { color: #e65100; }
         .ur-sum-card.out .vl { color: #2e7d32; }
-        .ur-form { background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.95); border-radius: 14px; padding: 14px 16px; }
-        .ur-form h3 { margin: 0 0 10px 0; color: #01579b; font-size: 15px; }
+        .ur-sum-card.neg .vl { color: #c62828; }
+        .ur-panel { background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.95); border-radius: 14px; padding: 14px 16px; }
+        .ur-panel h3 { margin: 0 0 10px 0; color: #01579b; font-size: 15px; }
+        .ur-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
         .ur-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
         .ur-grid .wide { grid-column: 1 / -1; }
         .ur-grid .pair { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 8px; }
         .ur-grid input, .ur-grid select, .ur-grid textarea { width: 100%; min-width: 0; }
         .ur-lbl { font-size: 11.5px; font-weight: 700; color: #546e7a; margin: 0 0 3px 2px; display: block; }
+        .ur-sub { font-size: 12px; font-weight: 800; color: #0277bd; margin: 12px 0 2px 2px; grid-column: 1 / -1; }
         .ur-list { display: flex; flex-direction: column; gap: 8px; }
         .ur-item { background: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.95); border-left: 5px solid #0288d1; border-radius: 12px; padding: 10px 12px; display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .ur-item.in { border-left-color: #ef6c00; }
@@ -2885,18 +2890,135 @@
         .ur-item-title { font-weight: 800; font-size: 14px; color: #263238; word-break: break-word; }
         .ur-item-meta { font-size: 12px; color: #607d8b; margin-top: 2px; word-break: break-word; }
         .ur-item-note { font-size: 12.5px; color: #455a64; margin-top: 4px; word-break: break-word; white-space: pre-wrap; }
-        .ur-meas { display: inline-block; background: rgba(2,136,209,0.12); color: #01579b; border-radius: 10px; padding: 2px 10px; font-weight: 800; font-size: 13px; margin-top: 4px; }
-        .ur-item.in .ur-meas { background: rgba(239,108,0,0.13); color: #e65100; }
-        .ur-item.out .ur-meas { background: rgba(46,125,50,0.13); color: #1b5e20; }
-        .ur-del { flex: 0 0 auto; border: none; background: rgba(198,40,40,0.1); color: #c62828; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 14px; }
+        .ur-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+        .ur-chip { background: rgba(2,136,209,0.10); color: #01579b; border-radius: 10px; padding: 2px 9px; font-weight: 700; font-size: 12px; }
+        .ur-chip.big { font-size: 13px; font-weight: 800; }
+        .ur-item.in .ur-chip.big { background: rgba(239,108,0,0.13); color: #e65100; }
+        .ur-item.out .ur-chip.big { background: rgba(46,125,50,0.13); color: #1b5e20; }
+        .ur-chip.env { background: rgba(0,150,136,0.12); color: #00695c; }
+        .ur-chip.money { background: rgba(121,85,72,0.12); color: #5d4037; }
+        .ur-acts { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; }
+        .ur-ibtn { border: none; background: rgba(2,136,209,0.10); color: #01579b; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 14px; }
+        .ur-ibtn.del { background: rgba(198,40,40,0.10); color: #c62828; }
         .ur-empty { text-align: center; padding: 22px 10px; color: #78909c; font-weight: 600; background: rgba(255,255,255,0.55); border-radius: 14px; }
+        .ur-filter { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 8px; }
+        .ur-filter > * { flex: 1 1 160px; min-width: 0; }
+        .ur-bar-row { display: grid; grid-template-columns: minmax(70px, 30%) 1fr auto; gap: 8px; align-items: center; margin: 6px 0; font-size: 12px; font-weight: 700; color: #455a64; }
+        .ur-bar-row .lb { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ur-bar-bg { background: rgba(0,0,0,0.07); border-radius: 8px; height: 14px; overflow: hidden; }
+        .ur-bar-fg { height: 100%; border-radius: 8px; background: linear-gradient(90deg, #29b6f6, #0288d1); }
+        .ur-bar-fg.in { background: linear-gradient(90deg, #ffb74d, #ef6c00); }
+        .ur-bar-fg.out { background: linear-gradient(90deg, #81c784, #2e7d32); }
+        .ur-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11.5px; font-weight: 800; color: #fff; background: #0288d1; }
+        .ur-badge.plan { background: #78909c; } .ur-badge.run { background: #0288d1; } .ur-badge.done { background: #2e7d32; } .ur-badge.stop { background: #c62828; }
+        .ur-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .ur-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 520px; }
+        .ur-table th, .ur-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.07); }
+        .ur-table th { color: #01579b; font-size: 12px; }
+        .ur-table tr.click { cursor: pointer; } .ur-table tr.click:hover { background: rgba(2,136,209,0.07); }
         @media (max-width: 768px) {
             .ur-head { padding: 12px; border-radius: 14px; }
             .ur-head h2 { font-size: 17px !important; }
-            .ur-form { padding: 12px; }
-            .ur-grid { grid-template-columns: minmax(0, 1fr); }
+            .ur-panel { padding: 12px; }
+            .ur-grid, .ur-two { grid-template-columns: minmax(0, 1fr); }
             .ur-sum { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .ur-picker select, .ur-picker input { flex: 1 1 100%; }
+            .ur-row > select, .ur-row > input { flex: 1 1 100%; }
+            .ur-row > .aero-btn { flex: 1 1 auto; }
+            .ur-table { display: table !important; }
+        }
+        /* =========================================
+           📈 GÖRSEL ANALİTİK + 🌰 TOHUM BANKASI
+           ========================================= */
+        .dash-analytics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; margin-bottom: 20px; }
+        .ch-card { min-width: 0; padding: 14px 16px !important; }
+        .ch-card h3 { margin: 0 0 8px 0; color: #01579b; font-size: 15px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .ch-card h3 select { font-size: 12px !important; padding: 4px 8px !important; min-height: 0 !important; width: auto !important; }
+        .ch-svg { width: 100%; height: auto; display: block; overflow: visible; }
+        .ch-svg text { font-family: inherit; fill: #607d8b; font-size: 10px; font-weight: 700; }
+        .ch-svg .ch-val { fill: #263238; font-size: 10px; }
+        .ch-svg .ch-grid { stroke: rgba(0,0,0,0.09); stroke-width: 1; }
+        .ch-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; margin-top: 8px; font-size: 12px; font-weight: 700; color: #455a64; }
+        .ch-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
+        .ch-empty { text-align: center; padding: 34px 10px; color: #78909c; font-weight: 600; font-size: 13px; }
+        .ch-sub { font-size: 11.5px; color: #78909c; font-weight: 600; margin-top: 4px; text-align: center; }
+        .sd-months { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; align-items: end; height: 110px; }
+        .sd-mcol { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; min-width: 0; }
+        .sd-mbar { width: 100%; max-width: 26px; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, #81c784, #2e7d32); min-height: 3px; }
+        .sd-mcol.now .sd-mbar { background: linear-gradient(180deg, #ffb74d, #ef6c00); }
+        .sd-mn { font-size: 10px; font-weight: 800; color: #607d8b; margin-top: 4px; }
+        .sd-mcol.now .sd-mn { color: #e65100; }
+        .sd-mc { font-size: 10.5px; font-weight: 800; color: #263238; }
+        .sd-item { border-left-color: #8d6e63; }
+        .ur-badge.warn { background: #f57f17; }
+        .ur-badge.ok { background: #2e7d32; }
+        .ur-badge.bad { background: #c62828; }
+        .ur-badge.brown { background: #8d6e63; }
+        .sd-germ { display: inline-block; min-width: 46px; text-align: center; }
+        @media (max-width: 768px) {
+            .ch-card { padding: 12px !important; }
+            .sd-months { height: 90px; gap: 2px; }
+            .sd-mn { font-size: 8.5px; }
+        }
+
+        /* =========================================
+           📊 TABLO & GRAFİKLER SEKMESİ
+           ========================================= */
+        .tg-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 16px !important; margin-bottom: 16px; }
+        .tg-title { margin: 0 !important; border: none !important; padding: 0 !important; font-size: 20px; }
+        .tg-seg { display: inline-flex; gap: 4px; padding: 4px; border-radius: 14px; background: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.8); }
+        .tg-seg-btn { border: none; background: transparent; cursor: pointer; font: inherit; font-size: 14px; font-weight: 800; color: #455a64; padding: 9px 18px; border-radius: 11px; min-height: 40px; transition: all .2s; -webkit-tap-highlight-color: transparent; }
+        .tg-seg-btn.active { background: linear-gradient(180deg, #4fc3f7, #0288d1); color: #fff; box-shadow: 0 2px 8px rgba(2,136,209,0.35); }
+        .tg-chart-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+        .tg-chart-tools .aero-btn { min-height: 40px; }
+        .ch-reset-note { flex: 1 1 200px; font-size: 12px; font-weight: 700; color: #e65100; }
+        .ch-h3-tools { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .ch-reset { border: 1px solid rgba(0,0,0,0.15); background: rgba(255,255,255,0.7); color: #455a64; font: inherit; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 10px; cursor: pointer; min-height: 32px; }
+        .ch-reset:active { background: #ffe0b2; }
+        .tg-charts { margin-bottom: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+        .tg-table-card { padding: 14px !important; }
+        .tg-table-top { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; }
+        .tg-table-top .excel-upload { flex: 1 1 260px; margin: 0; padding: 14px 16px; text-align: center; }
+        .tg-table-top .excel-upload h4 { margin: 0; font-size: 15px; }
+        .tg-table-top .excel-upload h4 span { font-weight: 600; opacity: .7; font-size: 12px; }
+        .tg-table-top .aero-btn { flex: 0 1 auto; min-height: 44px; }
+        .tg-status { margin: 8px 0 0 0; font-size: 12px; color: #555; min-height: 16px; }
+        .tg-table-wrap { margin-top: 10px; max-height: 65vh; overflow: auto !important; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+        .tg-table-wrap table { display: table !important; width: max-content; min-width: 100%; border-collapse: collapse; }
+        .tg-table-wrap th { position: sticky; top: 0; z-index: 2; white-space: nowrap; background: #e1f5fe; }
+        .tg-table-wrap td { white-space: nowrap; }
+        .tg-table-wrap tr:nth-child(even) td { background: rgba(255,255,255,0.45); }
+        @media (max-width: 768px) {
+            .tg-head { padding: 10px 12px !important; margin-bottom: 12px; }
+            .tg-title { font-size: 17px; }
+            .tg-seg { width: 100%; }
+            .tg-seg-btn { flex: 1 1 0; padding: 10px 8px; font-size: 14px; }
+            .tg-charts { gap: 12px; grid-template-columns: minmax(0, 1fr); }
+            .tg-table-card { padding: 10px !important; }
+            .tg-table-top .aero-btn { flex: 1 1 100%; }
+            .tg-table-wrap { max-height: 60vh; }
+            body #tab-excel .tg-table-wrap th, body #tab-excel .tg-table-wrap td { padding: 8px 10px; font-size: 13px; }
+            body #tab-excel .tg-table-wrap table { display: table !important; }
+            .ch-card h3 { font-size: 14px; }
+            .ch-svg text { font-size: 11px; }
+            .ch-svg .ch-val { font-size: 11px; }
+        }
+
+        /* =========================================
+           ⬇️ YAN MENÜ ALT BUTONLARI (Tam Ekran / BKV Akademi / Çıkış)
+           ========================================= */
+        .sb-foot { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.7); flex-shrink: 0; }
+        .sb-foot-btn { width: 100%; display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 10px; font: inherit; font-size: 12px; font-weight: 800; border: 1px solid rgba(255,255,255,0.8); background: rgba(255,255,255,0.65); color: #0c4a6e; cursor: pointer; text-align: left; min-height: 32px; transition: all .2s; -webkit-tap-highlight-color: transparent; }
+        .sb-foot-btn:hover { background: rgba(255,255,255,0.95); transform: translateY(-1px); }
+        .sb-foot-btn:active { transform: none; }
+        .sb-foot-ic { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
+        .sb-foot-academy { color: #6b21a8; }
+        .sb-foot-logout { background: linear-gradient(180deg, #ef5350, #c62828); color: #fff; border-color: rgba(198,40,40,0.6); }
+        .sb-foot-logout:hover { background: linear-gradient(180deg, #f44336, #b71c1c); }
+        body.ui-modern #main-sidebar.collapsed .sb-foot-btn { justify-content: center; padding: 6px 0; }
+        @media (max-width: 768px) {
+            .sb-foot { padding-bottom: env(safe-area-inset-bottom, 0px); }
+            .sb-foot-btn { padding: 9px 12px; font-size: 13.5px; min-height: 40px; }
+            .sb-foot-fs { display: none; }
         }
     </style>
 </head>
@@ -3118,18 +3240,6 @@
             </div>
         </div>
 
-        <!-- Right Actions -->
-        <div class="mh-actions" style="display: flex; align-items: center; gap: 8px;">
-            <button class="aero-btn mh-btn-fs" style="font-size: 11.5px; padding: 7px 12px;" onclick="toggleFullscreenUI()" title="Tam Ekran Modu">
-                <span>🔲</span> <span class="mh-btn-text">Tam Ekran</span>
-            </button>
-            <button class="aero-btn" style="font-size: 11.5px; padding: 7px 12px; color: #6b21a8;" onclick="window.open('https://online.bkvakademi.com/', '_blank')">
-                <span>🎓</span> <span class="mh-btn-text">BKV AKADEMİ</span>
-            </button>
-            <button class="aero-btn aero-btn-danger" style="font-size: 11.5px; padding: 7px 12px;" onclick="lockSystem()" title="Sistemi Kilitle / Çıkış">
-                <span>🚪</span> <span class="mh-btn-text">Çıkış</span>
-            </button>
-        </div>
     </header>
 
     <header class="glass modern-header" id="main-header">
@@ -3190,11 +3300,12 @@
         <nav class="tabs modern-tabs" id="main-tabs-container">
             <button class="tab-btn active" id="tab-btn-dashboard" onclick="openTab('tab-dashboard', this)"><span class="tab-icon">📋</span> <span class="tab-text">Anasayfa</span></button>
             <button class="tab-btn" id="tab-btn-student-portal" onclick="openTab('tab-student-portal', this); loadStudentPortalData();"><span class="tab-icon" id="portal-tab-icon">👑</span> <span class="tab-text" id="portal-tab-text">Yönetim İşlemleri</span></button>
-            <button class="tab-btn" id="tab-btn-excel" onclick="openTab('tab-excel', this)"><span class="tab-icon">📊</span> <span class="tab-text">Tablo Görüntüleyici</span></button>
-            <button class="tab-btn" id="tab-btn-barcode" onclick="openTab('tab-barcode', this)"><span class="tab-icon">🏷️</span> <span class="tab-text">Barkod/Satış</span></button>
-            <button class="tab-btn" id="tab-btn-hava-durumu" onclick="openTab('tab-hava-durumu', this)"><span class="tab-icon">⛅</span> <span class="tab-text">Hava Durumu</span></button>
             <button class="tab-btn" id="tab-btn-bokashi" onclick="openTab('tab-bokashi', this)"><span class="tab-icon">♻️</span> <span class="tab-text">Bokashi Takip</span></button>
             <button class="tab-btn" id="tab-btn-uretim" onclick="openTab('tab-uretim', this)"><span class="tab-icon">🌾</span> <span class="tab-text">Üretimlerim</span></button>
+            <button class="tab-btn" id="tab-btn-tohum" onclick="openTab('tab-tohum', this)"><span class="tab-icon">🌰</span> <span class="tab-text">Tohum Bankası</span></button>
+            <button class="tab-btn" id="tab-btn-hava-durumu" onclick="openTab('tab-hava-durumu', this)"><span class="tab-icon">⛅</span> <span class="tab-text">Hava Durumu</span></button>
+            <button class="tab-btn" id="tab-btn-barcode" onclick="openTab('tab-barcode', this)"><span class="tab-icon">🏷️</span> <span class="tab-text">Barkod/Satış</span></button>
+            <button class="tab-btn" id="tab-btn-excel" onclick="openTab('tab-excel', this)"><span class="tab-icon">📊</span> <span class="tab-text">Tablo &amp; Grafikler</span></button>
             <button class="tab-btn" id="tab-btn-settings" onclick="openTab('tab-settings', this)"><span class="tab-icon">⚙️</span> <span class="tab-text">Ayarlar</span></button>
         </nav>
     </header>
@@ -3226,6 +3337,9 @@
                     <button onclick="openTab('tab-uretim', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
                         <span style="font-size: 17px;">🌾</span> <span class="sidebar-hide-on-collapse">Üretimlerim</span>
                     </button>
+                    <button onclick="openTab('tab-tohum', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <span style="font-size: 17px;">🌰</span> <span class="sidebar-hide-on-collapse">Tohum Bankası</span>
+                    </button>
                     <button onclick="openTab('tab-hava-durumu', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
                         <span style="font-size: 17px;">⛅</span> <span class="sidebar-hide-on-collapse">Hava Durumu</span>
                     </button>
@@ -3233,7 +3347,7 @@
                         <span style="font-size: 17px;">🏷️</span> <span class="sidebar-hide-on-collapse">Barkod/Satış</span>
                     </button>
                     <button onclick="openTab('tab-excel', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
-                        <span style="font-size: 17px;">📊</span> <span class="sidebar-hide-on-collapse">Tablo Görüntüleyici</span>
+                        <span style="font-size: 17px;">📊</span> <span class="sidebar-hide-on-collapse">Tablo &amp; Grafikler</span>
                     </button>
                     <button id="sidebar-btn-settings" onclick="openTab('tab-settings', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
                         <span style="font-size: 17px;">⚙️</span> <span class="sidebar-hide-on-collapse">Ayarlar</span>
@@ -3241,7 +3355,17 @@
                 </nav>
             </div>
 
-            
+            <div class="sb-foot hide-on-print">
+                <button type="button" class="sb-foot-btn sb-foot-fs" onclick="sbFootAction(toggleFullscreenUI)" title="Tam Ekran Modu (F11)">
+                    <span class="sb-foot-ic">🔲</span> <span class="sidebar-hide-on-collapse">Tam Ekran</span>
+                </button>
+                <button type="button" class="sb-foot-btn sb-foot-academy" onclick="sbFootAction(function(){ window.open('https://online.bkvakademi.com/', '_blank'); })" title="BKV Akademi Portalı">
+                    <span class="sb-foot-ic">🎓</span> <span class="sidebar-hide-on-collapse">BKV Akademi</span>
+                </button>
+                <button type="button" class="sb-foot-btn sb-foot-logout" onclick="sbFootAction(lockSystem)" title="Sistemden Güvenli Çıkış">
+                    <span class="sb-foot-ic">🚪</span> <span class="sidebar-hide-on-collapse">Çıkış Yap</span>
+                </button>
+            </div>
         </aside>
 
         <div class="main-content">
@@ -3521,91 +3645,61 @@
                     <div class="ur-wrap">
                         <div class="ur-head">
                             <h2>🌾 Üretimlerim</h2>
-                            <p>Bir ürün seçin; üretimin girdilerini, sürecini ve çıktılarını ölçüm verileriyle kaydedin.</p>
-                            <div class="ur-picker">
-                                <select id="ur-urun-sec" class="aero-input" onchange="uretimUrunDegisti()"></select>
-                                <input type="text" id="ur-urun-diger" class="aero-input" placeholder="Ürün adını yazın (örn. Domates)" style="display:none;" oninput="uretimDigerYazildi()">
+                            <p>Ürününüzü ve üretim dönemini seçin; girdileri, süreci ve çıktıları ölçüm verileriyle kaydedin, maliyet ve verim analizini izleyin.</p>
+                            <div class="ur-row">
+                                <select id="ur-urun-sec" class="aero-input" title="Ürün"></select>
+                                <input type="text" id="ur-urun-diger" class="aero-input" placeholder="Ürün adını yazın (örn. Domates)" style="display:none;">
+                            </div>
+                            <div class="ur-row" id="ur-donem-satir" style="display:none;">
+                                <select id="ur-donem-sec" class="aero-input" title="Üretim dönemi"></select>
+                                <button class="aero-btn btn-green" data-act="donem-yeni">➕ Yeni Dönem</button>
+                                <button class="aero-btn" data-act="donem-duzenle" id="ur-btn-dduz">✏️ Düzenle</button>
+                                <button class="aero-btn btn-red" data-act="donem-sil" id="ur-btn-dsil">🗑️ Sil</button>
                             </div>
                         </div>
 
-                        <div id="ur-icerik" style="display:none;">
-                            <div class="ur-sum" id="ur-ozet"></div>
+                        <div class="ur-panel" id="ur-donem-form" style="display:none;"></div>
 
-                            <div class="portal-subtabs" style="margin-top: 14px;">
-                                <button class="portal-subtab-btn active" id="ur-btn-girdi" onclick="uretimSekme('girdi')">📥 Girdiler</button>
-                                <button class="portal-subtab-btn" id="ur-btn-surec" onclick="uretimSekme('surec')">⚙️ Süreç</button>
-                                <button class="portal-subtab-btn" id="ur-btn-cikti" onclick="uretimSekme('cikti')">📤 Çıktılar</button>
-                            </div>
-
-                            <!-- GİRDİLER -->
-                            <div id="ur-sec-girdi">
-                                <div class="ur-form">
-                                    <h3>📥 Yeni Girdi Ekle</h3>
-                                    <div class="ur-grid">
-                                        <div><label class="ur-lbl">Tarih</label><input type="date" id="ur-g-tarih" class="aero-input"></div>
-                                        <div><label class="ur-lbl">Girdi Türü</label>
-                                            <select id="ur-g-tur" class="aero-input">
-                                                <option>🌱 Tohum / Fide</option><option>🪱 Gübre / Kompost</option><option>💧 Su</option>
-                                                <option>🐞 Bitki Koruma</option><option>🟤 Toprak / Harç</option><option>👩‍🌾 İşgücü</option>
-                                                <option>⚡ Enerji</option><option>📦 Diğer</option>
-                                            </select></div>
-                                        <div class="wide"><label class="ur-lbl">Girdi Adı</label><input type="text" id="ur-g-ad" class="aero-input" placeholder="örn. Bokashi suyu, F1 tohum, damla sulama"></div>
-                                        <div class="wide pair">
-                                            <div><label class="ur-lbl">Ölçüm (Miktar)</label><input type="number" step="any" inputmode="decimal" id="ur-g-miktar" class="aero-input" placeholder="0"></div>
-                                            <div><label class="ur-lbl">Birim</label><select id="ur-g-birim" class="aero-input"></select></div>
-                                        </div>
-                                        <div class="wide"><label class="ur-lbl">Not (isteğe bağlı)</label><input type="text" id="ur-g-not" class="aero-input" placeholder="Ek bilgi"></div>
-                                    </div>
-                                    <button class="aero-btn btn-green" style="width:100%; margin-top:10px; padding:10px; font-weight:bold;" onclick="uretimKaydet('girdi')">💾 Girdiyi Kaydet</button>
-                                </div>
-                                <h3 style="color:#01579b; margin:14px 0 8px 0; font-size:15px;">Girdi Kayıtları</h3>
-                                <div id="ur-liste-girdi" class="ur-list"></div>
-                            </div>
-
-                            <!-- SÜREÇ -->
-                            <div id="ur-sec-surec" style="display:none;">
-                                <div class="ur-form">
-                                    <h3>⚙️ Yeni Süreç Kaydı</h3>
-                                    <div class="ur-grid">
-                                        <div><label class="ur-lbl">Tarih</label><input type="date" id="ur-s-tarih" class="aero-input"></div>
-                                        <div><label class="ur-lbl">Aşama</label>
-                                            <select id="ur-s-asama" class="aero-input">
-                                                <option>🟤 Toprak Hazırlığı</option><option>🌱 Ekim / Dikim</option><option>💧 Sulama</option>
-                                                <option>🪱 Gübreleme</option><option>✂️ Bakım / Budama</option><option>🐞 Zararlı & Hastalık Kontrolü</option>
-                                                <option>🧺 Hasat</option><option>📦 Diğer</option>
-                                            </select></div>
-                                        <div class="wide"><label class="ur-lbl">Yapılan İşlem / Gözlem</label><textarea id="ur-s-acik" class="aero-input" rows="3" placeholder="Süreçte neler yapıldı, ne gözlemlendi?" style="resize:vertical;"></textarea></div>
-                                    </div>
-                                    <button class="aero-btn btn-green" style="width:100%; margin-top:10px; padding:10px; font-weight:bold;" onclick="uretimKaydet('surec')">💾 Süreci Kaydet</button>
-                                </div>
-                                <h3 style="color:#01579b; margin:14px 0 8px 0; font-size:15px;">Süreç Kayıtları</h3>
-                                <div id="ur-liste-surec" class="ur-list"></div>
-                            </div>
-
-                            <!-- ÇIKTILAR -->
-                            <div id="ur-sec-cikti" style="display:none;">
-                                <div class="ur-form">
-                                    <h3>📤 Yeni Çıktı Ekle</h3>
-                                    <div class="ur-grid">
-                                        <div><label class="ur-lbl">Tarih</label><input type="date" id="ur-c-tarih" class="aero-input"></div>
-                                        <div><label class="ur-lbl">Çıktı Türü</label>
-                                            <select id="ur-c-tur" class="aero-input">
-                                                <option>🧺 Hasat / Ana Ürün</option><option>🌿 Yan Ürün</option><option>🗑️ Fire / Atık</option><option>📦 Diğer</option>
-                                            </select></div>
-                                        <div class="wide"><label class="ur-lbl">Çıktı Adı</label><input type="text" id="ur-c-ad" class="aero-input" placeholder="örn. 1. sınıf domates"></div>
-                                        <div class="wide pair">
-                                            <div><label class="ur-lbl">Ölçüm (Miktar)</label><input type="number" step="any" inputmode="decimal" id="ur-c-miktar" class="aero-input" placeholder="0"></div>
-                                            <div><label class="ur-lbl">Birim</label><select id="ur-c-birim" class="aero-input"></select></div>
-                                        </div>
-                                        <div class="wide"><label class="ur-lbl">Not (isteğe bağlı)</label><input type="text" id="ur-c-not" class="aero-input" placeholder="Kalite, sınıf vb."></div>
-                                    </div>
-                                    <button class="aero-btn btn-green" style="width:100%; margin-top:10px; padding:10px; font-weight:bold;" onclick="uretimKaydet('cikti')">💾 Çıktıyı Kaydet</button>
-                                </div>
-                                <h3 style="color:#01579b; margin:14px 0 8px 0; font-size:15px;">Çıktı Kayıtları</h3>
-                                <div id="ur-liste-cikti" class="ur-list"></div>
-                            </div>
+                        <div class="portal-subtabs" style="margin: 0;">
+                            <button class="portal-subtab-btn active" data-tab="ozet">📊 Genel Bakış</button>
+                            <button class="portal-subtab-btn" data-tab="girdi">📥 Girdiler</button>
+                            <button class="portal-subtab-btn" data-tab="surec">⚙️ Süreç</button>
+                            <button class="portal-subtab-btn" data-tab="cikti">📤 Çıktılar</button>
+                            <button class="portal-subtab-btn" data-tab="tum">🗂️ Tüm Ürünler</button>
                         </div>
+
                         <div id="ur-bos" class="ur-empty">👆 Başlamak için yukarıdan bir ürün seçin.</div>
+                        <div id="ur-sec-ozet" style="display:none;"></div>
+                        <div id="ur-sec-girdi" style="display:none;"></div>
+                        <div id="ur-sec-surec" style="display:none;"></div>
+                        <div id="ur-sec-cikti" style="display:none;"></div>
+                        <div id="ur-sec-tum" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: TOHUM BANKASI -->
+            <div id="tab-tohum" class="tab-content">
+                <div class="card glass">
+                    <div class="ur-wrap">
+                        <div class="ur-head">
+                            <h2>🌰 Tohum Bankası</h2>
+                            <p>Kulübün yerel ve atalık tohumlarının türü, saklama tarihi, çimlenme oranı, ideal ekim dönemi ve stoğu.</p>
+                            <div class="ur-row">
+                                <button class="aero-btn btn-green" data-sact="yeni">➕ Yeni Tohum Ekle</button>
+                                <button class="aero-btn" data-sact="csv">⬇️ CSV (Excel) İndir</button>
+                            </div>
+                        </div>
+                        <div class="ur-panel" id="sd-form" style="display:none;"></div>
+                        <div class="ur-sum" id="sd-ozet"></div>
+                        <div class="ur-panel"><h3>🗓️ İdeal Ekim Takvimi <span style="font-weight:600; color:#78909c; font-size:12px;">(her ay ekilebilecek çeşit sayısı)</span></h3><div id="sd-takvim"></div></div>
+                        <div class="ur-filter">
+                            <input type="search" id="sd-q" class="aero-input" placeholder="🔍 Tohum, çeşit, yer ara…">
+                            <select id="sd-f-kind" class="aero-input"><option value="">Tüm türler</option><option>Atalık / Yerel</option><option>Standart</option><option>Hibrit</option></select>
+                            <select id="sd-f-cat" class="aero-input"><option value="">Tüm kategoriler</option></select>
+                            <select id="sd-f-durum" class="aero-input"><option value="">Tüm durumlar</option><option value="simdi">🌱 Şimdi ekilebilir</option><option value="dikkat">⚠️ Dikkat gerekenler</option></select>
+                        </div>
+                        <div id="sd-liste" class="ur-list"></div>
                     </div>
                 </div>
             </div>
@@ -4180,21 +4274,47 @@
                 </div>
             </div>
 
-            <!-- TAB 7: TABLO GÖRÜNTÜLEYİCİ -->
+            <!-- TAB 7: TABLO & GRAFİKLER -->
             <div id="tab-excel" class="tab-content">
-                <div class="card glass" style="padding: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h2 style="margin: 0; border: none;">📊 Tablo Görüntüleyici</h2>
-                        <button id="export-btn" class="aero-btn btn-green hide-on-print" style="display: none;" onclick="exportExcel()">💾 Düzenlemeyi İndir (.xlsx)</button>
+                <div class="tg-head card glass">
+                    <h2 class="tg-title">📊 Tablo &amp; Grafikler</h2>
+                    <div class="tg-seg" role="tablist">
+                        <button type="button" id="tg-btn-charts" class="tg-seg-btn active" onclick="tgSwitch('charts')">📈 Grafikler</button>
+                        <button type="button" id="tg-btn-table" class="tg-seg-btn" onclick="tgSwitch('table')">📋 Tablo</button>
                     </div>
-                    
-                    <div class="excel-upload hide-on-print" onclick="document.getElementById('excel-file').click()">
-                        <h4 style="margin:0;">📁 Tablo Yüklemek/Görüntülemek İçin Excel Dosyası Seçin (.xlsx, .xls)</h4>
-                        <input type="file" id="excel-file" accept=".xlsx, .xls" style="display: none;" onchange="readExcel(event)">
+                </div>
+
+                <!-- Grafikler -->
+                <div id="tg-pane-charts" class="tg-pane">
+                    <div class="tg-chart-tools hide-on-print">
+                        <span id="ch-reset-note" class="ch-reset-note"></span>
+                        <button type="button" class="aero-btn" onclick="resetChart('all')">↺ Tümünü Sıfırla</button>
+                        <button type="button" class="aero-btn" id="ch-restore-btn" onclick="restoreCharts()" style="display:none;">👁 Tüm Verileri Göster</button>
                     </div>
-                    
-                    <p id="file-status" style="margin: 5px 0 0 0; font-size: 12px; color: #555;"></p>
-                    <div id="excel-output" class="table-container" style="max-height: 480px; margin-top: 15px;"></div>
+                    <div id="dash-analytics" class="dash-analytics tg-charts">
+                        <div class="card glass ch-card"><h3>♻️ Aylık Bokashi Atık Miktarı (kg) <button type="button" class="ch-reset" onclick="resetChart('bokashi')">↺ Sıfırla</button></h3><div id="ch-bokashi"></div></div>
+                        <div class="card glass ch-card"><h3>💰 Satış Cirosu Trendi (₺) <button type="button" class="ch-reset" onclick="resetChart('sales')">↺ Sıfırla</button></h3><div id="ch-sales"></div></div>
+                        <div class="card glass ch-card"><h3>📅 Kulüp Yoklama Oranı
+                            <span class="ch-h3-tools"><button type="button" class="ch-reset" onclick="resetChart('att')">↺ Sıfırla</button>
+                            <select id="ch-att-range" class="aero-input" onchange="renderDashCharts()">
+                                <option value="7">Son 7 gün</option><option value="30" selected>Son 30 gün</option><option value="90">Son 90 gün</option><option value="0">Tümü</option>
+                            </select></span></h3><div id="ch-att"></div></div>
+                    </div>
+                </div>
+
+                <!-- Tablo -->
+                <div id="tg-pane-table" class="tg-pane" style="display: none;">
+                    <div class="card glass tg-table-card">
+                        <div class="tg-table-top">
+                            <div class="excel-upload hide-on-print" onclick="document.getElementById('excel-file').click()">
+                                <h4>📁 Excel Dosyası Seç <span>(.xlsx, .xls)</span></h4>
+                                <input type="file" id="excel-file" accept=".xlsx, .xls" style="display: none;" onchange="readExcel(event)">
+                            </div>
+                            <button id="export-btn" class="aero-btn btn-green hide-on-print" style="display: none;" onclick="exportExcel()">💾 Düzenlemeyi İndir (.xlsx)</button>
+                        </div>
+                        <p id="file-status" class="tg-status"></p>
+                        <div id="excel-output" class="table-container tg-table-wrap"><div class="ch-empty">Henüz tablo yüklenmedi.<br>Yukarıdan bir Excel dosyası seçin.</div></div>
+                    </div>
                 </div>
             </div>
 
@@ -4917,6 +5037,10 @@
                 if (prod) { prod.stock = parseInt(prod.stock || 0) - item.qty; if (prod.stock < 0) prod.stock = 0; }
             });
             localStorage.setItem('bkvProducts', JSON.stringify(products));
+            // Stok değişimini buluta da yaz (yazılmazsa sayfa yenilenince eski stok geri gelir)
+            if (typeof window._firebaseUpdateStock === 'function') {
+                saleCart.forEach(item => { const pr = products.find(p => p.barcode === item.barcode); if (pr) window._firebaseUpdateStock(pr.barcode, pr.stock); });
+            }
             let salesHistory = JSON.parse(localStorage.getItem('bkvSalesHistory')) || [];
             const totalAmount = saleCart.reduce((sum, i) => sum + (i.unitPrice * i.qty), 0);
             salesHistory.unshift({ id: Date.now(), date: new Date().toLocaleString('tr-TR'), items: saleCart.map(i => ({ ...i })), total: totalAmount });
@@ -5217,6 +5341,14 @@
         function loadUIVersion() {
             const ver = localStorage.getItem('bkvUIVersion') || 'classic';
             switchUIVersion(ver, false);
+        }
+
+        function sbFootAction(fn) {
+            const sb = document.getElementById('main-sidebar'), bd = document.getElementById('mobile-nav-backdrop');
+            if (sb) sb.classList.remove('mobile-open');
+            if (bd) bd.classList.remove('show');
+            document.body.classList.remove('mobile-nav-open');
+            try { fn(); } catch (e) { console.error(e); }
         }
 
         function toggleSidebarCollapse() {
@@ -6053,6 +6185,17 @@
         // ========================================================
         // 📊 TABLO GÖRÜNTÜLEYİCİ
         // ========================================================
+        function tgSwitch(which) {
+            const isCh = which === 'charts';
+            const pc = document.getElementById('tg-pane-charts'), pt = document.getElementById('tg-pane-table');
+            if (pc) pc.style.display = isCh ? '' : 'none';
+            if (pt) pt.style.display = isCh ? 'none' : '';
+            const bc = document.getElementById('tg-btn-charts'), bt = document.getElementById('tg-btn-table');
+            if (bc) bc.classList.toggle('active', isCh);
+            if (bt) bt.classList.toggle('active', !isCh);
+            if (isCh && typeof window.renderDashCharts === 'function') window.renderDashCharts();
+        }
+
         function readExcel(event) {
             if (!checkMemberActionPermission()) return;
             const file = event.target.files[0]; if (!file) return;
@@ -6071,7 +6214,7 @@
                     html += '</table>'; document.getElementById('excel-output').innerHTML = html; 
                     if (isAdmin) { document.getElementById('file-status').innerText = "✓ Yüklendi. Düzenleyebilirsiniz."; document.getElementById('export-btn').style.display = 'inline-block'; } 
                     else { document.getElementById('file-status').innerText = "✓ Görüntüleniyor. (Okuma Modu)"; document.getElementById('export-btn').style.display = 'none'; }
-                    showNotification("Excel tablosu yüklendi!", "success");
+                    showNotification("Excel tablosu yüklendi!", "success"); tgSwitch("table");
                 } catch (error) { document.getElementById('file-status').innerText = "❌ Hata oluştu."; showNotification("Dosya okunamadı!", "error"); }
             };
             reader.readAsArrayBuffer(file);
@@ -6302,6 +6445,8 @@
                 if (typeof window.hesaplaBokashiSuyu === 'function') window.hesaplaBokashiSuyu();
             }
             if (tabId === 'tab-uretim' && typeof window.uretimAc === 'function') window.uretimAc();
+            if (tabId === 'tab-tohum' && typeof window.tohumAc === 'function') window.tohumAc();
+            if (tabId === 'tab-excel' && typeof window.renderDashCharts === 'function') window.renderDashCharts();
             if (targetTab) targetTab.classList.add('active');
             if (btnElement) {
                 btnElement.classList.add('active');
@@ -8818,8 +8963,11 @@
             try {
                 const docId = encodeURIComponent(barcode).replace(/\./g, '%2E');
                 await setDoc(doc(db, "products", docId), { stock: stockNum, updatedAt: Date.now() }, { merge: true });
+                return true;
             } catch(e) {
                 console.error("Firestore stok güncelleme hatası:", e);
+                showNotification("⚠️ Stok buluta kaydedilemedi, yenileyince eski değer dönebilir: " + (e.message || e), "error");
+                return false;
             }
         };
 
@@ -8865,6 +9013,7 @@
                                     barcode: bcode,
                                     name: p.name || '',
                                     price: p.price || '',
+                                    stock: parseInt(p.stock, 10) || 0,
                                     mfg: p.mfg || '',
                                     exp: p.exp || '',
                                     createdAt: p.createdAt || Date.now(),
@@ -10270,216 +10419,812 @@
         });
 
         // ========================================================
-        // 🌾 Üretimlerim: Firestore ("production_records")
+        // 🌾 Üretimlerim: Firestore ("production_records" + "production_cycles")
         // ========================================================
-        window._firebaseUretimEkle = async function(rec) {
-            try {
-                const { id, ...veri } = rec;
-                const docRef = await addDoc(collection(db, "production_records"), veri);
-                let l = [];
-                try { l = JSON.parse(localStorage.getItem('bkvUretim')) || []; } catch(e) {}
-                const it = l.find(r => String(r.id) === String(id));
-                if (it) it.id = docRef.id;
-                localStorage.setItem('bkvUretim', JSON.stringify(l));
-                if (typeof window.renderUretim === 'function') window.renderUretim();
-            } catch(err) {
-                console.error("Firestore üretim kaydı hatası:", err);
-                showNotification("Kayıt bu cihaza alındı ancak buluta iletilemedi: " + err.message, "warning");
-            }
+        window._firebaseUretimKaydet = async function(rec) {
+            try { await setDoc(doc(db, "production_records", String(rec.id)), rec); }
+            catch(err) { console.error("Firestore üretim kaydı hatası:", err); showNotification("Kayıt bu cihaza alındı ancak buluta iletilemedi: " + err.message, "warning"); }
         };
         window._firebaseUretimSil = async function(id) {
-            if (String(id).startsWith('tmp')) return;
             try { await deleteDoc(doc(db, "production_records", String(id))); }
             catch(err) { console.error("Firestore üretim silme hatası:", err); showNotification("Silinirken bulut hatası: " + err.message, "warning"); }
         };
-        let uretimInitialSynced = false;
-        onSnapshot(collection(db, "production_records"), async (snapshot) => {
-            if (snapshot.empty && !uretimInitialSynced) {
-                uretimInitialSynced = true;
-                let yerel = [];
-                try { yerel = JSON.parse(localStorage.getItem('bkvUretim')) || []; } catch(e) {}
-                if (yerel.length > 0) {
-                    for (const r of yerel) {
-                        try { const { id, ...veri } = r; await addDoc(collection(db, "production_records"), veri); }
-                        catch(e) { console.error("Üretim aktarım hatası:", e); }
+        window._firebaseUretimDonemKaydet = async function(d) {
+            try { await setDoc(doc(db, "production_cycles", String(d.id)), d); }
+            catch(err) { console.error("Firestore dönem kaydı hatası:", err); showNotification("Dönem bu cihaza alındı ancak buluta iletilemedi: " + err.message, "warning"); }
+        };
+        window._firebaseUretimDonemSil = async function(id, kayitIdleri) {
+            try {
+                for (const rid of (kayitIdleri || [])) await deleteDoc(doc(db, "production_records", String(rid)));
+                await deleteDoc(doc(db, "production_cycles", String(id)));
+            } catch(err) { console.error("Firestore dönem silme hatası:", err); showNotification("Dönem silinirken bulut hatası: " + err.message, "warning"); }
+        };
+        function uretimDinle(koleksiyon, anahtar) {
+            let ilk = false;
+            onSnapshot(collection(db, koleksiyon), async (snapshot) => {
+                if (snapshot.empty && !ilk) {
+                    ilk = true;
+                    let yerel = [];
+                    try { yerel = JSON.parse(localStorage.getItem(anahtar)) || []; } catch(e) {}
+                    if (yerel.length > 0) {
+                        for (const r of yerel) {
+                            try { await setDoc(doc(db, koleksiyon, String(r.id)), r); } catch(e) { console.error("Üretim aktarım hatası:", e); }
+                        }
+                        return;
                     }
+                }
+                ilk = true;
+                const liste = [];
+                snapshot.forEach(d => liste.push({ ...d.data(), id: d.id }));
+                localStorage.setItem(anahtar, JSON.stringify(liste));
+                if (typeof window.renderUretim === 'function') window.renderUretim();
+            }, (err) => { console.error("Firestore " + koleksiyon + " onSnapshot hatası:", err); });
+        }
+        uretimDinle("production_records", "bkvUretim");
+        uretimDinle("production_cycles", "bkvUretimDonem");
+
+        // ========================================================
+        // 🌰 Tohum Bankası: Firestore ("seed_bank")
+        // ========================================================
+        window._firebaseTohumKaydet = async function(s) {
+            try { await setDoc(doc(db, "seed_bank", String(s.id)), s); }
+            catch(err) { console.error("Firestore tohum kaydı hatası:", err); showNotification("Kayıt bu cihaza alındı ancak buluta iletilemedi: " + err.message, "warning"); }
+        };
+        window._firebaseTohumSil = async function(id) {
+            try { await deleteDoc(doc(db, "seed_bank", String(id))); }
+            catch(err) { console.error("Firestore tohum silme hatası:", err); showNotification("Silinirken bulut hatası: " + err.message, "warning"); }
+        };
+        let tohumIlk = false;
+        onSnapshot(collection(db, "seed_bank"), async (snapshot) => {
+            if (snapshot.empty && !tohumIlk) {
+                tohumIlk = true;
+                let yerel = [];
+                try { yerel = JSON.parse(localStorage.getItem('bkvSeeds')) || []; } catch(e) {}
+                if (yerel.length > 0) {
+                    for (const r of yerel) { try { await setDoc(doc(db, "seed_bank", String(r.id)), r); } catch(e) { console.error("Tohum aktarım hatası:", e); } }
                     return;
                 }
             }
-            uretimInitialSynced = true;
+            tohumIlk = true;
             const liste = [];
-            snapshot.forEach(d => liste.push({ id: d.id, ...d.data() }));
-            localStorage.setItem('bkvUretim', JSON.stringify(liste));
-            if (typeof window.renderUretim === 'function') window.renderUretim();
-        }, (err) => {
-            console.error("Firestore production_records onSnapshot hatası:", err);
-        });
+            snapshot.forEach(d => liste.push({ ...d.data(), id: d.id }));
+            localStorage.setItem('bkvSeeds', JSON.stringify(liste));
+            if (typeof window.renderTohum === 'function') window.renderTohum();
+        }, (err) => { console.error("Firestore seed_bank onSnapshot hatası:", err); });
     </script>
 
 
     <script>
     // ========================================================
-    // 🌾 ÜRETİMLERİM: girdi / süreç / çıktı kayıtları
+    // 🌾 ÜRETİMLERİM: dönemler + girdi / süreç / çıktı kayıtları + analiz
     // ========================================================
     (function() {
-        const KEY = 'bkvUretim';
-        const BIRIMLER = ['kg','g','L','mL','adet','demet','saat','kWh','m³','m²','°C','pH','TL'];
+        const KR = 'bkvUretim', KD = 'bkvUretimDonem';
+        const BIRIMLER = ['kg','g','L','mL','adet','demet','saat','kWh','m³','m²'];
         const ETIKET = { girdi: 'Girdi', surec: 'Süreç', cikti: 'Çıktı' };
-        let aktifSekme = 'girdi';
+        const DURUM = { plan: ['Planlandı','plan'], devam: ['Devam Ediyor','run'], bitti: ['Tamamlandı','done'], iptal: ['İptal / Başarısız','stop'] };
+        const TURLER = {
+            girdi: ['🌱 Tohum / Fide','🪱 Gübre / Kompost','💧 Su','🐞 Bitki Koruma','🟤 Toprak / Harç','👩‍🌾 İşgücü','⚡ Enerji','🧰 Ekipman / Malzeme','📦 Diğer'],
+            surec: ['🟤 Toprak Hazırlığı','🌱 Ekim / Dikim','💧 Sulama','🪱 Gübreleme','✂️ Bakım / Budama','🐞 Zararlı & Hastalık Kontrolü','🌡️ Ölçüm / Gözlem','🧺 Hasat','📦 Diğer'],
+            cikti: ['🧺 Hasat / Ana Ürün','🌿 Yan Ürün','🗑️ Fire / Atık','📦 Diğer']
+        };
+        const FORM = {
+            girdi: [
+                {k:'date',l:'Tarih',t:'date'}, {k:'type',l:'Girdi Türü',t:'select',o:TURLER.girdi},
+                {k:'title',l:'Girdi Adı',t:'text',w:1,ph:'örn. Bokashi suyu, F1 tohum, damla sulama',req:1},
+                {pair:[{k:'value',l:'Ölçüm (Miktar)',t:'number',ph:'0',req:1},{k:'unit',l:'Birim',t:'select',o:BIRIMLER}]},
+                {k:'cost',l:'Maliyet (TL)',t:'number',ph:'isteğe bağlı'},
+                {k:'origin',l:'Köken',t:'select',o:['—','Kendi üretimimiz','Satın alındı','Bağış','Geri dönüşüm / atık değerlendirme']},
+                {k:'note',l:'Not (isteğe bağlı)',t:'text',w:1,ph:'Tedarikçi, marka, ek bilgi'}
+            ],
+            surec: [
+                {k:'date',l:'Tarih',t:'date'}, {k:'type',l:'Aşama',t:'select',o:TURLER.surec},
+                {k:'note',l:'Yapılan İşlem / Gözlem',t:'textarea',w:1,ph:'Süreçte neler yapıldı, ne gözlemlendi?',req:1},
+                {k:'duration',l:'Süre (dakika)',t:'number',ph:'isteğe bağlı'}, {k:'people',l:'Yapanlar',t:'text',ph:'örn. 9-A ekibi'},
+                {sub:'🌡️ Çevre / Toprak Ölçümleri (isteğe bağlı)'},
+                {k:'temp',l:'Sıcaklık (°C)',t:'number'}, {k:'hum',l:'Hava Nemi (%)',t:'number'},
+                {k:'soil',l:'Toprak Nemi (%)',t:'number'}, {k:'ph',l:'Toprak pH',t:'number'}, {k:'ec',l:'EC (dS/m)',t:'number'}
+            ],
+            cikti: [
+                {k:'date',l:'Tarih',t:'date'}, {k:'type',l:'Çıktı Türü',t:'select',o:TURLER.cikti},
+                {k:'title',l:'Çıktı Adı',t:'text',w:1,ph:'örn. 1. sınıf domates',req:1},
+                {pair:[{k:'value',l:'Ölçüm (Miktar)',t:'number',ph:'0',req:1},{k:'unit',l:'Birim',t:'select',o:BIRIMLER}]},
+                {k:'quality',l:'Kalite Sınıfı',t:'select',o:['—','1. Sınıf','2. Sınıf','3. Sınıf','İşlenecek']},
+                {k:'price',l:'Birim Fiyat (TL)',t:'number',ph:'isteğe bağlı'},
+                {k:'dest',l:'Kullanım / Hedef',t:'select',o:['—','Satış','Kulüp tüketimi','Bağış','Kompost','Stok']},
+                {k:'note',l:'Not (isteğe bağlı)',t:'text',w:1}
+            ]
+        };
+        let sekme = 'ozet', duzenle = null, filtre = { girdi:{q:'',t:''}, surec:{q:'',t:''}, cikti:{q:'',t:''} };
 
-        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-        function oku() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch(e) { return []; } }
-        function yaz(l) { try { localStorage.setItem(KEY, JSON.stringify(l)); } catch(e) {} }
-        function urunler() { try { return JSON.parse(localStorage.getItem('bkvProducts')) || []; } catch(e) { return []; } }
-        function bugun() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
-        function fmt(n) { return (Math.round(n * 100) / 100).toLocaleString('tr-TR'); }
-        function tarihTR(t) { if (!t) return ''; const p = t.split('-'); return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : t; }
+        const $ = id => document.getElementById(id);
+        const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const oku = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch(e) { return []; } };
+        const yaz = (k, l) => { try { localStorage.setItem(k, JSON.stringify(l)); } catch(e) {} };
+        const urunler = () => { try { return JSON.parse(localStorage.getItem('bkvProducts')) || []; } catch(e) { return []; } };
+        const bugun = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+        const fmt = n => (Math.round(Number(n) * 100) / 100).toLocaleString('tr-TR');
+        const tl = n => fmt(n) + ' ₺';
+        const tarihTR = t => { if (!t) return ''; const p = t.split('-'); return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : t; };
+        const yeniId = () => 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        const kullanici = () => sessionStorage.getItem('currentUser') || 'Kullanıcı';
+        const yonetici = () => sessionStorage.getItem('currentRole') === 'admin';
+        const olmaz = () => (typeof checkMemberActionPermission === 'function') && !checkMemberActionPermission();
+        const sayi = v => (v === '' || v == null || isNaN(v)) ? null : Number(v);
 
-        // Seçili ürün anahtarı: barkod ya da "diger:<ad>"
-        function secili() {
-            const sel = document.getElementById('ur-urun-sec');
-            if (!sel || !sel.value) return null;
+        // ---------- Seçimler ----------
+        function secUrun() {
+            const sel = $('ur-urun-sec'); if (!sel || !sel.value) return null;
             if (sel.value === '__diger__') {
-                const ad = (document.getElementById('ur-urun-diger').value || '').trim();
+                const ad = ($('ur-urun-diger').value || '').trim();
                 return ad ? { key: 'diger:' + ad.toLocaleLowerCase('tr'), name: ad } : null;
             }
-            const opt = sel.options[sel.selectedIndex];
-            return { key: 'p:' + sel.value, name: opt.getAttribute('data-name') || opt.textContent };
+            const o = sel.options[sel.selectedIndex];
+            return { key: 'p:' + sel.value, name: o.getAttribute('data-name') || o.textContent };
         }
+        function donemler(key) { return oku(KD).filter(d => d.productKey === key).sort((a,b) => (b.startDate||'').localeCompare(a.startDate||'') || (b.createdAt||0)-(a.createdAt||0)); }
+        function secDonemId() { const s = $('ur-donem-sec'); return s ? s.value : ''; }   // '' = tümü, '__yok__' = dönemsiz
+        function kapsamKayit(u) {
+            const d = secDonemId();
+            return oku(KR).filter(r => r.productKey === u.key && (d === '' || (d === '__yok__' ? !r.cycleId : r.cycleId === d)));
+        }
+        function aktifDonem(u) { const d = secDonemId(); return (d && d !== '__yok__') ? donemler(u.key).find(x => x.id === d) : null; }
 
-        function urunListesiDoldur() {
-            const sel = document.getElementById('ur-urun-sec');
-            if (!sel) return;
-            const onceki = sel.value;
+        function urunListesi() {
+            const sel = $('ur-urun-sec'); const onceki = sel.value;
             let s = '<option value="">— Ürün seçin —</option>';
             urunler().slice().sort((a,b) => String(a.name||'').localeCompare(String(b.name||''), 'tr')).forEach(p => {
                 s += '<option value="' + esc(p.barcode) + '" data-name="' + esc(p.name) + '">' + esc(p.name) + '</option>';
             });
             s += '<option value="__diger__">✍️ Listede yok — ürün adını kendim yazayım</option>';
             sel.innerHTML = s;
-            let kayitli = onceki;
-            if (!kayitli) { try { kayitli = localStorage.getItem('bkvUretimSecili') || ''; } catch(e) {} }
-            if (kayitli && Array.from(sel.options).some(o => o.value === kayitli)) sel.value = kayitli;
+            let k = onceki; if (!k) { try { k = localStorage.getItem('bkvUretimSecili') || ''; } catch(e) {} }
+            if (k && Array.from(sel.options).some(o => o.value === k)) sel.value = k;
+            $('ur-urun-diger').style.display = sel.value === '__diger__' ? '' : 'none';
+        }
+        function donemListesi() {
+            const u = secUrun(); const satir = $('ur-donem-satir');
+            if (!u) { satir.style.display = 'none'; return; }
+            satir.style.display = '';
+            const sel = $('ur-donem-sec'); const onceki = sel.value;
+            const ds = donemler(u.key);
+            const yokVar = oku(KR).some(r => r.productKey === u.key && !r.cycleId);
+            let s = '<option value="">📚 Tüm dönemler (toplam)</option>';
+            ds.forEach(d => { s += '<option value="' + esc(d.id) + '">' + esc(d.name) + ' · ' + esc((DURUM[d.status]||DURUM.devam)[0]) + '</option>'; });
+            if (yokVar) s += '<option value="__yok__">📦 Dönemsiz (eski) kayıtlar</option>';
+            sel.innerHTML = s;
+            if (onceki && Array.from(sel.options).some(o => o.value === onceki)) sel.value = onceki;
+            else if (ds.length) { const aktif = ds.find(d => d.status === 'devam') || ds[0]; sel.value = aktif.id; }
+            const spec = sel.value && sel.value !== '__yok__';
+            $('ur-btn-dduz').style.display = spec ? '' : 'none';
+            $('ur-btn-dsil').style.display = spec ? '' : 'none';
         }
 
-        function birimDoldur() {
-            ['ur-g-birim', 'ur-c-birim'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el && !el.options.length) el.innerHTML = BIRIMLER.map(b => '<option>' + b + '</option>').join('');
+        // ---------- Form üretimi ----------
+        function alanHTML(f, kind) {
+            const id = 'ur-f-' + kind + '-' + f.k;
+            let el;
+            if (f.t === 'select') el = '<select id="' + id + '" class="aero-input">' + f.o.map(o => '<option>' + esc(o) + '</option>').join('') + '</select>';
+            else if (f.t === 'textarea') el = '<textarea id="' + id + '" class="aero-input" rows="3" placeholder="' + esc(f.ph||'') + '" style="resize:vertical;"></textarea>';
+            else if (f.t === 'number') el = '<input type="number" step="any" inputmode="decimal" id="' + id + '" class="aero-input" placeholder="' + esc(f.ph||'') + '">';
+            else el = '<input type="' + f.t + '" id="' + id + '" class="aero-input" placeholder="' + esc(f.ph||'') + '">';
+            return '<div' + (f.w ? ' class="wide"' : '') + '><label class="ur-lbl">' + esc(f.l) + (f.req ? ' *' : '') + '</label>' + el + '</div>';
+        }
+        function formHTML(kind) {
+            const bas = { girdi: '📥 Yeni Girdi Ekle', surec: '⚙️ Yeni Süreç Kaydı', cikti: '📤 Yeni Çıktı Ekle' }[kind];
+            let g = '';
+            FORM[kind].forEach(f => {
+                if (f.sub) g += '<div class="ur-sub">' + f.sub + '</div>';
+                else if (f.pair) g += '<div class="wide pair">' + f.pair.map(x => alanHTML(x, kind)).join('') + '</div>';
+                else g += alanHTML(f, kind);
             });
-            const gb = document.getElementById('ur-g-birim'); if (gb && !gb.dataset.init) { gb.dataset.init = 1; gb.value = 'kg'; }
-            const cb = document.getElementById('ur-c-birim'); if (cb && !cb.dataset.init) { cb.dataset.init = 1; cb.value = 'kg'; }
+            return '<div class="ur-panel"><h3 id="ur-ft-' + kind + '" data-baslik="' + bas + '">' + bas + '</h3><div class="ur-grid">' + g + '</div>' +
+                '<div class="ur-row"><button class="aero-btn btn-green" style="flex:1 1 200px; padding:10px; font-weight:bold;" data-act="kaydet" data-kind="' + kind + '" id="ur-kb-' + kind + '">💾 Kaydet</button>' +
+                '<button class="aero-btn" style="display:none;" data-act="iptal" data-kind="' + kind + '" id="ur-ib-' + kind + '">✖ Vazgeç</button></div></div>';
+        }
+        function formSifirla(kind, tarihKoru) {
+            duzenle = null;
+            FORM[kind].forEach(f => (f.pair ? f.pair : [f]).forEach(x => {
+                if (!x.k) return; const el = $('ur-f-' + kind + '-' + x.k); if (!el) return;
+                if (x.k === 'date') el.value = tarihKoru || bugun();
+                else if (x.t === 'select') { if (x.k !== 'unit' && x.k !== 'type') el.selectedIndex = 0; }
+                else el.value = '';
+            }));
+            $('ur-ft-' + kind).textContent = $('ur-ft-' + kind).getAttribute('data-baslik');
+            $('ur-kb-' + kind).textContent = '💾 Kaydet'; $('ur-ib-' + kind).style.display = 'none';
         }
 
-        window.uretimAc = function() {
-            birimDoldur();
-            urunListesiDoldur();
-            ['ur-g-tarih','ur-s-tarih','ur-c-tarih'].forEach(id => { const e = document.getElementById(id); if (e && !e.value) e.value = bugun(); });
-            uretimUrunDegisti(true);
-        };
+        // ---------- Analiz ----------
+        function analiz(recs, donem) {
+            const g = recs.filter(r => r.kind === 'girdi'), c = recs.filter(r => r.kind === 'cikti'), s = recs.filter(r => r.kind === 'surec');
+            const fire = r => /Fire|Atık/.test(r.type || '');
+            const birimTop = (l) => { const m = {}; l.forEach(r => { const v = sayi(r.value); if (v != null) m[r.unit] = (m[r.unit]||0) + v; }); return m; };
+            const gTop = birimTop(g);
+            const cIyi = birimTop(c.filter(r => !fire(r))), cFire = birimTop(c.filter(fire));
+            const birimMetin = m => { const k = Object.keys(m); return k.length ? k.map(u => fmt(m[u]) + ' ' + u).join(' · ') : '—'; };
+            const maliyet = g.reduce((t, r) => t + (sayi(r.cost) || 0), 0);
+            const gelir = c.filter(r => !fire(r)).reduce((t, r) => t + ((sayi(r.value) || 0) * (sayi(r.price) || 0)), 0);
+            let ana = null; Object.keys(cIyi).forEach(u => { if (!ana || cIyi[u] > cIyi[ana]) ana = u; });
+            const anaT = ana ? cIyi[ana] : 0, fireT = ana ? (cFire[ana] || 0) : 0;
+            const sure = s.reduce((t, r) => t + (sayi(r.duration) || 0), 0);
+            let hedefYuzde = null, hedefTop = null;
+            if (donem && sayi(donem.targetValue) > 0) { hedefTop = cIyi[donem.targetUnit] || 0; hedefYuzde = hedefTop / Number(donem.targetValue) * 100; }
+            const verim = (donem && sayi(donem.area) > 0 && ana && (ana === 'kg' || ana === 'g' || ana === 'adet' || ana === 'L')) ? anaT / Number(donem.area) : null;
+            return { g, c, s, gTop, cIyi, cFire, birimMetin, maliyet, gelir, ana, anaT, fireT, sure, hedefYuzde, hedefTop, verim,
+                fireOran: (ana && anaT + fireT > 0) ? fireT / (anaT + fireT) * 100 : null,
+                birimMaliyet: (ana && anaT > 0 && maliyet > 0) ? maliyet / anaT : null };
+        }
+        function barlar(items, cls) {
+            if (!items.length) return '<div class="ur-empty" style="padding:12px;">Veri yok</div>';
+            const mx = Math.max.apply(null, items.map(i => i.v)) || 1;
+            return items.map(i => '<div class="ur-bar-row"><div class="lb" title="' + esc(i.l) + '">' + esc(i.l) + '</div><div class="ur-bar-bg"><div class="ur-bar-fg ' + (cls||'') + '" style="width:' + Math.max(3, i.v / mx * 100) + '%"></div></div><div>' + esc(i.t) + '</div></div>').join('');
+        }
 
-        window.uretimUrunDegisti = function(sessiz) {
-            const sel = document.getElementById('ur-urun-sec');
-            const diger = document.getElementById('ur-urun-diger');
-            diger.style.display = (sel.value === '__diger__') ? '' : 'none';
-            if (sel.value !== '__diger__') { try { localStorage.setItem('bkvUretimSecili', sel.value); } catch(e) {} }
-            window.renderUretim();
-        };
-        window.uretimDigerYazildi = function() { window.renderUretim(); };
-
-        window.uretimSekme = function(s) {
-            aktifSekme = s;
-            ['girdi','surec','cikti'].forEach(k => {
-                const sec = document.getElementById('ur-sec-' + k); if (sec) sec.style.display = (k === s) ? 'block' : 'none';
-                const b = document.getElementById('ur-btn-' + k); if (b) b.classList.toggle('active', k === s);
-            });
-        };
-
-        window.renderUretim = function() {
-            const sec = secili();
-            const icerik = document.getElementById('ur-icerik');
-            const bos = document.getElementById('ur-bos');
-            if (!icerik) return;
-            if (!sec) { icerik.style.display = 'none'; bos.style.display = ''; return; }
-            icerik.style.display = ''; bos.style.display = 'none';
-            window.uretimSekme(aktifSekme);
-
-            const kayitlar = oku().filter(r => r.productKey === sec.key).sort((a,b) => (b.date||'').localeCompare(a.date||'') || (b.createdAt||0) - (a.createdAt||0));
-            const topla = (tur) => {
-                const m = {};
-                kayitlar.filter(r => r.kind === tur && r.value !== '' && r.value != null && !isNaN(r.value)).forEach(r => {
-                    if (tur === 'cikti' && /Fire|Atık/.test(r.type || '')) return;
-                    m[r.unit] = (m[r.unit] || 0) + Number(r.value);
-                });
-                const parcalar = Object.keys(m).map(u => fmt(m[u]) + ' ' + u);
-                return parcalar.length ? parcalar.join(' · ') : '—';
-            };
-            const adet = k => kayitlar.filter(r => r.kind === k).length;
-            document.getElementById('ur-ozet').innerHTML =
-                '<div class="ur-sum-card"><div class="lb">🌾 Ürün</div><div class="vl">' + esc(sec.name) + '</div></div>' +
-                '<div class="ur-sum-card in"><div class="lb">📥 Toplam Girdi (' + adet('girdi') + ' kayıt)</div><div class="vl">' + esc(topla('girdi')) + '</div></div>' +
-                '<div class="ur-sum-card"><div class="lb">⚙️ Süreç Kaydı</div><div class="vl">' + adet('surec') + '</div></div>' +
-                '<div class="ur-sum-card out"><div class="lb">📤 Toplam Çıktı (' + adet('cikti') + ' kayıt)</div><div class="vl">' + esc(topla('cikti')) + '</div></div>';
-
-            const isAdmin = sessionStorage.getItem('currentRole') === 'admin';
-            const me = sessionStorage.getItem('currentUser') || '';
-            ['girdi','surec','cikti'].forEach(k => {
-                const kap = document.getElementById('ur-liste-' + k);
-                const lst = kayitlar.filter(r => r.kind === k);
-                if (!lst.length) { kap.innerHTML = '<div class="ur-empty">Henüz ' + ETIKET[k].toLowerCase() + ' kaydı yok.</div>'; return; }
-                kap.innerHTML = lst.map(r => {
-                    const olcum = (k !== 'surec' && r.value !== '' && r.value != null) ? '<div class="ur-meas">📏 ' + esc(fmt(Number(r.value))) + ' ' + esc(r.unit) + '</div>' : '';
-                    const sil = (isAdmin || (r.author && r.author === me)) ? '<button class="ur-del" title="Sil" onclick="uretimSil(\'' + esc(r.id) + '\')">🗑️</button>' : '';
-                    return '<div class="ur-item ' + (k === 'girdi' ? 'in' : k === 'cikti' ? 'out' : '') + '"><div class="ur-item-main">' +
-                        '<div class="ur-item-title">' + esc(r.type || '') + (r.title ? ' — ' + esc(r.title) : '') + '</div>' +
-                        '<div class="ur-item-meta">📅 ' + esc(tarihTR(r.date)) + (r.author ? ' · 👤 ' + esc(r.author) : '') + '</div>' +
-                        olcum + (r.note ? '<div class="ur-item-note">' + esc(r.note) + '</div>' : '') +
-                        '</div>' + sil + '</div>';
-                }).join('');
-            });
-        };
-
-        window.uretimKaydet = async function(tur) {
-            if (typeof checkMemberActionPermission === 'function' && !checkMemberActionPermission()) return;
-            const sec = secili();
-            if (!sec) return showNotification('⚠️ Önce bir ürün seçin!', 'warning');
-            const v = id => (document.getElementById(id) || {}).value || '';
-            let rec;
-            if (tur === 'girdi' || tur === 'cikti') {
-                const p = tur === 'girdi' ? 'ur-g-' : 'ur-c-';
-                const ad = v(p + 'ad').trim(), miktar = v(p + 'miktar').trim();
-                if (!ad) return showNotification('⚠️ ' + ETIKET[tur] + ' adını yazın!', 'warning');
-                if (miktar === '' || isNaN(miktar)) return showNotification('⚠️ Geçerli bir ölçüm (miktar) girin!', 'warning');
-                rec = { kind: tur, date: v(p + 'tarih') || bugun(), type: v(p + 'tur'), title: ad, value: Number(miktar), unit: v(p + 'birim'), note: v(p + 'not').trim() };
-            } else {
-                const acik = v('ur-s-acik').trim();
-                if (!acik) return showNotification('⚠️ Yapılan işlemi / gözlemi yazın!', 'warning');
-                rec = { kind: 'surec', date: v('ur-s-tarih') || bugun(), type: v('ur-s-asama'), title: '', value: '', unit: '', note: acik };
+        // ---------- Görünümler ----------
+        function renderOzet(u, recs, donem) {
+            const a = analiz(recs, donem);
+            const net = a.gelir - a.maliyet;
+            let dBilgi = '';
+            if (donem) {
+                const d = DURUM[donem.status] || DURUM.devam;
+                const bas = donem.startDate ? new Date(donem.startDate) : null, bit = donem.endDate ? new Date(donem.endDate) : new Date();
+                const gun = bas ? Math.max(0, Math.round((bit - bas) / 86400000)) : null;
+                dBilgi = '<div class="ur-panel"><h3>🗓️ ' + esc(donem.name) + ' <span class="ur-badge ' + d[1] + '">' + d[0] + '</span></h3><div class="ur-chips">' +
+                    (donem.location ? '<span class="ur-chip">📍 ' + esc(donem.location) + '</span>' : '') +
+                    (sayi(donem.area) ? '<span class="ur-chip">📐 ' + fmt(donem.area) + ' m²</span>' : '') +
+                    (donem.startDate ? '<span class="ur-chip">▶ ' + tarihTR(donem.startDate) + '</span>' : '') +
+                    (donem.endDate ? '<span class="ur-chip">⏹ ' + tarihTR(donem.endDate) + '</span>' : '') +
+                    (gun != null ? '<span class="ur-chip">⏱ ' + gun + ' gün</span>' : '') + '</div>' +
+                    (donem.note ? '<div class="ur-item-note">' + esc(donem.note) + '</div>' : '');
+                if (a.hedefYuzde != null) {
+                    dBilgi += '<div style="margin-top:12px;"><div class="ur-lbl">🎯 Hedef: ' + fmt(donem.targetValue) + ' ' + esc(donem.targetUnit) + ' — gerçekleşen ' + fmt(a.hedefTop) + ' ' + esc(donem.targetUnit) + ' (%' + fmt(a.hedefYuzde) + ')</div>' +
+                        '<div class="ur-bar-bg" style="height:18px;"><div class="ur-bar-fg out" style="width:' + Math.min(100, a.hedefYuzde) + '%"></div></div></div>';
+                }
+                dBilgi += '</div>';
             }
-            rec.productKey = sec.key; rec.productName = sec.name;
-            rec.author = sessionStorage.getItem('currentUser') || 'Kullanıcı';
-            rec.createdAt = Date.now();
-            rec.id = 'tmp' + rec.createdAt;
+            const kart = (cls, lb, vl, sb) => '<div class="ur-sum-card ' + cls + '"><div class="lb">' + lb + '</div><div class="vl">' + vl + '</div>' + (sb ? '<div class="sb">' + sb + '</div>' : '') + '</div>';
+            let k = kart('', '🌾 Ürün', esc(u.name), donem ? esc(donem.name) : (secDonemId() === '__yok__' ? 'Dönemsiz kayıtlar' : 'Tüm dönemler')) +
+                kart('in', '📥 Toplam Girdi', esc(a.birimMetin(a.gTop)), a.g.length + ' kayıt') +
+                kart('out', '📤 Toplam Çıktı', esc(a.birimMetin(a.cIyi)), a.c.length + ' kayıt' + (a.ana && a.fireT ? ' · fire ' + fmt(a.fireT) + ' ' + a.ana : '')) +
+                kart('', '⚙️ Süreç Kaydı', a.s.length, a.sure ? fmt(a.sure / 60) + ' saat çalışma' : '') +
+                kart('in', '💰 Toplam Maliyet', a.maliyet ? tl(a.maliyet) : '—', a.birimMaliyet != null ? 'Birim maliyet: ' + tl(a.birimMaliyet) + ' / ' + a.ana : '') +
+                kart('out', '💵 Tahmini Gelir', a.gelir ? tl(a.gelir) : '—', 'Birim fiyatı girilen çıktılardan') +
+                kart(net < 0 ? 'neg' : 'out', '📈 Net Sonuç', (a.gelir || a.maliyet) ? tl(net) : '—', 'Gelir − maliyet') +
+                kart('', '🗑️ Fire Oranı', a.fireOran != null ? '%' + fmt(a.fireOran) : '—', '') +
+                (a.verim != null ? kart('out', '🌱 Verim', fmt(a.verim) + ' ' + a.ana + '/m²', 'Alan: ' + fmt(donem.area) + ' m²') : '');
+            // grafikler
+            const tur = {}; a.g.forEach(r => { const t = r.type || 'Diğer'; tur[t] = (tur[t]||0) + (sayi(r.cost) || 0); });
+            const turItems = Object.keys(tur).filter(t => tur[t] > 0).map(t => ({ l: t, v: tur[t], t: tl(tur[t]) })).sort((x,y) => y.v - x.v);
+            const gun = {}; a.c.filter(r => !/Fire|Atık/.test(r.type||'') && r.unit === a.ana).forEach(r => { gun[r.date] = (gun[r.date]||0) + (sayi(r.value)||0); });
+            const gunItems = Object.keys(gun).sort().slice(-12).map(d => ({ l: tarihTR(d), v: gun[d], t: fmt(gun[d]) + ' ' + a.ana }));
+            const ort = {}; a.s.forEach(r => ['temp','hum','soil','ph','ec'].forEach(f => { const v = sayi(r[f]); if (v != null) { (ort[f] = ort[f] || []).push(v); } }));
+            const ad = { temp:['🌡️ Sıcaklık','°C'], hum:['💧 Hava nemi','%'], soil:['🟤 Toprak nemi','%'], ph:['🧪 pH',''], ec:['⚡ EC','dS/m'] };
+            const ortHtml = Object.keys(ort).length ? '<div class="ur-chips">' + Object.keys(ort).map(f => { const l = ort[f]; const o = l.reduce((x,y)=>x+y,0)/l.length; return '<span class="ur-chip env">' + ad[f][0] + ': ort. ' + fmt(o) + ' ' + ad[f][1] + ' (min ' + fmt(Math.min.apply(null,l)) + ' – maks ' + fmt(Math.max.apply(null,l)) + ')</span>'; }).join('') + '</div>' : '<div class="ur-empty" style="padding:12px;">Süreç kayıtlarına ölçüm girildiğinde ortalamalar burada görünür.</div>';
+            const son = recs.slice().sort((x,y) => (y.date||'').localeCompare(x.date||'') || (y.createdAt||0)-(x.createdAt||0)).slice(0, 8);
+            const sonHtml = son.length ? '<div class="ur-list">' + son.map(r => '<div class="ur-item ' + (r.kind==='girdi'?'in':r.kind==='cikti'?'out':'') + '"><div class="ur-item-main"><div class="ur-item-title">' + esc(r.type||'') + (r.title ? ' — ' + esc(r.title) : '') + '</div><div class="ur-item-meta">📅 ' + tarihTR(r.date) + ' · ' + ETIKET[r.kind] + (sayi(r.value) != null && r.kind !== 'surec' ? ' · 📏 ' + fmt(r.value) + ' ' + esc(r.unit) : '') + '</div></div></div>').join('') + '</div>' : '<div class="ur-empty">Henüz kayıt yok. Girdiler, Süreç ve Çıktılar sekmelerinden kayıt ekleyin.</div>';
+            $('ur-sec-ozet').innerHTML = dBilgi + '<div class="ur-sum" style="margin-top:12px;">' + k + '</div>' +
+                '<div class="ur-row" style="margin:12px 0;"><button class="aero-btn" data-act="csv">⬇️ CSV (Excel) İndir</button><button class="aero-btn" data-act="rapor">🖨️ Rapor / Yazdır</button></div>' +
+                '<div class="ur-two"><div class="ur-panel"><h3>💰 Girdi Türüne Göre Maliyet</h3>' + barlar(turItems, 'in') + '</div>' +
+                '<div class="ur-panel"><h3>🧺 Tarihe Göre Çıktı' + (a.ana ? ' (' + esc(a.ana) + ')' : '') + '</h3>' + barlar(gunItems, 'out') + '</div></div>' +
+                '<div class="ur-panel" style="margin-top:12px;"><h3>🌡️ Ölçüm Ortalamaları</h3>' + ortHtml + '</div>' +
+                '<div class="ur-panel" style="margin-top:12px;"><h3>🕒 Son Hareketler</h3>' + sonHtml + '</div>';
+        }
 
-            const l = oku(); l.push(rec); yaz(l);
-            if (tur === 'girdi') { ['ur-g-ad','ur-g-miktar','ur-g-not'].forEach(i => document.getElementById(i).value = ''); }
-            else if (tur === 'cikti') { ['ur-c-ad','ur-c-miktar','ur-c-not'].forEach(i => document.getElementById(i).value = ''); }
-            else { document.getElementById('ur-s-acik').value = ''; }
-            window.renderUretim();
-            showNotification('✅ ' + ETIKET[tur] + ' kaydedildi.', 'success');
+        function recHtml(r) {
+            const me = kullanici(); const yetki = yonetici() || (r.author && r.author === me);
+            const ch = [];
+            if (sayi(r.value) != null && r.kind !== 'surec') ch.push('<span class="ur-chip big">📏 ' + fmt(r.value) + ' ' + esc(r.unit) + '</span>');
+            if (sayi(r.cost) != null) ch.push('<span class="ur-chip money">💰 ' + tl(r.cost) + '</span>');
+            if (sayi(r.price) != null) ch.push('<span class="ur-chip money">🏷️ ' + tl(r.price) + ' / ' + esc(r.unit) + '</span>');
+            if (r.origin && r.origin !== '—') ch.push('<span class="ur-chip">' + esc(r.origin) + '</span>');
+            if (r.quality && r.quality !== '—') ch.push('<span class="ur-chip">⭐ ' + esc(r.quality) + '</span>');
+            if (r.dest && r.dest !== '—') ch.push('<span class="ur-chip">🎯 ' + esc(r.dest) + '</span>');
+            if (sayi(r.duration) != null) ch.push('<span class="ur-chip">⏱ ' + fmt(r.duration) + ' dk</span>');
+            if (r.people) ch.push('<span class="ur-chip">👥 ' + esc(r.people) + '</span>');
+            [['temp','🌡️','°C'],['hum','💧','%'],['soil','🟤','%'],['ph','🧪',''],['ec','⚡',' dS/m']].forEach(a => { if (sayi(r[a[0]]) != null) ch.push('<span class="ur-chip env">' + a[1] + ' ' + fmt(r[a[0]]) + a[2] + '</span>'); });
+            const dn = r.cycleId ? donemler(r.productKey).find(d => d.id === r.cycleId) : null;
+            return '<div class="ur-item ' + (r.kind==='girdi'?'in':r.kind==='cikti'?'out':'') + '"><div class="ur-item-main">' +
+                '<div class="ur-item-title">' + esc(r.type||'') + (r.title ? ' — ' + esc(r.title) : '') + '</div>' +
+                '<div class="ur-item-meta">📅 ' + tarihTR(r.date) + (dn ? ' · 🗓️ ' + esc(dn.name) : '') + (r.author ? ' · 👤 ' + esc(r.author) : '') + '</div>' +
+                (ch.length ? '<div class="ur-chips">' + ch.join('') + '</div>' : '') +
+                (r.note ? '<div class="ur-item-note">' + esc(r.note) + '</div>' : '') + '</div>' +
+                (yetki ? '<div class="ur-acts"><button class="ur-ibtn" title="Düzenle" data-act="duzenle" data-id="' + esc(r.id) + '">✏️</button><button class="ur-ibtn del" title="Sil" data-act="sil" data-id="' + esc(r.id) + '">🗑️</button></div>' : '') + '</div>';
+        }
+        function renderKayit(kind, recs) {
+            const kap = $('ur-sec-' + kind);
+            if (!kap.dataset.hazir) {
+                kap.innerHTML = formHTML(kind) +
+                    '<h3 style="color:#01579b; margin:14px 0 0 0; font-size:15px;">' + ETIKET[kind] + ' Kayıtları <span id="ur-sayac-' + kind + '" style="font-weight:600; color:#78909c;"></span></h3>' +
+                    '<div class="ur-filter"><input type="search" class="aero-input" id="ur-q-' + kind + '" placeholder="🔍 Ara…"><select class="aero-input" id="ur-t-' + kind + '"><option value="">Tüm türler</option>' + TURLER[kind].map(t => '<option>' + esc(t) + '</option>').join('') + '</select></div>' +
+                    '<div id="ur-liste-' + kind + '" class="ur-list"></div>';
+                kap.dataset.hazir = 1; formSifirla(kind);
+            }
+            const f = filtre[kind]; const q = f.q.toLocaleLowerCase('tr');
+            const lst = recs.filter(r => r.kind === kind && (!f.t || r.type === f.t) &&
+                (!q || [r.title, r.note, r.type, r.people, r.origin, r.author].join(' ').toLocaleLowerCase('tr').indexOf(q) > -1))
+                .sort((a,b) => (b.date||'').localeCompare(a.date||'') || (b.createdAt||0)-(a.createdAt||0));
+            $('ur-sayac-' + kind).textContent = '(' + lst.length + ')';
+            $('ur-liste-' + kind).innerHTML = lst.length ? lst.map(recHtml).join('') : '<div class="ur-empty">Kayıt bulunamadı.</div>';
+        }
+        function renderTum() {
+            const kayit = oku(KR), don = oku(KD), harita = {};
+            kayit.forEach(r => { (harita[r.productKey] = harita[r.productKey] || { name: r.productName, recs: [] }).recs.push(r); });
+            don.forEach(d => { (harita[d.productKey] = harita[d.productKey] || { name: d.productName, recs: [] }); });
+            const keys = Object.keys(harita).sort((a,b) => String(harita[a].name).localeCompare(String(harita[b].name), 'tr'));
+            let sat = keys.map(k => {
+                const h = harita[k], a = analiz(h.recs, null); const dn = don.filter(d => d.productKey === k);
+                return '<tr class="click" data-act="urun-ac" data-key="' + esc(k) + '"><td><b>' + esc(h.name) + '</b></td><td>' + dn.length + '</td><td>' + h.recs.length + '</td><td>' + esc(a.birimMetin(a.gTop)) + '</td><td>' + esc(a.birimMetin(a.cIyi)) + '</td><td>' + (a.maliyet ? tl(a.maliyet) : '—') + '</td><td>' + (a.gelir ? tl(a.gelir) : '—') + '</td></tr>';
+            }).join('');
+            $('ur-sec-tum').innerHTML = '<div class="ur-panel"><h3>🗂️ Tüm Ürünlerin Karşılaştırması</h3>' +
+                (keys.length ? '<div class="ur-table-wrap"><table class="ur-table"><thead><tr><th>Ürün</th><th>Dönem</th><th>Kayıt</th><th>Toplam Girdi</th><th>Toplam Çıktı</th><th>Maliyet</th><th>Gelir</th></tr></thead><tbody>' + sat + '</tbody></table></div><div class="ur-row"><button class="aero-btn" data-act="csv-tum">⬇️ Tüm Üretimleri CSV İndir</button></div><div class="ur-item-meta" style="margin-top:6px;">Satıra dokunarak ürüne geçebilirsiniz.</div>' : '<div class="ur-empty">Henüz üretim kaydı yok.</div>') + '</div>';
+        }
 
-            if (typeof window._firebaseUretimEkle === 'function') window._firebaseUretimEkle(rec);
-        };
+        function render() {
+            const u = secUrun();
+            ['ozet','girdi','surec','cikti','tum'].forEach(k => $('ur-sec-' + k).style.display = 'none');
+            document.querySelectorAll('#tab-uretim .portal-subtab-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === sekme));
+            if (sekme === 'tum') { $('ur-bos').style.display = 'none'; renderTum(); $('ur-sec-tum').style.display = ''; return; }
+            if (!u) { $('ur-bos').style.display = ''; return; }
+            $('ur-bos').style.display = 'none';
+            const recs = kapsamKayit(u), dn = aktifDonem(u);
+            if (sekme === 'ozet') renderOzet(u, recs, dn); else renderKayit(sekme, recs);
+            $('ur-sec-' + sekme).style.display = '';
+        }
 
-        window.uretimSil = function(id) {
+        // ---------- Dönem formu ----------
+        function donemFormu(d) {
+            const u = secUrun(); if (!u) return;
+            const f = $('ur-donem-form');
+            const opt = (o, v) => o.map(x => '<option value="' + (Array.isArray(x) ? x[0] : x) + '"' + ((Array.isArray(x) ? x[0] : x) === v ? ' selected' : '') + '>' + esc(Array.isArray(x) ? x[1] : x) + '</option>').join('');
+            const v = d || { name: '', location: '', area: '', startDate: bugun(), endDate: '', status: 'devam', targetValue: '', targetUnit: 'kg', note: '' };
+            f.innerHTML = '<h3>' + (d ? '✏️ Dönemi Düzenle' : '➕ Yeni Üretim Dönemi') + ' — ' + esc(u.name) + '</h3><div class="ur-grid">' +
+                '<div class="wide"><label class="ur-lbl">Dönem Adı *</label><input id="ur-d-name" class="aero-input" placeholder="örn. 2026 Sonbahar – Sera 1" value="' + esc(v.name) + '"></div>' +
+                '<div><label class="ur-lbl">Yer</label><input id="ur-d-loc" class="aero-input" placeholder="Sera, bahçe, saksı…" value="' + esc(v.location) + '"></div>' +
+                '<div><label class="ur-lbl">Alan (m²)</label><input type="number" step="any" inputmode="decimal" id="ur-d-area" class="aero-input" value="' + esc(v.area) + '"></div>' +
+                '<div><label class="ur-lbl">Başlangıç</label><input type="date" id="ur-d-bas" class="aero-input" value="' + esc(v.startDate) + '"></div>' +
+                '<div><label class="ur-lbl">Bitiş</label><input type="date" id="ur-d-bit" class="aero-input" value="' + esc(v.endDate) + '"></div>' +
+                '<div><label class="ur-lbl">Durum</label><select id="ur-d-durum" class="aero-input">' + opt(Object.keys(DURUM).map(k => [k, DURUM[k][0]]), v.status) + '</select></div>' +
+                '<div class="pair"><div><label class="ur-lbl">Hedef Çıktı</label><input type="number" step="any" inputmode="decimal" id="ur-d-hedef" class="aero-input" value="' + esc(v.targetValue) + '"></div><div><label class="ur-lbl">Birim</label><select id="ur-d-hbirim" class="aero-input">' + opt(BIRIMLER, v.targetUnit) + '</select></div></div>' +
+                '<div class="wide"><label class="ur-lbl">Not</label><input id="ur-d-note" class="aero-input" value="' + esc(v.note) + '"></div></div>' +
+                '<div class="ur-row"><button class="aero-btn btn-green" style="flex:1 1 200px; padding:10px; font-weight:bold;" data-act="donem-kaydet" data-id="' + (d ? esc(d.id) : '') + '">💾 Dönemi Kaydet</button><button class="aero-btn" data-act="donem-iptal">✖ Vazgeç</button></div>';
+            f.style.display = ''; f.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        function donemKaydet(id) {
+            if (olmaz()) return;
+            const u = secUrun(); if (!u) return;
+            const ad = $('ur-d-name').value.trim(); if (!ad) return showNotification('⚠️ Dönem adını yazın!', 'warning');
+            const eski = id ? oku(KD).find(x => x.id === id) : null;
+            const d = Object.assign({}, eski || {}, {
+                id: id || yeniId(), productKey: u.key, productName: u.name, name: ad, location: $('ur-d-loc').value.trim(),
+                area: $('ur-d-area').value, startDate: $('ur-d-bas').value, endDate: $('ur-d-bit').value, status: $('ur-d-durum').value,
+                targetValue: $('ur-d-hedef').value, targetUnit: $('ur-d-hbirim').value, note: $('ur-d-note').value.trim()
+            });
+            if (!eski) { d.author = kullanici(); d.createdAt = Date.now(); }
+            const l = oku(KD).filter(x => x.id !== d.id); l.push(d); yaz(KD, l);
+            $('ur-donem-form').style.display = 'none';
+            donemListesi(); $('ur-donem-sec').value = d.id; donemListesi(); $('ur-donem-sec').value = d.id;
+            render();
+            showNotification('✅ Üretim dönemi kaydedildi.', 'success');
+            if (typeof window._firebaseUretimDonemKaydet === 'function') window._firebaseUretimDonemKaydet(d);
+        }
+        function donemSil() {
+            const u = secUrun(), d = u && aktifDonem(u); if (!d) return;
+            const adet = oku(KR).filter(r => r.cycleId === d.id).length;
+            showCustomConfirm('Dönemi Sil', '"' + d.name + '" dönemi ve bu döneme ait ' + adet + ' kayıt silinecek. Emin misiniz?', function() {
+                const silinecek = oku(KR).filter(r => r.cycleId === d.id);
+                yaz(KR, oku(KR).filter(r => r.cycleId !== d.id)); yaz(KD, oku(KD).filter(x => x.id !== d.id));
+                $('ur-donem-sec').value = ''; donemListesi(); render();
+                if (typeof window._firebaseUretimDonemSil === 'function') window._firebaseUretimDonemSil(d.id, silinecek.map(r => r.id));
+            });
+        }
+
+        // ---------- Kayıt ekle / düzenle / sil ----------
+        function kaydet(kind) {
+            if (olmaz()) return;
+            const u = secUrun(); if (!u) return showNotification('⚠️ Önce bir ürün seçin!', 'warning');
+            const dId = secDonemId();
+            const eski = duzenle && duzenle.kind === kind ? oku(KR).find(r => r.id === duzenle.id) : null;
+            if (!eski && (dId === '' || dId === '__yok__') && donemler(u.key).length) return showNotification('⚠️ Kayıt eklemek için önce belirli bir üretim dönemi seçin (veya yeni dönem oluşturun).', 'warning');
+            const rec = {};
+            for (const f of FORM[kind]) {
+                for (const x of (f.pair ? f.pair : [f])) {
+                    if (!x.k) continue; const el = $('ur-f-' + kind + '-' + x.k); let v = el ? el.value : '';
+                    if (typeof v === 'string' && x.t !== 'number') v = v.trim();
+                    if (x.req && (v === '' || (x.t === 'number' && isNaN(v)))) { showNotification('⚠️ "' + x.l + '" alanı zorunludur!', 'warning'); return; }
+                    rec[x.k] = x.t === 'number' ? (v === '' ? '' : Number(v)) : v;
+                }
+            }
+            if (kind === 'surec') { rec.title = ''; rec.value = ''; rec.unit = ''; }
+            if (!rec.date) rec.date = bugun();
+            Object.assign(rec, { kind, productKey: u.key, productName: u.name });
+            let l = oku(KR), son;
+            if (eski) { son = Object.assign({}, eski, rec, { updatedAt: Date.now() }); l = l.map(r => r.id === eski.id ? son : r); }
+            else { son = Object.assign(rec, { id: yeniId(), cycleId: (dId && dId !== '__yok__') ? dId : '', author: kullanici(), createdAt: Date.now() }); l.push(son); }
+            yaz(KR, l);
+            formSifirla(kind, rec.date); render(); donemListesi();
+            showNotification(eski ? '✅ Kayıt güncellendi.' : '✅ ' + ETIKET[kind] + ' kaydedildi.', 'success');
+            if (typeof window._firebaseUretimKaydet === 'function') window._firebaseUretimKaydet(son);
+        }
+        function duzenleBaslat(id) {
+            const r = oku(KR).find(x => x.id === id); if (!r) return;
+            const kind = r.kind; renderKayit(kind, kapsamKayit(secUrun()));
+            FORM[kind].forEach(f => (f.pair ? f.pair : [f]).forEach(x => { if (x.k && $('ur-f-' + kind + '-' + x.k)) $('ur-f-' + kind + '-' + x.k).value = r[x.k] == null ? '' : r[x.k]; }));
+            duzenle = { kind, id };
+            $('ur-ft-' + kind).textContent = '✏️ Kaydı Düzenle'; $('ur-kb-' + kind).textContent = '💾 Değişiklikleri Kaydet'; $('ur-ib-' + kind).style.display = '';
+            $('ur-ft-' + kind).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        function sil(id) {
             showCustomConfirm('Kaydı Sil', 'Bu üretim kaydını silmek istediğinize emin misiniz?', function() {
-                yaz(oku().filter(r => String(r.id) !== String(id)));
-                window.renderUretim();
+                yaz(KR, oku(KR).filter(r => r.id !== id)); render(); donemListesi();
                 if (typeof window._firebaseUretimSil === 'function') window._firebaseUretimSil(id);
             });
-        };
+        }
 
-        window.addEventListener('storage', function(e) { if (e.key === KEY || e.key === 'bkvProducts') { urunListesiDoldur(); window.renderUretim(); } });
+        // ---------- CSV & Rapor ----------
+        function csvIndir(hepsi) {
+            const u = secUrun(); let recs, ad;
+            if (hepsi) { recs = oku(KR); ad = 'tum_uretimler'; } else { if (!u) return; recs = kapsamKayit(u); ad = u.name.replace(/[^\wçğıöşüÇĞİÖŞÜ-]+/g, '_'); }
+            if (!recs.length) return showNotification('İndirilecek kayıt yok.', 'warning');
+            const dmap = {}; oku(KD).forEach(d => dmap[d.id] = d.name);
+            const cols = ['Ürün','Dönem','Kayıt Türü','Tarih','Kategori','Ad','Miktar','Birim','Maliyet (TL)','Birim Fiyat (TL)','Kalite','Hedef','Köken','Süre (dk)','Yapanlar','Sıcaklık','Hava Nemi','Toprak Nemi','pH','EC','Not','Kaydeden'];
+            const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+            const satirlar = recs.slice().sort((a,b) => (a.productName||'').localeCompare(b.productName||'', 'tr') || (a.date||'').localeCompare(b.date||'')).map(r => [r.productName, dmap[r.cycleId] || '', ETIKET[r.kind], r.date, r.type, r.title, r.value, r.unit, r.cost, r.price, r.quality, r.dest, r.origin, r.duration, r.people, r.temp, r.hum, r.soil, r.ph, r.ec, r.note, r.author].map(q).join(';'));
+            const blob = new Blob(['﻿' + cols.map(q).join(';') + '\n' + satirlar.join('\n')], { type: 'text/csv;charset=utf-8' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'uretim_' + ad + '_' + bugun() + '.csv';
+            document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+        }
+        function rapor() {
+            const u = secUrun(); if (!u) return;
+            const recs = kapsamKayit(u), dn = aktifDonem(u), a = analiz(recs, dn);
+            const w = window.open('', '_blank'); if (!w) return showNotification('Açılır pencere engellendi; tarayıcıdan izin verin.', 'warning');
+            const tablo = kind => { const l = recs.filter(r => r.kind === kind).sort((x,y) => (x.date||'').localeCompare(y.date||'')); if (!l.length) return '<p><i>Kayıt yok</i></p>'; return '<table><tr><th>Tarih</th><th>Tür</th><th>Ad / Açıklama</th><th>Ölçüm</th><th>Maliyet / Fiyat</th></tr>' + l.map(r => '<tr><td>' + tarihTR(r.date) + '</td><td>' + esc(r.type) + '</td><td>' + esc((r.title ? r.title + ' ' : '') + (r.note || '')) + '</td><td>' + (sayi(r.value) != null ? fmt(r.value) + ' ' + esc(r.unit) : '') + '</td><td>' + (sayi(r.cost) != null ? tl(r.cost) : (sayi(r.price) != null ? tl(r.price) + '/' + esc(r.unit) : '')) + '</td></tr>').join('') + '</table>'; };
+            w.document.write('<!doctype html><meta charset="utf-8"><title>Üretim Raporu</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}h1{color:#01579b}table{border-collapse:collapse;width:100%;margin:8px 0 18px}td,th{border:1px solid #bbb;padding:5px 8px;font-size:12px;text-align:left}th{background:#e1f5fe}</style>' +
+                '<h1>🌾 Üretim Raporu — ' + esc(u.name) + '</h1><p>' + (dn ? 'Dönem: <b>' + esc(dn.name) + '</b> · ' : '') + 'Rapor tarihi: ' + tarihTR(bugun()) + '</p>' +
+                '<p><b>Toplam girdi:</b> ' + esc(a.birimMetin(a.gTop)) + ' · <b>Toplam çıktı:</b> ' + esc(a.birimMetin(a.cIyi)) + ' · <b>Maliyet:</b> ' + (a.maliyet ? tl(a.maliyet) : '—') + ' · <b>Tahmini gelir:</b> ' + (a.gelir ? tl(a.gelir) : '—') + (a.fireOran != null ? ' · <b>Fire:</b> %' + fmt(a.fireOran) : '') + '</p>' +
+                '<h2>📥 Girdiler</h2>' + tablo('girdi') + '<h2>⚙️ Süreç</h2>' + tablo('surec') + '<h2>📤 Çıktılar</h2>' + tablo('cikti') + '<script>setTimeout(function(){window.print()},400)<\/script>');
+            w.document.close();
+        }
+
+        // ---------- Olaylar ----------
+        function baslat() {
+            const kok = $('tab-uretim');
+            kok.addEventListener('click', function(e) {
+                const t = e.target.closest('[data-act],[data-tab]'); if (!t) return;
+                if (t.hasAttribute('data-tab')) { sekme = t.getAttribute('data-tab'); render(); return; }
+                const act = t.getAttribute('data-act'), id = t.getAttribute('data-id'), kind = t.getAttribute('data-kind');
+                if (act === 'kaydet') kaydet(kind);
+                else if (act === 'iptal') formSifirla(kind);
+                else if (act === 'duzenle') duzenleBaslat(id);
+                else if (act === 'sil') sil(id);
+                else if (act === 'donem-yeni') donemFormu(null);
+                else if (act === 'donem-duzenle') { const u = secUrun(); donemFormu(u && aktifDonem(u)); }
+                else if (act === 'donem-sil') donemSil();
+                else if (act === 'donem-kaydet') donemKaydet(id);
+                else if (act === 'donem-iptal') $('ur-donem-form').style.display = 'none';
+                else if (act === 'csv') csvIndir(false);
+                else if (act === 'csv-tum') csvIndir(true);
+                else if (act === 'rapor') rapor();
+                else if (act === 'urun-ac') {
+                    const key = t.getAttribute('data-key'), sel = $('ur-urun-sec');
+                    const opt = Array.from(sel.options).find(o => 'p:' + o.value === key);
+                    if (opt) sel.value = opt.value; else { sel.value = '__diger__'; $('ur-urun-diger').style.display = ''; $('ur-urun-diger').value = (oku(KR).concat(oku(KD)).find(r => r.productKey === key) || {}).productName || ''; }
+                    sekme = 'ozet'; urunDegisti();
+                }
+            });
+            kok.addEventListener('input', function(e) {
+                const m = /^ur-q-(girdi|surec|cikti)$/.exec(e.target.id); if (m) { filtre[m[1]].q = e.target.value; const u = secUrun(); if (u) renderKayit(m[1], kapsamKayit(u)); }
+            });
+            kok.addEventListener('change', function(e) {
+                const id = e.target.id;
+                if (id === 'ur-urun-sec') { if (e.target.value === '__diger__') $('ur-urun-diger').style.display = ''; else $('ur-urun-diger').style.display = 'none'; urunDegisti(); }
+                else if (id === 'ur-donem-sec') { donemListesi(); render(); }
+                else { const m = /^ur-t-(girdi|surec|cikti)$/.exec(id); if (m) { filtre[m[1]].t = e.target.value; const u = secUrun(); if (u) renderKayit(m[1], kapsamKayit(u)); } }
+            });
+            $('ur-urun-diger').addEventListener('input', function() { donemListesi(); render(); });
+        }
+        function urunDegisti() {
+            const sel = $('ur-urun-sec');
+            if (sel.value && sel.value !== '__diger__') { try { localStorage.setItem('bkvUretimSecili', sel.value); } catch(e) {} }
+            $('ur-donem-sec').innerHTML = ''; $('ur-donem-form').style.display = 'none';
+            ['girdi','surec','cikti'].forEach(k => { if ($('ur-sec-' + k).dataset.hazir) formSifirla(k); });
+            donemListesi(); render();
+        }
+        let kuruldu = false;
+        window.uretimAc = function() {
+            if (!kuruldu) { kuruldu = true; baslat(); }
+            urunListesi(); donemListesi(); render();
+        };
+        window.renderUretim = function() {
+            if (!kuruldu) return;
+            const sel = $('ur-urun-sec'); const v = sel.value; urunListesi(); sel.value = v || sel.value;
+            donemListesi();
+            if (!duzenle) render();
+        };
+        window.addEventListener('storage', function(e) { if ([KR, KD, 'bkvProducts'].indexOf(e.key) > -1) window.renderUretim(); });
+    })();
+    </script>
+
+    <script>
+    // ========================================================
+    // 📈 GÖRSEL ANALİTİK (Anasayfa) — harici kütüphanesiz SVG grafikler
+    // ========================================================
+    (function() {
+        const AY = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+        const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const oku = (k, v) => { try { const x = JSON.parse(localStorage.getItem(k)); return x == null ? v : x; } catch(e) { return v; } };
+        const fmt = n => (Math.round(Number(n) * 100) / 100).toLocaleString('tr-TR');
+        function son6Ay() {
+            const l = [], d = new Date(); d.setDate(1);
+            for (let i = 5; i >= 0; i--) { const x = new Date(d.getFullYear(), d.getMonth() - i, 1); l.push({ key: x.getFullYear() + '-' + String(x.getMonth()+1).padStart(2,'0'), label: AY[x.getMonth()] + ' ' + String(x.getFullYear()).slice(2), v: 0 }); }
+            return l;
+        }
+        function cizgi(kap, aylar, birim, renk, id) {
+            const toplam = aylar.reduce((t, a) => t + a.v, 0);
+            if (!toplam) { kap.innerHTML = '<div class="ch-empty">Son 6 ayda veri yok.</div>'; return; }
+            const W = 360, H = 200, L = 40, R = 14, T = 20, B = 30, pw = W - L - R, ph = H - T - B;
+            const mx = Math.max.apply(null, aylar.map(a => a.v));
+            const ham = (mx * 1.1) / 4, us = Math.pow(10, Math.floor(Math.log10(ham))), adim = [1, 2, 2.5, 5, 10].map(k => k * us).find(k => k >= ham) || ham, tavan = adim * 4 || 1;
+            const x = i => L + (aylar.length === 1 ? pw / 2 : i * pw / (aylar.length - 1)), y = v => T + ph - v / tavan * ph;
+            let s = '<svg class="ch-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img"><defs><linearGradient id="g-' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + renk + '" stop-opacity="0.35"/><stop offset="100%" stop-color="' + renk + '" stop-opacity="0.02"/></linearGradient></defs>';
+            for (let i = 0; i <= 4; i++) { const v = tavan * i / 4, yy = y(v); s += '<line class="ch-grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '"/><text x="' + (L - 6) + '" y="' + (yy + 3) + '" text-anchor="end">' + fmt(v >= 10 ? Math.round(v) : v) + '</text>'; }
+            const pts = aylar.map((a, i) => x(i) + ',' + y(a.v)).join(' ');
+            s += '<polygon points="' + x(0) + ',' + y(0) + ' ' + pts + ' ' + x(aylar.length - 1) + ',' + y(0) + '" fill="url(#g-' + id + ')"/>';
+            s += '<polyline points="' + pts + '" fill="none" stroke="' + renk + '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+            aylar.forEach((a, i) => {
+                s += '<circle cx="' + x(i) + '" cy="' + y(a.v) + '" r="4" fill="#fff" stroke="' + renk + '" stroke-width="2.5"><title>' + esc(a.label) + ': ' + fmt(a.v) + ' ' + birim + '</title></circle>';
+                if (a.v > 0) s += '<text class="ch-val" x="' + x(i) + '" y="' + (y(a.v) - 8) + '" text-anchor="middle">' + fmt(a.v) + '</text>';
+                s += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle">' + esc(a.label) + '</text>';
+            });
+            kap.innerHTML = s + '</svg><div class="ch-sub">Son 6 ay toplamı: <b>' + fmt(toplam) + ' ' + birim + '</b></div>';
+        }
+        function halka(kap, parcalar) {
+            const T = parcalar.reduce((t, p) => t + p.v, 0);
+            if (!T) { kap.innerHTML = '<div class="ch-empty">Seçili dönemde yoklama kaydı yok.</div>'; return; }
+            const r = 52, c = 2 * Math.PI * r; let ofs = 0;
+            let s = '<svg class="ch-svg" viewBox="0 0 160 160" style="max-width:190px; margin:0 auto;"><g transform="rotate(-90 80 80)"><circle cx="80" cy="80" r="' + r + '" fill="none" stroke="rgba(0,0,0,0.07)" stroke-width="24"/>';
+            parcalar.forEach(p => { if (!p.v) return; const len = p.v / T * c; s += '<circle cx="80" cy="80" r="' + r + '" fill="none" stroke="' + p.renk + '" stroke-width="24" stroke-dasharray="' + len + ' ' + (c - len) + '" stroke-dashoffset="' + (-ofs) + '"><title>' + esc(p.ad) + ': ' + p.v + '</title></circle>'; ofs += len; });
+            const kat = parcalar[0].v + (parcalar[2] ? parcalar[2].v : 0) * 0;
+            s += '</g><text x="80" y="78" text-anchor="middle" style="font-size:22px; fill:#263238; font-weight:800;">%' + Math.round(parcalar[0].v / T * 100) + '</text><text x="80" y="95" text-anchor="middle" style="font-size:10px;">katılım</text></svg>';
+            s += '<div class="ch-legend">' + parcalar.map(p => '<span><i class="ch-dot" style="background:' + p.renk + '"></i>' + esc(p.ad) + ': ' + p.v + ' (%' + Math.round(p.v / T * 100) + ')</span>').join('') + '</div>';
+            kap.innerHTML = s;
+        }
+        function satisZamani(s) {
+            if (typeof s.id === 'number' && s.id > 1e11) return new Date(s.id);
+            const m = /^(\d{1,2})\.(\d{1,2})\.(\d{4})/.exec(String(s.date || '')); return m ? new Date(+m[3], +m[2] - 1, +m[1]) : null;
+        }
+        let zm = null;
+        window.renderDashCharts = function() {
+            clearTimeout(zm); zm = setTimeout(ciz, 120);
+        };
+        const gunStr = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+        function sifirDurum() {
+            const R = oku('bkvChartReset', {}), n = $b('ch-reset-note'), b = $b('ch-restore-btn');
+            const ad = { bokashi: 'Bokashi', sales: 'Satış', att: 'Yoklama' }, act = Object.keys(ad).filter(k => R[k]);
+            if (n) n.textContent = act.length ? '🔄 Sıfırlanmış: ' + act.map(k => ad[k]).join(', ') + ' — yalnızca sıfırlamadan sonraki kayıtlar gösteriliyor (veriler silinmedi).' : '';
+            if (b) b.style.display = act.length ? '' : 'none';
+        }
+        window.resetChart = function(which) {
+            const ad = { bokashi: 'Bokashi grafiği', sales: 'Satış grafiği', att: 'Yoklama grafiği', all: 'Tüm grafikler' };
+            const isle = function() {
+                const R = oku('bkvChartReset', {}), z = { ts: Date.now(), day: gunStr(new Date()) };
+                (which === 'all' ? ['bokashi','sales','att'] : [which]).forEach(k => { R[k] = z; });
+                try { localStorage.setItem('bkvChartReset', JSON.stringify(R)); } catch(e) {}
+                ciz();
+                if (typeof showNotification === 'function') showNotification('Grafik sıfırlandı. Kayıtlı veriler silinmedi.', 'info');
+            };
+            const msg = ad[which] + ' sıfırlansın mı? Kayıtlı veriler SİLİNMEZ; grafik yalnızca bundan sonraki kayıtları gösterir. (Bu cihazda geçerlidir.)';
+            if (typeof showCustomConfirm === 'function') showCustomConfirm('Grafik Sıfırlama', msg, isle); else if (confirm(msg)) isle();
+        };
+        window.restoreCharts = function() { try { localStorage.removeItem('bkvChartReset'); } catch(e) {} ciz(); if (typeof showNotification === 'function') showNotification('Tüm veriler grafiklerde yeniden gösteriliyor.', 'info'); };
+        function ciz() {
+            const bk = $b('ch-bokashi'); if (!bk) return;
+            const R = oku('bkvChartReset', {}); sifirDurum();
+            // Bokashi
+            const a1 = son6Ay();
+            oku('bkvBokashi', []).forEach(b => { if (R.bokashi) { const bt = Number(b.id); if (bt > 1e11 ? bt <= R.bokashi.ts : String(b.baslangic || '') <= R.bokashi.day) return; } const k = String(b.baslangic || '').slice(0, 7); const m = a1.find(x => x.key === k); const w = parseFloat(b.agirlik); if (m && !isNaN(w)) m.v += w; });
+            cizgi(bk, a1, 'kg', '#2e7d32', 'bk');
+            // Satış
+            const a2 = son6Ay();
+            oku('bkvSalesHistory', []).forEach(s => { const d = satisZamani(s); if (!d) return; if (R.sales && d.getTime() <= R.sales.ts) return; const k = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'); const m = a2.find(x => x.key === k); if (m) m.v += Number(s.total) || 0; });
+            cizgi($b('ch-sales'), a2, '₺', '#0288d1', 'sl');
+            // Yoklama
+            const gun = parseInt(($b('ch-att-range') || {}).value || '30', 10);
+            const alt = gun ? (function() { const d = new Date(); d.setDate(d.getDate() - gun); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); })() : '';
+            const say = { geldi: 0, gelmedi: 0, izinli: 0 }, yok = oku('bkvAttendance', {});
+            Object.keys(yok).forEach(t => { if (alt && t < alt) return; if (R.att && t <= R.att.day) return; Object.keys(yok[t] || {}).forEach(e => { const st = (yok[t][e] || {}).status; if (say[st] != null) say[st]++; }); });
+            halka($b('ch-att'), [{ ad: 'Geldi', v: say.geldi, renk: '#2e7d32' }, { ad: 'Gelmedi', v: say.gelmedi, renk: '#c62828' }, { ad: 'İzinli', v: say.izinli, renk: '#f9a825' }]);
+        }
+        function $b(id) { return document.getElementById(id); }
+        window.addEventListener('storage', function(e) { if (['bkvBokashi','bkvSalesHistory','bkvAttendance','bkvChartReset'].indexOf(e.key) > -1) window.renderDashCharts(); });
+        window.addEventListener('load', function() {
+            // Veri değiştiğinde grafikleri tazele
+            ['updateDashKPIs', 'loadSalesHistory', 'renderBokashi', 'loadAttendanceForDate'].forEach(function(ad) {
+                const o = window[ad]; if (typeof o !== 'function') return;
+                window[ad] = function() { const r = o.apply(this, arguments); window.renderDashCharts(); return r; };
+            });
+            window.renderDashCharts();
+        });
+    })();
+    </script>
+
+    <script>
+    // ========================================================
+    // 🌰 TOHUM BANKASI
+    // ========================================================
+    (function() {
+        const KEY = 'bkvSeeds';
+        const AY = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+        const AYK = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+        const KATEGORI = ['🥬 Sebze','🍎 Meyve','🌾 Tahıl','🫘 Baklagil','🌸 Çiçek / Süs','🌿 Aromatik / Şifalı','📦 Diğer'];
+        const FORM = [
+            {k:'name',l:'Tohum Adı',t:'text',ph:'örn. Domates',req:1}, {k:'variety',l:'Çeşit / Yöre',t:'text',ph:'örn. Kalp domates – Ayvalık'},
+            {k:'kind',l:'Tür',t:'select',o:['Atalık / Yerel','Standart','Hibrit']}, {k:'category',l:'Kategori',t:'select',o:KATEGORI},
+            {k:'source',l:'Temin Kaynağı',t:'text',ph:'Bağış, köylü, takas, satın alma…'}, {k:'storeDate',l:'Saklama Tarihi',t:'date'},
+            {k:'location',l:'Saklama Yeri',t:'text',ph:'Dolap, kavanoz, buzdolabı…'}, {k:'shelfYears',l:'Raf Ömrü (yıl)',t:'number',ph:'örn. 3'},
+            {pair:[{k:'quantity',l:'Stok Miktarı',t:'number',ph:'0',req:1},{k:'unit',l:'Birim',t:'select',o:['g','adet','paket']}]}, {k:'minQty',l:'Asgari Stok (uyarı)',t:'number',ph:'isteğe bağlı'},
+            {k:'germRate',l:'Çimlenme Oranı (%)',t:'number',ph:'0-100'}, {k:'germDate',l:'Çimlenme Testi Tarihi',t:'date'},
+            {k:'sowFrom',l:'İdeal Ekim: Başlangıç Ayı',t:'month'}, {k:'sowTo',l:'İdeal Ekim: Bitiş Ayı',t:'month'},
+            {k:'harvestDays',l:'Tahmini Hasada Kadar (gün)',t:'number',ph:'isteğe bağlı'},
+            {k:'note',l:'Not',t:'text',w:1,ph:'Ekim derinliği, aralık, özel bilgiler…'}
+        ];
+        let duzenleId = null, formAcik = false;
+        const $ = id => document.getElementById(id);
+        const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const oku = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch(e) { return []; } };
+        const yaz = l => { try { localStorage.setItem(KEY, JSON.stringify(l)); } catch(e) {} };
+        const sayi = v => (v === '' || v == null || isNaN(v)) ? null : Number(v);
+        const fmt = n => (Math.round(Number(n) * 100) / 100).toLocaleString('tr-TR');
+        const tarihTR = t => { if (!t) return ''; const p = t.split('-'); return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : t; };
+        const bugun = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+        const yeniId = () => 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        const yonetici = () => sessionStorage.getItem('currentRole') === 'admin';
+        const olmaz = () => (typeof checkMemberActionPermission === 'function') && !checkMemberActionPermission();
+
+        function ekimdeMi(s, ay) {
+            const a = sayi(s.sowFrom), b = sayi(s.sowTo); if (!a || !b) return false;
+            return a <= b ? (ay >= a && ay <= b) : (ay >= a || ay <= b);
+        }
+        function durum(s) {
+            const out = { uyari: [], simdi: ekimdeMi(s, new Date().getMonth() + 1) };
+            const raf = sayi(s.shelfYears);
+            if (s.storeDate && raf) {
+                const bit = new Date(s.storeDate); bit.setFullYear(bit.getFullYear() + raf);
+                const gun = Math.round((bit - new Date()) / 86400000); out.gun = gun; out.sonKullanma = bit.toISOString().slice(0, 10);
+                if (gun < 0) out.uyari.push(['bad', '⌛ Raf ömrü doldu']); else if (gun <= 90) out.uyari.push(['warn', '⌛ ' + gun + ' gün kaldı']);
+            }
+            const g = sayi(s.germRate); if (g != null && g < 70) out.uyari.push(['bad', '🧪 Düşük çimlenme']);
+            const q = sayi(s.quantity), m = sayi(s.minQty); if (q != null && m != null && q <= m) out.uyari.push(['warn', '📉 Stok az']);
+            return out;
+        }
+
+        function alanHTML(f) {
+            const id = 'sd-f-' + f.k; let el;
+            if (f.t === 'select') el = '<select id="' + id + '" class="aero-input">' + f.o.map(o => '<option>' + esc(o) + '</option>').join('') + '</select>';
+            else if (f.t === 'month') el = '<select id="' + id + '" class="aero-input"><option value="">—</option>' + AY.map((a, i) => '<option value="' + (i + 1) + '">' + a + '</option>').join('') + '</select>';
+            else if (f.t === 'number') el = '<input type="number" step="any" inputmode="decimal" id="' + id + '" class="aero-input" placeholder="' + esc(f.ph || '') + '">';
+            else el = '<input type="' + f.t + '" id="' + id + '" class="aero-input" placeholder="' + esc(f.ph || '') + '">';
+            return '<div' + (f.w ? ' class="wide"' : '') + '><label class="ur-lbl">' + esc(f.l) + (f.req ? ' *' : '') + '</label>' + el + '</div>';
+        }
+        function formAc(id) {
+            const f = $('sd-form'); duzenleId = id || null;
+            const r = id ? oku().find(x => x.id === id) : null;
+            f.innerHTML = '<h3>' + (r ? '✏️ Tohumu Düzenle' : '➕ Yeni Tohum') + '</h3><div class="ur-grid">' +
+                FORM.map(x => x.pair ? '<div class="wide pair">' + x.pair.map(alanHTML).join('') + '</div>' : alanHTML(x)).join('') + '</div>' +
+                '<div class="ur-row"><button class="aero-btn btn-green" style="flex:1 1 200px; padding:10px; font-weight:bold;" data-sact="kaydet">💾 Kaydet</button><button class="aero-btn" data-sact="iptal">✖ Vazgeç</button></div>';
+            FORM.forEach(x => (x.pair || [x]).forEach(y => { const el = $('sd-f-' + y.k); if (!el) return; if (r) el.value = r[y.k] == null ? '' : r[y.k]; else if (y.k === 'storeDate') el.value = bugun(); }));
+            f.style.display = ''; f.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        function kaydet() {
+            if (olmaz()) return;
+            const rec = {};
+            for (const x of FORM) for (const y of (x.pair || [x])) {
+                const el = $('sd-f-' + y.k); let v = el ? el.value : ''; if (typeof v === 'string' && y.t !== 'number') v = v.trim();
+                if (y.req && (v === '' || (y.t === 'number' && isNaN(v)))) return showNotification('⚠️ "' + y.l + '" alanı zorunludur!', 'warning');
+                rec[y.k] = y.t === 'number' ? (v === '' ? '' : Number(v)) : v;
+            }
+            const g = sayi(rec.germRate); if (g != null && (g < 0 || g > 100)) return showNotification('⚠️ Çimlenme oranı 0 ile 100 arasında olmalı!', 'warning');
+            if ((rec.sowFrom && !rec.sowTo) || (!rec.sowFrom && rec.sowTo)) return showNotification('⚠️ İdeal ekim dönemi için başlangıç ve bitiş ayını birlikte seçin.', 'warning');
+            let l = oku(), son;
+            const eski = duzenleId ? l.find(r => r.id === duzenleId) : null;
+            if (eski) { son = Object.assign({}, eski, rec, { updatedAt: Date.now() }); l = l.map(r => r.id === eski.id ? son : r); }
+            else { son = Object.assign(rec, { id: yeniId(), author: sessionStorage.getItem('currentUser') || 'Kullanıcı', createdAt: Date.now() }); l.push(son); }
+            yaz(l); $('sd-form').style.display = 'none'; duzenleId = null; render();
+            showNotification(eski ? '✅ Tohum kaydı güncellendi.' : '🌰 Tohum bankaya eklendi.', 'success');
+            if (typeof window._firebaseTohumKaydet === 'function') window._firebaseTohumKaydet(son);
+        }
+        function guncelle(id, ek) {
+            if (olmaz()) return;
+            const l = oku().map(r => r.id === id ? Object.assign({}, r, ek, { updatedAt: Date.now() }) : r); yaz(l); render();
+            const s = l.find(r => r.id === id); if (s && typeof window._firebaseTohumKaydet === 'function') window._firebaseTohumKaydet(s);
+        }
+        function sil(id) {
+            showCustomConfirm('Tohumu Sil', 'Bu tohum kaydını silmek istediğinize emin misiniz?', function() {
+                yaz(oku().filter(r => r.id !== id)); render();
+                if (typeof window._firebaseTohumSil === 'function') window._firebaseTohumSil(id);
+            });
+        }
+        function kullan(id) {
+            const s = oku().find(r => r.id === id); if (!s) return;
+            const v = prompt('Ekimde kullanılan miktar (' + (s.unit || '') + '):', '');
+            if (v == null) return; const n = Number(String(v).replace(',', '.'));
+            if (isNaN(n) || n <= 0) return showNotification('⚠️ Geçerli bir miktar girin.', 'warning');
+            guncelle(id, { quantity: Math.max(0, Math.round(((sayi(s.quantity) || 0) - n) * 100) / 100) });
+            showNotification('📉 Stoktan ' + fmt(n) + ' ' + (s.unit || '') + ' düşüldü.', 'info');
+        }
+        function test(id) {
+            const v = prompt('Yeni çimlenme testi sonucu (% olarak 0-100):', '');
+            if (v == null) return; const n = Number(String(v).replace(',', '.'));
+            if (isNaN(n) || n < 0 || n > 100) return showNotification('⚠️ 0 ile 100 arasında bir değer girin.', 'warning');
+            guncelle(id, { germRate: n, germDate: bugun() });
+        }
+
+        function render() {
+            if (!$('sd-liste')) return;
+            const tum = oku(), ay = new Date().getMonth() + 1;
+            const dur = tum.map(s => ({ s, d: durum(s) }));
+            const kart = (cls, lb, vl, sb) => '<div class="ur-sum-card ' + cls + '"><div class="lb">' + lb + '</div><div class="vl">' + vl + '</div>' + (sb ? '<div class="sb">' + sb + '</div>' : '') + '</div>';
+            const simdi = dur.filter(x => x.d.simdi), dikkat = dur.filter(x => x.d.uyari.length);
+            const germ = tum.map(s => sayi(s.germRate)).filter(v => v != null);
+            $('sd-ozet').innerHTML = kart('', '🌰 Toplam Çeşit', tum.length, tum.filter(s => s.kind === 'Atalık / Yerel').length + ' atalık / yerel') +
+                kart('out', '🌱 Şimdi Ekilebilir (' + AY[ay - 1] + ')', simdi.length, simdi.slice(0, 3).map(x => x.s.name).join(', ')) +
+                kart(dikkat.length ? 'neg' : '', '⚠️ Dikkat Gerekenler', dikkat.length, 'Raf ömrü, çimlenme, stok') +
+                kart('', '🧪 Ort. Çimlenme', germ.length ? '%' + fmt(germ.reduce((a, b) => a + b, 0) / germ.length) : '—', germ.length + ' testten');
+            // Takvim
+            const say = AYK.map((_, i) => tum.filter(s => ekimdeMi(s, i + 1)).length), mx = Math.max.apply(null, say) || 1;
+            $('sd-takvim').innerHTML = tum.length ? '<div class="sd-months">' + say.map((n, i) => '<div class="sd-mcol' + (i + 1 === ay ? ' now' : '') + '"><div class="sd-mc">' + (n || '') + '</div><div class="sd-mbar" style="height:' + (n ? Math.max(6, n / mx * 80) : 3) + 'px; opacity:' + (n ? 1 : 0.25) + '"></div><div class="sd-mn">' + AYK[i] + '</div></div>').join('') + '</div>' : '<div class="ur-empty">Tohum ekledikçe ekim takvimi burada oluşur.</div>';
+            // Kategori filtresi
+            const fc = $('sd-f-cat'); if (fc.options.length === 1) KATEGORI.forEach(k => { const o = document.createElement('option'); o.textContent = k; fc.appendChild(o); });
+            // Liste
+            const q = ($('sd-q').value || '').toLocaleLowerCase('tr'), fk = $('sd-f-kind').value, fcat = fc.value, fd = $('sd-f-durum').value;
+            const lst = dur.filter(x => (!fk || x.s.kind === fk) && (!fcat || x.s.category === fcat) && (!fd || (fd === 'simdi' ? x.d.simdi : x.d.uyari.length)) &&
+                (!q || [x.s.name, x.s.variety, x.s.source, x.s.location, x.s.note].join(' ').toLocaleLowerCase('tr').indexOf(q) > -1))
+                .sort((a, b) => String(a.s.name).localeCompare(String(b.s.name), 'tr'));
+            const me = sessionStorage.getItem('currentUser') || '';
+            $('sd-liste').innerHTML = lst.length ? lst.map(x => {
+                const s = x.s, d = x.d, yetki = yonetici() || (s.author && s.author === me), g = sayi(s.germRate);
+                const rozet = [];
+                if (s.kind) rozet.push('<span class="ur-badge ' + (s.kind === 'Atalık / Yerel' ? 'brown' : 'plan') + '">' + esc(s.kind) + '</span>');
+                if (d.simdi) rozet.push('<span class="ur-badge ok">🌱 Şimdi ekilebilir</span>');
+                d.uyari.forEach(u => rozet.push('<span class="ur-badge ' + u[0] + '">' + u[1] + '</span>'));
+                const ch = [];
+                if (sayi(s.quantity) != null) ch.push('<span class="ur-chip big">📦 ' + fmt(s.quantity) + ' ' + esc(s.unit) + '</span>');
+                if (g != null) ch.push('<span class="ur-chip">🧪 Çimlenme %' + fmt(g) + (s.germDate ? ' (' + tarihTR(s.germDate) + ')' : '') + '</span>');
+                if (s.sowFrom && s.sowTo) ch.push('<span class="ur-chip">🗓️ Ekim: ' + AYK[s.sowFrom - 1] + ' – ' + AYK[s.sowTo - 1] + '</span>');
+                if (sayi(s.harvestDays)) ch.push('<span class="ur-chip">🧺 ~' + fmt(s.harvestDays) + ' günde hasat</span>');
+                if (s.storeDate) ch.push('<span class="ur-chip">📅 Saklama: ' + tarihTR(s.storeDate) + '</span>');
+                if (d.sonKullanma) ch.push('<span class="ur-chip">⌛ Son: ' + tarihTR(d.sonKullanma) + '</span>');
+                if (s.location) ch.push('<span class="ur-chip">📍 ' + esc(s.location) + '</span>');
+                if (s.source) ch.push('<span class="ur-chip">🤝 ' + esc(s.source) + '</span>');
+                return '<div class="ur-item sd-item"><div class="ur-item-main"><div class="ur-item-title">' + esc(s.category ? s.category.split(' ')[0] + ' ' : '') + esc(s.name) + (s.variety ? ' — ' + esc(s.variety) : '') + '</div>' +
+                    '<div class="ur-chips">' + rozet.join('') + '</div><div class="ur-chips">' + ch.join('') + '</div>' + (s.note ? '<div class="ur-item-note">' + esc(s.note) + '</div>' : '') +
+                    '<div class="ur-row" style="margin-top:8px;"><button class="aero-btn" data-sact="kullan" data-id="' + esc(s.id) + '">📉 Ekimde Kullan</button><button class="aero-btn" data-sact="test" data-id="' + esc(s.id) + '">🧪 Çimlenme Testi</button></div></div>' +
+                    (yetki ? '<div class="ur-acts"><button class="ur-ibtn" title="Düzenle" data-sact="duzenle" data-id="' + esc(s.id) + '">✏️</button><button class="ur-ibtn del" title="Sil" data-sact="sil" data-id="' + esc(s.id) + '">🗑️</button></div>' : '') + '</div>';
+            }).join('') : '<div class="ur-empty">' + (tum.length ? 'Filtreye uyan tohum yok.' : '🌰 Henüz tohum kaydı yok. “Yeni Tohum Ekle” ile başlayın.') + '</div>';
+        }
+        function csv() {
+            const l = oku(); if (!l.length) return showNotification('İndirilecek kayıt yok.', 'warning');
+            const cols = ['Tohum','Çeşit','Tür','Kategori','Kaynak','Saklama Tarihi','Saklama Yeri','Raf Ömrü (yıl)','Stok','Birim','Asgari Stok','Çimlenme %','Test Tarihi','Ekim Başlangıç','Ekim Bitiş','Hasat (gün)','Not'];
+            const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+            const satir = l.map(s => [s.name, s.variety, s.kind, s.category, s.source, s.storeDate, s.location, s.shelfYears, s.quantity, s.unit, s.minQty, s.germRate, s.germDate, AY[s.sowFrom - 1] || '', AY[s.sowTo - 1] || '', s.harvestDays, s.note].map(q).join(';'));
+            const b = new Blob(['﻿' + cols.map(q).join(';') + '\n' + satir.join('\n')], { type: 'text/csv;charset=utf-8' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'tohum_bankasi_' + bugun() + '.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+        }
+        let kuruldu = false;
+        window.tohumAc = function() {
+            if (!kuruldu) {
+                kuruldu = true;
+                $('tab-tohum').addEventListener('click', function(e) {
+                    const t = e.target.closest('[data-sact]'); if (!t) return; const a = t.getAttribute('data-sact'), id = t.getAttribute('data-id');
+                    if (a === 'yeni') formAc(null); else if (a === 'duzenle') formAc(id); else if (a === 'kaydet') kaydet();
+                    else if (a === 'iptal') { $('sd-form').style.display = 'none'; duzenleId = null; }
+                    else if (a === 'sil') sil(id); else if (a === 'kullan') kullan(id); else if (a === 'test') test(id); else if (a === 'csv') csv();
+                });
+                ['sd-q', 'sd-f-kind', 'sd-f-cat', 'sd-f-durum'].forEach(i => { $(i).addEventListener('input', render); $(i).addEventListener('change', render); });
+            }
+            render();
+        };
+        window.renderTohum = function() { if (kuruldu) render(); };
+        window.addEventListener('storage', function(e) { if (e.key === KEY) window.renderTohum(); });
     })();
     </script>
 
