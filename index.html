@@ -2853,6 +2853,51 @@
             body.ui-modern .bottom-bar { display: none !important; }
         }
 
+
+        /* =========================================
+           🌾 ÜRETİMLERİM (Girdi / Süreç / Çıktı)
+           ========================================= */
+        .ur-wrap { display: flex; flex-direction: column; gap: 14px; max-width: 100%; }
+        .ur-wrap *, .ur-wrap *::before, .ur-wrap *::after { box-sizing: border-box; }
+        .ur-head { background: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.85); border-radius: 18px; padding: 16px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        .ur-head h2 { margin: 0; border: none; padding: 0; color: #01579b; font-size: 21px; }
+        .ur-head p { margin: 4px 0 12px 0; color: #0277bd; font-size: 13px; }
+        .ur-picker { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .ur-picker select, .ur-picker input { flex: 1 1 220px; min-width: 0; }
+        .ur-sum { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .ur-sum-card { background: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.9); border-radius: 14px; padding: 12px 14px; min-width: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        .ur-sum-card .lb { font-size: 12px; font-weight: 700; color: #546e7a; }
+        .ur-sum-card .vl { font-size: 15px; font-weight: 800; color: #01579b; margin-top: 4px; word-break: break-word; line-height: 1.35; }
+        .ur-sum-card.in .vl { color: #e65100; }
+        .ur-sum-card.out .vl { color: #2e7d32; }
+        .ur-form { background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.95); border-radius: 14px; padding: 14px 16px; }
+        .ur-form h3 { margin: 0 0 10px 0; color: #01579b; font-size: 15px; }
+        .ur-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+        .ur-grid .wide { grid-column: 1 / -1; }
+        .ur-grid .pair { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 8px; }
+        .ur-grid input, .ur-grid select, .ur-grid textarea { width: 100%; min-width: 0; }
+        .ur-lbl { font-size: 11.5px; font-weight: 700; color: #546e7a; margin: 0 0 3px 2px; display: block; }
+        .ur-list { display: flex; flex-direction: column; gap: 8px; }
+        .ur-item { background: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.95); border-left: 5px solid #0288d1; border-radius: 12px; padding: 10px 12px; display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .ur-item.in { border-left-color: #ef6c00; }
+        .ur-item.out { border-left-color: #2e7d32; }
+        .ur-item-main { min-width: 0; flex: 1; }
+        .ur-item-title { font-weight: 800; font-size: 14px; color: #263238; word-break: break-word; }
+        .ur-item-meta { font-size: 12px; color: #607d8b; margin-top: 2px; word-break: break-word; }
+        .ur-item-note { font-size: 12.5px; color: #455a64; margin-top: 4px; word-break: break-word; white-space: pre-wrap; }
+        .ur-meas { display: inline-block; background: rgba(2,136,209,0.12); color: #01579b; border-radius: 10px; padding: 2px 10px; font-weight: 800; font-size: 13px; margin-top: 4px; }
+        .ur-item.in .ur-meas { background: rgba(239,108,0,0.13); color: #e65100; }
+        .ur-item.out .ur-meas { background: rgba(46,125,50,0.13); color: #1b5e20; }
+        .ur-del { flex: 0 0 auto; border: none; background: rgba(198,40,40,0.1); color: #c62828; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 14px; }
+        .ur-empty { text-align: center; padding: 22px 10px; color: #78909c; font-weight: 600; background: rgba(255,255,255,0.55); border-radius: 14px; }
+        @media (max-width: 768px) {
+            .ur-head { padding: 12px; border-radius: 14px; }
+            .ur-head h2 { font-size: 17px !important; }
+            .ur-form { padding: 12px; }
+            .ur-grid { grid-template-columns: minmax(0, 1fr); }
+            .ur-sum { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .ur-picker select, .ur-picker input { flex: 1 1 100%; }
+        }
     </style>
 </head>
 <body>
@@ -3149,6 +3194,7 @@
             <button class="tab-btn" id="tab-btn-barcode" onclick="openTab('tab-barcode', this)"><span class="tab-icon">🏷️</span> <span class="tab-text">Barkod/Satış</span></button>
             <button class="tab-btn" id="tab-btn-hava-durumu" onclick="openTab('tab-hava-durumu', this)"><span class="tab-icon">⛅</span> <span class="tab-text">Hava Durumu</span></button>
             <button class="tab-btn" id="tab-btn-bokashi" onclick="openTab('tab-bokashi', this)"><span class="tab-icon">♻️</span> <span class="tab-text">Bokashi Takip</span></button>
+            <button class="tab-btn" id="tab-btn-uretim" onclick="openTab('tab-uretim', this)"><span class="tab-icon">🌾</span> <span class="tab-text">Üretimlerim</span></button>
             <button class="tab-btn" id="tab-btn-settings" onclick="openTab('tab-settings', this)"><span class="tab-icon">⚙️</span> <span class="tab-text">Ayarlar</span></button>
         </nav>
     </header>
@@ -3176,6 +3222,9 @@
                     </button>
                     <button onclick="openTab('tab-bokashi', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
                         <span style="font-size: 17px;">♻️</span> <span class="sidebar-hide-on-collapse">Bokashi Takip</span>
+                    </button>
+                    <button onclick="openTab('tab-uretim', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <span style="font-size: 17px;">🌾</span> <span class="sidebar-hide-on-collapse">Üretimlerim</span>
                     </button>
                     <button onclick="openTab('tab-hava-durumu', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
                         <span style="font-size: 17px;">⛅</span> <span class="sidebar-hide-on-collapse">Hava Durumu</span>
@@ -3466,6 +3515,101 @@
             </div>
 
                         <!-- TAB 4: HAVA DURUMU & TARIMSAL METEOROLOJİ -->
+            <!-- TAB: ÜRETİMLERİM -->
+            <div id="tab-uretim" class="tab-content">
+                <div class="card glass">
+                    <div class="ur-wrap">
+                        <div class="ur-head">
+                            <h2>🌾 Üretimlerim</h2>
+                            <p>Bir ürün seçin; üretimin girdilerini, sürecini ve çıktılarını ölçüm verileriyle kaydedin.</p>
+                            <div class="ur-picker">
+                                <select id="ur-urun-sec" class="aero-input" onchange="uretimUrunDegisti()"></select>
+                                <input type="text" id="ur-urun-diger" class="aero-input" placeholder="Ürün adını yazın (örn. Domates)" style="display:none;" oninput="uretimDigerYazildi()">
+                            </div>
+                        </div>
+
+                        <div id="ur-icerik" style="display:none;">
+                            <div class="ur-sum" id="ur-ozet"></div>
+
+                            <div class="portal-subtabs" style="margin-top: 14px;">
+                                <button class="portal-subtab-btn active" id="ur-btn-girdi" onclick="uretimSekme('girdi')">📥 Girdiler</button>
+                                <button class="portal-subtab-btn" id="ur-btn-surec" onclick="uretimSekme('surec')">⚙️ Süreç</button>
+                                <button class="portal-subtab-btn" id="ur-btn-cikti" onclick="uretimSekme('cikti')">📤 Çıktılar</button>
+                            </div>
+
+                            <!-- GİRDİLER -->
+                            <div id="ur-sec-girdi">
+                                <div class="ur-form">
+                                    <h3>📥 Yeni Girdi Ekle</h3>
+                                    <div class="ur-grid">
+                                        <div><label class="ur-lbl">Tarih</label><input type="date" id="ur-g-tarih" class="aero-input"></div>
+                                        <div><label class="ur-lbl">Girdi Türü</label>
+                                            <select id="ur-g-tur" class="aero-input">
+                                                <option>🌱 Tohum / Fide</option><option>🪱 Gübre / Kompost</option><option>💧 Su</option>
+                                                <option>🐞 Bitki Koruma</option><option>🟤 Toprak / Harç</option><option>👩‍🌾 İşgücü</option>
+                                                <option>⚡ Enerji</option><option>📦 Diğer</option>
+                                            </select></div>
+                                        <div class="wide"><label class="ur-lbl">Girdi Adı</label><input type="text" id="ur-g-ad" class="aero-input" placeholder="örn. Bokashi suyu, F1 tohum, damla sulama"></div>
+                                        <div class="wide pair">
+                                            <div><label class="ur-lbl">Ölçüm (Miktar)</label><input type="number" step="any" inputmode="decimal" id="ur-g-miktar" class="aero-input" placeholder="0"></div>
+                                            <div><label class="ur-lbl">Birim</label><select id="ur-g-birim" class="aero-input"></select></div>
+                                        </div>
+                                        <div class="wide"><label class="ur-lbl">Not (isteğe bağlı)</label><input type="text" id="ur-g-not" class="aero-input" placeholder="Ek bilgi"></div>
+                                    </div>
+                                    <button class="aero-btn btn-green" style="width:100%; margin-top:10px; padding:10px; font-weight:bold;" onclick="uretimKaydet('girdi')">💾 Girdiyi Kaydet</button>
+                                </div>
+                                <h3 style="color:#01579b; margin:14px 0 8px 0; font-size:15px;">Girdi Kayıtları</h3>
+                                <div id="ur-liste-girdi" class="ur-list"></div>
+                            </div>
+
+                            <!-- SÜREÇ -->
+                            <div id="ur-sec-surec" style="display:none;">
+                                <div class="ur-form">
+                                    <h3>⚙️ Yeni Süreç Kaydı</h3>
+                                    <div class="ur-grid">
+                                        <div><label class="ur-lbl">Tarih</label><input type="date" id="ur-s-tarih" class="aero-input"></div>
+                                        <div><label class="ur-lbl">Aşama</label>
+                                            <select id="ur-s-asama" class="aero-input">
+                                                <option>🟤 Toprak Hazırlığı</option><option>🌱 Ekim / Dikim</option><option>💧 Sulama</option>
+                                                <option>🪱 Gübreleme</option><option>✂️ Bakım / Budama</option><option>🐞 Zararlı & Hastalık Kontrolü</option>
+                                                <option>🧺 Hasat</option><option>📦 Diğer</option>
+                                            </select></div>
+                                        <div class="wide"><label class="ur-lbl">Yapılan İşlem / Gözlem</label><textarea id="ur-s-acik" class="aero-input" rows="3" placeholder="Süreçte neler yapıldı, ne gözlemlendi?" style="resize:vertical;"></textarea></div>
+                                    </div>
+                                    <button class="aero-btn btn-green" style="width:100%; margin-top:10px; padding:10px; font-weight:bold;" onclick="uretimKaydet('surec')">💾 Süreci Kaydet</button>
+                                </div>
+                                <h3 style="color:#01579b; margin:14px 0 8px 0; font-size:15px;">Süreç Kayıtları</h3>
+                                <div id="ur-liste-surec" class="ur-list"></div>
+                            </div>
+
+                            <!-- ÇIKTILAR -->
+                            <div id="ur-sec-cikti" style="display:none;">
+                                <div class="ur-form">
+                                    <h3>📤 Yeni Çıktı Ekle</h3>
+                                    <div class="ur-grid">
+                                        <div><label class="ur-lbl">Tarih</label><input type="date" id="ur-c-tarih" class="aero-input"></div>
+                                        <div><label class="ur-lbl">Çıktı Türü</label>
+                                            <select id="ur-c-tur" class="aero-input">
+                                                <option>🧺 Hasat / Ana Ürün</option><option>🌿 Yan Ürün</option><option>🗑️ Fire / Atık</option><option>📦 Diğer</option>
+                                            </select></div>
+                                        <div class="wide"><label class="ur-lbl">Çıktı Adı</label><input type="text" id="ur-c-ad" class="aero-input" placeholder="örn. 1. sınıf domates"></div>
+                                        <div class="wide pair">
+                                            <div><label class="ur-lbl">Ölçüm (Miktar)</label><input type="number" step="any" inputmode="decimal" id="ur-c-miktar" class="aero-input" placeholder="0"></div>
+                                            <div><label class="ur-lbl">Birim</label><select id="ur-c-birim" class="aero-input"></select></div>
+                                        </div>
+                                        <div class="wide"><label class="ur-lbl">Not (isteğe bağlı)</label><input type="text" id="ur-c-not" class="aero-input" placeholder="Kalite, sınıf vb."></div>
+                                    </div>
+                                    <button class="aero-btn btn-green" style="width:100%; margin-top:10px; padding:10px; font-weight:bold;" onclick="uretimKaydet('cikti')">💾 Çıktıyı Kaydet</button>
+                                </div>
+                                <h3 style="color:#01579b; margin:14px 0 8px 0; font-size:15px;">Çıktı Kayıtları</h3>
+                                <div id="ur-liste-cikti" class="ur-list"></div>
+                            </div>
+                        </div>
+                        <div id="ur-bos" class="ur-empty">👆 Başlamak için yukarıdan bir ürün seçin.</div>
+                    </div>
+                </div>
+            </div>
+
             <div id="tab-hava-durumu" class="tab-content">
                 <div class="card glass hd-container">
                     
@@ -6157,6 +6301,7 @@
                 if (typeof window.renderBokashi === 'function') window.renderBokashi();
                 if (typeof window.hesaplaBokashiSuyu === 'function') window.hesaplaBokashiSuyu();
             }
+            if (tabId === 'tab-uretim' && typeof window.uretimAc === 'function') window.uretimAc();
             if (targetTab) targetTab.classList.add('active');
             if (btnElement) {
                 btnElement.classList.add('active');
@@ -10123,8 +10268,220 @@
             console.error("Firestore bokashi onSnapshot hatası:", err);
             if (typeof window.renderBokashi === 'function') window.renderBokashi();
         });
+
+        // ========================================================
+        // 🌾 Üretimlerim: Firestore ("production_records")
+        // ========================================================
+        window._firebaseUretimEkle = async function(rec) {
+            try {
+                const { id, ...veri } = rec;
+                const docRef = await addDoc(collection(db, "production_records"), veri);
+                let l = [];
+                try { l = JSON.parse(localStorage.getItem('bkvUretim')) || []; } catch(e) {}
+                const it = l.find(r => String(r.id) === String(id));
+                if (it) it.id = docRef.id;
+                localStorage.setItem('bkvUretim', JSON.stringify(l));
+                if (typeof window.renderUretim === 'function') window.renderUretim();
+            } catch(err) {
+                console.error("Firestore üretim kaydı hatası:", err);
+                showNotification("Kayıt bu cihaza alındı ancak buluta iletilemedi: " + err.message, "warning");
+            }
+        };
+        window._firebaseUretimSil = async function(id) {
+            if (String(id).startsWith('tmp')) return;
+            try { await deleteDoc(doc(db, "production_records", String(id))); }
+            catch(err) { console.error("Firestore üretim silme hatası:", err); showNotification("Silinirken bulut hatası: " + err.message, "warning"); }
+        };
+        let uretimInitialSynced = false;
+        onSnapshot(collection(db, "production_records"), async (snapshot) => {
+            if (snapshot.empty && !uretimInitialSynced) {
+                uretimInitialSynced = true;
+                let yerel = [];
+                try { yerel = JSON.parse(localStorage.getItem('bkvUretim')) || []; } catch(e) {}
+                if (yerel.length > 0) {
+                    for (const r of yerel) {
+                        try { const { id, ...veri } = r; await addDoc(collection(db, "production_records"), veri); }
+                        catch(e) { console.error("Üretim aktarım hatası:", e); }
+                    }
+                    return;
+                }
+            }
+            uretimInitialSynced = true;
+            const liste = [];
+            snapshot.forEach(d => liste.push({ id: d.id, ...d.data() }));
+            localStorage.setItem('bkvUretim', JSON.stringify(liste));
+            if (typeof window.renderUretim === 'function') window.renderUretim();
+        }, (err) => {
+            console.error("Firestore production_records onSnapshot hatası:", err);
+        });
     </script>
 
+
+    <script>
+    // ========================================================
+    // 🌾 ÜRETİMLERİM: girdi / süreç / çıktı kayıtları
+    // ========================================================
+    (function() {
+        const KEY = 'bkvUretim';
+        const BIRIMLER = ['kg','g','L','mL','adet','demet','saat','kWh','m³','m²','°C','pH','TL'];
+        const ETIKET = { girdi: 'Girdi', surec: 'Süreç', cikti: 'Çıktı' };
+        let aktifSekme = 'girdi';
+
+        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        function oku() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch(e) { return []; } }
+        function yaz(l) { try { localStorage.setItem(KEY, JSON.stringify(l)); } catch(e) {} }
+        function urunler() { try { return JSON.parse(localStorage.getItem('bkvProducts')) || []; } catch(e) { return []; } }
+        function bugun() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+        function fmt(n) { return (Math.round(n * 100) / 100).toLocaleString('tr-TR'); }
+        function tarihTR(t) { if (!t) return ''; const p = t.split('-'); return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : t; }
+
+        // Seçili ürün anahtarı: barkod ya da "diger:<ad>"
+        function secili() {
+            const sel = document.getElementById('ur-urun-sec');
+            if (!sel || !sel.value) return null;
+            if (sel.value === '__diger__') {
+                const ad = (document.getElementById('ur-urun-diger').value || '').trim();
+                return ad ? { key: 'diger:' + ad.toLocaleLowerCase('tr'), name: ad } : null;
+            }
+            const opt = sel.options[sel.selectedIndex];
+            return { key: 'p:' + sel.value, name: opt.getAttribute('data-name') || opt.textContent };
+        }
+
+        function urunListesiDoldur() {
+            const sel = document.getElementById('ur-urun-sec');
+            if (!sel) return;
+            const onceki = sel.value;
+            let s = '<option value="">— Ürün seçin —</option>';
+            urunler().slice().sort((a,b) => String(a.name||'').localeCompare(String(b.name||''), 'tr')).forEach(p => {
+                s += '<option value="' + esc(p.barcode) + '" data-name="' + esc(p.name) + '">' + esc(p.name) + '</option>';
+            });
+            s += '<option value="__diger__">✍️ Listede yok — ürün adını kendim yazayım</option>';
+            sel.innerHTML = s;
+            let kayitli = onceki;
+            if (!kayitli) { try { kayitli = localStorage.getItem('bkvUretimSecili') || ''; } catch(e) {} }
+            if (kayitli && Array.from(sel.options).some(o => o.value === kayitli)) sel.value = kayitli;
+        }
+
+        function birimDoldur() {
+            ['ur-g-birim', 'ur-c-birim'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.options.length) el.innerHTML = BIRIMLER.map(b => '<option>' + b + '</option>').join('');
+            });
+            const gb = document.getElementById('ur-g-birim'); if (gb && !gb.dataset.init) { gb.dataset.init = 1; gb.value = 'kg'; }
+            const cb = document.getElementById('ur-c-birim'); if (cb && !cb.dataset.init) { cb.dataset.init = 1; cb.value = 'kg'; }
+        }
+
+        window.uretimAc = function() {
+            birimDoldur();
+            urunListesiDoldur();
+            ['ur-g-tarih','ur-s-tarih','ur-c-tarih'].forEach(id => { const e = document.getElementById(id); if (e && !e.value) e.value = bugun(); });
+            uretimUrunDegisti(true);
+        };
+
+        window.uretimUrunDegisti = function(sessiz) {
+            const sel = document.getElementById('ur-urun-sec');
+            const diger = document.getElementById('ur-urun-diger');
+            diger.style.display = (sel.value === '__diger__') ? '' : 'none';
+            if (sel.value !== '__diger__') { try { localStorage.setItem('bkvUretimSecili', sel.value); } catch(e) {} }
+            window.renderUretim();
+        };
+        window.uretimDigerYazildi = function() { window.renderUretim(); };
+
+        window.uretimSekme = function(s) {
+            aktifSekme = s;
+            ['girdi','surec','cikti'].forEach(k => {
+                const sec = document.getElementById('ur-sec-' + k); if (sec) sec.style.display = (k === s) ? 'block' : 'none';
+                const b = document.getElementById('ur-btn-' + k); if (b) b.classList.toggle('active', k === s);
+            });
+        };
+
+        window.renderUretim = function() {
+            const sec = secili();
+            const icerik = document.getElementById('ur-icerik');
+            const bos = document.getElementById('ur-bos');
+            if (!icerik) return;
+            if (!sec) { icerik.style.display = 'none'; bos.style.display = ''; return; }
+            icerik.style.display = ''; bos.style.display = 'none';
+            window.uretimSekme(aktifSekme);
+
+            const kayitlar = oku().filter(r => r.productKey === sec.key).sort((a,b) => (b.date||'').localeCompare(a.date||'') || (b.createdAt||0) - (a.createdAt||0));
+            const topla = (tur) => {
+                const m = {};
+                kayitlar.filter(r => r.kind === tur && r.value !== '' && r.value != null && !isNaN(r.value)).forEach(r => {
+                    if (tur === 'cikti' && /Fire|Atık/.test(r.type || '')) return;
+                    m[r.unit] = (m[r.unit] || 0) + Number(r.value);
+                });
+                const parcalar = Object.keys(m).map(u => fmt(m[u]) + ' ' + u);
+                return parcalar.length ? parcalar.join(' · ') : '—';
+            };
+            const adet = k => kayitlar.filter(r => r.kind === k).length;
+            document.getElementById('ur-ozet').innerHTML =
+                '<div class="ur-sum-card"><div class="lb">🌾 Ürün</div><div class="vl">' + esc(sec.name) + '</div></div>' +
+                '<div class="ur-sum-card in"><div class="lb">📥 Toplam Girdi (' + adet('girdi') + ' kayıt)</div><div class="vl">' + esc(topla('girdi')) + '</div></div>' +
+                '<div class="ur-sum-card"><div class="lb">⚙️ Süreç Kaydı</div><div class="vl">' + adet('surec') + '</div></div>' +
+                '<div class="ur-sum-card out"><div class="lb">📤 Toplam Çıktı (' + adet('cikti') + ' kayıt)</div><div class="vl">' + esc(topla('cikti')) + '</div></div>';
+
+            const isAdmin = sessionStorage.getItem('currentRole') === 'admin';
+            const me = sessionStorage.getItem('currentUser') || '';
+            ['girdi','surec','cikti'].forEach(k => {
+                const kap = document.getElementById('ur-liste-' + k);
+                const lst = kayitlar.filter(r => r.kind === k);
+                if (!lst.length) { kap.innerHTML = '<div class="ur-empty">Henüz ' + ETIKET[k].toLowerCase() + ' kaydı yok.</div>'; return; }
+                kap.innerHTML = lst.map(r => {
+                    const olcum = (k !== 'surec' && r.value !== '' && r.value != null) ? '<div class="ur-meas">📏 ' + esc(fmt(Number(r.value))) + ' ' + esc(r.unit) + '</div>' : '';
+                    const sil = (isAdmin || (r.author && r.author === me)) ? '<button class="ur-del" title="Sil" onclick="uretimSil(\'' + esc(r.id) + '\')">🗑️</button>' : '';
+                    return '<div class="ur-item ' + (k === 'girdi' ? 'in' : k === 'cikti' ? 'out' : '') + '"><div class="ur-item-main">' +
+                        '<div class="ur-item-title">' + esc(r.type || '') + (r.title ? ' — ' + esc(r.title) : '') + '</div>' +
+                        '<div class="ur-item-meta">📅 ' + esc(tarihTR(r.date)) + (r.author ? ' · 👤 ' + esc(r.author) : '') + '</div>' +
+                        olcum + (r.note ? '<div class="ur-item-note">' + esc(r.note) + '</div>' : '') +
+                        '</div>' + sil + '</div>';
+                }).join('');
+            });
+        };
+
+        window.uretimKaydet = async function(tur) {
+            if (typeof checkMemberActionPermission === 'function' && !checkMemberActionPermission()) return;
+            const sec = secili();
+            if (!sec) return showNotification('⚠️ Önce bir ürün seçin!', 'warning');
+            const v = id => (document.getElementById(id) || {}).value || '';
+            let rec;
+            if (tur === 'girdi' || tur === 'cikti') {
+                const p = tur === 'girdi' ? 'ur-g-' : 'ur-c-';
+                const ad = v(p + 'ad').trim(), miktar = v(p + 'miktar').trim();
+                if (!ad) return showNotification('⚠️ ' + ETIKET[tur] + ' adını yazın!', 'warning');
+                if (miktar === '' || isNaN(miktar)) return showNotification('⚠️ Geçerli bir ölçüm (miktar) girin!', 'warning');
+                rec = { kind: tur, date: v(p + 'tarih') || bugun(), type: v(p + 'tur'), title: ad, value: Number(miktar), unit: v(p + 'birim'), note: v(p + 'not').trim() };
+            } else {
+                const acik = v('ur-s-acik').trim();
+                if (!acik) return showNotification('⚠️ Yapılan işlemi / gözlemi yazın!', 'warning');
+                rec = { kind: 'surec', date: v('ur-s-tarih') || bugun(), type: v('ur-s-asama'), title: '', value: '', unit: '', note: acik };
+            }
+            rec.productKey = sec.key; rec.productName = sec.name;
+            rec.author = sessionStorage.getItem('currentUser') || 'Kullanıcı';
+            rec.createdAt = Date.now();
+            rec.id = 'tmp' + rec.createdAt;
+
+            const l = oku(); l.push(rec); yaz(l);
+            if (tur === 'girdi') { ['ur-g-ad','ur-g-miktar','ur-g-not'].forEach(i => document.getElementById(i).value = ''); }
+            else if (tur === 'cikti') { ['ur-c-ad','ur-c-miktar','ur-c-not'].forEach(i => document.getElementById(i).value = ''); }
+            else { document.getElementById('ur-s-acik').value = ''; }
+            window.renderUretim();
+            showNotification('✅ ' + ETIKET[tur] + ' kaydedildi.', 'success');
+
+            if (typeof window._firebaseUretimEkle === 'function') window._firebaseUretimEkle(rec);
+        };
+
+        window.uretimSil = function(id) {
+            showCustomConfirm('Kaydı Sil', 'Bu üretim kaydını silmek istediğinize emin misiniz?', function() {
+                yaz(oku().filter(r => String(r.id) !== String(id)));
+                window.renderUretim();
+                if (typeof window._firebaseUretimSil === 'function') window._firebaseUretimSil(id);
+            });
+        };
+
+        window.addEventListener('storage', function(e) { if (e.key === KEY || e.key === 'bkvProducts') { urunListesiDoldur(); window.renderUretim(); } });
+    })();
+    </script>
 
     <!-- Auto Weather Fetch for Aero 2.0 KPI -->
     <script>
