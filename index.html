@@ -2781,6 +2781,69 @@
             body.ui-modern .hd-metrics-grid { grid-template-columns: minmax(0, 1fr) !important; }
         }
 
+
+        /* ===== 📱 Mobil düzeltme: Profilim (Şifre Değiştir) + Hava Durumu ===== */
+        @media (max-width: 768px) {
+            /* Profil modalı: tüm kutular içeriğe sığsın */
+            body.ui-modern #profile-modal > .glass { overflow-x: hidden; }
+            body.ui-modern #profile-modal > .glass * { box-sizing: border-box; min-width: 0; }
+            body.ui-modern #profile-modal > .glass > div { max-width: 100%; }
+            body.ui-modern #profile-modal h2 { font-size: 16px !important; }
+            body.ui-modern #profile-modal p { word-break: break-word; }
+            body.ui-modern #profile-modal input.aero-input {
+                width: 100% !important; max-width: 100% !important; flex: none !important;
+                font-size: 16px !important; min-height: 42px; padding: 9px 12px !important;
+            }
+            /* Yeni şifre + tekrar alanı alt alta */
+            body.ui-modern #profile-modal div:has(> #prof-new-pass) { flex-direction: column !important; gap: 8px !important; }
+            body.ui-modern #profile-modal .aero-btn { white-space: normal; }
+            /* Güvenli çıkış / Kapat butonları sığsın */
+            body.ui-modern #profile-modal .glass > div:last-child { gap: 8px; flex-wrap: wrap; }
+
+            /* Hava durumu */
+            body.ui-modern #tab-hava-durumu, body.ui-modern #tab-hava-durumu * { min-width: 0; box-sizing: border-box; }
+            body.ui-modern #tab-hava-durumu { overflow-x: hidden; }
+            body.ui-modern #tab-hava-durumu .hd-container { padding: 8px !important; }
+            body.ui-modern .hd-header-card { padding: 12px !important; border-radius: 14px; }
+            body.ui-modern .hd-header-card h2 { font-size: 16px !important; line-height: 1.3; align-items: flex-start !important; }
+            body.ui-modern .hd-header-card p { font-size: 12px !important; }
+            body.ui-modern #hd-son-guncelleme { font-size: 11px !important; }
+            /* Arama çubuğu: select + Sorgula, altında iki buton, tam genişlik */
+            body.ui-modern .hd-header-card > div:nth-child(2) { flex-direction: column; align-items: stretch !important; }
+            body.ui-modern .hd-header-card > div:nth-child(2) > div { width: 100%; flex: none !important; }
+            body.ui-modern .hd-header-card > div:nth-child(2) > div > .aero-btn { flex: 1; min-width: 0 !important; padding: 8px 6px; font-size: 12.5px; }
+            body.ui-modern #sehir-secici { min-width: 0 !important; width: 100%; }
+            body.ui-modern .hd-city-chip { padding: 5px 10px; font-size: 12px; }
+            body.ui-modern #hava-durumu-sonuc { gap: 14px !important; }
+            body.ui-modern .hd-hero-card { padding: 10px; gap: 10px; border-radius: 16px; }
+            body.ui-modern .hd-hero-left, body.ui-modern .hd-agri-panel { padding: 12px; }
+            body.ui-modern #hd-sehir-ad { font-size: 19px !important; word-break: break-word; }
+            body.ui-modern .hd-temp-main { font-size: 42px; }
+            body.ui-modern .hd-hero-icon { font-size: 52px; }
+            body.ui-modern .hd-condition-badge { font-size: 13.5px; padding: 5px 12px; max-width: 100%; }
+            body.ui-modern .hd-hero-meta { font-size: 12.5px; gap: 6px; }
+            body.ui-modern .hd-agri-grid { grid-template-columns: minmax(0, 1fr); }
+            body.ui-modern .hd-agri-title { font-size: 14px; }
+            body.ui-modern .hd-agri-item-header { flex-wrap: wrap; gap: 4px; }
+            body.ui-modern .hd-agri-desc { word-break: break-word; }
+            body.ui-modern .hd-metric-card { padding: 10px; }
+            body.ui-modern .hd-metric-label { font-size: 11.5px; flex-wrap: wrap; }
+            body.ui-modern .hd-metric-val { font-size: 17px; }
+            body.ui-modern .hd-metric-sub { font-size: 10.5px; word-break: break-word; }
+            body.ui-modern #tab-hava-durumu h3 { font-size: 14.5px !important; flex-wrap: wrap; }
+            body.ui-modern #tab-hava-durumu div:has(> h3 + span) { flex-wrap: wrap; gap: 4px; }
+            body.ui-modern .hd-forecast-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+            body.ui-modern .hd-forecast-card { padding: 10px 6px; }
+            body.ui-modern .hd-forecast-cond { min-height: 0; text-align: center; word-break: break-word; }
+            body.ui-modern .hd-forecast-temps { flex-wrap: wrap; font-size: 13.5px; }
+            body.ui-modern .hd-fbadge { word-break: break-word; text-align: center; }
+            body.ui-modern .hd-tips-card { padding: 12px; }
+            body.ui-modern .hd-tips-list { padding-left: 16px; font-size: 12px; }
+        }
+        @media (max-width: 380px) {
+            body.ui-modern .hd-forecast-grid { grid-template-columns: minmax(0, 1fr); }
+        }
+
         /* --- Yatay (landscape) telefon: dikey alanı koru --- */
         @media (max-width: 900px) and (max-height: 480px) and (orientation: landscape) {
             body.ui-modern #modern-top-header { padding: 4px 10px !important; flex-wrap: nowrap !important; }
