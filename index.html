@@ -3047,7 +3047,15 @@
             }
             .sb-foot-fs { display: none !important; }
         }
-    </style>
+    /* 🔒 YÖNETİCİ KORUMASI (Satış Temizle, Grafik Sıfırla, Mesaj Sil) */
+        body:not(.is-admin) .admin-only,
+        body:not(.is-admin) .ch-reset,
+        body:not(.is-admin) #btn-clear-sales-history,
+        body:not(.is-admin) #btn-reset-chart-all {
+            display: none !important;
+        }
+
+        </style>
 </head>
 <body>
 
@@ -3419,6 +3427,29 @@
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
                 <button id="app-prompt-btn-cancel" class="aero-btn" style="padding: 8px 18px;">İptal</button>
                 <button id="app-prompt-btn-ok" class="aero-btn btn-green" style="padding: 8px 18px;">Tamam</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Uygulama İçi Görev ve Sorumlu Düzenleme Modalı -->
+    <div id="app-task-edit-modal" class="app-modal-backdrop" style="display: none;">
+        <div class="app-modal-box glass" style="max-width: 480px;">
+            <div class="app-modal-header" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                <span style="font-size: 26px;">✏️</span>
+                <h3 style="margin: 0; color: #01579b;">Görevi ve Sorumluyu Düzenle</h3>
+            </div>
+            
+            <label style="font-size: 13px; font-weight: bold; color: inherit; display: block; margin-bottom: 6px;">Görev Açıklaması:</label>
+            <input type="text" id="task-edit-modal-text" class="aero-input" style="width: 100%; box-sizing: border-box; margin-bottom: 15px; font-size: 14px; padding: 10px 12px;" placeholder="Görev açıklamasını giriniz...">
+
+            <label style="font-size: 13px; font-weight: bold; color: inherit; display: block; margin-bottom: 6px;">Görevin Atandığı Kişi (Sorumlu):</label>
+            <select id="task-edit-modal-assignee" class="aero-input" style="width: 100%; box-sizing: border-box; margin-bottom: 20px; font-size: 14px; padding: 10px 12px;">
+                <option value="">👤 Atanmadı / Herkes</option>
+            </select>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="task-edit-modal-btn-cancel" class="aero-btn" style="padding: 8px 18px;">İptal</button>
+                <button id="task-edit-modal-btn-save" class="aero-btn btn-green" style="padding: 8px 18px;">💾 Değişiklikleri Kaydet</button>
             </div>
         </div>
     </div>
@@ -4553,14 +4584,14 @@
                 <div id="tg-pane-charts" class="tg-pane">
                     <div class="tg-chart-tools hide-on-print">
                         <span id="ch-reset-note" class="ch-reset-note"></span>
-                        <button type="button" class="aero-btn" onclick="resetChart('all')">↺ Tümünü Sıfırla</button>
+                        <button type="button" class="aero-btn admin-only" id="btn-reset-chart-all" onclick="resetChart('all')">↺ Tümünü Sıfırla</button>
                         <button type="button" class="aero-btn" id="ch-restore-btn" onclick="restoreCharts()" style="display:none;">👁 Tüm Verileri Göster</button>
                     </div>
                     <div id="dash-analytics" class="dash-analytics tg-charts">
-                        <div class="card glass ch-card"><h3>♻️ Aylık Bokashi Atık Miktarı (kg) <button type="button" class="ch-reset" onclick="resetChart('bokashi')">↺ Sıfırla</button></h3><div id="ch-bokashi"></div></div>
-                        <div class="card glass ch-card"><h3>💰 Satış Cirosu Trendi (₺) <button type="button" class="ch-reset" onclick="resetChart('sales')">↺ Sıfırla</button></h3><div id="ch-sales"></div></div>
+                        <div class="card glass ch-card"><h3>♻️ Aylık Bokashi Atık Miktarı (kg) <button type="button" class="ch-reset admin-only" onclick="resetChart('bokashi')">↺ Sıfırla</button></h3><div id="ch-bokashi"></div></div>
+                        <div class="card glass ch-card"><h3>💰 Satış Cirosu Trendi (₺) <button type="button" class="ch-reset admin-only" onclick="resetChart('sales')">↺ Sıfırla</button></h3><div id="ch-sales"></div></div>
                         <div class="card glass ch-card"><h3>📅 Kulüp Yoklama Oranı
-                            <span class="ch-h3-tools"><button type="button" class="ch-reset" onclick="resetChart('att')">↺ Sıfırla</button>
+                            <span class="ch-h3-tools"><button type="button" class="ch-reset admin-only" onclick="resetChart('att')">↺ Sıfırla</button>
                             <select id="ch-att-range" class="aero-input" onchange="renderDashCharts()">
                                 <option value="7">Son 7 gün</option><option value="30" selected>Son 30 gün</option><option value="90">Son 90 gün</option><option value="0">Tümü</option>
                             </select></span></h3><div id="ch-att"></div></div>
@@ -4687,7 +4718,7 @@
                             <span style="font-size: 13px; color: #555; padding: 5px 10px; background: rgba(46,125,50,0.08); border-radius: 8px; border: 1px solid rgba(46,125,50,0.2);">
                                 Toplam Ciro: <b id="total-sales-revenue" style="color:#2e7d32;">0 TL</b>
                             </span>
-                            <button class="aero-btn btn-red" onclick="clearSalesHistory()" style="margin-left: auto; font-size: 11px; padding: 4px 12px;">🗑️ Geçmişi Temizle</button>
+                            <button class="aero-btn btn-red admin-only" id="btn-clear-sales-history" onclick="clearSalesHistory()" style="margin-left: auto; font-size: 11px; padding: 4px 12px;">🗑️ Geçmişi Temizle</button>
                         </div>
                         <div id="sales-history-list" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
                             <p style="text-align:center; opacity:0.6; color: #e65100;">Henüz satış yapılmamış.</p>
@@ -5024,6 +5055,89 @@
             };
         }
 
+        // Uygulama İçi Görev ve Sorumlu Düzenleme Modalı
+        function openTaskEditModal(task, onSave) {
+            const modal = document.getElementById('app-task-edit-modal');
+            if (!modal) return;
+            const textInput = document.getElementById('task-edit-modal-text');
+            const assigneeSelect = document.getElementById('task-edit-modal-assignee');
+            const btnCancel = document.getElementById('task-edit-modal-btn-cancel');
+            const btnSave = document.getElementById('task-edit-modal-btn-save');
+
+            textInput.value = task.text || '';
+
+            // Sorumlu seçeneklerini mevcut kullanıcılardan dinamik yükle
+            assigneeSelect.innerHTML = '<option value="">👤 Atanmadı / Herkes</option>';
+            let usersList = [];
+            if (typeof getSafeUsers === 'function') {
+                usersList = getSafeUsers();
+            } else if (window._liveUsers && Array.isArray(window._liveUsers) && window._liveUsers.length > 0) {
+                usersList = window._liveUsers;
+            } else {
+                try { usersList = JSON.parse(localStorage.getItem('bkvUsers')) || []; } catch(e) { usersList = []; }
+            }
+
+            const addedNames = new Set();
+            usersList.forEach(u => {
+                if (u && u.username && !addedNames.has(u.username)) {
+                    addedNames.add(u.username);
+                    const opt = document.createElement('option');
+                    opt.value = u.username;
+                    opt.textContent = `${u.username} (${u.grade || 'Üye'})`;
+                    assigneeSelect.appendChild(opt);
+                }
+            });
+
+            if (task.assignee && !addedNames.has(task.assignee)) {
+                const opt = document.createElement('option');
+                opt.value = task.assignee;
+                opt.textContent = `${task.assignee} (Mevcut Sorumlu)`;
+                assigneeSelect.appendChild(opt);
+            }
+
+            assigneeSelect.value = task.assignee || '';
+
+            modal.style.display = 'flex';
+            textInput.focus();
+
+            const cleanUp = () => {
+                modal.style.display = 'none';
+                btnCancel.onclick = null;
+                btnSave.onclick = null;
+                textInput.onkeypress = null;
+                modal.onclick = null;
+            };
+
+            btnCancel.onclick = () => {
+                cleanUp();
+            };
+
+            btnSave.onclick = () => {
+                const newText = textInput.value.trim();
+                const newAssignee = assigneeSelect.value.trim();
+                if (!newText) {
+                    if (typeof showNotification === 'function') showNotification("Lütfen bir görev açıklaması giriniz.", "warning");
+                    return;
+                }
+                cleanUp();
+                if (typeof onSave === 'function') {
+                    onSave(newText, newAssignee);
+                }
+            };
+
+            textInput.onkeypress = (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    btnSave.click();
+                }
+            };
+
+            modal.onclick = (e) => {
+                if (e.target === modal) cleanUp();
+            };
+        }
+        window.openTaskEditModal = openTaskEditModal;
+
 
         function exportNotesToWord() {
             const notesContainer = document.getElementById('notes-container');
@@ -5342,6 +5456,10 @@
         }
 
         function clearSalesHistory() {
+            if (sessionStorage.getItem('currentRole') !== 'admin') {
+                showNotification("⚠️ Satış geçmişini temizleme yetkisi yalnızca yöneticilere aittir!", "warning");
+                return;
+            }
             showCustomConfirm("Satış Geçmişi", "Tüm satış geçmişini silmek istediğinize emin misiniz?", () => {
                 localStorage.removeItem('bkvSalesHistory');
                 loadSalesHistory();
@@ -6010,6 +6128,14 @@
             const username = sessionStorage.getItem('currentUser') || 'Kullanıcı'; 
             const grade = sessionStorage.getItem('currentGrade') || 'Belirtilmedi';
             const isAdmin = (role === 'admin');
+            document.body.classList.toggle('is-admin', isAdmin);
+            document.querySelectorAll('.admin-only, .ch-reset').forEach(el => {
+                el.style.display = isAdmin ? '' : 'none';
+            });
+            const btnClearSales = document.getElementById('btn-clear-sales-history');
+            if (btnClearSales) btnClearSales.style.display = isAdmin ? 'inline-block' : 'none';
+            const btnResetAll = document.getElementById('btn-reset-chart-all');
+            if (btnResetAll) btnResetAll.style.display = isAdmin ? 'inline-block' : 'none';
             
             const userBadge = document.getElementById('current-user-badge');
             if (userBadge) userBadge.innerText = `👤 ${username}`;
@@ -6363,20 +6489,19 @@
         }
 
         function editTask(id) { 
-            if (!checkMemberActionPermission()) return; 
+            if (typeof checkMemberActionPermission === 'function' && !checkMemberActionPermission()) return; 
             try { tasks = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { tasks = []; }
-            const task = tasks.find(t => t.id === id); 
+            const task = tasks.find(t => String(t.id) === String(id)); 
             if(task) { 
-                showCustomPrompt("Görevi Düzenle", "Görevin yeni açıklamasını girin:", task.text, (newText) => {
-                    if (newText && newText.trim()) { 
-                        task.text = newText.trim(); 
-                        localStorage.setItem('bkvTasks', JSON.stringify(tasks));
-                        renderTasks();
-            updateDashKPIs();
-            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
-            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); 
-                        showNotification("Görev güncellendi!", "success");
-                    }
+                openTaskEditModal(task, (newText, newAssignee) => {
+                    task.text = newText;
+                    task.assignee = newAssignee;
+                    localStorage.setItem('bkvTasks', JSON.stringify(tasks));
+                    if (typeof renderTasks === 'function') renderTasks();
+                    if (typeof updateDashKPIs === 'function') updateDashKPIs();
+                    const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+                    if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity); 
+                    if (typeof showNotification === 'function') showNotification("Görev ve sorumlusu güncellendi!", "success");
                 });
             } 
         }
@@ -6933,7 +7058,7 @@
                     <div style="font-size: 14px; color: #222; background: rgba(255,255,255,0.7); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.05); white-space: pre-wrap;">${msg.body}</div>
                     <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 8px; gap: 8px;">
                         ${replyBtn}
-                        <button class="action-icon" style="color: #d32f2f;" onclick="deletePortalMessage('${msg.id}')">🗑️ Sil</button>
+                        ${(sessionStorage.getItem('currentRole') === 'admin') ? `<button class="action-icon" style="color: #d32f2f;" onclick="deletePortalMessage('${msg.id}')">🗑️ Sil</button>` : ''}
                     </div>
                 `;
 
@@ -6972,6 +7097,10 @@
         }
 
         function deletePortalMessage(msgId) {
+            if (sessionStorage.getItem('currentRole') !== 'admin') {
+                showNotification("⚠️ Mesajları silme yetkisi yalnızca yöneticilere aittir!", "warning");
+                return;
+            }
             showCustomConfirm("Mesajı Sil", "Bu mesajı silmek istediğinize emin misiniz?", () => {
                 let messages = getSafeMessages();
                 messages = messages.filter(m => String(m.id) !== String(msgId));
@@ -8522,21 +8651,24 @@
             try { taskList = JSON.parse(localStorage.getItem('bkvTasks')) || []; } catch(e) { taskList = []; }
             const task = taskList.find(t => String(t.id) === String(id)); 
             if(task) { 
-                showCustomPrompt("Görevi Düzenle", "Görevin yeni açıklamasını girin:", task.text, async (newText) => {
-                    if (newText && newText.trim()) { 
-                        task.text = newText.trim();
-                        localStorage.setItem('bkvTasks', JSON.stringify(taskList));
-                        window.renderTasks();
-            updateDashKPIs();
-            const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
-            if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
-                        try {
-                            await updateDoc(doc(db, "tasks", String(id)), { text: newText.trim() });
-                            if (typeof showNotification === 'function') showNotification("Görev güncellendi!", "success");
-                        } catch(err) {
-                            console.error("Firestore editTask hatası:", err);
-                            if (typeof showNotification === 'function') showNotification("Güncelleme hatası: " + err.message, "error");
-                        }
+                openTaskEditModal(task, async (newText, newAssignee) => {
+                    task.text = newText;
+                    task.assignee = newAssignee;
+                    localStorage.setItem('bkvTasks', JSON.stringify(taskList));
+                    if (typeof window.renderTasks === 'function') window.renderTasks();
+                    else if (typeof renderTasks === 'function') renderTasks();
+                    if (typeof updateDashKPIs === 'function') updateDashKPIs();
+                    const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+                    if (typeof havaDurumuGetir === 'function') havaDurumuGetir(initWeatherCity);
+                    try {
+                        await updateDoc(doc(db, "tasks", String(id)), {
+                            text: newText,
+                            assignee: newAssignee
+                        });
+                        if (typeof showNotification === 'function') showNotification("Görev ve sorumlusu güncellendi!", "success");
+                    } catch(err) {
+                        console.error("Firestore editTask hatası:", err);
+                        if (typeof showNotification === 'function') showNotification("Güncelleme hatası: " + err.message, "error");
                     }
                 });
             } 
@@ -9536,7 +9668,7 @@
                     <div style="font-size: 14px; color: #222; background: rgba(255,255,255,0.7); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.05); white-space: pre-wrap;">${msg.body || ''}</div>
                     <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 8px; gap: 8px;">
                         ${replyBtn}
-                        <button class="action-icon" style="color: #d32f2f;" onclick="deletePortalMessage('${msg.id}')">🗑️ Sil</button>
+                        ${(sessionStorage.getItem('currentRole') === 'admin') ? `<button class="action-icon" style="color: #d32f2f;" onclick="deletePortalMessage('${msg.id}')">🗑️ Sil</button>` : ''}
                     </div>
                 `;
 
@@ -9647,6 +9779,10 @@
         };
 
         window.deletePortalMessage = function(msgId) {
+            if (sessionStorage.getItem('currentRole') !== 'admin') {
+                showNotification("⚠️ Mesajları silme yetkisi yalnızca yöneticilere aittir!", "warning");
+                return;
+            }
             showCustomConfirm("Mesajı Sil", "Bu mesajı silmek istediğinize emin misiniz?", async () => {
                 let messages = window.getSafeMessages();
                 messages = messages.filter(m => String(m.id) !== String(msgId));
@@ -11195,6 +11331,12 @@
             if (b) b.style.display = act.length ? '' : 'none';
         }
         window.resetChart = async function(which) {
+            if (sessionStorage.getItem('currentRole') !== 'admin') {
+                if (typeof showNotification === 'function') {
+                    showNotification("⚠️ Grafikleri sıfırlama yetkisi yalnızca yöneticilere aittir!", "warning");
+                }
+                return;
+            }
             const labels = {
                 bokashi: 'Bokashi Atık ve Kova Verileri',
                 sales: 'Satış ve Ciro Geçmişi',
