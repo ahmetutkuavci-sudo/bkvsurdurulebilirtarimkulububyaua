@@ -24,7 +24,15 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logo.jpg">
+    <!-- 📱 PWA (Progressive Web App) Desteği -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0284c7">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="BKV Tarım">
+    <link rel="apple-touch-icon" href="Logo.jpg">
+    <link rel="icon" type="image/png" href="Logo.jpg">
     <title>BKV Sürdürülebilir Tarım Kulübü Bilgi Ve Yönetim Paneli</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -2627,23 +2635,30 @@
                 overscroll-behavior: contain;
             }
 
-            /* Çekmece menü */
+            /* Çekmece menü - Gelişmiş Mobil Uyum (Çıkış Yap Butonu ve Nav Sığması) */
             body.ui-modern #main-sidebar,
             body.ui-modern #main-sidebar.collapsed {
                 position: fixed !important;
                 top: 0; left: 0; bottom: 0;
                 height: 100vh; height: 100dvh;
-                width: min(82vw, 300px) !important;
-                padding: 18px 12px 24px 12px !important;
+                width: min(84vw, 310px) !important;
+                padding: 14px 10px max(55px, calc(env(safe-area-inset-bottom, 0px) + 40px)) 10px !important;
+                box-sizing: border-box !important;
                 border-radius: 0 22px 22px 0 !important;
                 background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%) !important;
                 backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
-                overflow-y: auto; -webkit-overflow-scrolling: touch;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                -webkit-overflow-scrolling: touch !important;
+                overscroll-behavior: contain !important;
                 transform: translateX(-108%);
                 visibility: hidden;
                 transition: transform .28s cubic-bezier(.4,0,.2,1), visibility 0s linear .28s !important;
                 z-index: 1000 !important;
                 box-shadow: none !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
             }
             body.ui-modern #main-sidebar.mobile-open {
                 transform: translateX(0);
@@ -2654,10 +2669,11 @@
             body.ui-modern #main-sidebar .sidebar-hide-on-collapse { display: revert !important; }
             body.ui-modern #main-sidebar .nav-link,
             body.ui-modern #main-sidebar.collapsed .nav-link {
-                padding: 13px 14px !important;
-                font-size: 15px !important;
+                padding: 10px 12px !important;
+                font-size: 14px !important;
                 justify-content: flex-start;
-                min-height: 48px;
+                min-height: 42px !important;
+                border-radius: 11px !important;
             }
             body.ui-modern #main-sidebar .nav-link:hover { transform: none; }
             body.ui-modern #main-sidebar .nav-link > div { flex: 1; }
@@ -3016,13 +3032,257 @@
         .sb-foot-logout:hover { background: linear-gradient(180deg, #f44336, #b71c1c); }
         body.ui-modern #main-sidebar.collapsed .sb-foot-btn { justify-content: center; padding: 6px 0; }
         @media (max-width: 768px) {
-            .sb-foot { padding-bottom: env(safe-area-inset-bottom, 0px); }
-            .sb-foot-btn { padding: 9px 12px; font-size: 13.5px; min-height: 40px; }
-            .sb-foot-fs { display: none; }
+            .sb-foot { 
+                margin-top: 14px !important; 
+                padding-top: 8px !important; 
+                padding-bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+                gap: 6px !important; 
+                flex-shrink: 0 !important;
+            }
+            .sb-foot-btn { 
+                padding: 9px 12px !important; 
+                font-size: 13px !important; 
+                min-height: 40px !important;
+                border-radius: 11px !important;
+            }
+            .sb-foot-fs { display: none !important; }
         }
     </style>
 </head>
 <body>
+
+    <!-- ========================================================
+         🌐 BAĞIMSIZ GERÇEK ZAMANLI AĞ & BULUT İZLEME MOTORU
+         (Sıfır Bağımlılık, CDN gerektirmez, İnternet yokken bile %100 çalışır)
+         ======================================================== -->
+    <script>
+    (function() {
+        let lastReportedStatus = null;
+        let pingTimer = null;
+
+        // UI Güncelleme Fonksiyonu: Hem Klasik Hem Modern Arayüzü ve Ayarlar Kartını Eşitler
+        window.updateCloudConnectionUI = function(status, latency = null, errorMsg = null) {
+            lastReportedStatus = status;
+            const nowTimeStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            // 1. Ayarlar sekmesindeki kart elementleri
+            const badge = document.getElementById('cloud-status-badge');
+            const resultEl = document.getElementById('cloud-ping-result');
+            const lastSyncEl = document.getElementById('cloud-last-sync-time');
+
+            // 2. Klasik tema başlık çubuğu elementleri
+            const headerPill = document.getElementById('header-cloud-pill');
+            const headerLabel = document.getElementById('header-cloud-label');
+            const headerPing = document.getElementById('header-cloud-ping');
+
+            // 3. Modern tema (Aero 2.0) başlık çubuğu elementleri
+            const modernPill = document.getElementById('modern-cloud-pill');
+            const modernLabel = document.getElementById('modern-cloud-label');
+            const modernDot = document.getElementById('modern-cloud-dot');
+
+            if (status === 'online') {
+                const latencyText = latency !== null ? `${latency} ms` : 'Aktif';
+
+                // Ayarlar kartı
+                if (badge) {
+                    badge.style.background = '#e8f5e9';
+                    badge.style.color = '#2e7d32';
+                    badge.style.borderColor = '#a5d6a7';
+                    badge.innerHTML = `<span style="display:inline-block;width:8px;height:8px;background:#2e7d32;border-radius:50%;box-shadow:0 0 0 2px rgba(46,125,50,0.25);"></span> CANLI BAĞLI (${latencyText})`;
+                }
+                if (resultEl) {
+                    resultEl.innerText = `Aktif (${latencyText} gecikme)`;
+                    resultEl.style.color = '#2e7d32';
+                }
+                if (lastSyncEl) {
+                    lastSyncEl.innerText = `Son kontrol: ${nowTimeStr} (Başarılı)`;
+                    lastSyncEl.style.color = '#2e7d32';
+                }
+
+                // Klasik header
+                if (headerPill) {
+                    headerPill.className = 'header-cloud-pill cloud-online';
+                }
+                if (headerLabel) headerLabel.innerText = 'Bulut Aktif';
+                if (headerPing) headerPing.innerText = latencyText;
+
+                // Modern header
+                if (modernPill) {
+                    modernPill.style.background = 'rgba(209, 250, 229, 0.95)';
+                    modernPill.style.color = '#065f46';
+                    modernPill.style.borderColor = '#6ee7b7';
+                }
+                if (modernDot) {
+                    modernDot.style.background = '#059669';
+                    modernDot.style.boxShadow = '0 0 0 2px rgba(5,150,105,0.3)';
+                    modernDot.classList.remove('cloud-dot-offline');
+                }
+                if (modernLabel) modernLabel.innerText = 'Bulut Aktif' + (latency !== null ? ` (${latency}ms)` : '');
+
+            } else if (status === 'offline') {
+                // Ayarlar kartı
+                if (badge) {
+                    badge.style.background = '#ffebee';
+                    badge.style.color = '#c62828';
+                    badge.style.borderColor = '#ffcdd2';
+                    badge.innerHTML = `<span style="display:inline-block;width:8px;height:8px;background:#c62828;border-radius:50%;box-shadow:0 0 0 2px rgba(198,40,40,0.3);"></span> BAĞLANTI KESİLDİ (İNTERNET YOK)`;
+                }
+                if (resultEl) {
+                    resultEl.innerText = 'İnternet bağlantısı koptu!';
+                    resultEl.style.color = '#c62828';
+                }
+                if (lastSyncEl) {
+                    lastSyncEl.innerText = `Bağlantı koptu (${nowTimeStr})`;
+                    lastSyncEl.style.color = '#c62828';
+                }
+
+                // Klasik header
+                if (headerPill) {
+                    headerPill.className = 'header-cloud-pill cloud-offline';
+                }
+                if (headerLabel) headerLabel.innerText = 'İnternet Yok';
+                if (headerPing) headerPing.innerText = 'Koptu';
+
+                // Modern header
+                if (modernPill) {
+                    modernPill.style.background = 'rgba(254, 226, 226, 0.95)';
+                    modernPill.style.color = '#991b1b';
+                    modernPill.style.borderColor = '#f87171';
+                }
+                if (modernDot) {
+                    modernDot.style.background = '#dc2626';
+                    modernDot.style.boxShadow = '0 0 0 3px rgba(220,38,38,0.4)';
+                    modernDot.classList.add('cloud-dot-offline');
+                }
+                if (modernLabel) modernLabel.innerText = 'Bağlantı Yok';
+
+            } else if (status === 'testing') {
+                if (badge) {
+                    badge.style.background = '#fff3e0';
+                    badge.style.color = '#e65100';
+                    badge.style.borderColor = '#ffe0b2';
+                    badge.innerHTML = '<span style="display:inline-block;width:8px;height:8px;background:#e65100;border-radius:50%;"></span> TEST EDİLİYOR...';
+                }
+                if (resultEl) {
+                    resultEl.innerText = 'Ağ bağlantısı test ediliyor...';
+                    resultEl.style.color = '#e65100';
+                }
+                if (headerLabel) headerLabel.innerText = 'Kontrol...';
+                if (modernLabel) modernLabel.innerText = 'Kontrol...';
+            }
+        };
+
+        // Gerçek Ağ & Bulut Ping Testi Fonksiyonu
+        window.checkCloudSyncStatus = async function(isSilent = false) {
+            // 1. Tarayıcı seviyesinde ağ kontrolü
+            if (!navigator.onLine) {
+                window.updateCloudConnectionUI('offline');
+                if (!isSilent && typeof showNotification === 'function') {
+                    showNotification('❌ İnternet bağlantınız bulunmuyor! Ağınızı kontrol edin.', 'error');
+                }
+                return false;
+            }
+
+            if (!isSilent) {
+                window.updateCloudConnectionUI('testing');
+            }
+
+            // 2. Gerçek Dış Ağ Erişimi Doğrulaması (Image Ping & Fetch with Timeout)
+            const startTime = Date.now();
+            let isConnected = false;
+
+            try {
+                // Güvenilir, hafif ve sıfır baytlık ping (Zaman damgası ile önbellek baypas edilir)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2800);
+
+                // Firestore API veya Google CDN uç noktasına canlı istek
+                await fetch('https://firestore.googleapis.com/?_=' + Date.now(), {
+                    method: 'GET',
+                    mode: 'no-cors',
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+                isConnected = true;
+            } catch (err) {
+                // Birinci istek başarısız olursa alternatif hafif ping ile teyit et
+                try {
+                    await new Promise((resolve, reject) => {
+                        const img = new Image();
+                        const t = setTimeout(() => { img.src = ''; reject(); }, 2000);
+                        img.onload = () => { clearTimeout(t); resolve(); };
+                        img.onerror = () => { clearTimeout(t); resolve(); }; // 404 olsa bile ağ yanıt verdi demektir
+                        img.src = 'https://www.google.com/favicon.ico?_=' + Date.now();
+                    });
+                    isConnected = true;
+                } catch (e2) {
+                    isConnected = false;
+                }
+            }
+
+            if (isConnected) {
+                const latency = Math.max(14, Date.now() - startTime);
+                window.updateCloudConnectionUI('online', latency);
+                if (!isSilent && typeof showNotification === 'function') {
+                    showNotification(`⚡ Bulut bağlantısı aktif! Canlı gecikme: ${latency} ms`, 'success');
+                }
+                return true;
+            } else {
+                window.updateCloudConnectionUI('offline');
+                if (!isSilent && typeof showNotification === 'function') {
+                    showNotification('❌ İnternet bağlantınız koptu! Bulut sunucusuna erişilemiyor.', 'error');
+                }
+                return false;
+            }
+        };
+
+        // Anlık Reaktif Olay Dinleyicileri (Anında Tepki)
+        window.addEventListener('offline', function() {
+            console.warn('⚠️ Ağ bağlantısı kesildi (offline olayı).');
+            window.updateCloudConnectionUI('offline');
+            if (typeof showNotification === 'function') {
+                showNotification('⚠️ İnternet bağlantınız koptu! Sistem çevrimdışı moda geçti.', 'error');
+            }
+        });
+
+        window.addEventListener('online', function() {
+            console.log('⚡ Ağ bağlantısı sağlandı (online olayı).');
+            window.checkCloudSyncStatus(true);
+            if (typeof showNotification === 'function') {
+                showNotification('⚡ İnternet bağlantısı yeniden kuruldu! Bulut senkronizasyonu aktif.', 'success');
+            }
+        });
+
+        window.addEventListener('focus', function() {
+            window.checkCloudSyncStatus(true);
+        });
+
+        // Sayfa DOM hazır olduğunda ilk kontrolü derhal yap
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!navigator.onLine) {
+                window.updateCloudConnectionUI('offline');
+            } else {
+                window.checkCloudSyncStatus(true);
+            }
+        });
+
+        // Ve hemen şimdi ilk kontrol (Gecikmesiz)
+        if (!navigator.onLine) {
+            window.updateCloudConnectionUI('offline');
+        } else {
+            setTimeout(function() { window.checkCloudSyncStatus(true); }, 250);
+        }
+
+        // Periyodik Can Damarı (Heartbeat) - Her 15 saniyede bir otomatik can kontrolü
+        setInterval(function() {
+            window.checkCloudSyncStatus(true);
+        }, 15000);
+    })();
+    </script>
+
+
     <script>try{var _v=localStorage.getItem('bkvUIVersion');if(_v==='modern'||_v==='classic'){document.body.classList.add('ui-'+_v);}}catch(e){}</script>
 
     <!-- Uygulama İçi Bildirim Toast Alanı -->
@@ -3128,14 +3388,19 @@
                 </div>
             </div>
 
-            <!-- 4. Alt İşlemler -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                <button class="aero-btn btn-red" onclick="closeProfileModal(); lockSystem();" style="font-size: 12px; padding: 8px 14px;">
-                    🚪 Güvenli Çıkış Yap
+            <!-- 4. Alt İşlemler & 📲 PWA Yükleme -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="aero-btn btn-green pwa-install-btn" onclick="triggerPWAInstall()" style="font-size: 12px; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px;" title="Uygulamayı Ana Ekrana Yükle">
+                    📲 Uygulamayı Yükle
                 </button>
-                <button class="aero-btn" onclick="closeProfileModal()" style="font-size: 12px; padding: 8px 18px;">
-                    Kapat
-                </button>
+                <div style="display: flex; gap: 8px; align-items: center; margin-left: auto;">
+                    <button class="aero-btn btn-red" onclick="closeProfileModal(); lockSystem();" style="font-size: 12px; padding: 8px 14px;">
+                        🚪 Güvenli Çıkış Yap
+                    </button>
+                    <button class="aero-btn" onclick="closeProfileModal()" style="font-size: 12px; padding: 8px 18px;">
+                        Kapat
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -3161,7 +3426,7 @@
     <div id="login-screen">
         <div class="login-box glass">
            <div id="login-section">
-                <img src="Login Screen.png" alt="Logo" style="width: 350px; display: block; margin: 0 auto 15px auto; border-radius: 15px;">
+                <img src="Login Screen.png" alt="Logo" style="width: 350px; display: block; margin: 0 auto 15px auto; border-radius: 15px; max-width: 90%; height: auto;" onerror="this.style.display='none';">
                 <h1 style="color: #01579b; text-shadow: 2px 2px 4px rgba(255,255,255,0.9); margin-bottom: 5px;">SİSTEM GİRİŞİ</h1>
                 <p style="color: #0277bd; margin-top: 0; font-size: 14px; text-shadow: 1px 1px 2px rgba(255,255,255,0.9); font-weight: bold; margin-bottom: 20px;">Sürdürülebilir Tarım Kulübü Bilgi ve Yönetim Paneli</p>
                 
@@ -3177,7 +3442,7 @@
             </div>
 
             <div id="register-section" class="hidden">
-                <img src="Login Screen.png" alt="Logo" style="width: 350px; display: block; margin: 0 auto 15px auto; border-radius: 15px;">
+                <img src="Login Screen.png" alt="Logo" style="width: 350px; display: block; margin: 0 auto 15px auto; border-radius: 15px; max-width: 90%; height: auto;" onerror="this.style.display='none';">
                 <h1 style="color: #01579b; text-shadow: 2px 2px 4px rgba(255,255,255,0.9); margin-bottom: 5px;">YENİ KAYIT</h1>
                 <p style="color: #0277bd; margin-top: 0; font-size: 14px; text-shadow: 1px 1px 2px rgba(255,255,255,0.9); font-weight: bold; margin-bottom: 20px;">Kulübe katılmak için bilgilerinizi girin.</p>
                 
@@ -3234,8 +3499,8 @@
             </div>
 
             <!-- Cloud Pill -->
-            <div id="modern-cloud-pill" onclick="checkCloudSyncStatus(false)" style="display: flex; align-items: center; gap: 6px; background: rgba(209, 250, 229, 0.9); color: #065f46; border: 1px solid #6ee7b7; padding: 6px 12px; border-radius: 14px; font-size: 11px; font-weight: 800; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background: #059669; display: inline-block;"></span>
+            <div id="modern-cloud-pill" onclick="checkCloudSyncStatus(false)" title="Canlı Bulut Senkronizasyon Durumu (Test etmek için tıklayın)" style="display: flex; align-items: center; gap: 6px; background: rgba(209, 250, 229, 0.9); color: #065f46; border: 1px solid #6ee7b7; padding: 6px 12px; border-radius: 14px; font-size: 11px; font-weight: 800; cursor: pointer; transition: all 0.25s;">
+                <span id="modern-cloud-dot" class="cloud-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #059669; display: inline-block; box-shadow: 0 0 0 2px rgba(5,150,105,0.25); transition: all 0.3s;"></span>
                 <span id="modern-cloud-label">Bulut Aktif</span>
             </div>
         </div>
@@ -3926,7 +4191,7 @@
                         <div class="kpi-body">
                             <p class="kpi-label">Mesaj &amp; Bildirim</p>
                             <h3 class="kpi-value" id="dash-kpi-messages">0 Yeni</h3>
-                            <span class="kpi-chip">Portal Kutusu</span>
+                            <span class="kpi-chip">Mesajlar</span>
                         </div>
                     </div>
                 </div>
@@ -5278,6 +5543,13 @@
                 document.body.classList.add('theme-' + themeName);
             }
             localStorage.setItem('bkvTheme', themeName);
+
+            // 🔥 Kullanıcının tema tercihini Firebase veritabanına kaydet
+            const currentEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase().trim();
+            if (currentEmail && typeof window.saveUserPreferences === 'function') {
+                window.saveUserPreferences(currentEmail, { theme: themeName });
+            }
+
             if(showToast) {
                 showNotification(`Tema güncellendi: ${themeName.toUpperCase()}`, "info", 2000);
             }
@@ -5292,6 +5564,12 @@
             localStorage.setItem('bkvUIVersion', version);
             document.body.classList.remove('ui-classic', 'ui-modern');
             document.body.classList.add('ui-' + version);
+
+            // 🔥 Kullanıcının arayüz modu tercihini Firebase veritabanına kaydet
+            const currentEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase().trim();
+            if (currentEmail && typeof window.saveUserPreferences === 'function') {
+                window.saveUserPreferences(currentEmail, { uiVersion: version });
+            }
 
             // Update all switcher buttons in settings & profile modal
             document.querySelectorAll('.ui-version-btn').forEach(btn => {
@@ -5468,6 +5746,9 @@
         }
 
         function getSafeUsers() {
+            if (window._liveUsers && Array.isArray(window._liveUsers) && window._liveUsers.length > 0) {
+                return window._liveUsers;
+            }
             let users = [];
             try { 
                 let parsed = JSON.parse(localStorage.getItem('bkvUsers'));
@@ -5537,15 +5818,23 @@
 
             if(!emailIn || !passIn) return showFormError('login-error', "E-posta adresi ve şifre boş bırakılamaz!");
             
-            let users = getSafeUsers();
-            const validUser = users.find(u => u.email.toLowerCase() === emailIn && u.password === passIn);
+            let users = (window._liveUsers && window._liveUsers.length > 0) ? window._liveUsers : getSafeUsers();
+            let validUser = users.find(u => u.email.toLowerCase().trim() === emailIn && u.password === passIn);
             
             if (validUser) {
                 sessionStorage.setItem('isUnlocked', 'true'); 
                 sessionStorage.setItem('currentUser', validUser.username);
                 sessionStorage.setItem('currentGrade', validUser.grade || 'Belirtilmedi');
-                sessionStorage.setItem('currentEmail', validUser.email.toLowerCase()); 
+                sessionStorage.setItem('currentEmail', validUser.email.toLowerCase().trim()); 
                 sessionStorage.setItem('currentRole', validUser.role || 'guest');
+
+                // 🎨 Kullanıcının Firebase'e kayıtlı Temasını ve Arayüz Modunu Yükle
+                if (validUser.theme) {
+                    changeTheme(validUser.theme, false);
+                }
+                if (validUser.uiVersion) {
+                    switchUIVersion(validUser.uiVersion, false);
+                }
                 applyUserRoleUI();
                 renderTasks();
             updateDashKPIs();
@@ -7740,166 +8029,49 @@
         // Global erişim nesneleri
         window.firebaseApp = app;
         window.db = db;
+        window.doc = doc;
+        window.setDoc = setDoc;
+        window.updateDoc = updateDoc;
+        window.getDoc = getDoc;
+        window.getDocs = getDocs;
+        window.collection = collection;
+
+        // 🌟 KULLANICI TERCİHLERİNİ (TEMA & ARAYÜZ MODU) FİREBASE'E KAYDETME FONKSİYONU
+        // 🔥 FİREBASE KOLEKSİYONUNU TAMAMEN SİLME YARDIMCISI (Kalıcı Sıfırlama)
+        window.clearFirestoreCollection = async function(colName) {
+            if (!db) return false;
+            try {
+                const snap = await getDocs(collection(db, colName));
+                const deletes = [];
+                snap.forEach(d => deletes.push(deleteDoc(d.ref)));
+                await Promise.all(deletes);
+                console.log(`🔥 Firestore '${colName}' koleksiyonu tamamen silindi (${deletes.length} belge).`);
+                return true;
+            } catch (err) {
+                console.error(`Firestore '${colName}' koleksiyonu silinirken hata:`, err);
+                return false;
+            }
+        };
+
+        window.saveUserPreferences = async function(email, prefs) {
+            if (!email || !prefs || typeof prefs !== 'object') return;
+            try {
+                const uEmail = email.toLowerCase().trim();
+                const userDocRef = doc(db, "users", uEmail);
+                await setDoc(userDocRef, prefs, { merge: true });
+                console.log("🔥 Kullanıcı tercihleri Firestore'a kaydedildi:", uEmail, prefs);
+            } catch (err) {
+                console.warn("Kullanıcı tercihleri kaydedilirken hata:", err);
+            }
+        };
 
         console.log("🔥 Firebase Firestore bağlantısı başarıyla kuruldu.");
 
         // ========================================================
         // ☁️ GERÇEK CANLI BULUT SENKRONİZASYON & AĞ İZLEME SİSTEMİ
         // ========================================================
-        let isCurrentlyOnline = navigator.onLine;
-        let lastReportedStatus = isCurrentlyOnline ? 'online' : 'offline';
-        let cloudHealthCheckTimer = null;
-
-        window.updateCloudConnectionUI = function(status, latency = null, errorMsg = null) {
-            lastReportedStatus = status;
-            const badge = document.getElementById('cloud-status-badge');
-            const resultEl = document.getElementById('cloud-ping-result');
-            const lastSyncEl = document.getElementById('cloud-last-sync-time');
-            const headerPill = document.getElementById('header-cloud-pill');
-            const headerLabel = document.getElementById('header-cloud-label');
-            const headerPing = document.getElementById('header-cloud-ping');
-
-            const nowTimeStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-            if (status === 'online') {
-                const latencyText = latency !== null ? `${latency} ms` : 'Aktif';
-                if (badge) {
-                    badge.style.background = '#e8f5e9';
-                    badge.style.color = '#2e7d32';
-                    badge.style.borderColor = '#a5d6a7';
-                    badge.innerHTML = `<span style="display:inline-block;width:8px;height:8px;background:#2e7d32;border-radius:50%;box-shadow:0 0 0 2px rgba(46,125,50,0.25);"></span> CANLI BAĞLI (${latencyText})`;
-                }
-                if (resultEl) {
-                    resultEl.innerText = `Aktif (${latencyText} gecikme)`;
-                    resultEl.style.color = '#2e7d32';
-                }
-                if (lastSyncEl) {
-                    lastSyncEl.innerText = `Son kontrol: ${nowTimeStr}`;
-                    lastSyncEl.style.color = '#2e7d32';
-                }
-                if (headerPill) {
-                    headerPill.className = 'header-cloud-pill cloud-online';
-                }
-                if (headerLabel) headerLabel.innerText = 'Bulut Aktif';
-                if (headerPing) headerPing.innerText = latencyText;
-            } else if (status === 'offline') {
-                if (badge) {
-                    badge.style.background = '#ffebee';
-                    badge.style.color = '#c62828';
-                    badge.style.borderColor = '#ffcdd2';
-                    badge.innerHTML = `<span style="display:inline-block;width:8px;height:8px;background:#c62828;border-radius:50%;box-shadow:0 0 0 2px rgba(198,40,40,0.3);"></span> BAĞLANTI KESİLDİ (İNTERNET YOK)`;
-                }
-                if (resultEl) {
-                    resultEl.innerText = 'İnternet bağlantısı koptu!';
-                    resultEl.style.color = '#c62828';
-                }
-                if (lastSyncEl) {
-                    lastSyncEl.innerText = `Bağlantı koptu (${nowTimeStr})`;
-                    lastSyncEl.style.color = '#c62828';
-                }
-                if (headerPill) {
-                    headerPill.className = 'header-cloud-pill cloud-offline';
-                }
-                if (headerLabel) headerLabel.innerText = 'İnternet Yok';
-                if (headerPing) headerPing.innerText = 'Koptu';
-            } else if (status === 'testing') {
-                if (badge) {
-                    badge.style.background = '#fff3e0';
-                    badge.style.color = '#e65100';
-                    badge.style.borderColor = '#ffe0b2';
-                    badge.innerHTML = '<span style="display:inline-block;width:8px;height:8px;background:#e65100;border-radius:50%;"></span> TEST EDİLİYOR...';
-                }
-                if (resultEl) {
-                    resultEl.innerText = 'Bulut test ediliyor...';
-                    resultEl.style.color = '#e65100';
-                }
-                if (headerLabel) headerLabel.innerText = 'Kontrol...';
-            } else if (status === 'server_error') {
-                if (badge) {
-                    badge.style.background = '#fff8e1';
-                    badge.style.color = '#f57f17';
-                    badge.style.borderColor = '#ffe082';
-                    badge.innerHTML = '<span style="display:inline-block;width:8px;height:8px;background:#f57f17;border-radius:50%;"></span> BULUT ERİŞİM UYARISI';
-                }
-                if (resultEl) {
-                    resultEl.innerText = errorMsg || 'Bulut sunucu yanıtı gecikti';
-                    resultEl.style.color = '#f57f17';
-                }
-                if (headerPill) {
-                    headerPill.className = 'header-cloud-pill cloud-warning';
-                }
-                if (headerLabel) headerLabel.innerText = 'Bulut Uyarısı';
-                if (headerPing) headerPing.innerText = 'Gecikme';
-            }
-        };
-
-        window.checkCloudSyncStatus = async function(isSilent = false) {
-            if (!navigator.onLine) {
-                window.updateCloudConnectionUI('offline');
-                if (!isSilent) {
-                    showNotification('❌ İnternet bağlantınız bulunmuyor! Lütfen ağınızı kontrol edin.', 'error');
-                }
-                return false;
-            }
-
-            if (!isSilent) {
-                window.updateCloudConnectionUI('testing');
-            }
-
-            const startTime = Date.now();
-            try {
-                // Firestore bağlantı ve canlı yanıt hızını ölç
-                const docSnap = await getDoc(doc(db, "system_settings", "cutoff"));
-                const latency = Date.now() - startTime;
-                window.updateCloudConnectionUI('online', latency);
-                if (!isSilent) {
-                    showNotification(`⚡ Firebase bulut bağlantısı kusursuz! Canlı gecikme: ${latency} ms`, 'success');
-                }
-                return true;
-            } catch(err) {
-                console.warn("Bulut test yanıtı:", err);
-                const latency = Date.now() - startTime;
-                if (!navigator.onLine) {
-                    window.updateCloudConnectionUI('offline');
-                    if (!isSilent) showNotification('❌ İnternet bağlantınız koptu!', 'error');
-                } else {
-                    window.updateCloudConnectionUI('server_error', latency, err.message);
-                    if (!isSilent) showNotification(`Bulut bağlantı uyarısı: ${err.message}`, 'warning');
-                }
-                return false;
-            }
-        };
-
-        // 🌐 Anlık Ağ Kopma ve Bağlanma Dinleyicileri (Anında Reaktif)
-        window.addEventListener('online', () => {
-            console.log("🌐 Tarayıcı: İnternet bağlantısı sağlandı.");
-            window.checkCloudSyncStatus(true);
-            showNotification("⚡ İnternet bağlantısı yeniden kuruldu! Bulut senkronizasyonu aktif.", "success");
-        });
-
-        window.addEventListener('offline', () => {
-            console.warn("⚠️ Tarayıcı: İnternet bağlantısı koptu!");
-            window.updateCloudConnectionUI('offline');
-            showNotification("⚠️ İnternet bağlantınız koptu! Lütfen bağlantınızı kontrol edin. Yapılan işlemler çevrimdışı önbellekte tutulacaktır.", "error");
-        });
-
-        window.addEventListener('focus', () => {
-            // Pencereye geri dönüldüğünde arka planda sessizce test et
-            window.checkCloudSyncStatus(true);
-        });
-
-        // Periyodik Can Damarı (Heartbeat) - Her 25 saniyede bir otomatik can kontrolü
-        if (cloudHealthCheckTimer) clearInterval(cloudHealthCheckTimer);
-        cloudHealthCheckTimer = setInterval(() => {
-            window.checkCloudSyncStatus(true);
-        }, 25000);
-
-        // İlk kontrolü başlangıçtan hemen sonra yap
-        setTimeout(() => {
-            window.checkCloudSyncStatus(true);
-        }, 1200);
-
         // ========================================================
+        // 📢 CANLI DUYURU// ========================================================
         // 📢 CANLI DUYURU (KAYAN YAZI) FİREBASE SENKRONİZASYONU
         // ========================================================
         let tickerInitialSynced = false;
@@ -8599,6 +8771,9 @@
         // 4. KAYITLI ÜYELER / KULLANICILAR (bkvUsers -> "users")
         // ========================================================
         window.getSafeUsers = function() {
+            if (window._liveUsers && Array.isArray(window._liveUsers) && window._liveUsers.length > 0) {
+                return window._liveUsers;
+            }
             let users = [];
             try { 
                 let parsed = JSON.parse(localStorage.getItem('bkvUsers'));
@@ -8801,17 +8976,33 @@
                 console.warn("Kurucu hesabı bulut veritabanında bulunamadı. Firebase konsolundan geri yükleyin.");
             }
 
+            window._liveUsers = userList;
             localStorage.setItem('bkvUsers', JSON.stringify(userList));
             if (typeof updateUsersLists === 'function') updateUsersLists();
 
-            const currentEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase();
+            // 🎨 Aktif kullanıcının Firebase'deki Rol, Tema & Arayüz Modunu Otomatik Eşitle
+            const currentEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase().trim();
             if (currentEmail) {
-                const activeUser = userList.find(u => u.email && u.email.toLowerCase() === currentEmail);
-                if (activeUser && activeUser.role && activeUser.role !== sessionStorage.getItem('currentRole')) {
-                    sessionStorage.setItem('currentRole', activeUser.role);
-                    if (typeof applyUserRoleUI === 'function') applyUserRoleUI();
-                    if (typeof showNotification === 'function') {
-                        showNotification("Hesap yetkiniz güncellendi: " + (activeUser.role === 'admin' ? "Yönetici" : "Normal Üye"), "info");
+                const activeUser = userList.find(u => u.email && u.email.toLowerCase().trim() === currentEmail);
+                if (activeUser) {
+                    if (activeUser.theme && !sessionStorage.getItem('_themeAppliedFromFB')) {
+                        sessionStorage.setItem('_themeAppliedFromFB', 'true');
+                        if (typeof changeTheme === 'function') {
+                            changeTheme(activeUser.theme, false);
+                        }
+                    }
+                    if (activeUser.uiVersion && !sessionStorage.getItem('_uiVerAppliedFromFB')) {
+                        sessionStorage.setItem('_uiVerAppliedFromFB', 'true');
+                        if (typeof switchUIVersion === 'function') {
+                            switchUIVersion(activeUser.uiVersion, false);
+                        }
+                    }
+                    if (activeUser.role && activeUser.role !== sessionStorage.getItem('currentRole')) {
+                        sessionStorage.setItem('currentRole', activeUser.role);
+                        if (typeof applyUserRoleUI === 'function') applyUserRoleUI();
+                        if (typeof showNotification === 'function') {
+                            showNotification("Hesap yetkiniz güncellendi: " + (activeUser.role === 'admin' ? "Yönetici" : "Normal Üye"), "info");
+                        }
                     }
                 }
             }
@@ -11000,20 +11191,83 @@
         function sifirDurum() {
             const R = oku('bkvChartReset', {}), n = $b('ch-reset-note'), b = $b('ch-restore-btn');
             const ad = { bokashi: 'Bokashi', sales: 'Satış', att: 'Yoklama' }, act = Object.keys(ad).filter(k => R[k]);
-            if (n) n.textContent = act.length ? '🔄 Sıfırlanmış: ' + act.map(k => ad[k]).join(', ') + ' — yalnızca sıfırlamadan sonraki kayıtlar gösteriliyor (veriler silinmedi).' : '';
+            if (n) n.textContent = act.length ? '🔄 Sıfırlanmış: ' + act.map(k => ad[k]).join(', ') + ' — veriler sıfırlandı.' : '';
             if (b) b.style.display = act.length ? '' : 'none';
         }
-        window.resetChart = function(which) {
-            const ad = { bokashi: 'Bokashi grafiği', sales: 'Satış grafiği', att: 'Yoklama grafiği', all: 'Tüm grafikler' };
-            const isle = function() {
-                const R = oku('bkvChartReset', {}), z = { ts: Date.now(), day: gunStr(new Date()) };
-                (which === 'all' ? ['bokashi','sales','att'] : [which]).forEach(k => { R[k] = z; });
-                try { localStorage.setItem('bkvChartReset', JSON.stringify(R)); } catch(e) {}
-                ciz();
-                if (typeof showNotification === 'function') showNotification('Grafik sıfırlandı. Kayıtlı veriler silinmedi.', 'info');
+        window.resetChart = async function(which) {
+            const labels = {
+                bokashi: 'Bokashi Atık ve Kova Verileri',
+                sales: 'Satış ve Ciro Geçmişi',
+                att: 'Kulüp Yoklama Kayıtları',
+                all: 'Tüm Tablo ve Grafik Verileri (Bokashi, Satış, Yoklama)'
             };
-            const msg = ad[which] + ' sıfırlansın mı? Kayıtlı veriler SİLİNMEZ; grafik yalnızca bundan sonraki kayıtları gösterir. (Bu cihazda geçerlidir.)';
-            if (typeof showCustomConfirm === 'function') showCustomConfirm('Grafik Sıfırlama', msg, isle); else if (confirm(msg)) isle();
+
+            const confirmMsg = `⚠️ DİKKAT: ${labels[which] || 'Seçilen veriler'} Firebase bulut veritabanından ve sistemden KALICI OLARAK SİLİNECEKTİR!\n\nBu işlem geri alınamaz. Gerçekten tamamen silmek istediğinize emin misiniz?`;
+
+            const doDelete = async function() {
+                try {
+                    if (typeof showNotification === 'function') {
+                        showNotification('🗑️ Veriler Firebase bulutundan ve sistemden siliniyor...', 'info', 2000);
+                    }
+
+                    // 1. Bokashi Verilerini Gerçekten Sil
+                    if (which === 'bokashi' || which === 'all') {
+                        if (typeof window.clearFirestoreCollection === 'function') {
+                            await window.clearFirestoreCollection('bokashi');
+                        }
+                        try {
+                            localStorage.removeItem('bkvBokashi');
+                            localStorage.removeItem('bkvBokashiRecords');
+                        } catch(e) {}
+                        if (typeof window.renderBokashi === 'function') window.renderBokashi();
+                    }
+
+                    // 2. Satış ve Ciro Geçmişini Gerçekten Sil
+                    if (which === 'sales' || which === 'all') {
+                        if (typeof window.clearFirestoreCollection === 'function') {
+                            await window.clearFirestoreCollection('sales');
+                            await window.clearFirestoreCollection('sales_history');
+                        }
+                        try {
+                            localStorage.removeItem('bkvSalesHistory');
+                        } catch(e) {}
+                        if (typeof loadSalesHistory === 'function') loadSalesHistory();
+                    }
+
+                    // 3. Yoklama Kayıtlarını Gerçekten Sil
+                    if (which === 'att' || which === 'all') {
+                        if (typeof window.clearFirestoreCollection === 'function') {
+                            await window.clearFirestoreCollection('attendance');
+                        }
+                        try {
+                            localStorage.removeItem('bkvAttendance');
+                        } catch(e) {}
+                        if (typeof window.loadAttendanceForDate === 'function') window.loadAttendanceForDate();
+                    }
+
+                    // Sıfırlama filtre bayraklarını temizle
+                    try { localStorage.removeItem('bkvChartReset'); } catch(e) {}
+
+                    // Ekranı ve grafikleri anında yenile
+                    if (typeof renderDashCharts === 'function') renderDashCharts();
+                    if (typeof updateDashKPIs === 'function') updateDashKPIs();
+
+                    if (typeof showNotification === 'function') {
+                        showNotification(`✅ ${labels[which] || 'Veriler'} Firebase bulutundan tamamen silindi!`, 'success', 3500);
+                    }
+                } catch (err) {
+                    console.error('Kalıcı silme hatası:', err);
+                    if (typeof showNotification === 'function') {
+                        showNotification('❌ Silme işlemi sırasında bir hata oluştu: ' + err.message, 'error');
+                    }
+                }
+            };
+
+            if (typeof showCustomConfirm === 'function') {
+                showCustomConfirm('Kalıcı Bulut Silme', confirmMsg, doDelete);
+            } else if (confirm(confirmMsg)) {
+                doDelete();
+            }
         };
         window.restoreCharts = function() { try { localStorage.removeItem('bkvChartReset'); } catch(e) {} ciz(); if (typeof showNotification === 'function') showNotification('Tüm veriler grafiklerde yeniden gösteriliyor.', 'info'); };
         function ciz() {
@@ -11344,6 +11598,67 @@
         }
         if (mq.addEventListener) mq.addEventListener('change', onChange); else if (mq.addListener) mq.addListener(onChange);
         onChange();
+    })();
+    </script>
+
+
+    <!-- 📲 PWA Service Worker & Akıllı Yükleme Motoru -->
+    <script>
+    (function() {
+        // 1. Service Worker Kaydı
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./sw.js').then(function(reg) {
+                    console.log('✅ PWA Service Worker başarıyla kaydedildi! Kapsam:', reg.scope);
+                }).catch(function(err) {
+                    console.log('ℹ️ PWA SW kaydı (yerel dosya veya HTTPS kısıtı):', err);
+                });
+            });
+        }
+
+        // 2. Akıllı "Uygulamayı Cihaza Yükle" (Install Prompt)
+        window.deferredPWAInstallPrompt = null;
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            window.deferredPWAInstallPrompt = e;
+            console.log('📲 PWA: Uygulama yüklemeye hazır!');
+
+            // Eğer varsa yükleme butonlarını görünür yap
+            const installBtns = document.querySelectorAll('.pwa-install-btn');
+            installBtns.forEach(btn => {
+                btn.style.display = 'inline-flex';
+            });
+        });
+
+        window.addEventListener('appinstalled', function() {
+            window.deferredPWAInstallPrompt = null;
+            console.log('🎉 PWA: Uygulama cihaza başarıyla kuruldu!');
+            if (typeof showNotification === 'function') {
+                showNotification('🎉 BKV Tarım Kulübü uygulaması ana ekranınıza başarıyla yüklendi!', 'success');
+            }
+            const installBtns = document.querySelectorAll('.pwa-install-btn');
+            installBtns.forEach(btn => btn.style.display = 'none');
+        });
+
+        // Global Yükleme Tetikleyici Fonksiyon
+        window.triggerPWAInstall = async function() {
+            if (window.deferredPWAInstallPrompt) {
+                window.deferredPWAInstallPrompt.prompt();
+                const choice = await window.deferredPWAInstallPrompt.userChoice;
+                if (choice.outcome === 'accepted') {
+                    console.log('Kullanıcı PWA yüklemesini kabul etti.');
+                }
+                window.deferredPWAInstallPrompt = null;
+            } else {
+                // iOS veya doğrudan tarayıcı yönlendirmesi
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (isIOS) {
+                    alert('📲 iOS için Yükleme: Safari tarayıcınızın altındaki "Paylaş" (Share) simgesine dokunun ve ardından "Ana Ekrana Ekle" seçeneğini seçin.');
+                } else {
+                    alert('📲 Uygulamayı yüklemek için tarayıcınızın sağ üstündeki menüden (üç nokta) "Uygulamayı Yükle" veya "Ana Ekrana Ekle" seçeneğine tıklayabilirsiniz.');
+                }
+            }
+        };
     })();
     </script>
 
