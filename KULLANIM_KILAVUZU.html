@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKV Sürdürülebilir Tarım Kulübü - Kullanım Kılavuzu & Sistem Rehberi</title>
+    <link rel="icon" type="image/jpeg" href="Logo.jpg">
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #e8f5e9;
+            --secondary: #0284c7;
+            --text-main: #2c3e50;
+            --text-muted: #64748b;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --accent-warn: #f59e0b;
+            --accent-danger: #ef4444;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.65;
+            font-size: 15px;
+        }
+
+        /* Üst Bar & Navigasyon */
+        .top-navbar {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .brand-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            letter-spacing: -0.3px;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-print {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-back {
+            background: #e2e8f0;
+            color: var(--text-main);
+        }
+
+        .btn-back:hover {
+            background: #cbd5e1;
+        }
+
+        /* Ana Düzen */
+        .layout-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* Kenar Çubuğu (İçindekiler) */
+        .sidebar-toc {
+            position: sticky;
+            top: 80px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+
+        .toc-title {
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .toc-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 7px 10px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.15s;
+        }
+
+        .toc-link:hover {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding-left: 14px;
+        }
+
+        /* İçerik Alanı */
+        .content-area {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Kapak Alanı */
+        .doc-header {
+            text-align: center;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        .doc-header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .doc-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary-dark);
+            line-height: 1.25;
+            margin-bottom: 8px;
+        }
+
+        .doc-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .doc-meta-pills {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-pill {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Bölüm Başlıkları ve Metin */
+        section {
+            margin-bottom: 45px;
+            scroll-margin-top: 90px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 22px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 14px;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin: 0 0 16px 22px;
+            color: #334155;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        /* Kutular (Callouts / Alerts) */
+        .callout {
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0;
+            font-size: 14px;
+            border-left: 4px solid;
+            background: #f8fafc;
+        }
+
+        .callout-info {
+            background: #f0f9ff;
+            border-color: #0284c7;
+            color: #0369a1;
+        }
+
+        .callout-success {
+            background: #f0fdf4;
+            border-color: #16a34a;
+            color: #15803d;
+        }
+
+        .callout-warn {
+            background: #fffbeb;
+            border-color: #d97706;
+            color: #b45309;
+        }
+
+        .callout-admin {
+            background: #fdf2f8;
+            border-color: #db2777;
+            color: #9d174d;
+        }
+
+        .callout strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 14.5px;
+        }
+
+        /* Tablolar */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 18px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #1e293b;
+            font-weight: 700;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            color: #334155;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        /* Rozetler */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .badge-admin { background: #fee2e2; color: #b91c1c; }
+        .badge-user { background: #e0f2fe; color: #0369a1; }
+        .badge-all { background: #dcfce7; color: #15803d; }
+
+        /* Adım Kutuları (Step by Step) */
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 14px;
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .step-num {
+            background: var(--primary);
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .step-content strong {
+            color: #1e293b;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* Baskı (Print to PDF) Stilleri */
+        @media print {
+            body {
+                background: white;
+                color: black;
+                font-size: 12pt;
+            }
+
+            .top-navbar, .sidebar-toc, .btn-action {
+                display: none !important;
+            }
+
+            .layout-container {
+                display: block;
+                padding: 0;
+                margin: 0;
+                max-width: 100%;
+            }
+
+            .content-area {
+                border: none;
+                box-shadow: none;
+                padding: 0;
+            }
+
+            section {
+                page-break-inside: avoid;
+                margin-bottom: 30px;
+            }
+
+            h2 {
+                color: #1b5e20 !important;
+                border-bottom: 2px solid #1b5e20;
+            }
+
+            .callout {
+                border-left-width: 6px;
+            }
+        }
+
+        /* Mobil Uyum */
+        @media (max-width: 860px) {
+            .layout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-toc {
+                display: none;
+            }
+
+            .content-area {
+                padding: 22px 18px;
+            }
+
+            .doc-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Üst Menü -->
+    <header class="top-navbar">
+        <div class="brand-container">
+            <img src="Logo.jpg" alt="Kulüp Logosu" class="brand-logo" onerror="this.style.display='none'">
+            <div class="brand-title">BKV Sürdürülebilir Tarım Kulübü</div>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-action btn-print" onclick="window.print()">
+                <span>📄</span> PDF Olarak Kaydet / Yazdır
+            </button>
+            <a href="BKV SÜRDÜRÜLEBİLİR TARIM KULÜBÜ BİLGİ VE YÖNETİM PANELİ.html" class="btn-action btn-back" onclick="if(window.opener || window.history.length > 1){ try { window.close(); } catch(e){} }">
+                <span>🔙</span> Panele Dön
+            </a>
+        </div>
+    </header>
+
+    <div class="layout-container">
+        
+        <!-- İçindekiler (Kenar Çubuğu) -->
+        <aside class="sidebar-toc">
+            <div class="toc-title">Rehber İçindekiler</div>
+            <ul class="toc-list">
+                <li><a href="#sec-giris" class="toc-link">1. Giriş ve Genel Bakış</a></li>
+                <li><a href="#sec-yetkiler" class="toc-link">2. Roller ve Yetki Matrisi</a></li>
+                <li><a href="#sec-tema-pwa" class="toc-link">3. Arayüz, Temalar ve PWA</a></li>
+                <li><a href="#sec-dashboard" class="toc-link">4. Anasayfa ve Günlük Görevler</a></li>
+                <li><a href="#sec-portal" class="toc-link">5. Yönetim & Mesajlaşma</a></li>
+                <li><a href="#sec-bokashi" class="toc-link">6. Bokashi Kompost Takibi</a></li>
+                <li><a href="#sec-uretim-satis" class="toc-link">7. Üretim, Hasat ve Satış</a></li>
+                <li><a href="#sec-tohum" class="toc-link">8. Tohum Bankası</a></li>
+                <li><a href="#sec-barkod" class="toc-link">9. Barkod / QR & Kasa</a></li>
+                <li><a href="#sec-ayarlar" class="toc-link">10. Ayarlar ve Üye Yönetimi</a></li>
+                <li><a href="#sec-bulut" class="toc-link">11. Bulut & Çevrimdışı Çalışma</a></li>
+                <li><a href="#sec-sss" class="toc-link">12. Sıkça Sorulan Sorular</a></li>
+            </ul>
+        </aside>
+
+        <!-- İçerik Alanı -->
+        <main class="content-area">
+
+            <!-- Başlık & Kapak -->
+            <div class="doc-header">
+                <img src="Logo.jpg" alt="Logo" onerror="this.style.display='none'">
+                <h1 class="doc-title">BİLGİ VE YÖNETİM SİSTEMİ</h1>
+                <div class="doc-subtitle">Resmi Kullanım Kılavuzu ve İşletim Dokümantasyonu</div>
+                <div class="doc-meta-pills">
+                    <span class="meta-pill">🌱 Sürdürülebilir Tarım</span>
+                    <span class="meta-pill">☁️ Google Cloud Firestore</span>
+                    <span class="meta-pill">📱 PWA Çevrimdışı Destekli</span>
+                    <span class="meta-pill">🔒 Rol Tabanlı Güvenlik</span>
+                </div>
+            </div>
+
+            <!-- 1. GİRİŞ -->
+            <section id="sec-giris">
+                <h2><span>🌱</span> 1. Giriş ve Genel Bakış</h2>
+                <p>
+                    <strong>BKV Sürdürülebilir Tarım Kulübü Bilgi ve Yönetim Sistemi</strong>; okul kulübümüzün günlük tarımsal faaliyetlerini, kompost (Bokashi) fermantasyon süreçlerini, hasat ve satış gelirlerini, tohum envanterini ve öğrenci görev dağılımlarını tek bir merkezden kayıt altına almak için geliştirilmiş modern bir web ve mobil yönetim platformudur.
+                </p>
+                <div class="callout callout-info">
+                    <strong>Sistemin Temel Amacı:</strong>
+                    Tüm kulüp üyelerinin eşit, şeffaf ve gerçek zamanlı olarak tarımsal üretime katılmasını sağlamak; kâğıt israfını önleyerek tüm kulüp geçmişini bulut üzerinde güvenle arşivlemektir.
+                </div>
+                <h3>Temel Özellikler:</h3>
+                <ul>
+                    <li><strong>Gerçek Zamanlı Bulut Senkronizasyonu:</strong> Google Cloud Firestore altyapısı sayesinde bir cihazda yapılan ekleme veya güncelleme saniyeler içinde diğer tüm cihazlarda güncellenir.</li>
+                    <li><strong>PWA (Progressive Web App):</strong> Uygulama tarayıcıdan doğrudan akıllı telefonlara ve bilgisayarlara uygulama gibi yüklenebilir.</li>
+                    <li><strong>Çevrimdışı (Offline) Desteği:</strong> İnternet bağlantınız kopsa bile sistem kesilmez; yerel hafıza devreye girer ve internet geldiğinde bulutla senkronize olur.</li>
+                </ul>
+            </section>
+
+            <!-- 2. ROLLER VE YETKİLER -->
+            <section id="sec-yetkiler">
+                <h2><span>👥</span> 2. Roller ve Yetki Matrisi</h2>
+                <p>Sistemde veri güvenliğini korumak amacıyla 2 farklı kullanıcı düzeyi bulunmaktadır (Normal Üye ve Yönetici):</p>
+                
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Özellik / Yetki</th>
+                                <th>Normal Üye</th>
+                                <th>Yönetici (Admin)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Giriş Yapma & Profil Düzenleme</td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Kendisine Atanan Görevi Tamamlama</td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Yeni Görev Ekleme</td>
+                                <td><span class="badge badge-admin">Hayır</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Görev & Sorumlu Düzenleme (✏️)</td>
+                                <td><span class="badge badge-admin">Hayır</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Görev Silme (❌)</td>
+                                <td><span class="badge badge-admin">Hayır</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Satış Geçmişi & Grafikleri Sıfırlama</td>
+                                <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Gelen Mesajları Silme</td>
+                                <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Üye Ekleme / Silme / Rol Değiştirme</td>
+                                <td><span class="badge badge-admin">Hayır</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </section>
+
+            <!-- 3. ARAYÜZ, TEMALAR VE PWA -->
+            <section id="sec-tema-pwa">
+                <h2><span>🎨</span> 3. Arayüz Modları, Temalar ve PWA Kurulumu</h2>
+                
+                <h3>Arayüz Düzenleri:</h3>
+                <ul>
+                    <li><strong>Modern Dikey Mod (Sidebar):</strong> Sol tarafta katlanabilir simgeli menü sunar. Geniş ekranlar ve tabletler için son derece ergonomiktir.</li>
+                    <li><strong>Klasik Üst Menü Modu (Top Navbar):</strong> Ekranın en üstünde yatay butonlar halinde menü sunar. Alışılmış masaüstü kullanımına uygundur.</li>
+                </ul>
+
+                <h3>Tema Seçenekleri & Bulut Kaydı:</h3>
+                <p>
+                    Kullanıcılar paneli 5 farklı cam/Frutiger Aero renk temasıyla (💧 Buz Mavisi, 🌿 Doğa Zümrüt, 🍊 Sıcak Amber, 🍷 Kraliyet Yakutu ve 🌸 Pudra Rose Gold) özelleştirebilirler. Seçtiğiniz tema ve arayüz modu doğrudan <strong>Google Cloud kullanıcı profilinize kaydedilir</strong>. Başka bir cihazdan veya telefondan giriş yapsanız dahi kendi temanız otomatik açılır.
+                </p>
+
+                <div class="callout callout-success">
+                    <strong>📲 Uygulamayı Telefona Yükleme (PWA):</strong>
+                    <div class="step-container">
+                        <div class="step-item">
+                            <div class="step-num">1</div>
+                            <div class="step-content"><strong>Android (Chrome):</strong> Tarayıcıda sağ üstteki 3 noktaya basın ve <em>"Ana Ekrana Ekle"</em> veya <em>"Uygulamayı Yükle"</em> seçeneğine dokunun.</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-num">2</div>
+                            <div class="step-content"><strong>iOS (Safari):</strong> Ekranın altındaki <em>"Paylaş"</em> (yukarı oklu kutu) simgesine basın, açılan menüden <em>"Ana Ekrana Ekle"</em> butonuna dokunun.</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-num">3</div>
+                            <div class="step-content"><strong>Masaüstü (Chrome / Edge):</strong> Adres çubuğunun en sağında beliren <em>"Uygulamayı Yükle"</em> simgesine tıklayın.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. DASHBOARD & GÖREVLER -->
+            <section id="sec-dashboard">
+                <h2><span>📋</span> 4. Anasayfa ve Günlük Görev Yönetimi</h2>
+                <p>Anasayfa, kulübün günlük nabzını tutan ana kontrol merkezidir:</p>
+                <ul>
+                    <li><strong>Canlı Hava Durumu:</strong> Tarımsal faaliyetler için anlık sıcaklık, nem oranı, rüzgar hızı ve gökyüzü durumunu görüntüler. Şehir ayarı kaydedilebilir.</li>
+                    <li><strong>KPI Özet Kutuları:</strong> Tamamlanmayı bekleyen görev sayısı, kulüp mesajları, toplam satış cirosu ve aylık kompost miktarı tek bakışta izlenir.</li>
+                    <li><strong>Hızlı Not Defteri:</strong> Günlük toplantı veya saha notları anında buraya yazılabilir; <em>"Word Olarak İndir"</em> butonu ile tek tıkla resmi belgeye dönüştürülebilir.</li>
+                </ul>
+
+                <h3>Günlük Görevler Tablosu Kullanımı:</h3>
+                <div class="step-container">
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <strong>Görev Ekleme (Yalnızca Admin):</strong> Görev kutusuna yapılacak işi yazın. Yanındaki açılır listeden sorumlu öğrenciyi seçin (veya genel görev için boş bırakın) ve <em>"Ekle ➕"</em> butonuna basın.
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <strong>Görevi ve Sorumluyu Düzenleme (✏️):</strong> Yöneticiler görevin yanındaki sarı <em>"Düzenle ✏️"</em> butonuna bastığında özel modal açılır. Buradan hem görev açıklaması hem de atanan kişi değiştirilip kaydedilebilir.
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <strong>Görevi Tamamlama:</strong> Görev kutucuğunu işaretleyin. Görev sahibinin adı ve tamamlanma durumu anında tüm panellerde güncellenir.
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <strong>Tarih Arşivi:</strong> Tarih seçiciden geçmiş bir güne giderek o gün hangi görevlerin yapıldığını arşiv olarak inceleyebilirsiniz.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. PORTAL & MESAJLAŞMA -->
+            <section id="sec-portal">
+                <h2><span>💬</span> 5. Yönetim İşlemleri ve Öğrenci Portalı</h2>
+                <p>
+                    Öğrenci portalı, kulüp içi iletişimin ve bireysel performans takibinin yapıldığı özel alandır:
+                </p>
+                <ul>
+                    <li><strong>Bireysel Görevler:</strong> Öğrenci sisteme girdiğinde yalnızca kendisine atanan görevleri filtreleyip öncelikli olarak görebilir.</li>
+                    <li><strong>Güvenli Mesajlaşma Kutusu:</strong> Öğrenciler ve yöneticiler kulüp çalışmaları hakkında birbirlerine dahili mesaj gönderebilir. Yeni mesaj geldiğinde menüdeki sayaç anında bildirim verir.</li>
+                    <li><strong>Mesaj Silme Güvenliği:</strong> Gereksiz veya okunmuş mesajları silme yetkisi veri güvenliği gereği yalnızca yöneticilere açıktır.</li>
+                </ul>
+            </section>
+
+            <!-- 6. BOKASHI KOMPOST -->
+            <section id="sec-bokashi">
+                <h2><span>♻️</span> 6. Bokashi Kompost Takip Sistemi</h2>
+                <p>
+                    Okul yemekhanesinden ve bahçeden toplanan organik atıkların fermantasyon yoluyla gübreye dönüştürüldüğü Bokashi kovalarının takibidir:
+                </p>
+                <ul>
+                    <li><strong>Kova Girişi:</strong> Kova numarası, atık türü (sebze artığı, meyve kabuğu vb.), kilogramı ve başlatılma tarihi kaydedilir.</li>
+                    <li><strong>Olgunlaşma Süresi:</strong> Kovanın hava almadan fermente olması gereken 14 günlük süre sistem tarafından otomatik hesaplanır.</li>
+                    <li><strong>Aylık Trend Grafiği:</strong> Hangi ay kaç kilogram atığın toprağa geri kazandırıldığı canlı çubuk grafikte görselleştirilir.</li>
+                    <li><strong>Grafiği Sıfırlama:</strong> Yöneticiler yeni dönem başında <em>"↺ Sıfırla"</em> butonuna bastığında hem yerel hafıza hem de bulut koleksiyonu kalıcı olarak temizlenir.</li>
+                </ul>
+            </section>
+
+            <!-- 7. ÜRETİM VE SATIŞ -->
+            <section id="sec-uretim-satis">
+                <h2><span>🌾</span> 7. Üretim, Hasat ve Satış / Finans Yönetimi</h2>
+                <p>Kulüp bahçesindeki tarımsal üretimin ekonomik değerini takip eder:</p>
+                <ul>
+                    <li><strong>Ekim Kaydı:</strong> Hangi parsele ne ekildiği, tohum türü ve tahmini hasat dönemi girilir.</li>
+                    <li><strong>Hasat ve Satış Girişi:</strong> Hasat edilen ürünün miktarı, satılan kilo/adet ve birim satış fiyatı girildiğinde sistem toplam hasılatı otomatik hesaplar.</li>
+                    <li><strong>Ciro Trendi:</strong> Kulüp kasasına giren gelirler zaman çizelgesinde grafik olarak izlenir.</li>
+                    <li><strong>Satış Geçmişini Temizleme:</strong> Eski satış kayıtlarını temizleme butonu veri güvenliği gereği yalnızca yöneticilere özeldir.</li>
+                </ul>
+            </section>
+
+            <!-- 8. TOHUM BANKASI -->
+            <section id="sec-tohum">
+                <h2><span>🌰</span> 8. Tohum Bankası Envanteri</h2>
+                <p>Kulübün ata tohumu ve yerel tohum mirasını korumak için tasarlanmıştır:</p>
+                <ul>
+                    <li><strong>Tohum Kaydı:</strong> Tohum adı (örn: Ayaş Domatesi, Çitlekçi Fasulye), elde edildiği yıl, tohum türü ve stoktaki adet/gram miktarı saklanır.</li>
+                    <li><strong>Saklama ve Çimlenme Oranı:</strong> Hangi kavanozda veya dolapta olduğu, yapılan son çimlenme testinin başarı yüzdesi kayıt altında tutulur.</li>
+                </ul>
+            </section>
+
+            <!-- 9. BARKOD VE KASA -->
+            <section id="sec-barkod">
+                <h2><span>🏷️</span> 9. Barkod / QR Kod ve Kasa Sistemi</h2>
+                <p>Üretilen fide, tohum ve organik mahsullerin okul kermeslerinde veya satış günlerinde profesyonelce satılmasını sağlar:</p>
+                <ul>
+                    <li><strong>Etiket Yazdırma:</strong> Ürün için otomatik barkod ve QR kod oluşturulur; tek tıkla mini etiket yazıcısına veya standart yazıcıya gönderilebilir.</li>
+                    <li><strong>Barkod Okuyucu / Satış Kasası:</strong> Cihazın kamerası veya harici barkod okuyucu tabanca ile barkod okutulduğunda ürün otomatik tanınır, satışa eklenir ve stoğu düşülür.</li>
+                </ul>
+            </section>
+
+            <!-- 10. AYARLAR VE ÜYE YÖNETİMİ -->
+            <section id="sec-ayarlar">
+                <h2><span>⚙️</span> 10. Sistem Ayarları ve Üye Yönetimi</h2>
+                <p>Yöneticilerin kulüp organizasyonunu yönettiği kısımdır:</p>
+                <ul>
+                    <li><strong>Yeni Üye Ekleme:</strong> Yeni katılan öğrencinin adı, sınıfı, e-posta adresi ve geçici şifresi girilerek sisteme kaydedilir.</li>
+                    <li><strong>Yetki Güncelleme:</strong> Yöneticiler, sorumluluk alan bir üyenin yetkisini tek tıkla <em>"Normal Üye"</em> veya <em>"Yönetici"</em> olarak değiştirebilir.</li>
+                    <li><strong>Kullanıcı Silme:</strong> Kulüpten ayrılan veya mezun olan öğrencilerin kaydı sistemden güvenle silinebilir.</li>
+                </ul>
+            </section>
+
+            <!-- 11. BULUT VE OFFLINE -->
+            <section id="sec-bulut">
+                <h2><span>☁️</span> 11. Bulut Senkronizasyonu ve Çevrimdışı Çalışma</h2>
+                <p>
+                    Sistem Google Cloud altyapısıyla 7/24 bağlantılı çalışır:
+                </p>
+                <div class="callout callout-success">
+                    <strong>🟢 CANLI BAĞLI Durumu:</strong>
+                    İnternet bağlantınız açıkken üst bardaki ve profil panelindeki gösterge yeşil yanar; sunucuyla aranızdaki canlı gecikme (ping) süresi ölçülür.
+                </div>
+                <div class="callout callout-warn">
+                    <strong>🔴 ÇEVRİMDIŞI (İnternet Yok) Durumu:</strong>
+                    İnternet kesildiğinde sistem donmaz veya hata vermez. Gösterge anında kırmızıya döner ve sizi uyarır. Yaptığınız işlemler tarayıcının güvenli belleğine kaydedilir; internet tekrar geldiği anda tüm veriler bulutla eşitlenir.
+                </div>
+            </section>
+
+            <!-- 12. SSS -->
+            <section id="sec-sss">
+                <h2><span>❓</span> 12. Sıkça Sorulan Sorular (SSS)</h2>
+                
+                <h3>S: Şifremi unutursam ne yapmalıyım?</h3>
+                <p><strong>C:</strong> Kulüp yöneticinize (öğretmeninize) başvurun. Yöneticiniz "Ayarlar" sekmesinden yeni bir şifre tanımlayabilir veya Firebase üzerinden şifrenizi güncelleyebilir.</p>
+
+                <h3>S: Verilerim silinir mi veya kaybolur mu?</h3>
+                <p><strong>C:</strong> Hayır. Tüm veriler Google Cloud Firestore veri merkezlerinde depolanmaktadır. Telefonunuz bozulsa veya bilgisayar değişse bile e-postanızla giriş yaptığınızda her şey yerli yerinde durur.</p>
+
+                <h3>S: Görev tablosundaki sorumlu kişiyi değiştirebilir miyim?</h3>
+                <p><strong>C:</strong> Evet. Yöneticiler görevin yanındaki sarı "Düzenle ✏️" butonuna basarak sorumluyu başka bir öğrenciye aktarabilir veya "Atanmadı" seçeneğine çekebilir.</p>
+
+                <h3>S: Uygulamayı başka okullara veya kulüplere tanıtabilir miyiz?</h3>
+                <p><strong>C:</strong> Elbette. Bu kılavuzun üst kısmındaki "📄 PDF Olarak Kaydet / Yazdır" butonuna basarak dokümanı PDF formatında kaydedebilir ve sunumlarda kullanabilirsiniz.</p>
+            </section>
+
+            <!-- Belge Sonu -->
+            <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+                © 2026 BKV Sürdürülebilir Tarım Kulübü Yönetim Sistemi • Tüm Hakları Saklıdır.
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
