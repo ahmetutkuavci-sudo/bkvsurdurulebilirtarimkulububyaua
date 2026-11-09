@@ -3401,7 +3401,10 @@
                 <button type="button" class="aero-btn btn-green pwa-install-btn" onclick="triggerPWAInstall()" style="font-size: 12px; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px;" title="Uygulamayı Ana Ekrana Yükle">
                     📲 Uygulamayı Yükle
                 </button>
-                <a href="KULLANIM_KILAVUZU.html" target="_blank" class="aero-btn" style="font-size: 12px; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;" title="Resmi Kullanım Kılavuzunu Aç">
+                <button type="button" id="bkv-notif-btn" class="aero-btn" onclick="bkvEnableNotifications()" style="font-size: 12px; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px;" title="Yeni mesajlar için bildirimleri aç">
+                    🔔 Bildirimleri Aç
+                </button>
+                <a href="KULLANIM_KILAVUZU.html" onclick="return openGuide(event)" class="aero-btn" style="font-size: 12px; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;" title="Resmi Kullanım Kılavuzunu Aç">
                     📖 Kullanım Kılavuzu
                 </a>
                 <div style="display: flex; gap: 8px; align-items: center; margin-left: auto;">
@@ -4765,7 +4768,7 @@
                                     <button class="aero-btn" onclick="openProfileModal()" style="margin-top: 10px; font-size: 13px; padding: 10px 16px; display: inline-flex; align-items: center; gap: 8px; font-weight: bold;">
                                         👤 Profilim & Tema Menüsünü Aç
                                     </button>
-                                    <a href="KULLANIM_KILAVUZU.html" target="_blank" class="aero-btn" style="margin-top: 10px; margin-left: 8px; font-size: 13px; padding: 10px 16px; display: inline-flex; align-items: center; gap: 8px; font-weight: bold; text-decoration: none;">
+                                    <a href="KULLANIM_KILAVUZU.html" onclick="return openGuide(event)" class="aero-btn" style="margin-top: 10px; margin-left: 8px; font-size: 13px; padding: 10px 16px; display: inline-flex; align-items: center; gap: 8px; font-weight: bold; text-decoration: none;">
                                         📖 Kullanım Kılavuzu
                                     </a>
                                 </div>
@@ -9850,6 +9853,7 @@
             snapshot.forEach(docSnap => {
                 msgs.push({ id: docSnap.id, ...docSnap.data() });
             });
+            try { if (window.bkvHandleIncomingMessages) window.bkvHandleIncomingMessages(msgs); } catch(e) { console.warn('Bildirim hatası', e); }
             msgs.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
             localStorage.setItem('bkvMessages', JSON.stringify(msgs));
             if (typeof window.loadPortalMessages === 'function') {
@@ -11833,5 +11837,117 @@
     })();
     </script>
 
+
+<!-- ===== Kullanım Kılavuzu: uygulama içi katman (yeni sekme açmaz, oturum korunur) ===== -->
+<style>
+#guide-overlay{position:fixed;inset:0;z-index:2147483000;display:none;flex-direction:column;background:#f8fafc}
+#guide-overlay.open{display:flex}
+#guide-overlay .guide-bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:#1b5e20;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+#guide-overlay .guide-back{border:0;border-radius:10px;padding:10px 16px;font:inherit;font-size:14px;font-weight:800;background:#fff;color:#1b5e20;cursor:pointer}
+#guide-overlay .guide-ttl{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#guide-overlay iframe{flex:1 1 auto;width:100%;border:0;background:#fff}
+</style>
+<div id="guide-overlay" role="dialog" aria-label="Kullanım Kılavuzu">
+  <div class="guide-bar">
+    <button type="button" class="guide-back" onclick="closeGuide()">← Uygulamaya Dön</button>
+    <span class="guide-ttl">📖 Kullanım Kılavuzu</span>
+  </div>
+  <iframe id="guide-frame" title="Kullanım Kılavuzu"></iframe>
+</div>
+<script>
+(function(){
+  var ov=document.getElementById('guide-overlay'), fr=document.getElementById('guide-frame'), pushed=false;
+  window.openGuide=function(e){
+    if(e&&e.preventDefault)e.preventDefault();
+    try{ if(typeof closeProfileModal==='function')closeProfileModal(); }catch(_){}
+    if(!fr.getAttribute('src'))fr.src='KULLANIM_KILAVUZU.html';
+    ov.classList.add('open'); document.body.style.overflow='hidden';
+    try{ history.pushState({bkvGuide:1},''); pushed=true; }catch(_){ pushed=false; }
+    return false;
+  };
+  window.closeGuide=function(fromPop){
+    if(!ov.classList.contains('open'))return;
+    ov.classList.remove('open'); document.body.style.overflow='';
+    if(pushed&&fromPop!==true){ pushed=false; try{history.back();}catch(_){} } else pushed=false;
+  };
+  window.addEventListener('popstate',function(){ if(ov.classList.contains('open')){ pushed=false; closeGuide(true); } });
+  window.addEventListener('message',function(ev){ if(ev.data==='bkv-guide-close')closeGuide(); });
+})();
+</script>
+
+<!-- 🔔 Mesaj Bildirimleri (yeni mesaj gelince sistem bildirimi) -->
+<script>
+(function(){
+  var KEY='bkvNotifLastSeen';
+  var started=Date.now();
+  var first=true;
+
+  function me(){ return {
+    email:(sessionStorage.getItem('currentEmail')||'').toLowerCase(),
+    grade:(sessionStorage.getItem('currentGrade')||'').toLowerCase()
+  }; }
+  function forMe(m,u){
+    if(!m||!u.email||(m.fromEmail||'').toLowerCase()===u.email) return false;
+    if(m.targetType==='ALL') return true;
+    if(m.targetType==='USER') return String(m.targetValue||'').toLowerCase()===u.email;
+    if(m.targetType==='GRADE') return !!u.grade && u.grade.indexOf(String(m.targetValue||'').toLowerCase())>-1;
+    return false;
+  }
+  function unread(m,u){ return !(m.readBy||[]).some(function(x){return String(x).toLowerCase()===u.email;}); }
+
+  function show(m){
+    var title=(m.targetType==='ALL'?'📢 Duyuru: ':'💬 ')+(m.fromUser||'Yeni mesaj');
+    var body=(m.subject?m.subject+' — ':'')+String(m.body||'').slice(0,120);
+    var opts={body:body,icon:'Logo.jpg',badge:'Logo.jpg',tag:'bkv-msg-'+(m.id||m.createdAt),data:{url:'./'}};
+    if(document.visibilityState==='visible'){
+      if(typeof showNotification==='function') showNotification('💬 '+m.fromUser+': '+(m.subject||'Yeni mesaj'),'success');
+      return;
+    }
+    if(!('Notification' in window)||Notification.permission!=='granted') return;
+    if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration){
+      navigator.serviceWorker.getRegistration().then(function(reg){
+        if(reg&&reg.showNotification) reg.showNotification(title,opts); else new Notification(title,opts);
+      }).catch(function(){ try{new Notification(title,opts);}catch(_){} });
+    } else { try{new Notification(title,opts);}catch(_){} }
+  }
+
+  window.bkvHandleIncomingMessages=function(msgs){
+    var u=me(); if(!u.email) return;          // giriş yapılmadan işaretleme
+    var last=parseInt(localStorage.getItem(KEY+':'+u.email)||'0',10);
+    if(!last) last=started;                    // ilk kurulumda eski mesajlar için bildirim yağdırma
+    var fresh=msgs.filter(function(m){ return (m.createdAt||0)>last && forMe(m,u) && unread(m,u); })
+                  .sort(function(a,b){return (a.createdAt||0)-(b.createdAt||0);});
+    if(fresh.length>3){
+      // çok sayıda mesaj: tek özet bildirimi
+      show({id:'ozet-'+Date.now(),fromUser:'BKV Panel',subject:fresh.length+' yeni mesajınız var',body:'Mesajlar & Duyurular bölümünden okuyabilirsiniz.',targetType:'USER'});
+    } else fresh.forEach(show);
+    var maxTs=msgs.reduce(function(a,m){return Math.max(a,m.createdAt||0);},last);
+    localStorage.setItem(KEY+':'+u.email,String(Math.max(maxTs,Date.now()-1)));
+    first=false;
+  };
+
+  window.bkvEnableNotifications=function(){
+    if(!('Notification' in window)){
+      if(typeof showNotification==='function') showNotification('Bu tarayıcı bildirimleri desteklemiyor. iPhone için uygulamayı Ana Ekrana ekleyin.','warning'); return; }
+    if(Notification.permission==='denied'){
+      if(typeof showNotification==='function') showNotification('Bildirimler engellenmiş. Tarayıcı/uygulama ayarlarından izin verin.','warning'); return; }
+    Notification.requestPermission().then(function(p){
+      if(typeof showNotification==='function') showNotification(p==='granted'?'🔔 Bildirimler açıldı!':'Bildirim izni verilmedi.',p==='granted'?'success':'warning');
+      bkvNotifBtn();
+    });
+  };
+  function bkvNotifBtn(){
+    var b=document.getElementById('bkv-notif-btn'); if(!b||!('Notification' in window)) return;
+    if(Notification.permission==='granted'){ b.innerHTML='🔔 Bildirimler Açık'; b.disabled=true; b.style.opacity='.7'; }
+  }
+  document.addEventListener('DOMContentLoaded',bkvNotifBtn);
+  // İzin henüz sorulmadıysa, giriş sonrası ilk dokunuşta bir kez iste (iOS kullanıcı hareketi ister)
+  document.addEventListener('click',function once(){
+    if('Notification' in window && Notification.permission==='default' && sessionStorage.getItem('currentEmail')){
+      document.removeEventListener('click',once); Notification.requestPermission().then(bkvNotifBtn);
+    }
+  },true);
+})();
+</script>
 </body>
 </html>
