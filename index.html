@@ -5953,7 +5953,7 @@
                 sessionStorage.setItem('currentUser', validUser.username);
                 sessionStorage.setItem('currentGrade', validUser.grade || 'Belirtilmedi');
                 sessionStorage.setItem('currentEmail', validUser.email.toLowerCase().trim()); 
-                sessionStorage.setItem('currentRole', validUser.role || 'guest');
+                sessionStorage.setItem('currentRole', validUser.role || 'guest'); try { setTimeout(function(){ if (window.bkvHandleIncomingMessages && window.getSafeMessages) window.bkvHandleIncomingMessages(window.getSafeMessages()); }, 1500); } catch(e) {}
 
                 // 🎨 Kullanıcının Firebase'e kayıtlı Temasını ve Arayüz Modunu Yükle
                 if (validUser.theme) {
