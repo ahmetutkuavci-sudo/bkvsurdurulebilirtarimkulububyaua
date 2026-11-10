@@ -11,13 +11,16 @@
             --primary-dark: #1b5e20;
             --primary-light: #e8f5e9;
             --secondary: #0284c7;
-            --text-main: #2c3e50;
+            --secondary-dark: #0369a1;
+            --secondary-light: #e0f2fe;
+            --text-main: #1e293b;
             --text-muted: #64748b;
             --bg-page: #f8fafc;
             --bg-card: #ffffff;
             --border: #e2e8f0;
             --accent-warn: #f59e0b;
             --accent-danger: #ef4444;
+            --accent-purple: #7e22ce;
             --radius: 12px;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
         }
@@ -40,8 +43,9 @@
         .top-navbar {
             position: sticky;
             top: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
             padding: 12px 24px;
             display: flex;
@@ -111,11 +115,11 @@
 
         /* Ana Düzen */
         .layout-container {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
             padding: 30px 20px;
             display: grid;
-            grid-template-columns: 280px 1fr;
+            grid-template-columns: 290px 1fr;
             gap: 30px;
             align-items: start;
         }
@@ -148,15 +152,15 @@
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         .toc-link {
             display: block;
-            padding: 7px 10px;
+            padding: 6px 10px;
             color: var(--text-main);
             text-decoration: none;
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 600;
             border-radius: 6px;
             transition: all 0.15s;
@@ -165,7 +169,7 @@
         .toc-link:hover {
             background: var(--primary-light);
             color: var(--primary-dark);
-            padding-left: 14px;
+            padding-left: 13px;
         }
 
         /* İçerik Alanı */
@@ -175,6 +179,7 @@
             border-radius: var(--radius);
             padding: 40px;
             box-shadow: var(--shadow);
+            min-width: 0;
         }
 
         /* Kapak Alanı */
@@ -194,7 +199,7 @@
         }
 
         .doc-title {
-            font-size: 28px;
+            font-size: 27px;
             font-weight: 900;
             color: var(--primary-dark);
             line-height: 1.25;
@@ -202,7 +207,7 @@
         }
 
         .doc-subtitle {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--text-muted);
             font-weight: 500;
             margin-bottom: 15px;
@@ -211,7 +216,7 @@
         .doc-meta-pills {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
@@ -222,17 +227,24 @@
             border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
+            border: 1px solid rgba(46, 125, 50, 0.2);
+        }
+
+        .meta-pill-blue {
+            background: var(--secondary-light);
+            color: var(--secondary-dark);
+            border-color: rgba(2, 132, 199, 0.25);
         }
 
         /* Bölüm Başlıkları ve Metin */
         section {
-            margin-bottom: 45px;
+            margin-bottom: 48px;
             scroll-margin-top: 90px;
         }
 
         h2 {
             font-size: 20px;
-            font-weight: 800;
+            font-weight: 850;
             color: var(--primary-dark);
             margin-bottom: 16px;
             display: flex;
@@ -244,9 +256,19 @@
 
         h3 {
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 750;
             color: #1e293b;
             margin: 22px 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        h4 {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #334155;
+            margin: 14px 0 6px 0;
         }
 
         p {
@@ -265,12 +287,13 @@
 
         /* Kutular (Callouts / Alerts) */
         .callout {
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 14px 18px;
             margin: 18px 0;
             font-size: 14px;
             border-left: 4px solid;
             background: #f8fafc;
+            line-height: 1.6;
         }
 
         .callout-info {
@@ -291,6 +314,12 @@
             color: #b45309;
         }
 
+        .callout-danger {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
         .callout-admin {
             background: #fdf2f8;
             border-color: #db2777;
@@ -307,8 +336,9 @@
         .table-responsive {
             overflow-x: auto;
             margin: 18px 0;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
         table {
@@ -321,15 +351,17 @@
         th {
             background: #f1f5f9;
             color: #1e293b;
-            font-weight: 700;
+            font-weight: 750;
             padding: 10px 14px;
             border-bottom: 1px solid var(--border);
+            white-space: nowrap;
         }
 
         td {
             padding: 10px 14px;
             border-bottom: 1px solid var(--border);
             color: #334155;
+            vertical-align: top;
         }
 
         tr:last-child td {
@@ -353,6 +385,8 @@
         .badge-admin { background: #fee2e2; color: #b91c1c; }
         .badge-user { background: #e0f2fe; color: #0369a1; }
         .badge-all { background: #dcfce7; color: #15803d; }
+        .badge-warn { background: #fef3c7; color: #d97706; }
+        .badge-purple { background: #f3e8ff; color: #7e22ce; }
 
         /* Adım Kutuları (Step by Step) */
         .step-container {
@@ -369,6 +403,7 @@
             padding: 12px 16px;
             border-radius: 8px;
             border: 1px solid var(--border);
+            align-items: flex-start;
         }
 
         .step-num {
@@ -383,6 +418,7 @@
             font-weight: 800;
             font-size: 12px;
             flex-shrink: 0;
+            margin-top: 2px;
         }
 
         .step-content strong {
@@ -391,12 +427,57 @@
             margin-bottom: 2px;
         }
 
+        /* Feature Card Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 18px 0;
+        }
+
+        .feature-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .feature-card h4 {
+            margin: 0;
+            color: var(--primary-dark);
+            font-size: 14.5px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .feature-card p {
+            margin: 0;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        /* Kod / Değer kutucukları */
+        code {
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+            font-size: 12.5px;
+        }
+
         /* Baskı (Print to PDF) Stilleri */
         @media print {
             body {
                 background: white;
                 color: black;
-                font-size: 12pt;
+                font-size: 11pt;
             }
 
             .top-navbar, .sidebar-toc, .btn-action {
@@ -418,7 +499,7 @@
 
             section {
                 page-break-inside: avoid;
-                margin-bottom: 30px;
+                margin-bottom: 28px;
             }
 
             h2 {
@@ -427,12 +508,12 @@
             }
 
             .callout {
-                border-left-width: 6px;
+                border-left-width: 5px;
             }
         }
 
         /* Mobil Uyum */
-        @media (max-width: 860px) {
+        @media (max-width: 900px) {
             .layout-container {
                 grid-template-columns: 1fr;
             }
@@ -442,7 +523,7 @@
             }
 
             .content-area {
-                padding: 22px 18px;
+                padding: 24px 18px;
             }
 
             .doc-title {
@@ -460,6 +541,9 @@
             <div class="brand-title">BKV Sürdürülebilir Tarım Kulübü</div>
         </div>
         <div class="nav-actions">
+            <button class="btn-action btn-back" onclick="guideBack()" style="background:#fff;color:#1b5e20;border:1px solid #1b5e20;margin-right:8px">
+                <span>←</span> Uygulamaya Dön
+            </button>
             <button class="btn-action btn-print" onclick="window.print()">
                 <span>📄</span> PDF Olarak Kaydet / Yazdır
             </button>
@@ -472,18 +556,22 @@
         <aside class="sidebar-toc">
             <div class="toc-title">Rehber İçindekiler</div>
             <ul class="toc-list">
-                <li><a href="#sec-giris" class="toc-link">1. Giriş ve Genel Bakış</a></li>
+                                <li><a href="#sec-yenilikler" class="toc-link">⭐ Yenilikler (Neler Değişti?)</a></li>
+                
+<li><a href="#sec-giris" class="toc-link">1. Giriş ve Genel Bakış</a></li>
                 <li><a href="#sec-yetkiler" class="toc-link">2. Roller ve Yetki Matrisi</a></li>
-                <li><a href="#sec-tema-pwa" class="toc-link">3. Arayüz, Temalar ve PWA</a></li>
-                <li><a href="#sec-dashboard" class="toc-link">4. Anasayfa ve Günlük Görevler</a></li>
-                <li><a href="#sec-portal" class="toc-link">5. Yönetim & Mesajlaşma</a></li>
-                <li><a href="#sec-bokashi" class="toc-link">6. Bokashi Kompost Takibi</a></li>
-                <li><a href="#sec-uretim-satis" class="toc-link">7. Üretim, Hasat ve Satış</a></li>
-                <li><a href="#sec-tohum" class="toc-link">8. Tohum Bankası</a></li>
-                <li><a href="#sec-barkod" class="toc-link">9. Barkod / QR & Kasa</a></li>
-                <li><a href="#sec-ayarlar" class="toc-link">10. Ayarlar ve Üye Yönetimi</a></li>
-                <li><a href="#sec-bulut" class="toc-link">11. Bulut & Çevrimdışı Çalışma</a></li>
-                <li><a href="#sec-sss" class="toc-link">12. Sıkça Sorulan Sorular</a></li>
+                <li><a href="#sec-tema-pwa" class="toc-link">3. Arayüz (Aero 2.0), Tema & Profil</a></li>
+                <li><a href="#sec-dashboard" class="toc-link">4. Anasayfa, Görevler, Notlar & Sepet</a></li>
+                <li><a href="#sec-portal" class="toc-link">5. Yönetim & Öğrenci Portalı</a></li>
+                <li><a href="#sec-bokashi" class="toc-link">6. Bokashi Biyo-Kompost İstasyonu</a></li>
+                <li><a href="#sec-uretim" class="toc-link">7. Üretimlerim (Girdi, Süreç, Çıktı)</a></li>
+                <li><a href="#sec-tohum" class="toc-link">8. Tohum Bankası & Ekim Takvimi</a></li>
+                <li><a href="#sec-meteoroloji" class="toc-link">9. Tarımsal Meteoroloji İstasyonu</a></li>
+                <li><a href="#sec-barkod" class="toc-link">10. Barkod, Satış Kasası & Stok</a></li>
+                <li><a href="#sec-analitik" class="toc-link">11. Tablo & Canlı Grafikler</a></li>
+                <li><a href="#sec-ayarlar" class="toc-link">12. Sistem Ayarları & Cihaz Defteri</a></li>
+                <li><a href="#sec-bulut" class="toc-link">13. Bulut Senkronizasyonu & PWA</a></li>
+                <li><a href="#sec-sss" class="toc-link">14. Sıkça Sorulan Sorular (SSS)</a></li>
             </ul>
         </aside>
 
@@ -494,278 +582,966 @@
             <div class="doc-header">
                 <img src="Logo.jpg" alt="Logo" onerror="this.style.display='none'">
                 <h1 class="doc-title">BİLGİ VE YÖNETİM SİSTEMİ</h1>
-                <div class="doc-subtitle">Resmi Kullanım Kılavuzu ve İşletim Dokümantasyonu</div>
+                <div class="doc-subtitle">Resmi Kullanım Kılavuzu ve Kapsamlı Sistem İşletim Dokümantasyonu</div>
                 <div class="doc-meta-pills">
                     <span class="meta-pill">🌱 Sürdürülebilir Tarım</span>
-                    <span class="meta-pill">☁️ Google Cloud Firestore</span>
+                    <span class="meta-pill meta-pill-blue">☁️ Google Cloud Firestore Realtime</span>
                     <span class="meta-pill">📱 PWA Çevrimdışı Destekli</span>
-                    <span class="meta-pill">🔒 Rol Tabanlı Güvenlik</span>
+                    <span class="meta-pill">🚀 Aero 2.0 Çift Arayüz</span>
+                    <span class="meta-pill">📱 Telefon Uyumlu Yan Menü</span>
+                    <span class="meta-pill meta-pill-blue">🔔 Mesaj Bildirimleri</span>
+                    <span class="meta-pill">🔒 Rol & Cihaz Güvenliği</span>
                 </div>
             </div>
 
-            <!-- 1. GİRİŞ -->
+            
+            <!-- 0. YENİLİKLER -->
+            <section id="sec-yenilikler">
+                <h2><span>⭐</span> Yenilikler: Bu Sürümde Neler Değişti?</h2>
+                <p>
+                    Bu kılavuz yazılımın güncel sürümüne göre yenilenmiştir. Daha önce sistemi kullanan herkesin hızlıca fark edebilmesi için yeni ve değişen özellikler aşağıda özetlenmiş; ayrıntılar ilgili bölümlerde anlatılmıştır.
+                </p>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr><th>Özellik</th><th>Ne Değişti?</th><th>Ayrıntı</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>📱 Telefonda Yan Menü</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Yan Menü (Aero 2.0) arayüzü artık telefon ekranlarına uyumludur: menü ☰ düğmesiyle açılan bir çekmece olarak çalışır.</td>
+                                <td><a href="#sec-tema-pwa">Bölüm 3</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>📊 Tablo &amp; Grafikler</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Sekme adı "Tablo &amp; Grafikler" oldu; içinde <em>Grafikler</em> ve <em>Tablo</em> görünümleri ayrı düğmelerle seçilir. Anasayfadaki grafikler bu sekmeye taşındı; her grafik tek tek sıfırlanabilir.</td>
+                                <td><a href="#sec-analitik">Bölüm 11</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🔔 Mesaj Bildirimleri</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Yeni mesaj veya duyuru geldiğinde bildirim alırsınız. Profilimdeki "🔔 Bildirimleri Aç" düğmesi izin verildikten sonra "🔔 Bildirimler Açık" olarak görünür.</td>
+                                <td><a href="#sec-bulut">Bölüm 13</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>📝 Kayıt Ol</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Giriş ekranından "Kulübümüze Katılmak İçin Kayıt Ol" bağlantısıyla yeni üyeler kendi hesaplarını oluşturabilir (hesap <em>Normal Üye</em> olarak açılır).</td>
+                                <td><a href="#sec-tema-pwa">Bölüm 3</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🔲 Tam Ekran &amp; 🎓 BKV Akademi</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Üst barda (Klasik arayüzde) ve yan menünün altında (Yan Menü arayüzünde) Tam Ekran, BKV Akademi ve Çıkış düğmeleri yer alır. Tam ekran için <code>F11</code> kısayolu da çalışır.</td>
+                                <td><a href="#sec-tema-pwa">Bölüm 3</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🌾 Üretimlerim: Tüm Ürünler</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Genel Bakış, Girdiler, Süreç ve Çıktılar sekmelerine ek olarak tüm ürünleri maliyet ve gelir açısından karşılaştıran "🗂️ Tüm Ürünler" sekmesi eklendi.</td>
+                                <td><a href="#sec-uretim">Bölüm 7</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🌰 Tohum Bankası: Arama &amp; Filtre</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Tohum, çeşit veya yere göre arama; tür, kategori ve durum filtreleri; "Şimdi ekilebilir" ve "Dikkat gerekenler" görünümleri eklendi.</td>
+                                <td><a href="#sec-tohum">Bölüm 8</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>💬 Gelen Kutusu / Gönderilenler</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Mesajlar ekranında gelen ve gönderilen mesajlar ayrı görünümlerde listelenir; yöneticiler bir öğrenci talebinden tek tıkla o öğrenciye bilgilendirme mesajı başlatabilir.</td>
+                                <td><a href="#sec-portal">Bölüm 5</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>⚙️ Ayarlar Sekmesi Yeniden Düzenlendi</strong> <span class="badge badge-warn">Değişti</span></td>
+                                <td>Ayarlar dört bölüme ayrıldı. Tema, şifre ve profil işlemleri "Profilim" penceresine taşındı. Cihaz Kayıt Defterine arama ve filtreler eklendi.</td>
+                                <td><a href="#sec-ayarlar">Bölüm 12</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🏷️ Rozetler (Kurucu / Öğretmen / Yönetici)</strong> <span class="badge badge-warn">Değişti</span></td>
+                                <td>Üst bardaki kullanıcı kartı yetkiye göre "👑 Kurucu", "👑 Öğretmen", "👑 Yönetici" veya "👤 Normal Üye" rozetini gösterir.</td>
+                                <td><a href="#sec-yetkiler">Bölüm 2</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>📦 Stok ve Satış Kayıtları</strong> <span class="badge badge-warn">Değişti</span></td>
+                                <td>Stok değişiklikleri (düzenleme, satış, ürün silme) buluta yazılır ve sayfa yenilense de korunur. Buluta yazılamazsa ekranda uyarı çıkar.</td>
+                                <td><a href="#sec-barkod">Bölüm 10</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+<!-- 1. GİRİŞ -->
             <section id="sec-giris">
                 <h2><span>🌱</span> 1. Giriş ve Genel Bakış</h2>
                 <p>
-                    <strong>BKV Sürdürülebilir Tarım Kulübü Bilgi ve Yönetim Sistemi</strong>; okul kulübümüzün günlük tarımsal faaliyetlerini, kompost (Bokashi) fermantasyon süreçlerini, hasat ve satış gelirlerini, tohum envanterini ve öğrenci görev dağılımlarını tek bir merkezden kayıt altına almak için geliştirilmiş modern bir web ve mobil yönetim platformudur.
+                    <strong>BKV Sürdürülebilir Tarım Kulübü Bilgi ve Yönetim Sistemi</strong>; BJK-Kabataş Vakfı Özel Okulları Sürdürülebilir Tarım Kulübü'nün sera, bahçe ve atölye çalışmalarını, biyo-fermantasyon (Bokashi) süreçlerini, üretim dönemlerini, ata tohumu mirasını, hasat ve kermes satışlarını, yoklama ve kulüp içi mesajlaşma trafiğini tek bir merkezden kayıt altına almak ve yönetmek için geliştirilmiş yeni nesil bir tarımsal yönetim platformudur.
                 </p>
                 <div class="callout callout-info">
                     <strong>Sistemin Temel Amacı:</strong>
-                    Tüm kulüp üyelerinin eşit, şeffaf ve gerçek zamanlı olarak tarımsal üretime katılmasını sağlamak; kâğıt israfını önleyerek tüm kulüp geçmişini bulut üzerinde güvenle arşivlemektir.
+                    Kulüp öğretmenleri ve öğrencilerinin tüm tarımsal süreçlere şeffaf, gerçek zamanlı ve eşit katılımını sağlamak; kâğıt israfını tamamen ortadan kaldırarak tarımsal verileri ve ata tohumu envanterini güvenle geleceğe aktarmaktır.
                 </div>
-                <h3>Temel Özellikler:</h3>
-                <ul>
-                    <li><strong>Gerçek Zamanlı Bulut Senkronizasyonu:</strong> Google Cloud Firestore altyapısı sayesinde bir cihazda yapılan ekleme veya güncelleme saniyeler içinde diğer tüm cihazlarda güncellenir.</li>
-                    <li><strong>PWA (Progressive Web App):</strong> Uygulama tarayıcıdan doğrudan akıllı telefonlara ve bilgisayarlara uygulama gibi yüklenebilir.</li>
-                    <li><strong>Çevrimdışı (Offline) Desteği:</strong> İnternet bağlantınız kopsa bile sistem kesilmez; yerel hafıza devreye girer ve internet geldiğinde bulutla senkronize olur.</li>
-                </ul>
+                <h3>Sistemin Temel Bileşenleri ve Modülleri:</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><span>📋</span> Anasayfa & Günlük Görevler</h4>
+                        <p>Anlık hava durumu, 4 canlı KPI sayacı, günlük görev dağılımı, ortak not defteri ve alınacaklar listesi.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>👑</span> Yönetim & Öğrenci Portalı</h4>
+                        <p>Gelen/Gönderilen mesajlar, öğrenci mazeret/ayrılma/proje talepleri, günlük yoklama ve kazanım defteri; yeni mesajlarda bildirim.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>♻️</span> Bokashi Biyo-Kompost İstasyonu</h4>
+                        <p>Organik atık fermantasyonu, olgunlaşma takibi, kova sayaçları, sıvı gübre seyreltme hesaplayıcısı ve atık rehberi.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🌾</span> Üretimlerim Modülü</h4>
+                        <p>Ürün bazlı üretim dönemleri (m², yer, hedef), girdiler, tarımsal süreçler (sensör/pH/EC/nem), çıktılar, verim, maliyet analizi ve tüm ürünlerin karşılaştırması.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🌰</span> Tohum Bankası & Ekim Takvimi</h4>
+                        <p>Atalık ve yerel tohum envanteri, çimlenme testleri, raf ömrü uyarıları, 12 aylık ideal ekim takvimi ve stok yönetimi.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>⛅</span> Tarımsal Meteoroloji İstasyonu</h4>
+                        <p>81 il ve GPS konum hava durumu, don riski, ilaçlama ve sulama danışmanı, 7 günlük genişletilmiş tahmin.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🏷️</span> Barkod, Satış Kasası & Stok</h4>
+                        <p>Barkod oluşturma ve yazdırma, kamera/okuyucu ile barkod okuma, satış sepeti, otomatik stok düşümü ve ciro geçmişi.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>📊</span> Tablo & Canlı Grafikler</h4>
+                        <p>"Grafikler" ve "Tablo" görünümleri: Bokashi atık trendi, satış cirosu, yoklama katılım halkası ve Excel dosyası düzenleme/indirme. Telefonda da rahat okunur.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>⚙️</span> Sistem Ayarları & Güvenlik</h4>
+                        <p>Canlı kayan duyuru yayını, çalışma saati/anlık kilit kısıtlaması, cihaz kayıt defteri, üye ve yetki yönetimi.</p>
+                    </div>
+                </div>
             </section>
 
             <!-- 2. ROLLER VE YETKİLER -->
             <section id="sec-yetkiler">
-                <h2><span>👥</span> 2. Roller ve Yetki Matrisi</h2>
-                <p>Sistemde veri güvenliğini korumak amacıyla 2 farklı kullanıcı düzeyi bulunmaktadır (Normal Üye ve Yönetici):</p>
-                
+                <h2><span>👥</span> 2. Roller, Kullanıcı Türleri ve Yetki Matrisi</h2>
+                <p>
+                    Sistemde veri güvenliğini ve pedagojik düzeni korumak amacıyla iki katmanlı bir yetkilendirme modeli uygulanmaktadır: <strong>Kullanıcı Türü (Görev)</strong> ve <strong>Yetki Düzeyi (Rol)</strong>.
+                </p>
+
+                <h3>Kullanıcı Türleri:</h3>
+                <ul>
+                    <li><strong>🎓 Öğrenci:</strong> Kulüp faaliyetlerine aktif katılan öğrencilerdir. Günlük yoklama listelerine dahil edilirler; kendilerine atanan görevleri işaretleyebilir, mesajlaşabilir ve talep iletebilirler.</li>
+                    <li><strong>👩‍🏫 Öğretmen:</strong> Kulüp danışman öğretmenleridir. Doğrudan yoklama listesinde öğrenci olarak yer almazlar; yönetsel yetkilere sahiptirler.</li>
+                    <li><strong>⚙️ Sistem Hesabı:</strong> Genel kulüp ekranları, akıllı tahtalar veya kurucu profiller için tanımlanmış özel hesaplardır.</li>
+                </ul>
+
+                <h3>Yetki Rolleri ve Matrisi:</h3>
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
-                                <th>Özellik / Yetki</th>
-                                <th>Normal Üye</th>
-                                <th>Yönetici (Admin)</th>
+                                <th>Özellik / İşlem Yetkisi</th>
+                                <th>Normal Üye (Öğrenci)</th>
+                                <th>Yönetici (Admin / Öğretmen)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Giriş Yapma & Profil Düzenleme</td>
+                                <td>Giriş Yapma, Profilim, Şifre Değiştirme ve Tema Seçimi</td>
                                 <td><span class="badge badge-all">Evet</span></td>
                                 <td><span class="badge badge-all">Evet</span></td>
                             </tr>
                             <tr>
+                                <td>Beni Hatırla (Oturum Saklama)</td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                                                        <tr>
+                                <td>Giriş Ekranından Kendi Hesabını Oluşturma (Kayıt Ol)</td>
+                                <td><span class="badge badge-all">Evet (Normal Üye olarak)</span></td>
+                                <td><span class="badge badge-admin">— (Hesapları yöneticiler de tanımlayabilir)</span></td>
+                            </tr>
+                            <tr>
+                                <td>Tam Ekran Modu ve BKV Akademi Bağlantısı</td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Mesaj Bildirimi Alma (izin verildiyse)</td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            
+<tr>
                                 <td>Kendisine Atanan Görevi Tamamlama</td>
                                 <td><span class="badge badge-all">Evet</span></td>
                                 <td><span class="badge badge-all">Evet</span></td>
                             </tr>
                             <tr>
-                                <td>Yeni Görev Ekleme</td>
-                                <td><span class="badge badge-admin">Hayır</span></td>
-                                <td><span class="badge badge-all">Evet</span></td>
-                            </tr>
-                            <tr>
-                                <td>Görev & Sorumlu Düzenleme (✏️)</td>
-                                <td><span class="badge badge-admin">Hayır</span></td>
-                                <td><span class="badge badge-all">Evet</span></td>
-                            </tr>
-                            <tr>
-                                <td>Görev Silme (❌)</td>
-                                <td><span class="badge badge-admin">Hayır</span></td>
-                                <td><span class="badge badge-all">Evet</span></td>
-                            </tr>
-                            <tr>
-                                <td>Satış Geçmişi & Grafikleri Sıfırlama</td>
+                                <td>Yeni Görev Ekleme, Düzenleme (✏️) ve Silme (❌)</td>
                                 <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
                                 <td><span class="badge badge-all">Evet</span></td>
                             </tr>
                             <tr>
-                                <td>Gelen Mesajları Silme</td>
+                                <td>Ortak Not ve Alınacaklar Listesine Ekleme Yapma</td>
+                                <td><span class="badge badge-all">Evet (Saat Sınırı İçinde)</span></td>
+                                <td><span class="badge badge-all">Evet (Sınırsız)</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ortak Not & Alınacaklar Listesinden Silme / Düzenleme</td>
+                                <td><span class="badge badge-admin">Hayır</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Öğrenci Talep Formları Gönderme (Ayrılma, İzin, Proje)</td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                                <td><span class="badge badge-admin">— (Gereksiz)</span></td>
+                            </tr>
+                            <tr>
+                                <td>Öğrenci Talep Masası (Onaylama / Reddetme)</td>
                                 <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
                                 <td><span class="badge badge-all">Evet</span></td>
                             </tr>
                             <tr>
-                                <td>Üye Ekleme / Silme / Rol Değiştirme</td>
+                                <td>Yoklama Alma & Deftere Kazanım İşleme</td>
+                                <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Tüm Kulübe Toplu Mesaj / Duyuru Gönderme</td>
                                 <td><span class="badge badge-admin">Hayır</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Gelen Dahili Mesajları Silme</td>
+                                <td><span class="badge badge-admin">Hayır</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Üretimlerim & Tohum Bankası Kaydı Ekleme</td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Barkodlu Ürün Tanımlama & Stok Değiştirme</td>
+                                <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Kasa Satışı / Sepeti Tamamlama</td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Satış Geçmişi & Grafikleri Sıfırlama (Kalıcı Silme)</td>
+                                <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Cihaz Kayıt Defterini İnceleme & Silme</td>
+                                <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sistem Kısıtlama Saatleri & Anlık Kilitleme</td>
+                                <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Canlı Kayan Duyuru Metnini Yayınlama</td>
+                                <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
+                                <td><span class="badge badge-all">Evet</span></td>
+                            </tr>
+                            <tr>
+                                <td>Yeni Üye Ekleme, Rol & Görev Değiştirme, Üye Silme</td>
+                                <td><span class="badge badge-admin">Hayır (Gizli)</span></td>
                                 <td><span class="badge badge-all">Evet</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+            
+                <div class="callout callout-info">
+                    <strong>🏷️ Üst Çubuktaki Yetki Rozetleri:</strong>
+                    Adınızın yanında yetkinizi gösteren bir rozet görünür: <code>👑 Kurucu</code> (kurucu hesap), <code>👑 Öğretmen</code> (sınıf bilgisinde "Öğretmen" yazan yöneticiler), <code>👑 Yönetici</code> (diğer yöneticiler; sınıf/şube bilgisi de yanında gösterilir) ve <code>👤 Normal Üye</code>. Yönetici olmayan üyelerde <strong>Ayarlar</strong> sekmesi hiç görünmez.
+                </div>
 
+</section>
 
-            </section>
-
-            <!-- 3. ARAYÜZ, TEMALAR VE PWA -->
+            <!-- 3. ARAYÜZ, TEMALAR VE PROFİL -->
             <section id="sec-tema-pwa">
-                <h2><span>🎨</span> 3. Arayüz Modları, Temalar ve PWA Kurulumu</h2>
+                <h2><span>🎨</span> 3. Arayüz Mimarisi (Aero 2.0), Temalar, Profil & PWA</h2>
                 
-                <h3>Arayüz Düzenleri:</h3>
+                <h3>Çift Arayüz Mimarisi:</h3>
+                <p>
+                    Kullanıcılar paneli kendi kullanım alışkanlıklarına veya kullandıkları ekrana göre iki farklı arayüz modunda kullanabilirler:
+                </p>
                 <ul>
-                    <li><strong>Modern Dikey Mod (Sidebar):</strong> Sol tarafta katlanabilir simgeli menü sunar. Geniş ekranlar ve tabletler için son derece ergonomiktir.</li>
-                    <li><strong>Klasik Üst Menü Modu (Top Navbar):</strong> Ekranın en üstünde yatay butonlar halinde menü sunar. Alışılmış masaüstü kullanımına uygundur.</li>
+                    <li><strong>🚀 Modern Yan Menü (Aero 2.0 Komuta Merkezi):</strong> Sol tarafta yer alan katlanabilir (collapsible) simgeli kenar çubuğu ve üstteki akıllı başlık barı. Masaüstü ekranlarda, akıllı tahtalarda, tabletlerde ve artık <strong>telefonlarda</strong> hızlı ve ergonomik geçiş sağlar.</li>
+                    <li><strong>💎 Klasik Üst Menü Modu (Segmented Tab Bar):</strong> Ekranın en üstünde yatay kayan cam hap butonlar sunar. Alışılmış masaüstü deneyimini tercih edenler için idealdir.</li>
                 </ul>
 
-                <h3>Tema Seçenekleri & Bulut Kaydı:</h3>
+                                <h3>📱 Telefonda Yan Menü (Çekmece):</h3>
                 <p>
-                    Kullanıcılar paneli 5 farklı cam/Frutiger Aero renk temasıyla (💧 Buz Mavisi, 🌿 Doğa Zümrüt, 🍊 Sıcak Amber, 🍷 Kraliyet Yakutu ve 🌸 Pudra Rose Gold) özelleştirebilirler. Seçtiğiniz tema ve arayüz modu doğrudan <strong>Google Cloud kullanıcı profilinize kaydedilir</strong>. Başka bir cihazdan veya telefondan giriş yapsanız dahi kendi temanız otomatik açılır.
+                    Yan Menü arayüzü dar ekranlarda (yaklaşık 768 piksel ve altı) telefona uygun çalışır: menü varsayılan olarak gizlidir.
                 </p>
+                <ul>
+                    <li><strong>Açma:</strong> Üst bardaki <code>☰</code> düğmesine dokunun; menü soldan bir çekmece olarak açılır.</li>
+                    <li><strong>Kapatma:</strong> Menünün dışındaki karartılmış alana dokunun, bir sekmeyi seçin ya da klavyeden <code>Esc</code> tuşuna basın.</li>
+                    <li><strong>Masaüstünde:</strong> Aynı <code>☰</code> düğmesi menüyü daraltır/genişletir (yalnızca simgeler kalır).</li>
+                    <li><strong>Menü sekmeleri:</strong> Anasayfa, Yönetim/Öğrenci İşlemleri (okunmamış mesaj sayacıyla), Bokashi Takip, Üretimlerim, Tohum Bankası, Hava Durumu, Barkod/Satış, Tablo &amp; Grafikler ve (yalnızca yöneticilere) Ayarlar.</li>
+                </ul>
+                <div class="callout callout-info">
+                    <strong>Küçük ipucu:</strong>
+                    Telefonda Klasik (üst menü) görünümü tercih ederseniz Profilim penceresinden tek tıkla geri dönebilirsiniz; seçiminiz hesabınıza kaydedilir.
+                </div>
+
+                <h3>🔲 Tam Ekran ve 🎓 BKV Akademi Düğmeleri:</h3>
+                <ul>
+                    <li><strong>Tam Ekran:</strong> Akıllı tahta veya projeksiyon kullanımında paneli tüm ekrana yayar. Düğmeye basabilir ya da <code>F11</code> tuşunu kullanabilirsiniz.</li>
+                    <li><strong>BKV Akademi:</strong> BKV Akademi çevrimiçi portalını yeni sekmede açar; panel oturumunuz bundan etkilenmez.</li>
+                    <li><strong>Çıkış:</strong> Oturumu güvenle kapatır. Klasik arayüzde bu düğmeler üst barda, Yan Menü arayüzünde menünün en altında bulunur.</li>
+                </ul>
+
+                <h3>📝 Giriş Yapma ve "Kayıt Ol":</h3>
+                <div class="step-container">
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-content"><strong>Giriş:</strong> E-posta ve şifrenizi yazıp <em>"Giriş Yap"</em> düğmesine basın. Aynı cihazda tekrar şifre girmek istemiyorsanız <em>"🔐 Beni Hatırla"</em> kutusunu işaretleyin.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-content"><strong>Hesabınız yoksa:</strong> Giriş ekranındaki <em>"Kulübümüze Katılmak İçin Kayıt Ol"</em> bağlantısına dokunun; Ad Soyad, Sınıf/Şube (öğretmenler için "Öğretmen"), e-posta ve şifrenizi girip <em>"Kayıt Ol"</em> düğmesine basın.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-content"><strong>Hesap yetkisi:</strong> Kayıt Ol ile açılan hesaplar <strong>Normal Üye</strong> yetkisiyle başlar. Yönetici yetkisi gerekiyorsa kulüp yöneticisi Ayarlar &gt; Kayıtlı Üyeler bölümünden rolü değiştirir. Aynı e-posta ile ikinci kayıt yapılamaz.</div>
+                    </div>
+                </div>
+
+<h3>Frutiger Aero Renk Temaları:</h3>
+                <p>
+                    Sistem 5 farklı canlı cam temasını destekler:
+                </p>
+                <ul>
+                    <li>💧 <strong>Buz Mavisi (Varsayılan):</strong> Dinlendirici gökyüzü ve berrak su tonları.</li>
+                    <li>🌿 <strong>Doğa Zümrüt:</strong> Kulübün ruhuna uygun organik yeşil ve pınar ferahlığı.</li>
+                    <li>🍊 <strong>Sıcak Amber:</strong> Gün batımı ve toprak sıcaklığını yansıtan turuncu palet.</li>
+                    <li>🍷 <strong>Kraliyet Yakutu:</strong> Canlı yakut ve bordeaux tonları.</li>
+                    <li>🌸 <strong>Pudra Rose Gold:</strong> Dingin pudra ve pastel gül kurusu cam efekti.</li>
+                </ul>
 
                 <div class="callout callout-success">
-                    <strong>📲 Uygulamayı Telefona Yükleme (PWA):</strong>
-                    <div class="step-container">
-                        <div class="step-item">
-                            <div class="step-num">1</div>
-                            <div class="step-content"><strong>Android (Chrome):</strong> Tarayıcıda sağ üstteki 3 noktaya basın ve <em>"Ana Ekrana Ekle"</em> veya <em>"Uygulamayı Yükle"</em> seçeneğine dokunun.</div>
-                        </div>
-                        <div class="step-item">
-                            <div class="step-num">2</div>
-                            <div class="step-content"><strong>iOS (Safari):</strong> Ekranın altındaki <em>"Paylaş"</em> (yukarı oklu kutu) simgesine basın, açılan menüden <em>"Ana Ekrana Ekle"</em> butonuna dokunun.</div>
-                        </div>
-                        <div class="step-item">
-                            <div class="step-num">3</div>
-                            <div class="step-content"><strong>Masaüstü (Chrome / Edge):</strong> Adres çubuğunun en sağında beliren <em>"Uygulamayı Yükle"</em> simgesine tıklayın.</div>
-                        </div>
+                    <strong>☁️ Kişisel Tercihlerin Buluta Kaydedilmesi:</strong>
+                    Seçtiğiniz renk teması ve arayüz modu (Klasik / Yan Menü), doğrudan <code>users</code> koleksiyonundaki profilinize kaydedilir. Farklı bir telefondan, tabletten veya bilgisayardan giriş yaptığınızda sistem sizi tanır ve kendi tema tercihinizle otomatik açılır.
+                </div>
+
+                <h3>👤 "Profilim & Tercihler" Modalı Kullanımı:</h3>
+                <p>
+                    Ekranın üst kısmında yer alan kullanıcı bilgi kartına (Adınız, Sınıfınız ve Rolünüzün yazdığı kutucuk) tıkladığınızda özel profil penceresi açılır:
+                </p>
+                <ul>
+                    <li><strong>Hesap Bilgileri:</strong> Adınız, e-posta adresiniz, kayıtlı sınıfınız ve kulüp yetki seviyeniz görüntülenir.</li>
+                    <li><strong>Arayüz Görünümü & Modu:</strong> Klasik ve Yan Menü arasında tek tıkla anında geçiş yapabilirsiniz.</li>
+                    <li><strong>Renk Teması:</strong> 5 temadan dilediğinizi seçebilirsiniz.</li>
+                    <li><strong>Şifremi Değiştir:</strong> Mevcut şifrenizi girip en az 4 karakterlik yeni şifrenizi tanımlayarak şifrenizi güncelleyebilirsiniz (bulutla anında eşitlenir).</li>
+                    <li><strong>🔔 Bildirimleri Aç:</strong> Tarayıcı / telefon bildirim iznini etkinleştirir. İzin verildiğinde düğmenin yazısı <em>"🔔 Bildirimler Açık"</em> olur. İzin daha önce reddedildiyse tarayıcı veya uygulama ayarlarından yeniden açmanız gerekir.</li>
+                    <li><strong>📲 Uygulamayı Yükle:</strong> Cihazınıza PWA olarak tek tıkla kurar.</li>
+                    <li><strong>📖 Kullanım Kılavuzu:</strong> Uygulamadan çıkmadan kılavuzu açar.</li>
+                    <li><strong>🚪 Güvenli Çıkış Yap:</strong> Oturumunuzu kapatır.</li>
+                </ul>
+
+                <h3>📲 Uygulamayı Telefona ve Masaüstüne Yükleme (PWA):</h3>
+                <div class="step-container">
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-content"><strong>Android (Chrome):</strong> Tarayıcıda sağ üst köşedeki üç noktaya basın; <em>"Ana Ekrana Ekle"</em> veya <em>"Uygulamayı Yükle"</em> butonuna dokunun.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-content"><strong>iOS (Safari):</strong> Ekranın alt çubuğundaki <em>"Paylaş"</em> (yukarı oklu kare) simgesine dokunun; menüyü aşağı kaydırıp <em>"Ana Ekrana Ekle"</em> seçeneğini onaylayın.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-content"><strong>Masaüstü (Chrome / Edge):</strong> Adres çubuğunun sağ ucunda beliren monitör/indirme simgesine tıklayarak uygulamayı masaüstünüze yükleyin.</div>
                     </div>
                 </div>
             </section>
 
             <!-- 4. DASHBOARD & GÖREVLER -->
             <section id="sec-dashboard">
-                <h2><span>📋</span> 4. Anasayfa ve Günlük Görev Yönetimi</h2>
-                <p>Anasayfa, kulübün günlük nabzını tutan ana kontrol merkezidir:</p>
+                <h2><span>📋</span> 4. Anasayfa (Dashboard), Görevler, Notlar ve Alışveriş</h2>
+                <p>
+                    Anasayfa, kulübün günlük operasyonlarını ve canlı göstergelerini tek bakışta sunan komuta merkezidir:
+                </p>
+
+                <h3>📊 4'lü Canlı KPI Özet Kartları:</h3>
                 <ul>
-                    <li><strong>Canlı Hava Durumu:</strong> Tarımsal faaliyetler için anlık sıcaklık, nem oranı, rüzgar hızı ve gökyüzü durumunu görüntüler. Şehir ayarı kaydedilebilir.</li>
-                    <li><strong>KPI Özet Kutuları:</strong> Tamamlanmayı bekleyen görev sayısı, kulüp mesajları, toplam satış cirosu ve aylık kompost miktarı tek bakışta izlenir.</li>
-                    <li><strong>Hızlı Not Defteri:</strong> Günlük toplantı veya saha notları anında buraya yazılabilir; <em>"Word Olarak İndir"</em> butonu ile tek tıkla resmi belgeye dönüştürülebilir.</li>
+                    <li><strong>📋 Aktif Görevler:</strong> Seçili gün içerisinde tamamlanan ve bekleyen görevlerin oranı (örn: <code>3 / 5</code>). Kart tıklandığında görev listesine yumuşak kaydırma yapar.</li>
+                    <li><strong>♻️ Bokashi Atığı:</strong> Kulüp kovalarında dönüştürülen toplam organik atık miktarı (kg cinsinden). Tıklandığında doğrudan Bokashi takip modülünü açar.</li>
+                    <li><strong>⛅ Anlık Hava Sıcaklığı:</strong> Kulübün bulunduğu şehirdeki canlı sıcaklık ve hava ikonu. Tıklandığında Meteoroloji modülüne gider.</li>
+                    <li><strong>💬 Mesaj & Bildirim:</strong> Okunmamış yeni mesaj ve duyuru sayısı. Tıklandığında gelen kutusunu açar.</li>
                 </ul>
 
-                <h3>Günlük Görevler Tablosu Kullanımı:</h3>
+                <h3>📌 Günlük Görev Tablosu Kullanımı:</h3>
                 <div class="step-container">
                     <div class="step-item">
                         <div class="step-num">1</div>
                         <div class="step-content">
-                            <strong>Görev Ekleme (Yalnızca Admin):</strong> Görev kutusuna yapılacak işi yazın. Yanındaki açılır listeden sorumlu öğrenciyi seçin (veya genel görev için boş bırakın) ve <em>"Ekle ➕"</em> butonuna basın.
+                            <strong>Görev Ekleme (Yalnızca Yönetici):</strong> Görev açıklamasını yazın, açılır listeden sorumlu öğrenciyi seçin (veya genel görev için boş bırakın) ve <em>"Ekle ➕"</em> butonuna basın. Görev anında tüm cihazlara dağıtılır.
                         </div>
                     </div>
                     <div class="step-item">
                         <div class="step-num">2</div>
                         <div class="step-content">
-                            <strong>Görevi ve Sorumluyu Düzenleme (✏️):</strong> Yöneticiler görevin yanındaki sarı <em>"Düzenle ✏️"</em> butonuna bastığında özel modal açılır. Buradan hem görev açıklaması hem de atanan kişi değiştirilip kaydedilebilir.
+                            <strong>Görev ve Sorumlu Düzenleme (✏️):</strong> Yöneticiler görevin yanındaki sarı <em>"Düzenle ✏️"</em> butonuna bastığında özel modal açılır; hem görev metni hem de atanan öğrenci güncellenebilir.
                         </div>
                     </div>
                     <div class="step-item">
                         <div class="step-num">3</div>
                         <div class="step-content">
-                            <strong>Görevi Tamamlama:</strong> Görev kutucuğunu işaretleyin. Görev sahibinin adı ve tamamlanma durumu anında tüm panellerde güncellenir.
+                            <strong>Görevi Tamamlama:</strong> Görev kutucuğunu işaretleyin. Görev yalnızca atanan öğrenci veya yöneticiler tarafından tamamlandı olarak işaretlenebilir.
                         </div>
                     </div>
                     <div class="step-item">
                         <div class="step-num">4</div>
                         <div class="step-content">
-                            <strong>Tarih Arşivi:</strong> Tarih seçiciden geçmiş bir güne giderek o gün hangi görevlerin yapıldığını arşiv olarak inceleyebilirsiniz.
+                            <strong>Günlük Otomatik Sıfırlama & Tarih Arşivi:</strong> Görevler her gün için ayrı hafızalanır. Tarih seçiciden veya <code>◀</code> ve <code>▶</code> butonlarıyla geçmiş bir güne giderek o günkü tamamlanma durumunu arşiv olarak inceleyebilir; <em>"Bugün"</em> butonu ile bugüne dönebilirsiniz.
                         </div>
                     </div>
+                    <div class="step-item">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <strong>Excel'e Aktarma:</strong> <em>"📊 Excel"</em> butonuna basarak o günün görev listesini, sorumlularını ve durumunu <code>Tarim_Gorevleri_GG.AA.YYYY.xlsx</code> dosyası olarak indirebilirsiniz.
+                        </div>
+                    </div>
+                </div>
+
+                <h3>📝 Ortak Not Defteri:</h3>
+                <p>
+                    Kulüp toplantılarında veya bahçe incelemelerinde alınan anlık notların paylaşıldığı alandır. Eklenen her not yazarının adı, tarihi ve saatiyle birlikte canlı Firestore veritabanına yazılır. <em>"💾 Dışa Aktar (Word)"</em> butonuna basılarak tüm notlar tek tıkla resmi Microsoft Word (<code>.doc</code>) belgesine dönüştürülüp indirilebilir.
+                </p>
+
+                <h3>🛒 Alınacaklar Listesi:</h3>
+                <p>
+                    Bahçe, sera veya atölye için temin edilmesi gereken tohum, fide, saksı, hortum veya kompost malzemelerinin listesidir. Ürün adı, miktar ve birim fiyat girildiğinde sistem satır toplamını ve en altta <strong>Genel Toplam Bütçeyi</strong> anlık hesaplar. <em>"📊 Excel'e Aktar"</em> butonu ile satın alma listesi Excel tablosu olarak yazdırılabilir.
+                </p>
+                <div class="callout callout-info">
+                    <strong>📈 Grafikler nerede?</strong>
+                    Bokashi, satış ve yoklama grafikleri artık Anasayfada değil, <strong>Tablo &amp; Grafikler</strong> sekmesindedir (bkz. Bölüm 11). Anasayfa görev, not ve alınacaklar listesine odaklanır.
                 </div>
             </section>
 
             <!-- 5. PORTAL & MESAJLAŞMA -->
             <section id="sec-portal">
-                <h2><span>💬</span> 5. Yönetim İşlemleri ve Öğrenci Portalı</h2>
+                <h2><span>💬</span> 5. Yönetim & Öğrenci Portalı</h2>
                 <p>
-                    Öğrenci portalı, kulüp içi iletişimin ve bireysel performans takibinin yapıldığı özel alandır:
+                    Kulüp içi resmi iletişimin, öğrenci başvurularının, yoklama takibinin ve resmi kazanım kayıtlarının yapıldığı entegre portal modülüdür. Giriş yapan kullanıcının yetkisine göre menü adı dinamik olarak değişir (Öğrencide <strong>"Öğrenci İşlemleri 🎓"</strong>, Yöneticide <strong>"Yönetim İşlemleri 👑"</strong>).
+                </p>
+
+                <h3>1. ✉️ Mesajlar & Duyurular:</h3>
+                <ul>
+                    <li><strong>Bireysel Özel Mesaj (USER):</strong> Belirli bir üyeye veya öğretmene özel dahili mesaj gönderilir.</li>
+                    <li><strong>Sınıf / Şube Mesajı (GRADE):</strong> Belirli bir sınıfa (örn: <code>10-A</code> veya <code>9</code>) kayıtlı tüm öğrencilere toplu mesaj ulaştırılır.</li>
+                    <li><strong>Kulüp Genel Duyurusu (ALL):</strong> Yalnızca yöneticilere açık yetkidir; tüm kulüp üyelerinin gelen kutusuna genel duyuru düşürür.</li>
+                    <li><strong>Okundu / Okunmadı Takibi:</strong> Mesaj açıldığında okunmuş olarak işaretlenir; okunmamış mesajlar mavi şeritle belirtilir ve üst sayaçta görünür.</li>
+                    <li><strong>Tek Tıkla Yanıtlama (RE:):</strong> Gelen mesajın altındaki <em>"↩️ Yanıtla"</em> butonu alıcıyı ve konuyu otomatik doldurur.</li>
+                    <li><strong>🔔 Mesaj Bildirimi:</strong> Panel açıkken yeni mesaj ekranda kısa bir bildirim olarak belirir. Panel arka plandaysa (ve bildirim izni verilmişse) cihazın bildirimi olarak görünür. Aynı anda çok sayıda mesaj gelirse tek bir özet bildirimi gösterilir. Ayrıntılar için Bölüm 13'e bakın.</li>
+                    <li><strong>📥 Gelen Kutusu / 📤 Gönderilenler:</strong> Mesaj listesinin üstündeki düğmelerle gelen mesajlarınız (sayısıyla birlikte) ile gönderdiğiniz mesajlar arasında geçiş yaparsınız. <em>"🔄 Yenile"</em> ile liste tazelenir.</li>
+                </ul>
+
+                <h3>2. 📝 Öğrenci Talep Formları (Öğrenci Tarafı):</h3>
+                <p>Öğrenciler veli veya idareye gitmeden önce kulüp içi resmi bildirimlerini sistem üzerinden 3 kategoride iletebilirler. Gönderilen talepler ve durumları (bekliyor, onaylandı, reddedildi, yönetici notu) aynı ekranın altındaki <strong>"📋 Gönderdiğim Talepler &amp; Başvuru Durumları"</strong> bölümünde izlenir:</p>
+                <ul>
+                    <li><strong>🔴 Kulüpten Ayrılma Talebi:</strong> Sınav yoğunluğu, etüt, sağlık veya başka kulüp tercihi gerekçesi ve açıklamasıyla iletilir.</li>
+                    <li><strong>📄 Mazeret / İzin Bildirimi:</strong> Kulüp dersine veya saha çalışmasına katılamayacağı tarih ve mazeret türü (rapor, okul temsiliyeti vb.) girilerek bildirilir.</li>
+                    <li><strong>💡 Proje & Etkinlik Önerisi:</strong> Kulüp bahçesinde uygulanmasını istedikleri dikey tarım, kompost veya sulama fikirleri kategori seçilerek sunulur.</li>
+                </ul>
+
+                <h3>3. 📑 Öğrenci Talep Masası (Yönetici Tarafı):</h3>
+                <p>
+                    Yöneticiler öğrencilerden gelen tüm talepleri kategoriye göre (Tümü, Ayrılma, Mazeret, Proje) filtreleyebilir. Her talep için <em>"✅ Onayla"</em> veya <em>"❌ Reddet"</em> butonuna basılarak öğrenciye iletilecek açıklama notu girilir (boş bırakılırsa standart bir onay/ret notu yazılır). Durum öğrencinin kendi ekranında güncellenir.
                 </p>
                 <ul>
-                    <li><strong>Bireysel Görevler:</strong> Öğrenci sisteme girdiğinde yalnızca kendisine atanan görevleri filtreleyip öncelikli olarak görebilir.</li>
-                    <li><strong>Güvenli Mesajlaşma Kutusu:</strong> Öğrenciler ve yöneticiler kulüp çalışmaları hakkında birbirlerine dahili mesaj gönderebilir. Yeni mesaj geldiğinde menüdeki sayaç anında bildirim verir.</li>
-                    <li><strong>Mesaj Silme Güvenliği:</strong> Gereksiz veya okunmuş mesajları silme yetkisi veri güvenliği gereği yalnızca yöneticilere açıktır.</li>
+                    <li><strong>✉️ Bilgilendirme mesajı:</strong> Talep kartındaki mesaj düğmesi Mesajlar ekranını açar; alıcı ve konu ("Bilgilendirme: ...") otomatik doldurulur.</li>
+                    <li><strong>🗑️ Sil:</strong> Sonuçlanmış veya gereksiz talep kaydı onay sorulduktan sonra silinebilir.</li>
+                    <li><strong>🔄 Talepleri Yenile:</strong> Listeyi güncel haline getirir.</li>
                 </ul>
+                
+                <h3>4. 📋 Yoklama Yönetim Sistemi:</h3>
+                <p>
+                    Kulüp öğretmenleri tarih seçerek kayıtlı öğrencilerin yoklamasını tek sayfada alır. Durum seçenekleri: <code>✅ Geldi</code>, <code>❌ Gelmedi</code>, <code>📝 İzinli</code>, <code>🏥 Raporlu</code> ve <code>🏃 Faaliyet/Görevli</code>. Her öğrenciye özel açıklama notu yazılabilir. <em>"Öğretmen / Sistem de görünsün"</em> seçeneğiyle sadece öğrenciler veya tüm hesaplar listelenebilir. <em>"💾 Excel İndir"</em> ile resmi idare yoklama listesi alınabilir.
+                </p>
+
+                <h3>5. 📝 Kazanım Defteri:</h3>
+                <p>
+                    Milli Eğitim müfredatı ve kulüp yıllık planı çerçevesinde işlenen etkinliklerin kayıt altına alındığı resmi defterdir. Etkinlik tarihi, konu başlığı ve detaylı kazanım açıklaması girilerek arşivlenir; tek tıkla Excel'e aktarılabilir.
+                </p>
             </section>
 
             <!-- 6. BOKASHI KOMPOST -->
             <section id="sec-bokashi">
-                <h2><span>♻️</span> 6. Bokashi Kompost Takip Sistemi</h2>
+                <h2><span>♻️</span> 6. Bokashi Biyo-Kompost & Sıvı Gübre İstasyonu</h2>
                 <p>
-                    Okul yemekhanesinden ve bahçeden toplanan organik atıkların fermantasyon yoluyla gübreye dönüştürüldüğü Bokashi kovalarının takibidir:
+                    Bokashi, okul yemekhanesinden, kantinden ve bahçeden toplanan organik atıkların faydalı mikroorganizmalar (EM-1 Bokashi Kepeği) yardımıyla havasız (anaerobik) ortamda fermente edilerek değerli toprak besinine dönüştürüldüğü Japon kompost teknolojisidir.
                 </p>
+
+                <h3>4 Canlı İstatistik Göstergesi:</h3>
                 <ul>
-                    <li><strong>Kova Girişi:</strong> Kova numarası, atık türü (sebze artığı, meyve kabuğu vb.), kilogramı ve başlatılma tarihi kaydedilir.</li>
-                    <li><strong>Olgunlaşma Süresi:</strong> Kovanın hava almadan fermente olması gereken 14 günlük süre sistem tarafından otomatik hesaplanır.</li>
-                    <li><strong>Aylık Trend Grafiği:</strong> Hangi ay kaç kilogram atığın toprağa geri kazandırıldığı canlı çubuk grafikte görselleştirilir.</li>
-                    <li><strong>Grafiği Sıfırlama:</strong> Yöneticiler yeni dönem başında <em>"↺ Sıfırla"</em> butonuna bastığında hem yerel hafıza hem de bulut koleksiyonu kalıcı olarak temizlenir.</li>
+                    <li><strong>🪣 Fermantasyondaki Kovalar:</strong> Şu an hava almadan fermantasyon sürecini sürdüren aktif kova sayısı.</li>
+                    <li><strong>🎉 Hasada Hazır Kovalar:</strong> Süresi tamamlanmış ve bahçe toprağına gömülmeyi bekleyen kovalar.</li>
+                    <li><strong>⚖️ Dönüştürülen Organik Atık:</strong> Çöpe gitmesi önlenerek geri kazanılan toplam atık miktarı (kg).</li>
+                    <li><strong>💧 Toplanan Sıvı Gübre:</strong> Kovalardan hasat edilen zengin probiyotik kompost çayı hasat adedi.</li>
+                </ul>
+
+                <h3>Yeni Bokashi Kovası Başlatma Adımları:</h3>
+                <div class="step-container">
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-content"><strong>Kova Kodu ve Atık Türü:</strong> Kovaya bir isim verin (Örn: <em>Kova #3 - Kafeterya Sebze</em>) ve atık kaynağını seçin (Meyve-sebze, Çay posası, Ekmek artığı vb.).</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-content"><strong>Ağırlık ve Süre:</strong> Kovadaki atığın tahmini kilosunu (örn: 5 kg) ve fermantasyon süresini (14 gün standart, 21 veya 28 gün derin fermantasyon) belirleyin.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-content"><strong>Sorumlu Ekip ve Kepek Kontrolü:</strong> Kovanın bakımından sorumlu öğrenci grubunu yazın; kepeğin homojen serpiştirildiğini işaretleyip <em>"Yeni Döngüyü Başlat"</em> butonuna basın.</div>
+                    </div>
+                </div>
+
+                <h3>💧 Bokashi Sıvısı (Kompost Çayı) Hasadı & Seyreltme Hesaplayıcısı:</h3>
+                <p>
+                    Fermantasyon sırasında kovanın dip musluğunda biriken sıvı, canlı mikroorganizmalar açısından son derece zengin bir sıvı gübredir. Kovanın kartındaki <em>"💧 Sıvı Alındı"</em> butonuna tıklandığında hasat sayısı kaydedilir.
+                </p>
+                <div class="callout callout-info">
+                    <strong>🚰 Seyreltme Hesaplayıcı Nasıl Çalışır?</strong>
+                    Bokashi sıvısı çok asidik ve konsantredir; seyreltilmeden bitkiye verilirse kökleri yakabilir. Modüldeki hesaplayıcıya aldığınız mililitreyi (örn: <code>20 ml</code>) ve kullanım amacını girdiğinizde eklemeniz gereken klorsuz su miktarını anında hesaplar:
+                    <ul>
+                        <li><strong>Bahçe & Sera Sebzeleri:</strong> 1:500 oranı (20 ml sıvıya 10 Litre su).</li>
+                        <li><strong>Salon & Saksı Çiçekleri:</strong> 1:1000 oranı (20 ml sıvıya 20 Litre su).</li>
+                        <li><strong>Meyve Ağaçları & Çalılar:</strong> 1:100 güçlü besleme oranı (20 ml sıvıya 2 Litre su).</li>
+                        <li><strong>Lavabo ve Gider Açıcı:</strong> 1:1 saf kullanım (borulardaki yağ tortularını eritir).</li>
+                    </ul>
+                </div>
+
+                                <h3>🔎 Kova Listesi Filtreleri:</h3>
+                <p>
+                    Kova kartlarının üstündeki düğmelerle listeyi <strong>Tümü</strong>, <strong>⏳ Fermantasyonda</strong> (süreci devam edenler) veya <strong>🎉 Tamamlananlar</strong> (hasada hazır olanlar) şeklinde süzebilirsiniz.
+                </p>
+
+                <h3>📜 Bokashi Fermantasyonu Altın Kuralları:</h3>
+                <ol>
+                    <li><strong>Kesinlikle hava almamalı:</strong> Her atık eklemesinde preslenmeli ve kapak sıkıca kilitlenmelidir.</li>
+                    <li><strong>Yeterli kepek:</strong> Her 3-5 cm atık tabakasının üzerine 1-2 avuç Bokashi kepeği homojen serpiştirilir.</li>
+                    <li><strong>Sıvı düzenli tahliye edilmeli:</strong> Dipte biriken sıvı 2-3 günde bir alınır; aksi halde aşırı nem ve koku oluşabilir.</li>
+                    <li><strong>Beyaz küf başarı işaretidir:</strong> Yüzeydeki beyaz pamuksu tabaka faydalı mayaların çalıştığını gösterir; siyah/yeşil küf ise hava sızıntısına işaret eder.</li>
+                </ol>
+
+<h3>🔍 Organik Atık Rehberi (Açılır Tablo):</h3>
+                <ul>
+                    <li><strong>✅ Güvenle Atılabilir (Yeşil Liste):</strong> Meyve-sebze kabukları, ekmek, unlu mamuller, çay-kahve telvesi, yumurta kabukları, sera budama artıkları, peynir kabukları.</li>
+                    <li><strong>❌ Kesinlikle Atılmamalı (Kırmızı Liste):</strong> Kalın büyük kasap kemikleri, çorba ve saf süt gibi aşırı sıvılar, küflü/çürümüş atıklar, plastik/streç film, sigara izmariti, deterjan artıkları.</li>
                 </ul>
             </section>
 
-            <!-- 7. ÜRETİM VE SATIŞ -->
-            <section id="sec-uretim-satis">
-                <h2><span>🌾</span> 7. Üretim, Hasat ve Satış / Finans Yönetimi</h2>
-                <p>Kulüp bahçesindeki tarımsal üretimin ekonomik değerini takip eder:</p>
+            <!-- 7. ÜRETİM VE DÖNEMLER -->
+            <section id="sec-uretim">
+                <h2><span>🌾</span> 7. Üretimlerim (Dönem, Girdi, Süreç, Çıktı & Maliyet Analizi)</h2>
+                <p>
+                    Kulübün yetiştirdiği tüm tarımsal mahsullerin (Domates, Biber, Çilek, Marul vb.) tohumdan hasada kadar olan bilimsel, operasyonel ve finansal yolculuğunu takip eden kapsamlı modüldür.
+                </p>
+
+                                <h3>Ürün ve Dönem Seçimi:</h3>
                 <ul>
-                    <li><strong>Ekim Kaydı:</strong> Hangi parsele ne ekildiği, tohum türü ve tahmini hasat dönemi girilir.</li>
-                    <li><strong>Hasat ve Satış Girişi:</strong> Hasat edilen ürünün miktarı, satılan kilo/adet ve birim satış fiyatı girildiğinde sistem toplam hasılatı otomatik hesaplar.</li>
-                    <li><strong>Ciro Trendi:</strong> Kulüp kasasına giren gelirler zaman çizelgesinde grafik olarak izlenir.</li>
-                    <li><strong>Satış Geçmişini Temizleme:</strong> Eski satış kayıtlarını temizleme butonu veri güvenliği gereği yalnızca yöneticilere özeldir.</li>
+                    <li><strong>Ürün seçimi:</strong> Üstteki alana ürün adını yazın (örn. Domates) ya da listeden seçin. Seçim yapılmadan Genel Bakış ve kayıt sekmeleri boş kalır; "Tüm Ürünler" sekmesi ürün seçmeden de çalışır.</li>
+                    <li><strong>Dönem seçimi:</strong> Seçtiğiniz ürünün <em>tüm dönemlerini</em>, <em>dönemsiz kayıtlarını</em> veya belirli bir dönemi görüntüleyebilirsiniz. Seçili dönem için <em>"➕ Yeni Dönem"</em>, <em>"✏️ Düzenle"</em> ve <em>"🗑️ Sil"</em> düğmeleri kullanılır.</li>
+                    <li><strong>Kayıt düzenleme:</strong> Girdi, süreç ve çıktı kayıtları sonradan düzenlenebilir veya silinebilir.</li>
+                </ul>
+
+<h3>Üretim Dönemi (Cycle) Yönetimi:</h3>
+                <p>
+                    Her ürün için farklı üretim dönemleri tanımlanabilir (Örn: <em>2026 İlkbahar Serası</em>, <em>2026 Yaz Açık Tarla</em>). Dönem kaydında:
+                </p>
+                <ul>
+                    <li><strong>Dönem Bilgileri:</strong> Yer (Sera 1, Parsel A, Hidroponik Set), Alan (m²), Başlangıç ve Tahmini Bitiş Tarihleri.</li>
+                    <li><strong>Hedef Çıktı:</strong> Hedeflenen hasat miktarı ve birimi (örn: <code>50 kg</code>).</li>
+                    <li><strong>Dönem Durumu:</strong> <code>Planlandı</code>, <code>Devam Ediyor</code>, <code>Tamamlandı</code> veya <code>İptal</code>.</li>
+                </ul>
+
+                <h3>Alt Sekmeler ve Veri Girişleri:</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><span>📊</span> 1. Genel Bakış (Analiz)</h4>
+                        <p>Dönem hedefi gerçekleşme yüzdesi çubuğu, 8 KPI özet kartı (Girdi, Çıktı, Süreç, Maliyet, Gelir, Net Kâr/Zarar, Fire Oranı, Verim kg/m²), maliyet çubuk grafiği, çıktı zaman çizelgesi, toprak ve sensör ölçüm ortalamaları.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>📥</span> 2. Girdiler</h4>
+                        <p>Tohum/fide, kompost/gübre, su, bitki koruma, harç, işgücü, enerji vb. Girdinin adı, ölçümü, maliyeti (TL) ve kökeni (kendi üretimimiz, satın alma, bağış, geri dönüşüm).</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>⚙️</span> 3. Süreç & Sensör Ölçümleri</h4>
+                        <p>Ekim, sulama, budama, çapalama ve zararlı kontrolü adımları; çalışma süresi (dk), yapan ekip ve çevresel ölçüm değerleri: Sıcaklık (°C), Hava Nemi (%), Toprak Nemi (%), pH ve EC (dS/m).</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>📤</span> 4. Çıktılar (Hasat & Satış)</h4>
+                        <p>Hasat edilen ana ürün, yan ürün veya fire miktarı. Kalite sınıfı (1., 2., 3. Sınıf), birim satış fiyatı (TL/kg) ve hedef (satış, kulüp tüketimi, bağış, stok).</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🗂️</span> 5. Tüm Ürünler</h4>
+                        <p>Kulübün tüm ürünlerini tek tabloda karşılaştırır: ürün, dönem sayısı, kayıt sayısı, toplam girdi, toplam çıktı, maliyet ve gelir. Bir satıra tıklayınca o ürünün ayrıntısı açılır.</p>
+                    </div>
+                </div>
+
+                <h3>Dışa Aktarma ve Resmi Raporlama:</h3>
+                <ul>
+                    <li><strong>⬇️ CSV (Excel) İndir:</strong> Seçili dönemin veya tüm ürünlerin girdi, süreç ve çıktı kayıtlarını filtreli Excel tablosu olarak kaydeder.</li>
+                    <li><strong>🖨️ Rapor / Yazdır:</strong> Seçili dönemin tüm özetini, maliyetlerini ve tablolarını tek tıkla resmi kulüp faaliyet raporu formatında yazıcıya veya PDF'e gönderir.</li>
                 </ul>
             </section>
 
             <!-- 8. TOHUM BANKASI -->
             <section id="sec-tohum">
-                <h2><span>🌰</span> 8. Tohum Bankası Envanteri</h2>
-                <p>Kulübün ata tohumu ve yerel tohum mirasını korumak için tasarlanmıştır:</p>
-                <ul>
-                    <li><strong>Tohum Kaydı:</strong> Tohum adı (örn: Ayaş Domatesi, Çitlekçi Fasulye), elde edildiği yıl, tohum türü ve stoktaki adet/gram miktarı saklanır.</li>
-                    <li><strong>Saklama ve Çimlenme Oranı:</strong> Hangi kavanozda veya dolapta olduğu, yapılan son çimlenme testinin başarı yüzdesi kayıt altında tutulur.</li>
-                </ul>
-            </section>
-
-            <!-- 9. BARKOD VE KASA -->
-            <section id="sec-barkod">
-                <h2><span>🏷️</span> 9. Barkod / QR Kod ve Kasa Sistemi</h2>
-                <p>Üretilen fide, tohum ve organik mahsullerin okul kermeslerinde veya satış günlerinde profesyonelce satılmasını sağlar:</p>
-                <ul>
-                    <li><strong>Etiket Yazdırma:</strong> Ürün için otomatik barkod ve QR kod oluşturulur; tek tıkla mini etiket yazıcısına veya standart yazıcıya gönderilebilir.</li>
-                    <li><strong>Barkod Okuyucu / Satış Kasası:</strong> Cihazın kamerası veya harici barkod okuyucu tabanca ile barkod okutulduğunda ürün otomatik tanınır, satışa eklenir ve stoğu düşülür.</li>
-                </ul>
-            </section>
-
-            <!-- 10. AYARLAR VE ÜYE YÖNETİMİ -->
-            <section id="sec-ayarlar">
-                <h2><span>⚙️</span> 10. Sistem Ayarları ve Üye Yönetimi</h2>
-                <p>Yöneticilerin kulüp organizasyonunu yönettiği kısımdır:</p>
-                <ul>
-                    <li><strong>Yeni Üye Ekleme:</strong> Yeni katılan öğrencinin adı, sınıfı, e-posta adresi ve geçici şifresi girilerek sisteme kaydedilir.</li>
-                    <li><strong>Yetki Güncelleme:</strong> Yöneticiler, sorumluluk alan bir üyenin yetkisini tek tıkla <em>"Normal Üye"</em> veya <em>"Yönetici"</em> olarak değiştirebilir.</li>
-                    <li><strong>Kullanıcı Silme:</strong> Kulüpten ayrılan veya mezun olan öğrencilerin kaydı sistemden güvenle silinebilir.</li>
-                </ul>
-            </section>
-
-            <!-- 11. BULUT VE OFFLINE -->
-            <section id="sec-bulut">
-                <h2><span>☁️</span> 11. Bulut Senkronizasyonu ve Çevrimdışı Çalışma</h2>
+                <h2><span>🌰</span> 8. Tohum Bankası Envanteri & İdeal Ekim Takvimi</h2>
                 <p>
-                    Sistem Google Cloud altyapısıyla 7/24 bağlantılı çalışır:
+                    Okul kulübünün ata tohumu mirasını korumak, genetik çeşitliliği belgelemek ve tohum envanterini takip etmek amacıyla geliştirilmiştir.
                 </p>
+
+                <h3>Tohum Kayıt Parametreleri:</h3>
+                <ul>
+                    <li><strong>Tohum Bilgileri:</strong> Tohum adı, çeşit/yöre (örn: <em>Ayaş Domatesi - Ankara</em>), tür (Atalık/Yerel, Standart, Hibrit) ve kategori (Sebze, Meyve, Tahıl, Baklagil, Çiçek, Şifalı).</li>
+                    <li><strong>Saklama & Raf Ömrü:</strong> Temin kaynağı, saklama tarihi, saklama dolabı/yeri ve raf ömrü (yıl). Sistem son kullanma tarihini otomatik hesaplar; raf ömrüne 90 gün kaldığında sarı, dolduğunda kırmızı uyarı verir.</li>
+                    <li><strong>Stok ve Asgari Stok:</strong> Mevcut miktar (gram, adet veya paket) ve asgari stok alarmı.</li>
+                    <li><strong>Çimlenme Testi Oranı (%):</strong> Yapılan son testin tarihi ve başarı yüzdesi (%70 altındaysa sistem düşük çimlenme uyarısı verir).</li>
+                </ul>
+
+                                <h3>🔍 Arama ve Filtreler:</h3>
+                <p>
+                    Tohum listesinin üstündeki arama kutusu tohum adı, çeşit ve yöre bilgisine göre arar. Yanındaki filtrelerle liste şu şekilde daraltılabilir:
+                </p>
+                <ul>
+                    <li><strong>Tür:</strong> Tüm türler, Atalık / Yerel, Standart, Hibrit.</li>
+                    <li><strong>Kategori:</strong> Sebze, Meyve, Tahıl, Baklagil, Çiçek, Şifalı vb.</li>
+                    <li><strong>Durum:</strong> Tüm durumlar, <em>🌱 Şimdi ekilebilir</em> (içinde bulunulan ay ideal ekim aralığındakiler) ve <em>⚠️ Dikkat gerekenler</em> (uyarı rozeti taşıyan tohumlar).</li>
+                </ul>
+
+                <h3>⚠️ Uyarı Rozetleri:</h3>
+                <ul>
+                    <li><code>⌛ Raf ömrü doldu</code> (kırmızı): Son kullanma tarihi geçmiş tohum.</li>
+                    <li><code>⌛ N gün kaldı</code> (sarı): Raf ömrünün bitmesine 90 gün veya daha az kalmış tohum.</li>
+                    <li><code>🧪 Düşük çimlenme</code> (kırmızı): Son çimlenme testi %70'in altında.</li>
+                    <li><code>📉 Stok az</code> (sarı): Mevcut miktar, belirlediğiniz asgari stoğa eşit veya altında.</li>
+                </ul>
+
+<h3>🗓️ 12 Aylık İdeal Ekim Takvimi:</h3>
+                <p>
+                    Tohumlar kaydedilirken ideal ekim ayları (örn: Mart – Mayıs) belirlenir. Modülün üst kısmındaki dinamik çubuk grafik, her ay kulüp bankasındaki kaç çeşit tohumun ekime uygun olduğunu gösterir. İçinde bulunulan ay turuncu renkle <strong>"Şimdi Ekilebilir"</strong> olarak otomatik vurgulanır.
+                </p>
+
+                <h3>Hızlı Operasyon Butonları:</h3>
+                <ul>
+                    <li><strong>📉 Ekimde Kullan:</strong> Tohum tarlaya veya seraya ekildiğinde tek tıkla miktar girilir ve mevcut stoktan otomatik düşülür.</li>
+                    <li><strong>🧪 Çimlenme Testi:</strong> Yapılan son çimlenme testi yüzdesi tek tıkla güncellenir ve test tarihi bugüne eşitlenir.</li>
+                    <li><strong>⬇️ CSV İndir:</strong> Tüm tohum arşivini Excel formatında raporlar.</li>
+                </ul>
+            </section>
+
+            <!-- 9. METEOROLOJİ İSTASYONU -->
+            <section id="sec-meteoroloji">
+                <h2><span>⛅</span> 9. Tarımsal Meteoroloji İstasyonu (Canlı Hava Durumu)</h2>
+                <p>
+                    Tarımsal planlama için doğrudan Open-Meteo bilimsel uydularından beslenen canlı hava durumu ve saha danışmanı motorudur.
+                </p>
+
+                <h3>Bölge ve Konum Seçimi:</h3>
+                <ul>
+                    <li><strong>81 İl Seçici:</strong> Türkiye'nin tüm illeri alfabetik listeden seçilebilir; seçilen şehir hafızalanır.</li>
+                    <li><strong>⚡ Hızlı Seçim Çipleri:</strong> İstanbul, Ankara, İzmir, Bursa, Antalya, Adana, Konya gibi tarım merkezleri tek tıkla sorgulanır.</li>
+                    <li><strong>🎯 Konumumu Bul:</strong> Cihazın anlık GPS koordinatlarına göre en yakın noktanın hava verisini getirir.</li>
+                </ul>
+
+                <h3>🌱 Sürdürülebilir Tarım & Saha Danışmanı (Akıllı Algoritma):</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><span>❄️</span> Don & Soğuk Riski</h4>
+                        <p>Gece sıcaklığı 0°C altına düştüğünde kırmızı "Kritik Don!", 3°C altına indiğinde "Don Riski Var" uyarısı verir; sera ısıtması ve don perdesi tedbiri hatırlatır.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🚜</span> İlaçlama & Gübreleme</h4>
+                        <p>Yağış ihtimali (%40 üstü) veya yüksek rüzgar hızında (20 km/s üstü) yaprak uygulamalarının yıkanmaması için erteleme uyarısı verir; sakin havada "Çok Uygun" rozeti yakar.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>💧</span> Sulama İhtiyacı</h4>
+                        <p>Düşük nem ve yüksek sıcaklıkta sulama ihtiyacını artırır; yağışlı günlerde aşırı kök çürümesini önlemek için "Sulamayı Ertele" tavsiyesinde bulunur.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🌿</span> Tarla & Sera Faaliyeti</h4>
+                        <p>Fırtına, şiddetli sağanak veya kar durumunda açık saha çalışmalarını durdurup sera içi bakım veya bokashi kompost çalışmalarına yönlendirir.</p>
+                    </div>
+                </div>
+
+                <h3>Detaylı Göstergeler & 7 Günlük Tahmin:</h3>
+                <p>
+                    Bağıl Nem (%), Rüzgar Hızı (km/s) ve Yönü (Kuzey, Güneydoğu vb.), Yağış İhtimali ve Miktarı (mm), Maksimum UV İndeksi, Gündoğumu ve Günbatımı saatleri anlık verilir. 7 günlük tahmin tablosu günlük en yüksek/en düşük sıcaklıkları ve rüzgar şiddetini haftalık planlama için listeler.
+                </p>
+            </section>
+
+            <!-- 10. BARKOD VE KASA -->
+            <section id="sec-barkod">
+                <h2><span>🏷️</span> 10. Barkod, Satış Kasası ve Stok Yönetimi</h2>
+                <p>
+                    Kulüp serasında yetiştirilen fidelerin, tohum paketlerinin, saksı bitkilerinin ve organik ürünlerin okul kermeslerinde profesyonel perakende standartlarında satılmasını sağlar.
+                </p>
+
+                <h3>Barkod Oluşturma ve Yazdırma:</h3>
+                <p>
+                    Herhangi bir barkod numarası yazıldığında sistem anında standart <code>CODE128</code> formatında vektörel barkod çizer. <em>"Sadece Barkodu Yazdır"</em> butonuna tıklandığında ekranın geri kalanı gizlenir ve yalnızca barkod etiketi mini termal etiket yazıcısına veya A4 yazıcıya gönderilir.
+                </p>
+
+                <h3>Barkodlu Ürün Tanımlama & Stok:</h3>
+                <p>
+                    Yöneticiler yeni bir ürünün barkodunu, adını, satış fiyatını, mevcut stok miktarını, üretim tarihini ve son kullanma tarihini girerek sisteme kaydeder. Barkod alanının yanındaki <em>"Okunandan Al"</em> düğmesi, kasa bölümünde az önce okutulan barkodu forma aktarır. Kayıtlı ürünler listesinde stok rengi durumu gösterir: <code>✅ yeşil</code> (6 ve üzeri), <code>⚠️ turuncu</code> (1-5 adet), <code>❌ kırmızı</code> (stok yok).
+                </p>
+                <ul>
+                    <li><strong>Stok düzenleme (yönetici):</strong> Ürünün yanındaki "Stok" kutusuna yeni miktarı yazıp <em>"💾 Kaydet"</em> düğmesine basın veya <code>Enter</code> tuşunu kullanın. Miktar sıfır ya da daha büyük bir sayı olmalıdır.</li>
+                    <li><strong>Ürün silme (yönetici):</strong> Silme düğmesi onay sorar; onaylanırsa ürün sistemden ve tüm cihazlardan kaldırılır.</li>
+                    <li><strong>Buluta kayıt:</strong> Stok düzenlemeleri ve satışlar buluta yazılır, sayfayı yenileseniz de eski değere dönmez. Buluta yazılamazsa "Stok buluta kaydedilemedi" uyarısı çıkar; bu durumda bağlantınızı kontrol edip işlemi tekrarlayın.</li>
+                </ul>
+                
+                <h3>📷 Kamera ve USB Okuyucu ile Satış Kasası:</h3>
+                <div class="step-container">
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-content"><strong>Kamerayı Aç / Barkod Okut:</strong> <em>"Kamerayı Aç 📷"</em> butonuna basarak telefon/tablet kamerasıyla veya USB barkod okuyucu tabanca ile barkodu okutun. Sistem ürün bulunduğunda başarılı ses tonu (bip) çalar.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-content"><strong>Stok Kontrolü ve Bilgi Kartı:</strong> Ürünün adı, fiyatı, kalan stok adedi ve SKT'si görüntülenir. Stokta kalmamışsa sistem kırmızı uyarı verir.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-content"><strong>Satış Sepeti:</strong> Satılacak adedi seçip <em>"🛒 Sepete Ekle"</em> butonuna basın. Sepette birden fazla farklı ürün biriktirilebilir.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">4</div>
+                        <div class="step-content"><strong>✅ Satışı Tamamla:</strong> Butona basıldığında sepetteki toplam tutar tahsil edilmiş sayılır, satılan adetler veritabanındaki stoktan <strong>anında ve kalıcı olarak düşülür</strong> ve satış geçmişine eklenir.</div>
+                    </div>
+                </div>
+
+                <h3>📊 Satış Geçmişi & Ciro Takibi:</h3>
+                <p>
+                    Gerçekleşen her satış fişi tarihi, saati, ürün listesi ve tutarıyla kaydedilir. Toplam satış adedi ve kulüp kasasına giren <strong>Toplam Ciro</strong> canlı izlenir. Geçmişi temizleme yetkisi veri güvenliği gereği yalnızca yöneticilere açıktır.
+                </p>
+            </section>
+
+            <!-- 11. ANALİTİK VE TABLOLAR -->
+            <section id="sec-analitik">
+                <h2><span>📊</span> 11. Tablo & Canlı Grafikler (Analitik Merkezi)</h2>
+                <p>
+                    Kulübün tüm faaliyetlerini görselleştiren interaktif grafik paneli ve Excel tablo entegrasyonudur. Sekmenin üstündeki iki düğmeyle görünümü seçersiniz: <strong>📈 Grafikler</strong> (Bokashi, satış ve yoklama grafikleri) ve <strong>📋 Tablo</strong> (Excel dosyası görüntüleyici/düzenleyici). Düzen telefon ekranlarına uyumludur.
+                </p>
+
+                <h3>📈 Canlı SVG Grafikler (Harici Eklenti Gerektirmez):</h3>
+                <ul>
+                    <li><strong>♻️ Aylık Bokashi Atık Miktarı (kg):</strong> Son 6 ay boyunca toplanan organik atık miktarını zaman serisi çizgi grafiği olarak çizer.</li>
+                    <li><strong>💰 Satış Cirosu Trendi (₺):</strong> Kulüp kermes ve ürün satışlarından elde edilen aylık net ciroyu görselleştirir.</li>
+                    <li><strong>📅 Kulüp Yoklama Katılım Oranı:</strong> Üyelerin kulüp derslerine katılımını (Geldi, Gelmedi, İzinli) renkli halka (donut) grafikte gösterir. Üstteki açılır menüden <code>Son 7 gün</code>, <code>Son 30 gün</code>, <code>Son 90 gün</code> veya <code>Tümü</code> filtrelenebilir.</li>
+                    <li><strong>↺ Sıfırla ve ↺ Tümünü Sıfırla (Yönetici):</strong> Her grafiğin başlığındaki <em>"↺ Sıfırla"</em> yalnızca o grafiğin verisini, sekmenin üstündeki <em>"↺ Tümünü Sıfırla"</em> üç grafiğin verisini birden siler. İşlem öncesi onay penceresi çıkar. Normal üyelerde bu düğmeler görünmez.</li>
+                </ul>
+
+                                <div class="callout callout-danger">
+                    <strong>⚠️ Sıfırlama kalıcıdır ve geri alınamaz:</strong>
+                    Grafik sıfırlama yalnızca görüntüyü temizlemez; ilgili kayıtları Google Cloud Firestore'dan ve cihazlardan <strong>kalıcı olarak siler</strong>:
+                    <ul>
+                        <li><strong>Bokashi grafiği:</strong> Bokashi kovası kayıtları silinir (Bokashi Takip sekmesindeki kovalar da boşalır).</li>
+                        <li><strong>Satış grafiği:</strong> Satış ve ciro geçmişi silinir.</li>
+                        <li><strong>Yoklama grafiği:</strong> Günlük yoklama kayıtları silinir.</li>
+                    </ul>
+                    Yalnızca yeni eğitim-öğretim yılı veya dönem başında, gerekirse önce ilgili Excel/CSV raporlarını indirdikten sonra kullanın.
+                </div>
+
+<h3>📋 "Tablo" Görünümü: Excel Görüntüleyici ve Düzenleyici:</h3>
+                <p>
+                    Cihazınızdaki herhangi bir Excel dosyasını (<code>.xlsx</code>, <code>.xls</code>) seçerek web arayüzünde canlı bir tabloya dönüştürebilirsiniz. Yöneticiler tablo hücrelerine doğrudan tıklayarak düzenleme yapabilir ve <em>"💾 Düzenlemeyi İndir (.xlsx)"</em> butonuyla güncellenmiş Excel dosyasını geri alabilirler.
+                </p>
+            </section>
+
+            <!-- 12. AYARLAR VE GÜVENLİK -->
+            <section id="sec-ayarlar">
+                <h2><span>⚙️</span> 12. Sistem Ayarları, Güvenlik ve Cihaz Kayıt Defteri</h2>
+                <p>
+                    Yöneticilerin kulüp organizasyonunu, güvenliğini ve donanım bağlantılarını yönettiği en üst düzey kontrol sekmesidir:
+                </p>
+
+                <h3>Ayarlar Sekmesinin Bölümleri:</h3>
+                <p>Ayarlar sekmesi yalnızca yöneticilere görünür ve dört bölüme ayrılmıştır:</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><span>🎨</span> Görünüm &amp; Canlı Duyuru</h4>
+                        <p>Profilim penceresine giden kısayol, kılavuz bağlantısı ve kayan duyuru metni. Renk teması, arayüz modu ve şifre işlemleri artık Profilim penceresindedir.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🔒</span> Sistem Kısıtlaması &amp; Bulut Durumu</h4>
+                        <p>Anında kilit, saat bazlı kısıtlama ve bulut bağlantı/gecikme durumu kartı.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🖥️</span> Cihaz Kayıt Defteri</h4>
+                        <p>Giriş yapan cihazların listesi; arama, cihaz türü ve ülke filtreleri, yenileme ve CSV dışa aktarma.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>👥</span> Kullanıcı ve Hesap Yönetimi</h4>
+                        <p>Kayıtlı üyeler listesi, yeni kullanıcı ekleme, görev türü ve yetki rolü değiştirme, silme.</p>
+                    </div>
+                </div>
+
+
+                <h3>📢 Canlı Kayan Duyuru Metni Yayını:</h3>
+                <p>
+                    Yöneticiler duyuru metnini yazıp <em>"Metni Güncelle ve Tüm Cihazlarda Canlı Yayınla"</em> butonuna bastığında, Firestore <code>system_settings/ticker</code> belgesi güncellenir. Sisteme bağlı olan tüm akıllı tahtalar, bilgisayarlar ve öğrenci telefonlarının alt bilgi çubuğundaki kayan yazı <strong>sayfayı yenilemeye gerek kalmadan anında</strong> güncellenir.
+                </p>
+
+                <h3>🔒 Sistem ve Üye İşlem Kısıtlaması (Cutoff Engine):</h3>
+                <div class="callout callout-danger">
+                    <strong>Sistem Güvenliği ve Zaman Kontrolü:</strong>
+                    Kulüp öğretmenleri, ders saatleri dışında veya bakım anında öğrencilerin verileri değiştirmesini engellemek için iki farklı kısıtlama uygulayabilir:
+                    <ul>
+                        <li><strong>🚨 Anında Tüm Cihazları Kilitle:</strong> Tek bir anahtarla tüm bağlı cihazlardaki normal üyelerin görev ekleme, not yazma veya silme işlemleri derhal engellenir.</li>
+                        <li><strong>⏰ Saat Bazlı Otomatik Kısıtlama:</strong> Belirlenen saat aralığında (örn: Kapanış <code>18:00</code> – Açılış <code>08:00</code>) sistem otomatik olarak kilitlenir.</li>
+                        <li><strong>Yönetici Muafiyeti:</strong> Sistem kilitliyken ekranın en üstünde kırmızı bir uyarı şeridi çıkar; ancak yöneticiler tam yetkili oldukları için serbestçe işlem yapmaya devam ederler.</li>
+                    </ul>
+                </div>
+
+                                <h3>☁️ Bulut Veri Senkronizasyonu Kartı:</h3>
+                <p>
+                    Bu kart bağlantı durumunu (<code>CANLI BAĞLI</code> / çevrimdışı), veri akış modelini (Firestore Realtime), bulut proje adını, anlık gecikmeyi (Ping, ms) ve son senkronizasyon bilgisini gösterir. <em>"🔄 Bulut Bağlantısını ve Senkronizasyonu Şimdi Test Et"</em> düğmesi bağlantıyı anında yeniden ölçer; internet kesilirse üst çubuk ve bu kart kırmızı uyarı verir.
+                </p>
+
+<h3>🖥️ Cihaz Kayıt Defteri (Yalnızca Yönetici Görür):</h3>
+                <p>
+                    Güvenlik denetimi ve katılım takibi amacıyla sisteme giriş yapan her cihazın dijital ayak izi <code>device_logs</code> koleksiyonunda saklanır:
+                </p>
+                <ul>
+                    <li><strong>Cihaz & Tarayıcı Bilgisi:</strong> Cihaz türü (📱 iPhone, 📲 Android Telefon, 💻 PC, Mac vb.), işletim sistemi, tarayıcı adı, ekran çözünürlüğü ve kurulu dil.</li>
+                    <li><strong>Ağ ve Konum:</strong> IP adresi, internet servis sağlayıcısı (ISP), ülke bayrağı ve bağlandığı şehir.</li>
+                    <li><strong>Zaman Damgaları & Sayacı:</strong> İlk giriş zamanı, son görülme zamanı ve kaç kez giriş yaptığı.</li>
+                    <li><strong>Oturum Durumu:</strong> Kullanıcının <em>"Beni Hatırla"</em> özelliğini aktif edip etmediği.</li>
+                    <li><strong>Arama ve Filtreler:</strong> Arama kutusuyla kullanıcı, IP, ülke veya tarayıcıya göre arama yapılır; "Tüm cihaz türleri" ve "Tüm ülkeler" açılır listeleriyle liste daraltılır. <em>"🔄 Yenile"</em> listeyi günceller.</li>
+                    <li><strong>Dışa Aktarma:</strong> <em>"⬇️ CSV (Excel) İndir"</em> butonuyla tüm giriş denetim kaydı resmi rapor olarak alınabilir.</li>
+                    <li><strong>Gizlilik notu:</strong> IP ve ülke bilgisi üçüncü taraf bir IP servisinden alınır; VPN/proxy kullanan cihazlar gerçek konumdan farklı görünebilir. Kayıtlar kişisel veri içerdiğinden yalnızca yönetim amacıyla kullanılmalıdır.</li>
+                </ul>
+
+                <h3>👥 Üye ve Hesap Yönetimi:</h3>
+                <ul>
+                    <li><strong>Yeni Kullanıcı Tanımlama:</strong> Ad Soyad, Sınıf/Şube, E-posta, Şifre, Görev Türü (Öğrenci, Öğretmen, Sistem) ve Yetki Rolü (Normal Üye, Yönetici) belirlenerek yeni hesap açılır.</li>
+                    <li><strong>Görev Türü Güncelleme:</strong> Öğrenci olarak kayıtlı olan bir üye Öğretmen veya Sistem hesabına dönüştürülebilir (yoklama listesini doğrudan etkiler).</li>
+                    <li><strong>Yetki Güncelleme:</strong> Sorumluluk alan bir üyenin rolü tek tıkla Yönetici veya Normal Üye yapılabilir.</li>
+                    <li><strong>Kullanıcı Silme:</strong> Kulüpten mezun olan üyeler sistemden silinebilir. Kurucu hesabı güvenlik gereği asla silinemez.</li>
+                </ul>
+            </section>
+
+            <!-- 13. BULUT VE OFFLINE -->
+            <section id="sec-bulut">
+                <h2><span>☁️</span> 13. Bulut Senkronizasyonu, PWA ve Çevrimdışı Çalışma</h2>
+                <p>
+                    Sistem Google Cloud Firestore sunucularıyla 7/24 reaktif ve çift yönlü (Realtime Snapshot) bağlantılı olarak çalışır:
+                </p>
+
                 <div class="callout callout-success">
                     <strong>🟢 CANLI BAĞLI Durumu:</strong>
-                    İnternet bağlantınız açıkken üst bardaki ve profil panelindeki gösterge yeşil yanar; sunucuyla aranızdaki canlı gecikme (ping) süresi ölçülür.
+                    İnternet bağlantınız açıkken üst çubuktaki bulut göstergesi yeşil yanar. Göstergeye tıklandığında anlık sunucu gecikmesi (Ping, ms) ölçülür. Bir kullanıcının yaptığı değişiklik (görev tamamlama, kova ekleme, mesaj gönderme vb.) 1 saniyeden kısa sürede tüm bağlı ekranlara yansır.
                 </div>
+
                 <div class="callout callout-warn">
-                    <strong>🔴 ÇEVRİMDIŞI (İnternet Yok) Durumu:</strong>
-                    İnternet kesildiğinde sistem donmaz veya hata vermez. Gösterge anında kırmızıya döner ve sizi uyarır. Yaptığınız işlemler tarayıcının güvenli belleğine kaydedilir; internet tekrar geldiği anda tüm veriler bulutla eşitlenir.
+                    <strong>🔴 ÇEVRİMDIŞI (İnternet Kesintisi) Durumu:</strong>
+                    Okul bahçesinde veya serada Wi-Fi / mobil internet kopsa bile uygulama kapanmaz veya hata vermez:
+                    <ul>
+                        <li>Gösterge derhal kırmızı renge dönerek kullanıcıyı uyarır.</li>
+                        <li>Sistem yerel hafıza (Local Cache) moduna geçer; görevleri incelemeye ve işlem yapmaya devam edebilirsiniz.</li>
+                        <li>İnternet bağlantısı yeniden kurulduğu anda arka planda çalışan senkronizasyon motoru tüm bekleyen verileri bulut veritabanıyla otomatik olarak eşitler.</li>
+                    </ul>
                 </div>
+
+                                <h3>🔔 Mesaj Bildirimleri Nasıl Çalışır?</h3>
+                <ul>
+                    <li><strong>İzin:</strong> Giriş yaptıktan sonra ilk dokunuşunuzda tarayıcı bildirim izni sorar (cihaz başına bir kez). Sonradan Profilim &gt; <em>"🔔 Bildirimleri Aç"</em> ile de açabilirsiniz.</li>
+                    <li><strong>Kimler bildirim alır?</strong> Size özel gönderilen mesajlar, sınıfınıza/şubenize giden toplu mesajlar ve tüm kulübe giden duyurular bildirim üretir. Kendi gönderdiğiniz mesajlar ve zaten okuduğunuz mesajlar bildirim üretmez.</li>
+                    <li><strong>Panel açıkken:</strong> Ekranda kısa bir bildirim kutusu belirir. <strong>Panel arka plandayken</strong> (uygulama simge durumuna alınmış veya başka sekmede) cihazın bildirimi olarak gelir.</li>
+                    <li><strong>Çok sayıda mesaj:</strong> Aynı anda üçten fazla yeni mesaj varsa tek bir özet bildirimi gösterilir.</li>
+                    <li><strong>iPhone:</strong> Bildirim için uygulamanın önce Safari'den "Ana Ekrana Ekle" ile kurulması gerekir.</li>
+                </ul>
+                <div class="callout callout-warn">
+                    <strong>Önemli sınır:</strong>
+                    Bildirimler panel açıkken veya arka planda çalışırken gelir. Uygulama tamamen kapatılmışsa (arka planda hiç çalışmıyorsa) bildirim, panel yeniden açıldığında ulaşır. Yeni mesajlar her durumda <strong>Mesajlar &amp; Duyurular</strong> gelen kutusunda ve Anasayfadaki "Mesaj &amp; Bildirim" sayacında görünür.
+                </div>
+
+
+<h3>📖 Uygulama İçi Kılavuz Katmanı (In-App Overlay):</h3>
+                <p>
+                    Uygulama içerisindeki <em>"📖 Kullanım Kılavuzu"</em> bağlantısına tıklandığında tarayıcıda yeni bir sekme açılmaz. Kılavuz, mevcut oturumu ve açık ekranı koruyarak akıllı bir katman (iframe overlay) olarak açılır. İşiniz bittiğinde sol üstteki <strong>"← Uygulamaya Dön"</strong> butonuna basarak (ya da telefonunuzun/tarayıcınızın geri tuşunu kullanarak) tam kaldığınız yerden çalışmaya devam edebilirsiniz; tekrar giriş yapmanız gerekmez.
+                </p>
             </section>
 
-            <!-- 12. SSS -->
+            <!-- 14. SSS -->
             <section id="sec-sss">
-                <h2><span>❓</span> 12. Sıkça Sorulan Sorular (SSS)</h2>
+                <h2><span>❓</span> 14. Sıkça Sorulan Sorular (SSS)</h2>
                 
-                <h3>S: Şifremi unutursam ne yapmalıyım?</h3>
-                <p><strong>C:</strong> Kulüp yöneticinize (öğretmeninize) başvurun. Yöneticiniz "Ayarlar" sekmesinden yeni bir şifre tanımlayabilir veya Firebase üzerinden şifrenizi güncelleyebilir.</p>
+                <h3>S: Şifremi unutursam veya değiştirmek istersem ne yapmalıyım?</h3>
+                <p><strong>C:</strong> Şifrenizi değiştirmek için üst bardaki kullanıcı profilinize tıklayın ve "Şifremi Değiştir" alanından yeni şifrenizi tanımlayın. Şifrenizi tamamen unuttuysanız kulüp öğretmenine başvurun; yöneticiniz Ayarlar sekmesindeki üye listesinden veya Firebase konsolundan yeni bir şifre tanımlayabilir.</p>
 
-                <h3>S: Verilerim silinir mi veya kaybolur mu?</h3>
-                <p><strong>C:</strong> Hayır. Tüm veriler Google Cloud Firestore veri merkezlerinde depolanmaktadır. Telefonunuz bozulsa veya bilgisayar değişse bile e-postanızla giriş yaptığınızda her şey yerli yerinde durur.</p>
+                <h3>S: Telefonum bozulursa veya farklı bir bilgisayardan girersem verilerim kaybolur mu?</h3>
+                <p><strong>C:</strong> Kesinlikle hayır. Tüm veriler (görevler, mesajlar, üretimler, tohumlar, satışlar) Google Cloud Firestore veri merkezlerinde saklanmaktadır. Herhangi bir cihazdan e-posta ve şifrenizle giriş yaptığınızda tüm kulüp geçmişi ve kişisel temanız saniyeler içinde karşınıza gelir.</p>
 
-                <h3>S: Görev tablosundaki sorumlu kişiyi değiştirebilir miyim?</h3>
-                <p><strong>C:</strong> Evet. Yöneticiler görevin yanındaki sarı "Düzenle ✏️" butonuna basarak sorumluyu başka bir öğrenciye aktarabilir veya "Atanmadı" seçeneğine çekebilir.</p>
+                <h3>S: Satış kasasında ürünün barkodunu okuttuğumda stok neden düşüyor?</h3>
+                <p><strong>C:</strong> Kasa sistemi perakende envanter kurallarına göre çalışır. "Satışı Tamamla" butonuna basıldığında satılan adetler ürünün mevcut stok miktarından anında düşülür ve buluta yazılır; böylece kermes bittiğinde sayım yapmaya gerek kalmadan kalan net stok görüntülenir.</p>
 
-                <h3>S: Uygulamayı başka okullara veya kulüplere tanıtabilir miyiz?</h3>
-                <p><strong>C:</strong> Elbette. Bu kılavuzun üst kısmındaki "📄 PDF Olarak Kaydet / Yazdır" butonuna basarak dokümanı PDF formatında kaydedebilir ve sunumlarda kullanabilirsiniz.</p>
+                <h3>S: "İşlem Engellendi / Sistem Kilitli" uyarısı alıyorum, sebebi nedir?</h3>
+                <p><strong>C:</strong> Kulüp yöneticisi tarafından mesai saati dışında (örn: 18:00 sonrasında) veri girişini kapatmak için sistem kısıtlaması aktif edilmiştir. Kısıtlama saatleri içerisinde normal üyeler yalnızca okuma/görüntüleme yapabilir; ekleme ve silme işlemleri için sabah açılış saatini beklemeli veya yöneticinize danışmalısınız.</p>
+
+                <h3>S: Yeni bir mesaj geldiğinde bildirim alamıyorum, nasıl açabilirim?</h3>
+                <p><strong>C:</strong> Üst bardaki kullanıcı profilinize tıklayın ve <em>"🔔 Bildirimleri Aç"</em> butonuna basarak tarayıcınızdan bildirim iznine "İzin Ver" deyin. iPhone kullanıyorsanız Safari'den uygulamayı önce "Ana Ekrana Ekle" diyerek yüklemeniz gerekmektedir. Bildirimi daha önce reddettiyseniz tarayıcı veya telefon ayarlarından bu siteye izin vermeniz gerekir.</p>
+
+                
+                <h3>S: Hesabım yok, sisteme nasıl üye olurum?</h3>
+                <p><strong>C:</strong> Giriş ekranındaki "Kulübümüze Katılmak İçin Kayıt Ol" bağlantısına dokunun, Ad Soyad, Sınıf/Şube, e-posta ve şifrenizi girin. Hesabınız Normal Üye olarak açılır; yönetici yetkisi için kulüp öğretmeninize başvurun.</p>
+
+                <h3>S: Telefonda yan menü görünmüyor, sekmelere nasıl geçerim?</h3>
+                <p><strong>C:</strong> Yan Menü arayüzünde telefon ekranında menü gizlidir. Üst bardaki <code>☰</code> düğmesine dokunarak açın; bir sekmeyi seçtiğinizde veya menü dışına dokunduğunuzda kapanır. Dilerseniz Profilim penceresinden Klasik (üst menü) görünüme de geçebilirsiniz.</p>
+
+                <h3>S: Uygulama tamamen kapalıyken de bildirim gelir mi?</h3>
+                <p><strong>C:</strong> Bildirimler panel açıkken veya arka planda çalışırken gelir. Uygulama tamamen kapalıysa bildirim, panel yeniden açıldığında ulaşır; yeni mesajlar her durumda gelen kutunuzda bekler.</p>
+
+                <h3>S: Grafikleri sıfırladım, verileri geri getirebilir miyim?</h3>
+                <p><strong>C:</strong> Hayır. Grafik sıfırlama ilgili kayıtları (Bokashi kovaları, satış geçmişi veya yoklama kayıtları) buluttan kalıcı olarak siler. Sıfırlamadan önce gerekli Excel/CSV raporlarını indirmenizi öneririz.</p>
+
+                <h3>S: Anasayfadaki grafikler nereye gitti?</h3>
+                <p><strong>C:</strong> Tüm grafikler "Tablo &amp; Grafikler" sekmesine taşındı. Üstteki "📈 Grafikler" düğmesi grafikleri, "📋 Tablo" düğmesi Excel görüntüleyiciyi açar.</p>
+
+                <h3>S: Stoğu değiştirdim ama sayfayı yenileyince eski değere döndü, neden?</h3>
+                <p><strong>C:</strong> Stok değişiklikleri buluta yazılır. Bağlantı kopukken veya yazma hatasında ekranda "Stok buluta kaydedilemedi" uyarısı çıkar; bu durumda internet bağlantınızı kontrol edip stoğu yeniden kaydedin. Yalnızca yöneticiler stok değiştirebilir.</p>
+
+<h3>S: Bu kılavuzu baskı veya sunum için PDF olarak nasıl kaydedebilirim?</h3>
+                <p><strong>C:</strong> Sayfanın sağ üst köşesinde yer alan <strong>"📄 PDF Olarak Kaydet / Yazdır"</strong> butonuna tıklayın. Açılan yazdırma penceresinde hedefi <em>"PDF Olarak Kaydet"</em> seçerek dokümanı temiz bir kitapçık formatında bilgisayarınıza veya telefonunuza indirebilirsiniz.</p>
             </section>
 
             <!-- Belge Sonu -->
             <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
-                © 2026 BKV Sürdürülebilir Tarım Kulübü Yönetim Sistemi • Tüm Hakları Saklıdır.
+                © 2026 BJK-Kabataş Vakfı Özel Okulları • Sürdürülebilir Tarım Kulübü Yönetim Sistemi • Tüm Hakları Saklıdır.<br>Kılavuz son güncelleme: 10 Kasım 2026 (yazılımın güncel sürümüne göre)
             </div>
 
         </main>
     </div>
 
+<script>
+    // Panel içinde (iframe) açıldıysa katmanı kapat; doğrudan açıldıysa geri git / sekmeyi kapat.
+    function guideBack(){
+        if(window.parent && window.parent !== window){ 
+            window.parent.postMessage('bkv-guide-close', '*'); 
+            return; 
+        }
+        if(history.length > 1){ 
+            history.back(); 
+        } else { 
+            window.close(); 
+        }
+    }
+</script>
+<style>@media print{.btn-back{display:none!important}}</style>
 </body>
 </html>
