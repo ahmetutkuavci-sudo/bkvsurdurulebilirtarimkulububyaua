@@ -8751,24 +8751,7 @@
 
         let notesInitialSynced = false;
         onSnapshot(collection(db, "notes"), async (snapshot) => {
-            if (snapshot.empty && !notesInitialSynced) {
-                notesInitialSynced = true;
-                let localNotes = [];
-                try { localNotes = JSON.parse(localStorage.getItem('bkvNotesShared')) || []; } catch(e) {}
-                if (localNotes.length > 0) {
-                    for (const n of localNotes) {
-                        try {
-                            await addDoc(collection(db, "notes"), {
-                                author: n.author || 'Anonim',
-                                text: n.text || '',
-                                date: n.date || '',
-                                createdAt: n.createdAt || Date.now()
-                            });
-                        } catch(e) { console.error("Not aktarım hatası:", e); }
-                    }
-                    return;
-                }
-            }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
             notesInitialSynced = true;
             let notesList = [];
             snapshot.forEach(docSnap => {
@@ -9193,25 +9176,7 @@
 
         let shoppingInitialSynced = false;
         onSnapshot(collection(db, "shopping"), async (snapshot) => {
-            if (snapshot.empty && !shoppingInitialSynced) {
-                shoppingInitialSynced = true;
-                let localItems = [];
-                try { localItems = JSON.parse(localStorage.getItem('shoppingList')) || []; } catch(e){}
-                if (localItems.length > 0) {
-                    for (const item of localItems) {
-                        try {
-                            await addDoc(collection(db, "shopping"), {
-                                name: item.name || '',
-                                qty: Number(item.qty) || 1,
-                                price: Number(item.price) || 0,
-                                total: (Number(item.qty) || 1) * (Number(item.price) || 0),
-                                createdAt: item.createdAt || Date.now()
-                            });
-                        } catch(e) { console.error("Alınacaklar aktarım hatası:", e); }
-                    }
-                    return;
-                }
-            }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
             shoppingInitialSynced = true;
             let items = [];
             snapshot.forEach(docSnap => {
@@ -9688,32 +9653,7 @@
         // Realtime Listener: Barkodlu Ürünler
         let productsInitialSynced = false;
         onSnapshot(collection(db, "products"), async (snapshot) => {
-            if (snapshot.empty && !productsInitialSynced) {
-                productsInitialSynced = true;
-                let localProducts = [];
-                try { localProducts = JSON.parse(localStorage.getItem('bkvProducts')) || []; } catch(e){}
-                if (localProducts.length > 0) {
-                    for (const p of localProducts) {
-                        try {
-                            const bcode = String(p.barcode || '').trim();
-                            if (bcode) {
-                                const docId = encodeURIComponent(bcode).replace(/\./g, '%2E');
-                                await setDoc(doc(db, "products", docId), {
-                                    barcode: bcode,
-                                    name: p.name || '',
-                                    price: p.price || '',
-                                    stock: parseInt(p.stock, 10) || 0,
-                                    mfg: p.mfg || '',
-                                    exp: p.exp || '',
-                                    createdAt: p.createdAt || Date.now(),
-                                    updatedAt: p.updatedAt || Date.now()
-                                });
-                            }
-                        } catch(e) { console.error("Ürün aktarım hatası:", e); }
-                    }
-                    return;
-                }
-            }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
             productsInitialSynced = true;
             let productList = [];
             snapshot.forEach(docSnap => {
@@ -10166,22 +10106,7 @@
 
         // Realtime Listener: Messages
         onSnapshot(collection(db, "messages"), async (snapshot) => {
-            if (snapshot.empty && !messagesInitialSynced) {
-                messagesInitialSynced = true;
-                let localMsgs = window.getSafeMessages();
-                if (localMsgs.length > 0) {
-                    for (const m of localMsgs) {
-                        try {
-                            const { id, ...dataToSend } = m;
-                            await addDoc(collection(db, "messages"), {
-                                ...dataToSend,
-                                createdAt: m.createdAt || Date.now()
-                            });
-                        } catch(e) { console.error("Mesaj aktarım hatası:", e); }
-                    }
-                    return;
-                }
-            }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
             messagesInitialSynced = true;
             let msgs = [];
             snapshot.forEach(docSnap => {
@@ -10441,22 +10366,7 @@
 
         // Realtime Listener: Student Requests
         onSnapshot(collection(db, "student_requests"), async (snapshot) => {
-            if (snapshot.empty && !requestsInitialSynced) {
-                requestsInitialSynced = true;
-                let localReqs = window.getSafeRequests();
-                if (localReqs.length > 0) {
-                    for (const r of localReqs) {
-                        try {
-                            const { id, ...dataToSend } = r;
-                            await addDoc(collection(db, "student_requests"), {
-                                ...dataToSend,
-                                createdAt: r.createdAt || Date.now()
-                            });
-                        } catch(e) { console.error("Talep aktarım hatası:", e); }
-                    }
-                    return;
-                }
-            }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
             requestsInitialSynced = true;
             let reqs = [];
             snapshot.forEach(docSnap => {
@@ -10584,25 +10494,7 @@
 
         // Realtime Listener: Attendance
         onSnapshot(collection(db, "attendance"), async (snapshot) => {
-            if (snapshot.empty && !attendanceInitialSynced) {
-                attendanceInitialSynced = true;
-                let localAtt = {};
-                try { localAtt = JSON.parse(localStorage.getItem('bkvAttendance')) || {}; } catch(e) {}
-                const dates = Object.keys(localAtt);
-                if (dates.length > 0) {
-                    for (const dStr of dates) {
-                        try {
-                            await setDoc(doc(db, "attendance", dStr), {
-                                date: dStr,
-                                records: localAtt[dStr],
-                                updatedAt: Date.now(),
-                                updatedBy: 'Sistem Aktarımı'
-                            }, { merge: true });
-                        } catch(e) { console.error("Yoklama aktarım hatası:", e); }
-                    }
-                    return;
-                }
-            }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
             attendanceInitialSynced = true;
             let allAttendance = {};
             snapshot.forEach(docSnap => {
@@ -10734,23 +10626,7 @@
 
         // Realtime Listener: Club Logs
         onSnapshot(collection(db, "club_logs"), async (snapshot) => {
-            if (snapshot.empty && !clubLogsInitialSynced) {
-                clubLogsInitialSynced = true;
-                let localLogs = [];
-                try { localLogs = JSON.parse(localStorage.getItem('clubLogs')) || []; } catch(e) {}
-                if (localLogs.length > 0) {
-                    for (const l of localLogs) {
-                        try {
-                            const { id, ...dataToSend } = l;
-                            await addDoc(collection(db, "club_logs"), {
-                                ...dataToSend,
-                                createdAt: l.createdAt || Date.now()
-                            });
-                        } catch(e) { console.error("Kazanım defteri aktarım hatası:", e); }
-                    }
-                    return;
-                }
-            }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
             clubLogsInitialSynced = true;
             let logsList = [];
             snapshot.forEach(docSnap => {
@@ -11083,23 +10959,7 @@
 
         // Realtime Listener: Bokashi
         onSnapshot(collection(db, "bokashi"), async (snapshot) => {
-            if (snapshot.empty && !bokashiInitialSynced) {
-                bokashiInitialSynced = true;
-                let localB = [];
-                try { localB = JSON.parse(localStorage.getItem('bkvBokashi')) || []; } catch(e) {}
-                if (localB.length > 0) {
-                    for (const b of localB) {
-                        try {
-                            const { id, ...dataToSend } = b;
-                            await addDoc(collection(db, "bokashi"), {
-                                ...dataToSend,
-                                createdAt: b.createdAt || Date.now()
-                            });
-                        } catch(e) { console.error("Bokashi aktarım hatası:", e); }
-                    }
-                    return;
-                }
-            }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
             bokashiInitialSynced = true;
             let list = [];
             snapshot.forEach(docSnap => {
@@ -11139,17 +10999,7 @@
         function uretimDinle(koleksiyon, anahtar) {
             let ilk = false;
             onSnapshot(collection(db, koleksiyon), async (snapshot) => {
-                if (snapshot.empty && !ilk) {
-                    ilk = true;
-                    let yerel = [];
-                    try { yerel = JSON.parse(localStorage.getItem(anahtar)) || []; } catch(e) {}
-                    if (yerel.length > 0) {
-                        for (const r of yerel) {
-                            try { await setDoc(doc(db, koleksiyon, String(r.id)), r); } catch(e) { console.error("Üretim aktarım hatası:", e); }
-                        }
-                        return;
-                    }
-                }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
                 ilk = true;
                 const liste = [];
                 snapshot.forEach(d => liste.push({ ...d.data(), id: d.id }));
@@ -11173,15 +11023,7 @@
         };
         let tohumIlk = false;
         onSnapshot(collection(db, "seed_bank"), async (snapshot) => {
-            if (snapshot.empty && !tohumIlk) {
-                tohumIlk = true;
-                let yerel = [];
-                try { yerel = JSON.parse(localStorage.getItem('bkvSeeds')) || []; } catch(e) {}
-                if (yerel.length > 0) {
-                    for (const r of yerel) { try { await setDoc(doc(db, "seed_bank", String(r.id)), r); } catch(e) { console.error("Tohum aktarım hatası:", e); } }
-                    return;
-                }
-            }
+            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
             tohumIlk = true;
             const liste = [];
             snapshot.forEach(d => liste.push({ ...d.data(), id: d.id }));
