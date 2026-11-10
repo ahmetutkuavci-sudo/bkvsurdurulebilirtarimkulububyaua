@@ -113,6 +113,17 @@
             background: #cbd5e1;
         }
 
+
+        /* Uygulamaya Dön + PDF düğmeleri her ekranda yan yana, logonun dışında */
+        .nav-actions { flex-wrap: nowrap; align-items: center; }
+        .nav-actions .btn-action { white-space: nowrap; }
+        @media (max-width: 700px) {
+            .top-navbar { flex-wrap: wrap; row-gap: 8px; padding: 10px 14px; }
+            .brand-container { flex: 1 1 100%; }
+            .nav-actions { flex: 1 1 100%; justify-content: flex-start; gap: 8px; }
+            .nav-actions .btn-action { padding: 8px 12px; font-size: 12.5px; }
+        }
+
         /* Ana Düzen */
         .layout-container {
             max-width: 1240px;
@@ -541,7 +552,7 @@
             <div class="brand-title">BKV Sürdürülebilir Tarım Kulübü</div>
         </div>
         <div class="nav-actions">
-            <button class="btn-action btn-back" onclick="guideBack()" style="background:#fff;color:#1b5e20;border:1px solid #1b5e20;margin-right:8px">
+            <button class="btn-action btn-back" onclick="guideBack()" style="background:#fff;color:#1b5e20;border:1px solid #1b5e20">
                 <span>←</span> Uygulamaya Dön
             </button>
             <button class="btn-action btn-print" onclick="window.print()">
