@@ -3470,7 +3470,11 @@
                 <div id="login-error" class="form-message form-error"></div>
 
                 <input type="email" id="login-email" class="aero-input" placeholder="📧 E-posta Adresi" style="margin-bottom: 10px; width: 100%;">
-                <input type="password" id="login-pass" class="aero-input" placeholder="🔑 Şifre" onkeypress="if(event.key === 'Enter') login()" style="margin-bottom: 15px; width: 100%;">
+                <input type="password" id="login-pass" class="aero-input" placeholder="🔑 Şifre" onkeypress="if(event.key === 'Enter') login()" style="margin-bottom: 10px; width: 100%;">
+                <label for="login-remember" style="display:flex; align-items:center; gap:8px; margin: 0 2px 14px 2px; font-size:13.5px; font-weight:700; color:#01579b; cursor:pointer; text-align:left;">
+                    <input type="checkbox" id="login-remember" class="task-checkbox" style="width:18px; height:18px; flex-shrink:0;">
+                    <span>🔐 Beni Hatırla</span>
+                </label>
                 <button class="aero-btn" style="width: 100%; font-size: 16px; padding: 15px;" onclick="login()">Giriş Yap</button>
                 
                 <div style="margin-top: 25px; font-size: 14px; color: #01579b; font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">
@@ -4514,6 +4518,7 @@
                                 <input type="date" id="attendance-date" class="aero-input" style="padding: 7px 12px;" onchange="loadAttendanceForDate()">
                                 <button class="aero-btn btn-green" onclick="loadAttendanceForDate()" style="padding: 7px 14px; font-size: 13px;">🔄 Yenile</button>
                                 <button class="aero-btn btn-orange" onclick="exportAttendanceToExcel()" style="padding: 7px 14px; font-size: 13px;">💾 Excel İndir</button>
+                                <label style="display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:#01579b; cursor:pointer;"><input type="checkbox" id="attendance-show-all" onchange="loadAttendanceForDate()"> Öğretmen / Sistem de görünsün</label>
                             </div>
                         </div>
 
@@ -4903,6 +4908,36 @@
                         </div>
                     </div>
 
+                    <!-- 🖥️ CİHAZ KAYIT DEFTERİ (YALNIZCA YÖNETİCİ) -->
+                    <div class="settings-section admin-only" id="device-log-section">
+                        <div class="settings-section-header">
+                            <span class="settings-section-icon">🖥️</span>
+                            <div class="settings-section-title">
+                                <h3>Cihaz Kayıt Defteri</h3>
+                                <p>Sisteme giriş yapan cihazların türü, IP adresi ve bağlandığı ülke. Bu bölümü yalnızca yöneticiler görür.</p>
+                            </div>
+                        </div>
+                        <div class="card glass">
+                            <div class="ur-sum" id="dl-summary" style="margin-bottom:12px;"></div>
+                            <div class="ur-filter">
+                                <input type="search" id="dl-q" class="aero-input" placeholder="🔍 Kullanıcı, IP, ülke, tarayıcı ara…">
+                                <select id="dl-f-type" class="aero-input"><option value="">Tüm cihaz türleri</option></select>
+                                <select id="dl-f-country" class="aero-input"><option value="">Tüm ülkeler</option></select>
+                            </div>
+                            <div class="ur-row" style="margin-top:0; margin-bottom:10px;">
+                                <button class="aero-btn" onclick="bkvDeviceLogReload()">🔄 Yenile</button>
+                                <button class="aero-btn" onclick="bkvDeviceLogCsv()">⬇️ CSV (Excel) İndir</button>
+                            </div>
+                            <div class="ur-table-wrap" style="max-height:480px; overflow:auto;">
+                                <table class="ur-table" style="min-width:860px;">
+                                    <thead><tr><th>Kullanıcı</th><th>Cihaz</th><th>Sistem / Tarayıcı</th><th>IP Adresi</th><th>Ülke / Şehir</th><th>Son Giriş</th><th>Giriş</th><th>Durum</th><th></th></tr></thead>
+                                    <tbody id="dl-body"><tr><td colspan="9" style="text-align:center; opacity:.6;">Yükleniyor…</td></tr></tbody>
+                                </table>
+                            </div>
+                            <div class="ur-item-meta" style="margin-top:8px;">ℹ️ IP ve ülke bilgisi, cihaz giriş yaptığında üçüncü taraf bir IP servisinden alınır; VPN/proxy kullanan cihazlarda gerçek konumdan farklı görünebilir. Kayıtlar kişisel veri içerir — yalnızca yönetim amacıyla kullanın.</div>
+                        </div>
+                    </div>
+
                     <!-- 3. BÖLÜM: KULLANICI VE HESAP YÖNETİMİ -->
                     <div class="settings-section">
                         <div class="settings-section-header">
@@ -4930,6 +4965,11 @@
                                     <input type="text" id="new-user-grade" class="aero-input" placeholder="Sınıf / Şube (Örn: 10-A, Öğretmen)">
                                     <input type="email" id="new-user-email" class="aero-input" placeholder="E-posta Adresi (Giriş İçin)">
                                     <input type="password" id="new-user-pass" class="aero-input" placeholder="Yeni Şifre">
+                                    <select id="new-user-type" class="aero-input" title="Kullanıcının görevi">
+                                        <option value="ogrenci">🎓 Öğrenci (yoklamaya dahil)</option>
+                                        <option value="ogretmen">👩‍🏫 Öğretmen</option>
+                                        <option value="sistem">⚙️ Sistem hesabı</option>
+                                    </select>
                                     <select id="new-user-role" class="aero-input">
                                         <option value="guest">👤 Normal Üye (Öğrenci/Görüntüleyici)</option>
                                         <option value="admin">👑 Yönetici (Tam Yetkili / Öğretmen)</option>
@@ -5736,7 +5776,7 @@
             }
 
             if (showToast) {
-                const label = version === 'modern' ? '🚀 Aero 2.0 Komuta Merkezi (Yan Menülü & KPI)' : '💎 Klasik Frutiger Aero (Üst Menülü)';
+                const label = version === 'modern' ? '🚀 Yan Menü (YENİ)' : '💎 Klasik (Üst Menü)';
                 if (typeof showNotification === 'function') {
                     showNotification(`Arayüz görünümü güncellendi: ${label}`, 'success');
                 }
@@ -5872,6 +5912,23 @@
             el.innerText = message; el.style.display = 'block';
         }
 
+        // 🎓 GÖREV (kullanıcı türü): ogrenci / ogretmen / sistem — yetkiden (admin/guest) bağımsızdır
+        const BKV_USER_TYPES = {
+            ogrenci:  { icon: '🎓', label: 'Öğrenci',  color: '#2e7d32' },
+            ogretmen: { icon: '👩‍🏫', label: 'Öğretmen', color: '#0277bd' },
+            sistem:   { icon: '⚙️', label: 'Sistem',   color: '#6a1b9a' }
+        };
+        function bkvUserType(u) {
+            if (!u) return 'ogrenci';
+            if (u.userType && BKV_USER_TYPES[u.userType]) return u.userType;
+            const email = (u.email || '').toLowerCase().trim();
+            const g = (u.grade || '').toLowerCase(), n = (u.username || '').toLowerCase();
+            if (email === 'www.ahmetutkuavci@gmail.com' || g.includes('system') || g.includes('sistem') || n.includes('tarım kulübü')) return 'sistem';
+            if (u.role === 'admin' || g.includes('öğretmen') || g.includes('ogretmen')) return 'ogretmen';
+            return 'ogrenci';
+        }
+        window.bkvUserType = bkvUserType; window.BKV_USER_TYPES = BKV_USER_TYPES;
+
         function getSafeUsers() {
             if (window._liveUsers && Array.isArray(window._liveUsers) && window._liveUsers.length > 0) {
                 return window._liveUsers;
@@ -5900,6 +5957,8 @@
             
             localStorage.setItem('bkvUsers', JSON.stringify(users));
 
+            if (sessionStorage.getItem('isUnlocked') !== 'true') { bkvTryRestoreSession(); }
+
             if (sessionStorage.getItem('isUnlocked') === 'true') {
                 document.getElementById('login-screen').style.display = 'none'; 
                 applyUserRoleUI();
@@ -5908,6 +5967,29 @@
             }
             updateUsersLists();
         }
+
+        // 🔐 BENİ HATIRLA: kayıtlı cihazda oturumu (çıkış yapılana kadar) otomatik geri yükler
+        function bkvTryRestoreSession() {
+            if (sessionStorage.getItem('isUnlocked') === 'true') return true;
+            let rem = null;
+            try { rem = JSON.parse(localStorage.getItem('bkvRemember')); } catch(e) {}
+            if (!rem || !rem.email) return false;
+            const users = (window._liveUsers && window._liveUsers.length) ? window._liveUsers : getSafeUsers();
+            const u = users.find(x => (x.email || '').toLowerCase().trim() === rem.email);
+            if (!u) return false;
+            sessionStorage.setItem('isUnlocked', 'true');
+            sessionStorage.setItem('currentUser', u.username);
+            sessionStorage.setItem('currentGrade', u.grade || 'Belirtilmedi');
+            sessionStorage.setItem('currentEmail', u.email.toLowerCase().trim());
+            sessionStorage.setItem('currentRole', u.role || 'guest');
+            try {
+                if (u.theme) changeTheme(u.theme, false);
+                if (u.uiVersion) switchUIVersion(u.uiVersion, false);
+            } catch(e) {}
+            try { if (typeof window.bkvDeviceLog === 'function') window.bkvDeviceLog(u, 'restore', true); } catch(e) {}
+            return true;
+        }
+        window.bkvTryRestoreSession = bkvTryRestoreSession;
 
         function registerUser() {
             const newName = document.getElementById('reg-name').value.trim();
@@ -5975,6 +6057,13 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('login-email').value = ''; 
                 document.getElementById('login-pass').value = '';
+                try {
+                    const rememberEl = document.getElementById('login-remember');
+                    const rememberOn = !!(rememberEl && rememberEl.checked);
+                    if (rememberOn) localStorage.setItem('bkvRemember', JSON.stringify({ email: validUser.email.toLowerCase().trim(), ts: Date.now() }));
+                    else localStorage.removeItem('bkvRemember');
+                    if (typeof window.bkvDeviceLog === 'function') window.bkvDeviceLog(validUser, 'login', rememberOn);
+                } catch(e) { console.warn('Beni hatırla / cihaz kaydı hatası', e); }
                 showNotification(`Hoş geldiniz, ${validUser.username}!`, "success");
             } else { 
                 showFormError('login-error', "Hatalı e-posta adresi veya şifre girdiniz!"); 
@@ -6121,6 +6210,8 @@
         }
 
         function lockSystem() {
+            try { if (typeof window.bkvDeviceLog === 'function') window.bkvDeviceLog(null, 'logout', false); } catch(e) {}
+            try { localStorage.removeItem('bkvRemember'); } catch(e) {}
             sessionStorage.removeItem('isUnlocked'); 
             sessionStorage.removeItem('currentUser');
             sessionStorage.removeItem('currentGrade');
@@ -6151,6 +6242,7 @@
             }
 
             document.body.classList.toggle('is-admin', isAdmin);
+            try { if (isAdmin && typeof window.bkvDeviceLogStart === 'function') window.bkvDeviceLogStart(); else if (!isAdmin && typeof window.bkvDeviceLogStop === 'function') window.bkvDeviceLogStop(); } catch(e) {}
             document.querySelectorAll('.admin-only, .ch-reset').forEach(el => {
                 el.style.display = isAdmin ? '' : 'none';
             });
@@ -6315,7 +6407,7 @@
                 msgUserSelect.innerHTML = '<option value="">-- Alıcı Üye Seçin --</option>';
                 users.forEach(u => {
                     if (u.email.toLowerCase() !== currentEmail) {
-                        msgUserSelect.innerHTML += `<option value="${u.email}">${u.username} (🏫 ${u.grade || 'Üye'} - ${u.role === 'admin' ? '👑 Yetkili' : 'Üye'})</option>`;
+                        msgUserSelect.innerHTML += `<option value="${u.email}">${u.username} (🏫 ${u.grade || 'Üye'} - ${BKV_USER_TYPES[bkvUserType(u)].icon} ${BKV_USER_TYPES[bkvUserType(u)].label})</option>`;
                     }
                 });
             }
@@ -6328,13 +6420,17 @@
                     const uEmail = (u.email || '').toLowerCase();
                     const isKurucu = (uEmail === kurucuEmail);
                     const isSelf = (uEmail === currentEmail);
-                    let roleIcon = u.role === 'admin' ? '👑' : '👤';
-                    let roleText = u.role === 'admin' ? 'Yönetici / Öğretmen' : 'Üye';
+                    const uType = bkvUserType(u), uTypeInfo = BKV_USER_TYPES[uType];
+                    let roleIcon = uTypeInfo.icon;
+                    let roleText = (u.role === 'admin' ? '👑 Yönetici · ' : '') + uTypeInfo.label;
                     let gradeText = u.grade ? `🏫 ${u.grade}` : '🏫 Belirtilmedi';
 
                     let roleControlHtml = '';
                     if (isAdmin && !isKurucu) {
                         roleControlHtml = `
+                            <select class="aero-input" style="padding: 4px 8px; font-size: 12px; border-radius: 8px; cursor: pointer; background: white; font-weight: bold;" onchange="setUserType('${u.email}', this.value)" title="Görevi Değiştir (Öğrenci / Öğretmen / Sistem)">
+                                ${Object.keys(BKV_USER_TYPES).map(k => `<option value="${k}" ${uType === k ? 'selected' : ''}>${BKV_USER_TYPES[k].icon} ${BKV_USER_TYPES[k].label}</option>`).join('')}
+                            </select>
                             <select class="aero-input" style="padding: 4px 8px; font-size: 12px; border-radius: 8px; cursor: pointer; background: white; font-weight: bold;" onchange="changeUserRole('${u.email}', this.value)" title="Yetkiyi Değiştir">
                                 <option value="guest" ${u.role !== 'admin' ? 'selected' : ''}>👤 Normal Üye</option>
                                 <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>👑 Yönetici</option>
@@ -6352,6 +6448,7 @@
                             <div>
                                 <span>${roleIcon} ${u.username}</span>
                                 <span style="font-size: 11px; color: #0277bd; margin-left: 8px; background: rgba(2,136,209,0.1); padding: 2px 6px; border-radius: 6px;">${gradeText}</span>
+                                <span style="font-size: 11px; color: ${uTypeInfo.color}; margin-left: 4px; background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 6px;">${uTypeInfo.label}</span>
                                 <div style="font-size: 11px; color: #555; margin-left: 5px; margin-top: 2px;">${u.email}</div>
                             </div>
                             <div style="display: flex; align-items: center;">
@@ -6410,7 +6507,7 @@
 
             if (users.find(u => u.email.toLowerCase() === newE)) return showNotification("Bu e-posta adresi zaten sistemde kayıtlı!", "error");
             
-            users.push({ username: newU, grade: newG, email: newE, password: newP, role: newRole });
+            users.push({ username: newU, grade: newG, email: newE, password: newP, role: newRole, userType: (document.getElementById('new-user-type') || {}).value || 'ogrenci' });
             localStorage.setItem('bkvUsers', JSON.stringify(users)); 
             showNotification(`"${newU}" adlı hesap (${newG}) oluşturuldu!`, "success");
             
@@ -7560,6 +7657,7 @@
                 const displayName = user.username || user.email;
                 const userEmail = user.email;
                 const userGrade = user.grade ? `🏫 ${user.grade}` : '';
+                const uTI = BKV_USER_TYPES[bkvUserType(user)];
 
                 const savedStatus = todaysAttendance[userEmail] ? todaysAttendance[userEmail].status : 'geldi';
                 const savedNote = todaysAttendance[userEmail] ? todaysAttendance[userEmail].note : '';
@@ -7567,7 +7665,7 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td style="font-weight: bold; color: #01579b;">
-                        ${displayName} <span style="font-size: 11px; color: #0277bd; margin-left: 6px;">${userGrade}</span>
+                        ${displayName} <span style="font-size: 11px; color: #0277bd; margin-left: 6px;">${userGrade}</span> <span style="font-size: 11px; color: ${uTI.color};">${uTI.icon} ${uTI.label}</span>
                         <br><small style="color:#777;">${userEmail}</small>
                     </td>
                     <td>
@@ -8227,6 +8325,133 @@
         };
 
         console.log("🔥 Firebase Firestore bağlantısı başarıyla kuruldu.");
+
+        // ========================================================
+        // 🖥️ CİHAZ KAYIT DEFTERİ (device_logs) — yazma: her cihaz, okuma/silme: yönetici arayüzü
+        // ========================================================
+        (function() {
+            const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            function deviceId() {
+                let id = localStorage.getItem('bkvDeviceId');
+                if (!id) { id = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); try { localStorage.setItem('bkvDeviceId', id); } catch(e) {} }
+                return id;
+            }
+            function detect() {
+                const ua = navigator.userAgent || '', touch = navigator.maxTouchPoints || 0;
+                let os = 'Bilinmiyor', type = '💻 PC / Dizüstü';
+                if (/iPhone|iPod/.test(ua)) { os = 'iOS'; type = '📱 iPhone (iOS)'; }
+                else if (/iPad/.test(ua) || (/Macintosh/.test(ua) && touch > 1)) { os = 'iPadOS'; type = '📲 iPad'; }
+                else if (/Android/.test(ua)) { os = 'Android'; type = /Mobile/.test(ua) ? '📱 Android Telefon' : '📲 Android Tablet'; }
+                else if (/CrOS/.test(ua)) { os = 'ChromeOS'; type = '💻 Chromebook'; }
+                else if (/Windows/.test(ua)) { os = 'Windows'; }
+                else if (/Mac OS X|Macintosh/.test(ua)) { os = 'macOS'; }
+                else if (/Linux/.test(ua)) { os = 'Linux'; }
+                else if (/Tablet/i.test(ua)) { type = '📲 Tablet'; }
+                let br = 'Diğer';
+                if (/EdgA?\/|Edg\//.test(ua)) br = 'Edge'; else if (/OPR\/|Opera/.test(ua)) br = 'Opera';
+                else if (/SamsungBrowser/.test(ua)) br = 'Samsung Internet'; else if (/Firefox|FxiOS/.test(ua)) br = 'Firefox';
+                else if (/Chrome|CriOS/.test(ua)) br = 'Chrome'; else if (/Safari/.test(ua)) br = 'Safari';
+                const standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+                return { type, os, browser: br + (standalone ? ' (Uygulama)' : ''), ua: ua.slice(0, 300), screen: (screen.width || 0) + 'x' + (screen.height || 0), lang: navigator.language || '' };
+            }
+            async function getGeo() {
+                try { const c = JSON.parse(sessionStorage.getItem('bkvGeoCache') || 'null'); if (c && c.ip) return c; } catch(e) {}
+                const tries = [
+                    async () => { const j = await (await fetch('https://ipwho.is/')).json(); if (j && j.success !== false && j.ip) return { ip: j.ip, country: j.country || '', cc: j.country_code || '', city: j.city || '', isp: (j.connection && (j.connection.isp || j.connection.org)) || '' }; throw 0; },
+                    async () => { const j = await (await fetch('https://ipapi.co/json/')).json(); if (j && j.ip) return { ip: j.ip, country: j.country_name || '', cc: j.country_code || '', city: j.city || '', isp: j.org || '' }; throw 0; },
+                    async () => { const j = await (await fetch('https://api.country.is/')).json(); if (j && j.ip) return { ip: j.ip, country: j.country || '', cc: j.country || '', city: '', isp: '' }; throw 0; }
+                ];
+                for (const t of tries) { try { const g = await t(); try { sessionStorage.setItem('bkvGeoCache', JSON.stringify(g)); } catch(e) {} return g; } catch(e) {} }
+                return { ip: '', country: '', cc: '', city: '', isp: '' };
+            }
+            function flag(cc) { return (cc && /^[A-Za-z]{2}$/.test(cc)) ? String.fromCodePoint.apply(null, cc.toUpperCase().split('').map(c => 127397 + c.charCodeAt(0))) + ' ' : ''; }
+
+            window.bkvDeviceLog = async function(user, event, remember) {
+                try {
+                    const email = ((user && user.email) || sessionStorage.getItem('currentEmail') || '').toLowerCase().trim();
+                    if (!email) return;
+                    const did = deviceId(), ref = doc(db, 'device_logs', email + '__' + did), now = Date.now();
+                    let old = null; try { const s = await getDoc(ref); if (s.exists()) old = s.data(); } catch(e) {}
+                    const d = detect();
+                    const rec = {
+                        email: email, username: (user && user.username) || sessionStorage.getItem('currentUser') || '',
+                        grade: (user && user.grade) || sessionStorage.getItem('currentGrade') || '',
+                        role: (user && user.role) || sessionStorage.getItem('currentRole') || 'guest',
+                        deviceId: did, deviceType: d.type, os: d.os, browser: d.browser, ua: d.ua, screen: d.screen, lang: d.lang,
+                        remember: !!remember, lastEvent: event, lastSeen: now,
+                        firstSeen: (old && old.firstSeen) || now, loginCount: ((old && old.loginCount) || 0) + (event === 'login' ? 1 : 0)
+                    };
+                    if (event !== 'logout') {
+                        const g = await getGeo();
+                        rec.ip = g.ip || (old && old.ip) || ''; rec.country = g.country || (old && old.country) || '';
+                        rec.countryCode = g.cc || (old && old.countryCode) || ''; rec.city = g.city || (old && old.city) || ''; rec.isp = g.isp || (old && old.isp) || '';
+                    }
+                    await setDoc(ref, rec, { merge: true });
+                } catch(err) { console.warn('Cihaz kaydı yazılamadı:', err); }
+            };
+
+            // ---- Yönetici görünümü ----
+            let rows = [], unsub = null;
+            const when = t => { if (!t) return '—'; const d = new Date(t); return d.toLocaleDateString('tr-TR') + ' ' + d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }); };
+            function render() {
+                const body = document.getElementById('dl-body'); if (!body) return;
+                if (sessionStorage.getItem('currentRole') !== 'admin') { body.innerHTML = ''; return; }
+                const uniq = (arr) => Array.from(new Set(arr.filter(Boolean))).sort((a, b) => String(a).localeCompare(String(b), 'tr'));
+                const fill = (id, label, vals) => { const el = document.getElementById(id); if (!el) return; const v = el.value; el.innerHTML = '<option value="">' + label + '</option>' + vals.map(x => '<option>' + esc(x) + '</option>').join(''); el.value = vals.indexOf(v) > -1 ? v : ''; };
+                fill('dl-f-type', 'Tüm cihaz türleri', uniq(rows.map(r => r.deviceType)));
+                fill('dl-f-country', 'Tüm ülkeler', uniq(rows.map(r => r.country)));
+                const q = (document.getElementById('dl-q').value || '').toLocaleLowerCase('tr'), ft = document.getElementById('dl-f-type').value, fc = document.getElementById('dl-f-country').value;
+                const list = rows.filter(r => (!ft || r.deviceType === ft) && (!fc || r.country === fc) &&
+                    (!q || [r.username, r.email, r.ip, r.country, r.city, r.browser, r.os, r.deviceType, r.grade].join(' ').toLocaleLowerCase('tr').indexOf(q) > -1))
+                    .sort((a, b) => (b.lastSeen || 0) - (a.lastSeen || 0));
+                // özet
+                const sayac = {}; rows.forEach(r => { sayac[r.deviceType] = (sayac[r.deviceType] || 0) + 1; });
+                const ulke = uniq(rows.map(r => r.country)).length, aktif = rows.filter(r => r.remember && r.lastEvent !== 'logout').length;
+                const kart = (lb, vl, sb) => '<div class="ur-sum-card"><div class="lb">' + lb + '</div><div class="vl">' + vl + '</div>' + (sb ? '<div class="sb">' + sb + '</div>' : '') + '</div>';
+                document.getElementById('dl-summary').innerHTML = kart('🖥️ Toplam Cihaz', rows.length, new Set(rows.map(r => r.email)).size + ' kullanıcı') +
+                    kart('🌍 Ülke', ulke, uniq(rows.map(r => r.country)).slice(0, 3).join(', ')) +
+                    kart('🔐 Beni Hatırla Açık', aktif, 'Oturumu açık kalan cihaz') +
+                    kart('📊 Türlere Göre', Object.keys(sayac).length, Object.keys(sayac).map(k => k + ': ' + sayac[k]).join(' · '));
+                body.innerHTML = list.length ? list.map(r => {
+                    const durum = r.lastEvent === 'logout' ? '<span class="ur-badge plan">Çıkış yaptı</span>' : (r.remember ? '<span class="ur-badge ok">Hatırlanıyor</span>' : '<span class="ur-badge run">Oturum</span>');
+                    return '<tr><td><b>' + esc(r.username || r.email) + '</b><br><small style="opacity:.7">' + esc(r.email) + (r.grade ? ' · ' + esc(r.grade) : '') + '</small></td>' +
+                        '<td>' + esc(r.deviceType) + '<br><small style="opacity:.7">' + esc(r.screen || '') + '</small></td>' +
+                        '<td>' + esc(r.os) + '<br><small style="opacity:.7">' + esc(r.browser) + '</small></td>' +
+                        '<td style="font-family:monospace;">' + esc(r.ip || '—') + (r.isp ? '<br><small style="opacity:.7; font-family:inherit;">' + esc(r.isp) + '</small>' : '') + '</td>' +
+                        '<td>' + flag(r.countryCode) + esc(r.country || '—') + (r.city ? '<br><small style="opacity:.7">' + esc(r.city) + '</small>' : '') + '</td>' +
+                        '<td>' + when(r.lastSeen) + '<br><small style="opacity:.7">İlk: ' + when(r.firstSeen) + '</small></td>' +
+                        '<td>' + (r.loginCount || 0) + '</td><td>' + durum + '</td>' +
+                        '<td><button class="ur-ibtn del" title="Kaydı sil" onclick="bkvDeviceLogDelete(\'' + esc(r._id).replace(/'/g, '') + '\')">🗑️</button></td></tr>';
+                }).join('') : '<tr><td colspan="9" style="text-align:center; opacity:.6; padding:18px;">' + (rows.length ? 'Filtreye uyan cihaz yok.' : 'Henüz cihaz kaydı yok. Kullanıcılar giriş yaptıkça burada görünür.') + '</td></tr>';
+            }
+            window.bkvDeviceLogStart = function() {
+                if (sessionStorage.getItem('currentRole') !== 'admin') return;
+                ['dl-q', 'dl-f-type', 'dl-f-country'].forEach(id => { const el = document.getElementById(id); if (el && !el.dataset.bound) { el.dataset.bound = 1; el.addEventListener('input', render); el.addEventListener('change', render); } });
+                if (unsub) { render(); return; }
+                unsub = onSnapshot(collection(db, 'device_logs'), (snap) => {
+                    rows = []; snap.forEach(d => rows.push(Object.assign({ _id: d.id }, d.data()))); render();
+                }, (err) => {
+                    console.warn('device_logs dinlenemedi:', err);
+                    const body = document.getElementById('dl-body'); if (body) body.innerHTML = '<tr><td colspan="9" style="text-align:center; color:#c62828;">Kayıtlar okunamadı: ' + esc(err.message) + '</td></tr>';
+                });
+            };
+            window.bkvDeviceLogStop = function() { if (unsub) { unsub(); unsub = null; } rows = []; };
+            window.bkvDeviceLogReload = function() { window.bkvDeviceLogStop(); window.bkvDeviceLogStart(); if (typeof showNotification === 'function') showNotification('Cihaz kayıtları yenilendi.', 'info', 1800); };
+            window.bkvDeviceLogDelete = function(id) {
+                if (sessionStorage.getItem('currentRole') !== 'admin') return;
+                showCustomConfirm('Cihaz Kaydını Sil', 'Bu cihaz kaydı silinsin mi? (Cihaz tekrar giriş yaparsa yeniden oluşur.)', async () => {
+                    try { await deleteDoc(doc(db, 'device_logs', id)); } catch(e) { showNotification('Silinemedi: ' + e.message, 'error'); }
+                });
+            };
+            window.bkvDeviceLogCsv = function() {
+                if (!rows.length) return showNotification('İndirilecek kayıt yok.', 'warning');
+                const cols = ['Kullanıcı', 'E-posta', 'Sınıf', 'Cihaz', 'İşletim Sistemi', 'Tarayıcı', 'Ekran', 'IP', 'Ülke', 'Şehir', 'İnternet Sağlayıcı', 'İlk Giriş', 'Son Giriş', 'Giriş Sayısı', 'Beni Hatırla', 'Son Olay'];
+                const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+                const sat = rows.slice().sort((a, b) => (b.lastSeen || 0) - (a.lastSeen || 0)).map(r => [r.username, r.email, r.grade, r.deviceType, r.os, r.browser, r.screen, r.ip, r.country, r.city, r.isp, when(r.firstSeen), when(r.lastSeen), r.loginCount, r.remember ? 'Evet' : 'Hayır', r.lastEvent].map(q).join(';'));
+                const b = new Blob(['\ufeff' + cols.map(q).join(';') + '\n' + sat.join('\n')], { type: 'text/csv;charset=utf-8' });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'cihaz_kayit_defteri.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+            };
+        })();
 
         // ========================================================
         // ☁️ GERÇEK CANLI BULUT SENKRONİZASYON & AĞ İZLEME SİSTEMİ
@@ -9016,6 +9241,7 @@
                 email: newE,
                 password: newP,
                 role: newRole,
+                userType: (document.getElementById('new-user-type') || {}).value || 'ogrenci',
                 createdAt: Date.now()
             };
 
@@ -9033,6 +9259,29 @@
             } catch(err) {
                 console.error("Firestore addNewUser hatası:", err);
                 if (typeof showNotification === 'function') showNotification("Kullanıcı oluşturulurken hata: " + err.message, "error");
+            }
+        };
+
+        window.setUserType = async function(email, newType) {
+            if (sessionStorage.getItem('currentRole') !== 'admin') {
+                if (typeof showNotification === 'function') showNotification("⚠️ Görev değiştirme yetkisi yalnızca yöneticilere aittir!", "warning");
+                if (typeof updateUsersLists === 'function') updateUsersLists();
+                return;
+            }
+            if (!BKV_USER_TYPES[newType]) return;
+            let users = window.getSafeUsers();
+            let user = users.find(u => (u.email || '').toLowerCase() === email.toLowerCase());
+            if (!user) { if (typeof showNotification === 'function') showNotification("⚠️ Kullanıcı bulunamadı!", "error"); return; }
+            user.userType = newType;
+            localStorage.setItem('bkvUsers', JSON.stringify(users));
+            if (typeof updateUsersLists === 'function') updateUsersLists();
+            try {
+                await updateDoc(doc(db, "users", user._docId || email.toLowerCase()), { userType: newType });
+                if (typeof showNotification === 'function') showNotification(`✅ "${user.username}" görevi "${BKV_USER_TYPES[newType].icon} ${BKV_USER_TYPES[newType].label}" olarak güncellendi!`, "success");
+                if (typeof loadAttendanceForDate === 'function') loadAttendanceForDate();
+            } catch(err) {
+                console.error("Firestore setUserType hatası:", err);
+                if (typeof showNotification === 'function') showNotification("Görev değiştirilirken hata: " + err.message, "error");
             }
         };
 
@@ -9119,6 +9368,7 @@
                                     email: uEmail,
                                     password: u.password || '123456',
                                     role: u.role || 'guest',
+                                    userType: bkvUserType(u),
                                     createdAt: u.createdAt || Date.now()
                                 });
                             }
@@ -9143,6 +9393,20 @@
             window._liveUsers = userList;
             localStorage.setItem('bkvUsers', JSON.stringify(userList));
             if (typeof updateUsersLists === 'function') updateUsersLists();
+
+            // 🔐 Beni Hatırla: oturum henüz açılmadıysa bulut verisiyle geri yüklemeyi dene
+            try {
+                if (sessionStorage.getItem('isUnlocked') !== 'true' && localStorage.getItem('bkvRemember')) {
+                    if (window.bkvTryRestoreSession && window.bkvTryRestoreSession()) {
+                        const ls = document.getElementById('login-screen'); if (ls) ls.style.display = 'none';
+                        if (typeof applyUserRoleUI === 'function') applyUserRoleUI();
+                        if (typeof loadStudentPortalData === 'function') loadStudentPortalData();
+                    } else {
+                        const rem = JSON.parse(localStorage.getItem('bkvRemember') || 'null');
+                        if (rem && !userList.some(u => (u.email || '').toLowerCase().trim() === rem.email)) localStorage.removeItem('bkvRemember');
+                    }
+                }
+            } catch(e) { console.warn('Oturum geri yükleme hatası', e); }
 
             // 🎨 Aktif kullanıcının Firebase'deki Rol, Tema & Arayüz Modunu Otomatik Eşitle
             const currentEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase().trim();
@@ -10160,12 +10424,14 @@
             const todaysAttendance = allAttendance[selectedDate] || {};
 
             let users = (typeof window.getSafeUsers === 'function') ? window.getSafeUsers() : [];
+            const showAllEl = document.getElementById('attendance-show-all');
+            if (!(showAllEl && showAllEl.checked)) users = users.filter(u => bkvUserType(u) === 'ogrenci'); // yoklama: yalnızca öğrenciler
             const container = document.getElementById('attendance-list-container');
             if (!container) return;
             container.innerHTML = '';
 
             if (users.length === 0) {
-                container.innerHTML = '<tr><td colspan="3" style="text-align:center;">Kayıtlı üye bulunmamaktadır.</td></tr>';
+                container.innerHTML = '<tr><td colspan="3" style="text-align:center;">Yoklama alınacak öğrenci bulunmamaktadır. (Ayarlar → Üye listesinden kullanıcıların görevini "Öğrenci" yapın.)</td></tr>';
                 return;
             }
 
@@ -10173,6 +10439,7 @@
                 const displayName = user.username || user.email;
                 const userEmail = user.email;
                 const userGrade = user.grade ? `🏫 ${user.grade}` : '';
+                const uTI = BKV_USER_TYPES[bkvUserType(user)];
 
                 const savedStatus = todaysAttendance[userEmail] ? todaysAttendance[userEmail].status : 'geldi';
                 const savedNote = todaysAttendance[userEmail] ? todaysAttendance[userEmail].note : '';
@@ -10180,7 +10447,7 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td style="font-weight: bold; color: #01579b;">
-                        ${displayName} <span style="font-size: 11px; color: #0277bd; margin-left: 6px;">${userGrade}</span>
+                        ${displayName} <span style="font-size: 11px; color: #0277bd; margin-left: 6px;">${userGrade}</span> <span style="font-size: 11px; color: ${uTI.color};">${uTI.icon} ${uTI.label}</span>
                         <br><small style="color:#777;">${userEmail}</small>
                     </td>
                     <td>
@@ -10215,7 +10482,7 @@
 
             let allAttendance = {};
             try { allAttendance = JSON.parse(localStorage.getItem('bkvAttendance')) || {}; } catch(e) {}
-            let todaysAttendance = {};
+            let todaysAttendance = Object.assign({}, allAttendance[selectedDate] || {}); // ekranda görünmeyen kişilerin eski kayıtları korunur
 
             const statusSelects = document.querySelectorAll('.attendance-status');
             const noteInputs = document.querySelectorAll('.attendance-note');
@@ -11943,8 +12210,12 @@
   document.addEventListener('DOMContentLoaded',bkvNotifBtn);
   // İzin henüz sorulmadıysa, giriş sonrası ilk dokunuşta bir kez iste (iOS kullanıcı hareketi ister)
   document.addEventListener('click',function once(){
+    var asked=false; try{asked=localStorage.getItem('bkvNotifAsked')==='1';}catch(_){}
+    if(asked){ document.removeEventListener('click',once); return; } // bu cihazda bir kez soruldu; tekrar sorma (butondan açılabilir)
     if('Notification' in window && Notification.permission==='default' && sessionStorage.getItem('currentEmail')){
-      document.removeEventListener('click',once); Notification.requestPermission().then(bkvNotifBtn);
+      document.removeEventListener('click',once);
+      try{localStorage.setItem('bkvNotifAsked','1');}catch(_){}
+      Notification.requestPermission().then(bkvNotifBtn);
     }
   },true);
 })();
