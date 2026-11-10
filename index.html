@@ -12107,7 +12107,7 @@
 
 <!-- ===== Kullanım Kılavuzu: uygulama içi katman (yeni sekme açmaz, oturum korunur) ===== -->
 <style>
-#guide-overlay{position:fixed;inset:0;z-index:2147483000;display:none;flex-direction:column;background:#f8fafc}
+#guide-overlay{position:fixed;inset:0;z-index:2147483000;display:none;flex-direction:column;background:#f8fafc;padding-top:env(safe-area-inset-top,0px)}
 #guide-overlay.open{display:flex}
 #guide-overlay .guide-bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:#1b5e20;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 #guide-overlay .guide-back{border:0;border-radius:10px;padding:10px 16px;font:inherit;font-size:14px;font-weight:800;background:#fff;color:#1b5e20;cursor:pointer}
@@ -12115,11 +12115,7 @@
 #guide-overlay iframe{flex:1 1 auto;width:100%;border:0;background:#fff}
 </style>
 <div id="guide-overlay" role="dialog" aria-label="Kullanım Kılavuzu">
-  <div class="guide-bar">
-    <button type="button" class="guide-back" onclick="closeGuide()">← Uygulamaya Dön</button>
-    <span class="guide-ttl">📖 Kullanım Kılavuzu</span>
-  </div>
-  <iframe id="guide-frame" title="Kullanım Kılavuzu"></iframe>
+        <iframe id="guide-frame" title="Kullanım Kılavuzu"></iframe>
 </div>
 <script>
 (function(){
