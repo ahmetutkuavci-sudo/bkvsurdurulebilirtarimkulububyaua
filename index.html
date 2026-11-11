@@ -3056,6 +3056,31 @@
             display: none !important;
         }
 
+
+        /* 🥬 MARUL AI */
+        .marul-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.7);border:1px solid var(--glass-border,rgba(255,255,255,.85));border-radius:14px;padding:4px 6px 4px 12px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05)}
+        .marul-bar input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-size:13px;font-weight:600;color:var(--text-main,#0c4a6e);padding:7px 0}
+        .marul-bar button{border:none;cursor:pointer;border-radius:10px;padding:6px 10px;font-weight:800;background:linear-gradient(#86efac,#22c55e);color:#064e3b}
+        .marul-bar button:disabled{opacity:.5;cursor:wait}
+        .marul-answer{margin-top:10px;max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+        .marul-msg{padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:var(--text-main,#0c4a6e)}
+        .marul-msg.u{align-self:flex-end;background:rgba(34,197,94,.18)}
+        .marul-msg.a{align-self:flex-start;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9)}
+        .marul-note{font-size:11px;opacity:.7;margin-top:6px;color:var(--text-main,#0c4a6e)}
+        #marul-pop{display:none;position:fixed;z-index:99990;left:270px;bottom:70px;width:360px;max-width:calc(100vw - 24px);padding:14px;border-radius:18px;background:var(--glass-bg,rgba(255,255,255,.9));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glass-border,#fff);box-shadow:var(--glass-shadow)}
+        #marul-pop.open{display:block}
+        #marul-pop .mp-head{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:var(--text-main,#0c4a6e);margin-bottom:6px}
+        #marul-pop .mp-head button{border:none;background:none;font-size:18px;cursor:pointer}
+        #marul-fab{display:none}
+        body.ui-classic #marul-sidebar-slot{display:none}
+        @media (min-width:769px){ body.ui-modern .marul-dash{display:none} }
+        @media (max-width:768px){
+            #marul-fab{display:flex;position:fixed;right:14px;bottom:78px;width:52px;height:52px;border-radius:50%;border:none;font-size:26px;align-items:center;justify-content:center;z-index:99980;cursor:pointer;background:linear-gradient(#bbf7d0,#22c55e);box-shadow:0 6px 18px rgba(0,0,0,.25)}
+            #marul-pop{left:8px;right:8px;bottom:70px;width:auto;max-width:none}
+            #marul-pop .marul-answer{max-height:45vh}
+            body.ui-modern .marul-dash{display:none}
+        }
+
         </style>
 </head>
 <body>
@@ -3660,6 +3685,12 @@
                         <span style="font-size: 17px;">⚙️</span> <span class="sidebar-hide-on-collapse">Ayarlar</span>
                     </button>
                 </nav>
+                    <div id="marul-sidebar-slot" style="margin-top:8px;">
+                        <div class="marul-bar" style="padding-left:8px;">
+                            <span style="font-size:17px;cursor:pointer;" onclick="marulOpen()" title="Marul Ai">🥬</span>
+                            <input type="text" class="sidebar-hide-on-collapse" placeholder="Marul Ai'ya sor..." onkeydown="if(event.key==='Enter'){marulAsk(this.value,'pop');this.value='';}">
+                        </div>
+                    </div>
             </div>
 
             <div class="sb-foot hide-on-print">
@@ -4239,6 +4270,7 @@
                 </div>
 
                 <div class="dashboard-layout" style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px;">
+                    <div style="display:flex;flex-direction:column;gap:20px;">
                     <div class="card glass" style="height: fit-content;">
                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.7); padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
                             <div style="display: flex; align-items: center; gap: 10px;">
@@ -4269,6 +4301,16 @@
                         </div>
 
                         <ul class="task-list" id="task-list-container" style="max-height: 600px;"></ul>
+                    </div>
+                    <div class="card glass marul-dash hide-on-print">
+                        <h2 style="margin:0 0 10px;border:none;padding:0;">🥬 Marul Ai</h2>
+                        <div class="marul-bar">
+                            <input type="text" id="marul-dash-input" placeholder="Tarım, bokashi, tohum... Marul Ai'ya sor" onkeydown="if(event.key==='Enter')marulAsk(this.value,'dash',this)">
+                            <button type="button" onclick="marulAsk(document.getElementById('marul-dash-input').value,'dash',document.getElementById('marul-dash-input'))">Sor</button>
+                        </div>
+                        <div class="marul-answer" id="marul-dash-answer"></div>
+                        <div class="marul-note">Yapay zeka yanılabilir; önemli bilgileri öğretmeninle doğrula.</div>
+                    </div>
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -4987,6 +5029,17 @@
 
         </div>
 
+    </div>
+
+    <button id="marul-fab" class="hide-on-print" onclick="marulOpen()" title="Marul Ai">🥬</button>
+    <div id="marul-pop" class="hide-on-print">
+        <div class="mp-head"><span>🥬 Marul Ai <small style="opacity:.5;font-weight:600">v11</small></span><button type="button" onclick="marulClose()">✕</button></div>
+        <div class="marul-bar">
+            <input type="text" id="marul-pop-input" placeholder="Marul Ai'ya sor..." onkeydown="if(event.key==='Enter'){marulAsk(this.value,'pop',this);}">
+            <button type="button" onclick="marulAsk(document.getElementById('marul-pop-input').value,'pop',document.getElementById('marul-pop-input'))">Sor</button>
+        </div>
+        <div class="marul-answer" id="marul-pop-answer"></div>
+        <div class="marul-note">Yapay zeka yanılabilir; önemli bilgileri öğretmeninle doğrula.</div>
     </div>
 
     <!-- Ticker & Live Clock Bottom Bar -->
@@ -8751,7 +8804,24 @@
 
         let notesInitialSynced = false;
         onSnapshot(collection(db, "notes"), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+            if (snapshot.empty && !notesInitialSynced) {
+                notesInitialSynced = true;
+                let localNotes = [];
+                try { localNotes = JSON.parse(localStorage.getItem('bkvNotesShared')) || []; } catch(e) {}
+                if (localNotes.length > 0) {
+                    for (const n of localNotes) {
+                        try {
+                            await addDoc(collection(db, "notes"), {
+                                author: n.author || 'Anonim',
+                                text: n.text || '',
+                                date: n.date || '',
+                                createdAt: n.createdAt || Date.now()
+                            });
+                        } catch(e) { console.error("Not aktarım hatası:", e); }
+                    }
+                    return;
+                }
+            }
             notesInitialSynced = true;
             let notesList = [];
             snapshot.forEach(docSnap => {
@@ -9176,7 +9246,25 @@
 
         let shoppingInitialSynced = false;
         onSnapshot(collection(db, "shopping"), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+            if (snapshot.empty && !shoppingInitialSynced) {
+                shoppingInitialSynced = true;
+                let localItems = [];
+                try { localItems = JSON.parse(localStorage.getItem('shoppingList')) || []; } catch(e){}
+                if (localItems.length > 0) {
+                    for (const item of localItems) {
+                        try {
+                            await addDoc(collection(db, "shopping"), {
+                                name: item.name || '',
+                                qty: Number(item.qty) || 1,
+                                price: Number(item.price) || 0,
+                                total: (Number(item.qty) || 1) * (Number(item.price) || 0),
+                                createdAt: item.createdAt || Date.now()
+                            });
+                        } catch(e) { console.error("Alınacaklar aktarım hatası:", e); }
+                    }
+                    return;
+                }
+            }
             shoppingInitialSynced = true;
             let items = [];
             snapshot.forEach(docSnap => {
@@ -9653,7 +9741,32 @@
         // Realtime Listener: Barkodlu Ürünler
         let productsInitialSynced = false;
         onSnapshot(collection(db, "products"), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+            if (snapshot.empty && !productsInitialSynced) {
+                productsInitialSynced = true;
+                let localProducts = [];
+                try { localProducts = JSON.parse(localStorage.getItem('bkvProducts')) || []; } catch(e){}
+                if (localProducts.length > 0) {
+                    for (const p of localProducts) {
+                        try {
+                            const bcode = String(p.barcode || '').trim();
+                            if (bcode) {
+                                const docId = encodeURIComponent(bcode).replace(/\./g, '%2E');
+                                await setDoc(doc(db, "products", docId), {
+                                    barcode: bcode,
+                                    name: p.name || '',
+                                    price: p.price || '',
+                                    stock: parseInt(p.stock, 10) || 0,
+                                    mfg: p.mfg || '',
+                                    exp: p.exp || '',
+                                    createdAt: p.createdAt || Date.now(),
+                                    updatedAt: p.updatedAt || Date.now()
+                                });
+                            }
+                        } catch(e) { console.error("Ürün aktarım hatası:", e); }
+                    }
+                    return;
+                }
+            }
             productsInitialSynced = true;
             let productList = [];
             snapshot.forEach(docSnap => {
@@ -10106,7 +10219,22 @@
 
         // Realtime Listener: Messages
         onSnapshot(collection(db, "messages"), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+            if (snapshot.empty && !messagesInitialSynced) {
+                messagesInitialSynced = true;
+                let localMsgs = window.getSafeMessages();
+                if (localMsgs.length > 0) {
+                    for (const m of localMsgs) {
+                        try {
+                            const { id, ...dataToSend } = m;
+                            await addDoc(collection(db, "messages"), {
+                                ...dataToSend,
+                                createdAt: m.createdAt || Date.now()
+                            });
+                        } catch(e) { console.error("Mesaj aktarım hatası:", e); }
+                    }
+                    return;
+                }
+            }
             messagesInitialSynced = true;
             let msgs = [];
             snapshot.forEach(docSnap => {
@@ -10366,7 +10494,22 @@
 
         // Realtime Listener: Student Requests
         onSnapshot(collection(db, "student_requests"), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+            if (snapshot.empty && !requestsInitialSynced) {
+                requestsInitialSynced = true;
+                let localReqs = window.getSafeRequests();
+                if (localReqs.length > 0) {
+                    for (const r of localReqs) {
+                        try {
+                            const { id, ...dataToSend } = r;
+                            await addDoc(collection(db, "student_requests"), {
+                                ...dataToSend,
+                                createdAt: r.createdAt || Date.now()
+                            });
+                        } catch(e) { console.error("Talep aktarım hatası:", e); }
+                    }
+                    return;
+                }
+            }
             requestsInitialSynced = true;
             let reqs = [];
             snapshot.forEach(docSnap => {
@@ -10494,7 +10637,25 @@
 
         // Realtime Listener: Attendance
         onSnapshot(collection(db, "attendance"), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+            if (snapshot.empty && !attendanceInitialSynced) {
+                attendanceInitialSynced = true;
+                let localAtt = {};
+                try { localAtt = JSON.parse(localStorage.getItem('bkvAttendance')) || {}; } catch(e) {}
+                const dates = Object.keys(localAtt);
+                if (dates.length > 0) {
+                    for (const dStr of dates) {
+                        try {
+                            await setDoc(doc(db, "attendance", dStr), {
+                                date: dStr,
+                                records: localAtt[dStr],
+                                updatedAt: Date.now(),
+                                updatedBy: 'Sistem Aktarımı'
+                            }, { merge: true });
+                        } catch(e) { console.error("Yoklama aktarım hatası:", e); }
+                    }
+                    return;
+                }
+            }
             attendanceInitialSynced = true;
             let allAttendance = {};
             snapshot.forEach(docSnap => {
@@ -10626,7 +10787,23 @@
 
         // Realtime Listener: Club Logs
         onSnapshot(collection(db, "club_logs"), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+            if (snapshot.empty && !clubLogsInitialSynced) {
+                clubLogsInitialSynced = true;
+                let localLogs = [];
+                try { localLogs = JSON.parse(localStorage.getItem('clubLogs')) || []; } catch(e) {}
+                if (localLogs.length > 0) {
+                    for (const l of localLogs) {
+                        try {
+                            const { id, ...dataToSend } = l;
+                            await addDoc(collection(db, "club_logs"), {
+                                ...dataToSend,
+                                createdAt: l.createdAt || Date.now()
+                            });
+                        } catch(e) { console.error("Kazanım defteri aktarım hatası:", e); }
+                    }
+                    return;
+                }
+            }
             clubLogsInitialSynced = true;
             let logsList = [];
             snapshot.forEach(docSnap => {
@@ -10959,7 +11136,23 @@
 
         // Realtime Listener: Bokashi
         onSnapshot(collection(db, "bokashi"), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+            if (snapshot.empty && !bokashiInitialSynced) {
+                bokashiInitialSynced = true;
+                let localB = [];
+                try { localB = JSON.parse(localStorage.getItem('bkvBokashi')) || []; } catch(e) {}
+                if (localB.length > 0) {
+                    for (const b of localB) {
+                        try {
+                            const { id, ...dataToSend } = b;
+                            await addDoc(collection(db, "bokashi"), {
+                                ...dataToSend,
+                                createdAt: b.createdAt || Date.now()
+                            });
+                        } catch(e) { console.error("Bokashi aktarım hatası:", e); }
+                    }
+                    return;
+                }
+            }
             bokashiInitialSynced = true;
             let list = [];
             snapshot.forEach(docSnap => {
@@ -10999,7 +11192,17 @@
         function uretimDinle(koleksiyon, anahtar) {
             let ilk = false;
             onSnapshot(collection(db, koleksiyon), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+                if (snapshot.empty && !ilk) {
+                    ilk = true;
+                    let yerel = [];
+                    try { yerel = JSON.parse(localStorage.getItem(anahtar)) || []; } catch(e) {}
+                    if (yerel.length > 0) {
+                        for (const r of yerel) {
+                            try { await setDoc(doc(db, koleksiyon, String(r.id)), r); } catch(e) { console.error("Üretim aktarım hatası:", e); }
+                        }
+                        return;
+                    }
+                }
                 ilk = true;
                 const liste = [];
                 snapshot.forEach(d => liste.push({ ...d.data(), id: d.id }));
@@ -11023,7 +11226,15 @@
         };
         let tohumIlk = false;
         onSnapshot(collection(db, "seed_bank"), async (snapshot) => {
-            // (Eski 'koleksiyon boşsa yerel kopyayı Firebase'e geri yükle' bloğu kaldırıldı: silinen veriyi diriltiyordu)
+            if (snapshot.empty && !tohumIlk) {
+                tohumIlk = true;
+                let yerel = [];
+                try { yerel = JSON.parse(localStorage.getItem('bkvSeeds')) || []; } catch(e) {}
+                if (yerel.length > 0) {
+                    for (const r of yerel) { try { await setDoc(doc(db, "seed_bank", String(r.id)), r); } catch(e) { console.error("Tohum aktarım hatası:", e); } }
+                    return;
+                }
+            }
             tohumIlk = true;
             const liste = [];
             snapshot.forEach(d => liste.push({ ...d.data(), id: d.id }));
@@ -12127,6 +12338,94 @@
     }
   },true);
 })();
+</script>
+<script>
+// 🥬 MARUL AI (Groq) — anahtarı aşağıya yaz. Not: HTML'deki anahtarı sayfayı açan herkes görebilir.
+var MARUL_KEY = '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';
+var MARUL_MODEL = 'llama-3.3-70b-versatile';
+var MARUL_BASE = 'https://api.groq.com/openai/v1';
+var MARUL_SYSTEM = 'Sen "Marul Ai"sın: BKV Sürdürülebilir Tarım Kulübü\'nün lise öğrencilerine yardım eden samimi asistanısın. Türkçe, kısa (en fazla 6 cümle) ve anlaşılır cevap ver. Konular: tarım, bokashi, kompost, tohum, sulama, hava durumuna göre bahçe işleri, kulüp çalışmaları. Kulüp dışı konularda nazikçe konuya dön. Tehlikeli veya zararlı talimat verme. Emin değilsen öğretmene danışmayı öner. Panel bilgisi verilmişse (yoklama, üyeler, görevler) sorulara ona dayanarak cevap ver; bilgi yoksa uydurma, "panelde bu bilgi yok" de.';
+var marulLast = 0, marulHistory = [];
+function marulCtx(){
+  var c=[];
+  function g(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
+  function iso(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(x<10?'0':'')+x;}
+  var gunler=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  var now=new Date(), dow=(now.getDay()+6)%7; // Pzt=0
+  var thisMon=new Date(now.getFullYear(),now.getMonth(),now.getDate()-dow);
+  var lastMon=new Date(thisMon.getFullYear(),thisMon.getMonth(),thisMon.getDate()-7);
+  var lastSun=new Date(thisMon.getFullYear(),thisMon.getMonth(),thisMon.getDate()-1);
+  c.push('Bugün: '+iso(now)+' '+gunler[now.getDay()]+'. "Geçen hafta" = '+iso(lastMon)+' ile '+iso(lastSun)+' arası. "Bu hafta" = '+iso(thisMon)+' ile bugün arası.');
+  var w=g('bkvLastWeatherData'); if(w) c.push('Hava durumu: '+JSON.stringify(w).slice(0,300));
+  var bk=g('bkvBokashi'); if(bk&&bk.length) c.push('Bokashi kayıt sayısı: '+bk.length);
+  var sd=g('bkvSeeds'); if(sd&&sd.length) c.push('Tohum çeşidi sayısı: '+sd.length);
+  // Üye/yoklama/görev bilgileri YALNIZCA yöneticiye gönderilir (öğrenci verisi korunur)
+  if(sessionStorage.getItem('currentRole')==='admin'){
+    var users=g('bkvUsers')||[], nm={};
+    users.forEach(function(u){nm[u.email]=(u.username||u.email)+(u.grade?' ('+u.grade+')':'');});
+    if(users.length) c.push('Kayıtlı üyeler ('+users.length+'): '+users.map(function(u){return nm[u.email];}).join(', ').slice(0,900));
+    var att=g('bkvAttendance')||{}, ds=Object.keys(att).sort().slice(-21), lines=[];
+    var etiket={geldi:'geldi',gelmedi:'GELMEDİ',izinli:'izinli',raporlu:'raporlu',faaliyet:'faaliyette'};
+    ds.forEach(function(d){
+      var rec=att[d], absent=[], present=0;
+      Object.keys(rec).forEach(function(e){var st=rec[e].status; if(st==='geldi') present++; else absent.push((nm[e]||e)+' '+(etiket[st]||st)+(rec[e].note?' ['+rec[e].note+']':''));});
+      var dd=new Date(d+'T12:00:00');
+      lines.push(d+' '+gunler[dd.getDay()]+': '+present+' geldi'+(absent.length?'; gelmeyen/diğer: '+absent.join(', '):''));
+    });
+    c.push('YOKLAMA KAYITLARI (son kayıtlı günler; listede olmayan tarih = yoklama alınmamış):\n'+(lines.join('\n')||'kayıt yok'));
+    var tk=g('bkvTasks')||[];
+    if(tk.length) c.push('Görevler: '+tk.slice(0,30).map(function(t){return t.text+(t.assignee?' ['+t.assignee+']':'')+(t.completed?' (tamam)':' (açık)');}).join('; ').slice(0,900));
+  }
+  return c.join('\n').slice(0,6000);
+}
+function marulOpen(){var p=document.getElementById('marul-pop');p.classList.add('open');var i=document.getElementById('marul-pop-input');if(i)i.focus();}
+function marulClose(){document.getElementById('marul-pop').classList.remove('open');}
+function marulAdd(box,cls,text){var d=document.createElement('div');d.className='marul-msg '+cls;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;}
+async function marulAsk(q,where,inputEl){
+  q=(q||'').trim(); if(!q) return;
+  if(where==='pop') marulOpen();
+  var box=document.getElementById(where==='dash'?'marul-dash-answer':'marul-pop-answer');
+  if(sessionStorage.getItem('isUnlocked')!=='true' && !document.body.classList.contains('is-admin')){marulAdd(box,'a','Marul Ai için önce giriş yapmalısın.');return;}
+  if(MARUL_KEY.indexOf('BURAYA')===0){marulAdd(box,'a','Marul Ai henüz kurulmadı (anahtar eklenmemiş).');return;}
+  if(Date.now()-marulLast<3000){marulAdd(box,'a','Biraz yavaş :) Birkaç saniye bekle.');return;}
+  marulLast=Date.now(); if(inputEl) inputEl.value='';
+  marulAdd(box,'u',q);
+  var wait=marulAdd(box,'a','🥬 düşünüyor...');
+  var t0=Date.now(), errs=[];
+  var tick=setInterval(function(){wait.textContent='🥬 düşünüyor... ('+Math.round((Date.now()-t0)/1000)+' sn)';},1000);
+  try{
+    var ctx=marulCtx();
+    var msgs=[{role:'system',content:MARUL_SYSTEM+(ctx?'\n\nPanel bilgisi:\n'+ctx:'')}];
+    marulHistory.slice(-6).forEach(function(m){msgs.push({role:m.role==='model'?'assistant':'user',content:m.text});});
+    msgs.push({role:'user',content:q.slice(0,500)});
+    var H={'Content-Type':'application/json','Authorization':'Bearer '+MARUL_KEY};
+    async function ask(model){
+      var ac=new AbortController(), to=setTimeout(function(){ac.abort();},25000);
+      try{
+        var r=await fetch(MARUL_BASE+'/chat/completions',{method:'POST',signal:ac.signal,headers:H,body:JSON.stringify({model:model,messages:msgs,max_tokens:700,temperature:0.7})});
+        var j=await r.json(); console.log('Marul Ai ('+model+'):',r.status,j);
+        var a=j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
+        if(a) return a.replace(/<think>[\s\S]*?<\/think>/g,'').trim();
+        var em=(j.error&&j.error.message)||('HTTP '+r.status);
+        errs.push(model+': '+em.split('\n')[0].slice(0,110));
+        return '';
+      }catch(e){errs.push(model+': '+(e.name==='AbortError'?'25 sn cevap yok':e.message));return '';}
+      finally{clearTimeout(to);}
+    }
+    var ans=await ask(MARUL_MODEL);
+    if(!ans){
+      try{
+        var lr=await fetch(MARUL_BASE+'/models',{headers:H}); var lj=await lr.json(); console.log('Marul Ai model listesi:',lj);
+        var names=((lj.data)||[]).map(function(m){return m.id;}).filter(function(id){return !/whisper|guard|tts|playai|orpheus|embed|prompt/i.test(id);});
+        for(var i=0;i<names.length && i<5 && !ans;i++){ if(names[i]===MARUL_MODEL) continue; ans=await ask(names[i]); if(ans) MARUL_MODEL=names[i]; }
+      }catch(e){errs.push('model listesi: '+e.message);}
+    }
+    clearInterval(tick);
+    wait.textContent=ans||('Marul Ai şu an cevap veremiyor.\nDenenenler:\n• '+errs.join('\n• '));
+    if(ans){marulHistory.push({role:'user',text:q},{role:'model',text:ans});}
+  }catch(e){clearInterval(tick);console.error('Marul Ai hata:',e);wait.textContent='Bağlantı hatası: '+e.message;}
+  box.scrollTop=box.scrollHeight;
+}
 </script>
 </body>
 </html>
