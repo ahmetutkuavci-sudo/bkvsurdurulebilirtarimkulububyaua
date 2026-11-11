@@ -12443,7 +12443,7 @@ var MARUL_RULES_MEMBER = '\n\nARAÇ KURALLARI (ÜYE):\n- Yönetici araçları (y
 var marulLast = 0, marulHistory = [];
 
 // 😊 EMOJİ DESTEĞİ — AI cevaplarında emoji kullanımı + yazı alanı için emoji seçici
-var MARUL_EMOJI_RULE = '\n\nEMOJİ KULLANIMI:\n- Cevaplarında konuya uygun emojileri doğal biçimde kullan (🌱🥬🍅💧☀️🌧️🐛🪱♻️📋✅📊👏).\n- Başlıkların başına ve önemli maddelere uygun bir emoji koy; her cümleye emoji ekleme, abartma (genelde cevap başına 2-6 emoji).\n- Kullanıcı emoji gönderirse veya emojiyle yazarsa sen de aynı samimiyetle emojiyle karşılık ver; 🙂 gibi emojileri anla ve yorumla.\n- Ciddi veya uyarı içeren konularda (hastalık, tehlike, disiplin) emojiyi az ve yerinde kullan.';
+var MARUL_EMOJI_RULE = '\n\nEMOJİ KULLANIMI:\n- Cevaplarında konuya uygun emojileri doğal biçimde kullan (🌱🥬🍅💧☀️🌧️🐛🪱♻️📋✅📊👏).\n- Başlıkların başına ve önemli maddelere uygun bir emoji koy; her cümleye emoji ekleme, abartma (genelde cevap başına 2-6 emoji).\n- Kullanıcı emoji gönderirse veya emojiyle yazarsa sen de aynı samimiyetle emojiyle karşılık ver; 🙂 gibi emojileri anla ve yorumla.\n- Ciddi veya uyarı içeren konularda (hastalık, tehlike, disiplin) emojiyi az ve yerinde kullan.\n- ÖNEMLİ: Yıldız (*), çift yıldız (**), diyez (#) gibi Markdown işaretleri KULLANMA, ekranda düz yazı olarak görünüyor. Başlık için emoji + düz yazı kullan (örn: 📌 Özet), madde işareti olarak tire yerine konuya uygun emoji koy (örn: 📅 Kuruluş: 10 Ekim 2008), vurgu için büyük harf veya emoji kullan.';
 var MARUL_EMOJIS = ['😊','😄','😂','🙂','😉','😍','🤔','😎','👍','👏','🙏','💪','🎉','🔥','❤️','✅','🌱','🌿','🥬','🍅','🥕','🥒','🌽','🍓','🌻','🌸','🍃','🌳','🪴','🐛','🐝','🦋','🪱','💧','☀️','🌧️','⛅','❄️','🌡️','♻️','🧪','🚜','📋','📊','📅','📝','💡','⚠️'];
 function marulEmojiClose(){var p=document.getElementById('marul-emoji');if(p)p.classList.remove('open');}
 function marulEmoji(input,btn){
@@ -12579,7 +12579,8 @@ function marulMic(input,where,btn){
 }
 function marulOpen(){var p=document.getElementById('marul-pop');p.classList.add('open');var i=document.getElementById('marul-pop-input');if(i)i.focus();}
 function marulClose(){document.getElementById('marul-pop').classList.remove('open');}
-function marulAdd(box,cls,text){var d=document.createElement('div');d.className='marul-msg '+cls;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;}
+function marulClean(t){return String(t||'').replace(/\*\*(.+?)\*\*/g,'$1').replace(/__(.+?)__/g,'$1').replace(/^\s{0,3}#{1,6}\s*/gm,'').replace(/^(\s*)[-*]\s+/gm,'$1• ').replace(/\*{1,2}/g,'');}
+function marulAdd(box,cls,text){var d=document.createElement('div');d.className='marul-msg '+cls;d.textContent=(cls==='a')?marulClean(text):text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;}
 
 // ============================================================
 // ONAY DİYALOĞU
