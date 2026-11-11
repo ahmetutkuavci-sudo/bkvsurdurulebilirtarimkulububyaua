@@ -3061,6 +3061,9 @@
         .marul-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.7);border:1px solid var(--glass-border,rgba(255,255,255,.85));border-radius:14px;padding:4px 6px 4px 12px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05)}
         .marul-bar input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-size:13px;font-weight:600;color:var(--text-main,#0c4a6e);padding:7px 0}
         .marul-bar button{border:none;cursor:pointer;border-radius:10px;padding:6px 10px;font-weight:800;background:linear-gradient(#86efac,#22c55e);color:#064e3b}
+        .marul-bar button.marul-mic{background:rgba(255,255,255,.8);color:#0c4a6e;padding:6px 8px;font-size:15px}
+        .marul-bar button.marul-mic.rec{background:#ef4444;color:#fff;animation:marulPulse 1s infinite}
+        @keyframes marulPulse{50%{opacity:.55}}
         .marul-bar button:disabled{opacity:.5;cursor:wait}
         .marul-answer{margin-top:10px;max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
         .marul-msg{padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:var(--text-main,#0c4a6e)}
@@ -3689,6 +3692,7 @@
                         <div class="marul-bar" style="padding-left:8px;">
                             <span style="font-size:17px;cursor:pointer;" onclick="marulOpen()" title="Marul Ai">🥬</span>
                             <input type="text" class="sidebar-hide-on-collapse" placeholder="Marul Ai'ya sor..." onkeydown="if(event.key==='Enter'){marulAsk(this.value,'pop');this.value='';}">
+                            <button type="button" class="marul-mic sidebar-hide-on-collapse" title="Sesli sor" onclick="marulMic(this.parentNode.querySelector('input'),'pop',this)">🎤</button>
                         </div>
                     </div>
             </div>
@@ -4306,6 +4310,7 @@
                         <h2 style="margin:0 0 10px;border:none;padding:0;">🥬 Marul Ai</h2>
                         <div class="marul-bar">
                             <input type="text" id="marul-dash-input" placeholder="Tarım, bokashi, tohum... Marul Ai'ya sor" onkeydown="if(event.key==='Enter')marulAsk(this.value,'dash',this)">
+                            <button type="button" class="marul-mic" title="Sesli sor" onclick="marulMic(document.getElementById('marul-dash-input'),'dash',this)">🎤</button>
                             <button type="button" onclick="marulAsk(document.getElementById('marul-dash-input').value,'dash',document.getElementById('marul-dash-input'))">Sor</button>
                         </div>
                         <div class="marul-answer" id="marul-dash-answer"></div>
@@ -5033,9 +5038,10 @@
 
     <button id="marul-fab" class="hide-on-print" onclick="marulOpen()" title="Marul Ai">🥬</button>
     <div id="marul-pop" class="hide-on-print">
-        <div class="mp-head"><span>🥬 Marul Ai <small style="opacity:.5;font-weight:600">v11</small></span><button type="button" onclick="marulClose()">✕</button></div>
+        <div class="mp-head"><span>🥬 Marul Ai <small style="opacity:.5;font-weight:600">v12</small></span><button type="button" onclick="marulClose()">✕</button></div>
         <div class="marul-bar">
             <input type="text" id="marul-pop-input" placeholder="Marul Ai'ya sor..." onkeydown="if(event.key==='Enter'){marulAsk(this.value,'pop',this);}">
+            <button type="button" class="marul-mic" title="Sesli sor" onclick="marulMic(document.getElementById('marul-pop-input'),'pop',this)">🎤</button>
             <button type="button" onclick="marulAsk(document.getElementById('marul-pop-input').value,'pop',document.getElementById('marul-pop-input'))">Sor</button>
         </div>
         <div class="marul-answer" id="marul-pop-answer"></div>
@@ -12377,6 +12383,22 @@ function marulCtx(){
     if(tk.length) c.push('Görevler: '+tk.slice(0,30).map(function(t){return t.text+(t.assignee?' ['+t.assignee+']':'')+(t.completed?' (tamam)':' (açık)');}).join('; ').slice(0,900));
   }
   return c.join('\n').slice(0,6000);
+}
+var marulRec=null;
+function marulMic(input,where,btn){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){showNotification('Bu tarayıcı sesli dikteyi desteklemiyor. Chrome veya Edge kullan.','warning');return;}
+  if(marulRec){try{marulRec.stop();}catch(e){} return;}
+  var rec=new SR(); marulRec=rec; rec.lang='tr-TR'; rec.interimResults=true; rec.continuous=false;
+  var finalText='';
+  btn.classList.add('rec'); if(where==='pop') marulOpen();
+  rec.onresult=function(ev){var t='';for(var i=0;i<ev.results.length;i++){t+=ev.results[i][0].transcript;if(ev.results[i].isFinal)finalText=t;}input.value=t;};
+  rec.onerror=function(ev){
+    var m={'not-allowed':'Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden mikrofona izin ver.','service-not-allowed':'Mikrofon izni verilmedi.','no-speech':'Ses duyulmadı, tekrar dene.','audio-capture':'Mikrofon bulunamadı.','network':'Sesli dikte için internet gerekli.'};
+    showNotification(m[ev.error]||('Sesli dikte hatası: '+ev.error),'warning');
+  };
+  rec.onend=function(){btn.classList.remove('rec');marulRec=null;var t=(finalText||input.value||'').trim();if(t){marulAsk(t,where,input);}};
+  try{rec.start();}catch(e){btn.classList.remove('rec');marulRec=null;}
 }
 function marulOpen(){var p=document.getElementById('marul-pop');p.classList.add('open');var i=document.getElementById('marul-pop-input');if(i)i.focus();}
 function marulClose(){document.getElementById('marul-pop').classList.remove('open');}
