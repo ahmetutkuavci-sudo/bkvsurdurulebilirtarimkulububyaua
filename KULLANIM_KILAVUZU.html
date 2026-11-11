@@ -582,7 +582,8 @@
                 <li><a href="#sec-analitik" class="toc-link">11. Tablo & Canlı Grafikler</a></li>
                 <li><a href="#sec-ayarlar" class="toc-link">12. Sistem Ayarları & Cihaz Defteri</a></li>
                 <li><a href="#sec-bulut" class="toc-link">13. Bulut Senkronizasyonu & PWA</a></li>
-                <li><a href="#sec-sss" class="toc-link">14. Sıkça Sorulan Sorular (SSS)</a></li>
+                <li><a href="#sec-marulai" class="toc-link">🥬 15. Marul Ai — Yapay Zeka Asistanı</a></li>
+                <li><a href="#sec-sss" class="toc-link">16. Sıkça Sorulan Sorular (SSS)</a></li>
             </ul>
         </aside>
 
@@ -602,6 +603,7 @@
                     <span class="meta-pill">📱 Telefon Uyumlu Yan Menü</span>
                     <span class="meta-pill meta-pill-blue">🔔 Mesaj Bildirimleri</span>
                     <span class="meta-pill">🔒 Rol & Cihaz Güvenliği</span>
+                    <span class="meta-pill meta-pill-blue">🥬 Marul Ai Asistanı</span>
                 </div>
             </div>
 
@@ -667,6 +669,11 @@
                                 <td><strong>🏷️ Rozetler (Kurucu / Öğretmen / Yönetici)</strong> <span class="badge badge-warn">Değişti</span></td>
                                 <td>Üst bardaki kullanıcı kartı yetkiye göre "👑 Kurucu", "👑 Öğretmen", "👑 Yönetici" veya "👤 Normal Üye" rozetini gösterir.</td>
                                 <td><a href="#sec-yetkiler">Bölüm 2</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🥬 Marul Ai Asistanı</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Sisteme entegre yapay zeka asistanı: sesli veya yazılı tarım soruları, hava durumu analizi ve yöneticiler için yoklama kaydetme / görev dağıtımı gibi panele işlevler sunuyor.</td>
+                                <td><a href="#sec-marulai">Bölüm 15</a></td>
                             </tr>
                             <tr>
                                 <td><strong>📦 Stok ve Satış Kayıtları</strong> <span class="badge badge-warn">Değişti</span></td>
@@ -1489,9 +1496,156 @@
                 </p>
             </section>
 
-            <!-- 14. SSS -->
+            <!-- 15. MARUL AI -->
+            <section id="sec-marulai">
+                <h2><span>🥬</span> 15. Marul Ai — Yapay Zeka Tarım Asistanı</h2>
+                <p>
+                    <strong>Marul Ai</strong>, BKV Sürdürülebilir Tarım Kulübü Yönetim Sistemi'ne entegre edilmiş, özel olarak tarım konusunda uzmanlaşmış yapay zeka destekli bir asistanıdır. Groq altyapısı üzerinde çalışan <strong>LLaMA 3.3 70B</strong> büyük dil modeli kullanan Marul Ai, lise öğrencilerine samimi, kısa ve anlaşılır cevaplar verir.
+                </p>
+
+                <div class="callout callout-success">
+                    <strong>🥬 Marul Ai Nedir?</strong>
+                    Panelin her yerine entegre edilmiş, tarım, bokashi, tohum, sulama, hava durumu ve kulüp işleri konusunda uzmanlaşmış yapay zeka asistanıdır. Genel bilgi sormak için de kullanılabilir; ancak konu dışı sorularda sizi nazikçe tarıma yönlendirir.
+                </div>
+
+                <h3>📍 Marul Ai'ya Nereden Erişilir?</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><span>📋</span> Anasayfa Kartı</h4>
+                        <p>Anasayfadaki yeşil "🥬 Marul Ai" kartından yazılı veya sesli soru sorabilirsiniz. Masaüstünde yan menü arayüzünde bu kart gizlenir; bunun yerine kenar çubuğundaki Marul Ai alanı kullanılır.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🗂️</span> Yan Menü Alanı (Aero 2.0)</h4>
+                        <p>Yan Menü (Aero 2.0) arayüzünde menünün alt bölümünde sabit bir Marul Ai giriş alanı bulunur. Herhangi bir sekmede çalışırken anında AI'ya ulaşabilirsiniz.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🫧</span> Yüzen Balon (📱 Mobil)</h4>
+                        <p>Dar ekranlarda (telefon ve küçük tablet) ekranın sağ alt köşesinde yeşil <code>🥬</code> yüzen düğmesi belirir. Bu düğmeye dokunulduğunda Marul Ai sohbet penceresi (pop-up) açılır.</p>
+                    </div>
+                </div>
+
+                <h3>✍️ Nasıl Kullanılır?</h3>
+                <div class="step-container">
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-content"><strong>Yazılı Soru:</strong> İlgili alana sorunuzu yazın ve <em>"Sor"</em> düğmesine basın ya da <code>Enter</code> tuşuna basın. Marul Ai düşünürken ilerleme göstergesi çıkar.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-content"><strong>Sesli Soru (🎤):</strong> Mikrofon düğmesine basın. Tarayıcı mikrofon izni isteyecektir; izin verdikten sonra Türkçe konuşun. Konuşma bitince Marul Ai soruyu otomatik işler. Tekrar mikrofona basmak dikteyı durdurur.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-content"><strong>Cevap:</strong> Yanıt sohbet baloncuğu şeklinde listelenir. Konuşma geçmişi (son 6 mesaj çifti) bağlam olarak tutulur; önceki soruya atıfta bulunabilirsiniz.</div>
+                    </div>
+                </div>
+
+                <div class="callout callout-info">
+                    <strong>🕒 Hız Sınırı:</strong> Marul Ai sorular arasında 2 saniyelik bekleme uygular. Çok hızlı sorular için "Biraz yavaş :)" yanıtını alırsınız.
+                </div>
+
+                <h3>🌡️ Marul Ai'nın Temel Yetenekleri (Tüm Kullanıcılar)</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><span>🌱</span> Tarım & Bitki Bilgisi</h4>
+                        <p>Ekim, sulama, budama, gübreleme, zararlı kontrolü ve organik tarım konularında kısa ve pratik bilgi verir.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>♻️</span> Bokashi & Kompost</h4>
+                        <p>Fermantasyon süreci, kova bakımı, sıvı gübre kullanımı, atık rehberi ve bokashi pratiği hakkında ayrıntılı rehberlik sağlar.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>🌰</span> Tohum & Yetiştiricilik</h4>
+                        <p>Atalık tohum saklama, çimlenme testleri, ekim takvimi ve raf ömrü konularında bilgi aktarır.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>⛅</span> Hava Durumu Sorgusu</h4>
+                        <p>Herhangi bir şehir için canlı hava durumu ve günlük tahmin getirir; elde ettiği veriyi bahçe işlerine (sulama, don riski, ilaçlama) göre yorumlar. <em>"İstanbul'da yarın hava nasıl?"</em> gibi doğal sorularla kullanılır.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>💬</span> Genel Kulüp Sohbeti</h4>
+                        <p>Kulüp çalışmaları, sürdürülebilirlik ve çevre konularında bilgi aktarır; tehlikeli veya zararlı talimat vermez, emin olmadığı konularda öğretmene danışmanızı önerir.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span>📊</span> Panel Bağlam Bilgisi</h4>
+                        <p>Hava durumu, bokashi kova sayısı, tohum çeşit sayısı gibi panel verilerini otomatik bağlam olarak kullanır. <em>"Kaç çeşit tohumun var?"</em> gibi sorulara paneldeki gerçek verilerle cevap verir.</p>
+                    </div>
+                </div>
+
+                <h3>👑 Yönetici Araçları (Yalnızca Yöneticiler)</h3>
+                <p>Yönetici hesabıyla giriş yapıldığında Marul Ai ek işlem araçlarına sahip olur. Bu araçlar her çağrıda rol tekrar doğrulanır ve işlem öncesi <strong>onay penceresi</strong> gösterilir:</p>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr><th>Araç</th><th>Ne Yapar?</th><th>Örnek İstek</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>📋 Yoklama Kayıt</strong></td>
+                                <td>Belirtilen tarih için tüm öğrencilerin yoklamasını kaydeder. İstisnaları (farklı durumda olanları) ayrıca belirtebilirsiniz. Yoklama kaydedilmeden önce onay penceresi çıkar.</td>
+                                <td><code>Bugün herkes geldi, Ahmet gelmedi</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>➕ Görev Ekleme</strong></td>
+                                <td>Panele yeni görev ekler ve istenirse bir öğrenciye atar.</td>
+                                <td><code>Sera sulama görevini Ayşe'ye ekle</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🤖 Otomatik Görev Dağıtımı</strong></td>
+                                <td>Verilen görevleri, o gün yoklamada "geldi" olan öğrencilere dengeli ve otomatik olarak dağıtır. Dağıtım planı onay penceresinde listelenir.</td>
+                                <td><code>Sera sulama, kova kontrolü ve tohum sayımı görevlerini dağıt</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout callout-warn">
+                    <strong>⚠️ Yönetici Araçları Güvenliği:</strong>
+                    Marul Ai yönetici araçlarını (yoklama, görev ekleme) yalnızca siz <em>açıkça</em> istediğinizde çağırır. Bir konuyu sormak veya sohbet etmek, otomatik yoklama veya görev eklenmesi anlamına gelmez. Her işlem öncesinde <strong>"🥬 Marul Ai onay istiyor"</strong> başlıklı bir onay penceresi çıkar — <code>Enter</code> veya "✅ Onayla" ile işlemi onaylayabilir, <code>Esc</code> veya "İptal" ile iptal edebilirsiniz.
+                </div>
+
+                <div class="callout callout-info">
+                    <strong>🔐 Veri Gizliliği:</strong>
+                    Marul Ai yönetici olduğunuzda üye listesi, yoklama kayıtları ve görevleri bağlam olarak görür. Normal üyeler bu bilgilere erişemez; yönetici araçları da yalnızca yöneticilere açıktır. Öğrenci iken yönetici işlemi istenirse Marul Ai nazikçe reddeder.
+                </div>
+
+                <h3>🎤 Sesli Dikteyi Destekleyen Tarayıcılar</h3>
+                <ul>
+                    <li>✅ <strong>Google Chrome</strong> (Önerilir — masaüstü ve Android)</li>
+                    <li>✅ <strong>Microsoft Edge</strong> (masaüstü)</li>
+                    <li>✅ <strong>Safari</strong> (iPhone / iPad — iOS 15 ve üzeri)</li>
+                    <li>❌ <strong>Firefox</strong> — sesli dikteyi desteklemez, yazılı mod çalışır.</li>
+                </ul>
+
+                <h3>⚙️ Teknik Altyapı</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr><th>Bileşen</th><th>Değer</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Dil Modeli (varsayılan)</td><td><code>LLaMA 3.3 70B Versatile</code></td></tr>
+                            <tr><td>Yedek Modeller</td><td><code>LLaMA 3.1 8B Instant</code>, <code>Qwen 3 32B</code> ve Groq'taki diğer uyumlu modeller</td></tr>
+                            <tr><td>API Altyapısı</td><td>Groq (OpenAI uyumlu API — <code>api.groq.com</code>)</td></tr>
+                            <tr><td>Hava Durumu Verisi</td><td>Open-Meteo (serber taraflı, ücretsiz)</td></tr>
+                            <tr><td>Konuşma Dili</td><td>Türkçe</td></tr>
+                            <tr><td>Maks. Yanıt Uzunluğu</td><td>700 token (~400–500 kelime)</td></tr>
+                            <tr><td>Zaman Aşımı</td><td>25 saniye — aşılırsa yedek modele geçilir</td></tr>
+                            <tr><td>Versiyon</td><td>v12</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout callout-warn">
+                    <strong>📌 Önemli Kullanım Notu:</strong>
+                    Marul Ai bir yapay zeka modelidir ve yanılabilir. Önemli tarımsal kararlar, ilaçlama dozları veya sağlıkla ilgili bilgiler için öğretmeninize veya yetkili bir uzmana danışın. Yanıt kutusunun altındaki <em>"Yapay zeka yanılabilir; önemli bilgileri öğretmeninle doğrula."</em> notu bu yüzden her zaman görünür.
+                </div>
+            </section>
+
+            <!-- 16. SSS -->
             <section id="sec-sss">
-                <h2><span>❓</span> 14. Sıkça Sorulan Sorular (SSS)</h2>
+                <h2><span>❓</span> 16. Sıkça Sorulan Sorular (SSS)</h2>
                 
                 <h3>S: Şifremi unutursam veya değiştirmek istersem ne yapmalıyım?</h3>
                 <p><strong>C:</strong> Şifrenizi değiştirmek için üst bardaki kullanıcı profilinize tıklayın ve "Şifremi Değiştir" alanından yeni şifrenizi tanımlayın. Şifrenizi tamamen unuttuysanız kulüp öğretmenine başvurun; yöneticiniz Ayarlar sekmesindeki üye listesinden veya Firebase konsolundan yeni bir şifre tanımlayabilir.</p>
@@ -1529,11 +1683,23 @@
 
 <h3>S: Bu kılavuzu baskı veya sunum için PDF olarak nasıl kaydedebilirim?</h3>
                 <p><strong>C:</strong> Sayfanın sağ üst köşesinde yer alan <strong>"📄 PDF Olarak Kaydet / Yazdır"</strong> butonuna tıklayın. Açılan yazdırma penceresinde hedefi <em>"PDF Olarak Kaydet"</em> seçerek dokümanı temiz bir kitapçık formatında bilgisayarınıza veya telefonunuza indirebilirsiniz.</p>
+
+                <h3>S: Marul Ai'ya nasıl ulaşırım?</h3>
+                <p><strong>C:</strong> Anasayfadaki yeşil "🥬 Marul Ai" kartından veya Yan Menü arayüzünde menünün altındaki alandan ulaşabilirsiniz. Telefonda ekranın sağ altındaki yeşil 🥬 düğmesine dokunun. Ayrıntılar için Bölüm 15'e bakın.</p>
+
+                <h3>S: Marul Ai sesli soru almıyor, ne yapmalıyım?</h3>
+                <p><strong>C:</strong> Sesli dikteyi Chrome, Edge ve Safari destekler; Firefox desteklemez. Chrome'da adres çubuğundaki kilit simgesine tıklayıp Mikrofon iznini "İzin Ver" yapın. Daha önce reddettiyseniz tarayıcı site ayarlarından yeniden açmanız gerekir.</p>
+
+                <h3>S: Marul Ai'ya hava durumu sorabilir miyim?</h3>
+                <p><strong>C:</strong> Evet. <em>"Ankara'da bugün hava nasıl?"</em> veya <em>"İstanbul'da yarın yağmur var mı?"</em> gibi doğal bir Türkçe soruyla gerçek zamanlı verilere ulaşabilirsiniz. Marul Ai hava verisini bahçe işlerine (sulama, don riski, ilaçlama) göre yorumlayarak tarımsal öneri sunar.</p>
+
+                <h3>S: Yönetici olarak yoklamayı Marul Ai ile kaydedebilir miyim?</h3>
+                <p><strong>C:</strong> Evet, yönetici hesabıyla giriş yaptıysanız. Örneğin <em>"Bugün herkes geldi, Ahmet ve Fatma gelmedi"</em> yazmanız yeterlidir. Marul Ai kayıt öncesi size onay sorar; onayladıktan sonra yoklama sisteme işlenir. Normal üyeler bu özelliği kullanamazlar.</p>
             </section>
 
             <!-- Belge Sonu -->
             <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
-                © 2026 BJK-Kabataş Vakfı Özel Okulları • Sürdürülebilir Tarım Kulübü Yönetim Sistemi • Tüm Hakları Saklıdır.<br>Kılavuz son güncelleme: 10 Kasım 2026 (yazılımın güncel sürümüne göre)
+                © 2026 BJK-Kabataş Vakfı Özel Okulları • Sürdürülebilir Tarım Kulübü Yönetim Sistemi • Tüm Hakları Saklıdır.<br>Kılavuz son güncelleme: 11 Kasım 2026 — Marul Ai (v12) bölümü eklendi.
             </div>
 
         </main>
