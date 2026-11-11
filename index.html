@@ -8136,11 +8136,37 @@
                 if (dashWeatherCity) dashWeatherCity.innerText = cityName;
                 const dashWeatherIcon = document.getElementById('dash-kpi-weather-icon');
                 if (dashWeatherIcon && weatherInfo.icon) dashWeatherIcon.innerText = weatherInfo.icon;
+                // 🥬 Marul AI için zengin hava durumu verisi kaydediliyor
                 localStorage.setItem('bkvLastWeatherData', JSON.stringify({
                     temp: currentTemp,
                     city: cityName,
                     icon: weatherInfo.icon || "☀️",
-                    text: weatherInfo.text || "Açık"
+                    text: weatherInfo.text || "Açık",
+                    hissedilen: Math.round(current.apparent_temperature || current.temperature_2m || 0),
+                    nem: Math.round(current.relative_humidity_2m || 0),
+                    ruzgar_kmh: Math.round(current.wind_speed_10m || 0),
+                    ruzgar_yon: (function(deg){var d=parseInt(deg)||0;var dirs=['K','KD','D','GD','G','GB','B','KB'];return dirs[Math.round(d/45)%8];})(current.wind_direction_10m),
+                    yagis_mm: daily.precipitation_sum && daily.precipitation_sum[0] !== undefined ? daily.precipitation_sum[0] : 0,
+                    yagis_ihtimali: daily.precipitation_probability_max && daily.precipitation_probability_max[0] !== undefined ? daily.precipitation_probability_max[0] : 0,
+                    min: daily.temperature_2m_min && daily.temperature_2m_min[0] !== undefined ? Math.round(daily.temperature_2m_min[0]) : currentTemp,
+                    max: daily.temperature_2m_max && daily.temperature_2m_max[0] !== undefined ? Math.round(daily.temperature_2m_max[0]) : currentTemp,
+                    uv: daily.uv_index_max && daily.uv_index_max[0] !== undefined ? daily.uv_index_max[0] : 0,
+                    gundogumu: daily.sunrise && daily.sunrise[0] ? daily.sunrise[0].split('T')[1] : '--:--',
+                    gunbatimi: daily.sunset && daily.sunset[0] ? daily.sunset[0].split('T')[1] : '--:--',
+                    tahmin: (daily.time || []).slice(0, 7).map(function(t, i) {
+                        var wi = wmoHavaDetaylari[daily.weather_code && daily.weather_code[i]] || {text:'Açık', icon:'☀️'};
+                        return {
+                            tarih: t,
+                            durum: wi.text,
+                            icon: wi.icon,
+                            min: daily.temperature_2m_min ? Math.round(daily.temperature_2m_min[i]) : 0,
+                            max: daily.temperature_2m_max ? Math.round(daily.temperature_2m_max[i]) : 0,
+                            yagis_mm: daily.precipitation_sum ? (daily.precipitation_sum[i] || 0) : 0,
+                            yagis_ihtimali: daily.precipitation_probability_max ? (daily.precipitation_probability_max[i] || 0) : 0,
+                            ruzgar_kmh: daily.wind_speed_10m_max ? Math.round(daily.wind_speed_10m_max[i] || 0) : 0
+                        };
+                    }),
+                    kaydedildi: new Date().toISOString()
                 }));
 
                 // 1. Hero Card Updates
@@ -12388,44 +12414,113 @@
 })();
 </script>
 <script>
-// 🥬 MARUL AI (Groq) — anahtarı aşağıya yaz. Not: HTML'deki anahtarı sayfayı açan herkes görebilir.
+// 🥬 MARUL AI v13 (Groq) — YÖNETİCİ SINIFI ASISTAN
+// Not: Anahtarı sayfayı açan herkes görebilir; üretim için backend proxy kullanın.
 var MARUL_KEY = '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';
 var MARUL_MODEL = 'llama-3.3-70b-versatile';
 var MARUL_BASE = 'https://api.groq.com/openai/v1';
-var MARUL_SYSTEM = 'Sen "Marul Ai"sın: BKV Sürdürülebilir Tarım Kulübü\'nün lise öğrencilerine yardım eden samimi asistanısın. Türkçe, kısa (en fazla 6 cümle) ve anlaşılır cevap ver. Konular: tarım, bokashi, kompost, tohum, sulama, hava durumuna göre bahçe işleri, kulüp çalışmaları. Kulüp dışı konularda nazikçe konuya dön. Tehlikeli veya zararlı talimat verme. Emin değilsen öğretmene danışmayı öner. Panel bilgisi verilmişse (yoklama, üyeler, görevler) sorulara ona dayanarak cevap ver; bilgi yoksa uydurma, "panelde bu bilgi yok" de.';
+
+// ============================================================
+// SİSTEM PROMPTLARI — Rol bazlı (admin vs üye)
+// ============================================================
+var MARUL_SYSTEM_ADMIN = 'Sen "Marul Ai"sin — BKV Sürdürülebilir Tarım Kulübü\'nün deneyimli YÖNETİCİ asistanısın. Türkçe konuş.\n\nROLÜN: Kulüp yöneticilerine (öğretmen ve yönetici öğrencilere) tam kapsamlı destek.\n\nBİLGİ BİRİKİMİN:\nKulüp Yönetimi:\n- Yoklama analizi, devamsızlık takibi, katılım raporları (paneldeki gerçek verilerle)\n- Görev atama, iş bölümü, sorumluluk dağılımı stratejileri\n- Üye motivasyonu, takım dinamikleri, liderlik önerileri\n- Etkinlik planlama: tarım günleri, hasat festivali, sergi, geziler, workshoplar\n- Toplantı yönetimi, gündem hazırlama, karar alma süreçleri\n- Proje geliştirme, bütçe yönetimi, malzeme talebi hazırlama\n- Duyuru metinleri, okul yönetimiyle iletişim, kulüp raporları\n- Yıllık faaliyet planı, takvim oluşturma\n\nTarım & Sürdürülebilirlik Uzmanlığı:\n- Bokashi fermantasyon (seyreltme oranları 1:50-1:100, olgunlaşma takibi, koku sorunları)\n- Kompost (C/N oranı 25-30:1, nem %45-55, karıştırma sıklığı, olgunluk testi)\n- Organik gübre: solucan gübresi, yeşil gübre, ahır gübresi kullanımı ve NPK değerleri\n- Tohum seçimi, yerel ve heirloom çeşitler, tohum bankası yönetimi, çimlendirme testi\n- Fide yetiştirme: viyol, substrat, ışık gereksinimleri, sıcaklık, sulama rejimi\n- Türkiye iklimine göre mevsimsel ekim-dikim takvimi (bölgeye özel)\n- Sebzeler: domates, biber, patlıcan, marul, semizotu, maydanoz, nane, brokoli, lahana, havuç, soğan, sarımsak, kabak, fasulye, bezelye, ıspanak, roka\n- Meyveler: çilek, ahududu, bektaşiüzümü, frenk üzümü\n- Sulama sistemleri: damla, yağmurlama, karık, çömlek sulama; sulama zamanlaması\n- Zararlı yönetimi: entegre mücadele, biyolojik kontrol, yapışkanlı tuzaklar, neem yağı\n- Hastalık tanı ve tedavisi: mantar (mildiyö, külleme), bakteri, virüs hastalıkları\n- Sera yönetimi: havalandırma, nem ve ısı kontrolü, gölgeleme\n- Toprak analizi: pH, NPK, mikrobiyom; kireçleme, perlit, vermikülit\n- Yağmur suyu hasadı, geri dönüşüm sistemleri, permakültür tasarım ilkeleri\n- Solucan çiftliği: kurulum, besleme, hasat, sorun giderme\n\nHava & Tarım İlişkisi:\n- Panelin hava durumu menüsünden alınan GERÇEK veriyi analiz et ve yorumla\n- Hava verisi zaten context\'te geliyorsa ek API çağrısı yapma, direkt yorumla\n- Don riski, dolu, fırtına gibi aşırı hava olaylarına karşı koruma önerileri\n- Sulama zamanlaması, ilaçlama penceresi, hasat zamanı optimizasyonu\n- Mevsimsel geçiş dönemlerinde sera/açık alan kararları\n\nCEVAP STİLİN:\n- Yöneticiye saygılı, profesyonel ama samimi hitap et\n- Bilgi sorularında detaylı ol (8-15 cümle kabul edilebilir), başlık/madde işareti kullan\n- İşlem yaparken (yoklama, görev) kısa ve öz ol, onay iste\n- Paneldeki gerçek verilerle (üye adları, yoklama kayıtları, görevler) konuş\n- Bilgi yoksa uydurma; "panelde bu bilgi yok" de\n- Araç kullanım kuralı: Yoklama/görev isteklerinde aracı hemen çağır, gereksiz soru sorma. Hava verisi context\'te varsa get_weather çağırma, direkt cevapla. Hava verisi yoksa veya başka şehir istenirse get_weather çağır.';
+
+var MARUL_SYSTEM_MEMBER = 'Sen "Marul Ai"sin: BKV Sürdürülebilir Tarım Kulübü\'nün lise öğrenci üyelerine yardım eden samimi tarım asistanısın. Türkçe, kısa (en fazla 5 cümle) ve anlaşılır cevap ver. Konular: tarım, bokashi, kompost, tohum, sulama, hava durumuna göre bahçe işleri, kulüp etkinlikleri. Kulüp dışı konularda nazikçe konuya dön. Tehlikeli veya zararlı talimat verme. YASAK: Yoklama kaydetme, üye listesi görme, başka üyelerin bilgileri, yönetici işlemleri — bunlar yalnızca yöneticilere açıktır, asla paylaşma veya yapmaya çalışma. Paneldeki hava durumu verisini kullanabilirsin.';
+
+// ============================================================
+// ARAÇ KURALLARI — Role göre dinamik seçim
+// ============================================================
+var MARUL_RULES_ADMIN = '\n\nARAÇ KURALLARI (YÖNETİCİ):\n- Yoklama gir / görev ekle / görev ata isteklerinde ilgili aracı HEMEN çağır, gereksiz soru sorma\n- Hava durumu context\'te mevcutsa get_weather çağırma; yoksa veya farklı şehir istenirse çağır\n- Araç sonucu {cancelled:true} ise "işlem iptal edildi" de\n- Araç sonucunu kısa ve net özetle, uydurma\n- Eksik bilgi varsa makul varsayım yap (tarih yoksa bugün, şehir yoksa kayıtlı şehir)';
+
+var MARUL_RULES_MEMBER = '\n\nARAÇ KURALLARI (ÜYE):\n- Yönetici araçları (yoklama, görev ekleme) sana verilmemiştir\n- Bu işlemler istenirse "Bu işlem yalnızca yöneticilere açıktır" de, bilgi paylaşma\n- Hava durumu context\'te mevcutsa get_weather çağırma; yoksa çağırabilirsin';
+
 var marulLast = 0, marulHistory = [];
+
+// ============================================================
+// BAĞLAM (CONTEXT) — Panel verileri AI\'a iletilir
+// ============================================================
 function marulCtx(){
   var c=[];
   function g(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
   function iso(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(x<10?'0':'')+x;}
   var gunler=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
-  var now=new Date(), dow=(now.getDay()+6)%7; // Pzt=0
+  var now=new Date(), dow=(now.getDay()+6)%7;
   var thisMon=new Date(now.getFullYear(),now.getMonth(),now.getDate()-dow);
   var lastMon=new Date(thisMon.getFullYear(),thisMon.getMonth(),thisMon.getDate()-7);
   var lastSun=new Date(thisMon.getFullYear(),thisMon.getMonth(),thisMon.getDate()-1);
   c.push('Bugün: '+iso(now)+' '+gunler[now.getDay()]+'. "Geçen hafta" = '+iso(lastMon)+' ile '+iso(lastSun)+' arası. "Bu hafta" = '+iso(thisMon)+' ile bugün arası.');
-  var w=g('bkvLastWeatherData'); if(w) c.push('Hava durumu: '+JSON.stringify(w).slice(0,300));
-  var bk=g('bkvBokashi'); if(bk&&bk.length) c.push('Bokashi kayıt sayısı: '+bk.length);
-  var sd=g('bkvSeeds'); if(sd&&sd.length) c.push('Tohum çeşidi sayısı: '+sd.length);
-  // Üye/yoklama/görev bilgileri YALNIZCA yöneticiye gönderilir (öğrenci verisi korunur)
+
+  // 🌤️ Hava durumu — Panelin hava durumu menüsündeki zengin veri kullanılır
+  var w=g('bkvLastWeatherData');
+  if(w){
+    var havaSatiri='HAVA DURUMU (Panelin Hava Durumu Menüsünden — '+( w.city||'?')+'):';
+    havaSatiri+=' Şu an '+w.temp+'°C, '+w.text+(w.icon?' '+w.icon:'')+'.';
+    if(w.hissedilen!==undefined) havaSatiri+=' Hissedilen: '+w.hissedilen+'°C.';
+    if(w.min!==undefined&&w.max!==undefined) havaSatiri+=' Bugün min/max: '+w.min+'/'+w.max+'°C.';
+    if(w.nem!==undefined) havaSatiri+=' Nem: %'+w.nem+'.';
+    if(w.ruzgar_kmh!==undefined) havaSatiri+=' Rüzgar: '+w.ruzgar_kmh+' km/s'+(w.ruzgar_yon?' '+w.ruzgar_yon:'')+'.';
+    if(w.yagis_ihtimali!==undefined) havaSatiri+=' Yağış ihtimali: %'+w.yagis_ihtimali+'.';
+    if(w.yagis_mm!==undefined&&w.yagis_mm>0) havaSatiri+=' Yağış: '+w.yagis_mm+' mm.';
+    if(w.uv!==undefined) havaSatiri+=' UV: '+w.uv+'.';
+    if(w.gundogumu&&w.gunbatimi) havaSatiri+=' Gün doğumu/batımı: '+w.gundogumu+'/'+w.gunbatimi+'.';
+    if(w.tahmin&&w.tahmin.length>1){
+      havaSatiri+=' 7 Günlük Tahmin: ';
+      havaSatiri+=w.tahmin.slice(0,7).map(function(t){return t.tarih+' '+t.durum+' '+t.min+'/'+t.max+'°C yağış%'+t.yagis_ihtimali;}).join(' | ');
+    }
+    if(w.kaydedildi) havaSatiri+=' (Veri zamanı: '+w.kaydedildi.substring(0,16)+')';
+    c.push(havaSatiri);
+  }
+
+  var bk=g('bkvBokashi'); if(bk&&bk.length) c.push('Bokashi kayıt sayısı: '+bk.length+(bk[bk.length-1]?' — Son kayıt: '+JSON.stringify(bk[bk.length-1]).slice(0,120):''));
+  var sd=g('bkvSeeds'); if(sd&&sd.length) c.push('Tohum çeşidi sayısı: '+sd.length+' — Çeşitler: '+sd.map(function(s){return s.name||s.isim||JSON.stringify(s).slice(0,30);}).join(', ').slice(0,400));
+
+  // 👑 Yönetici bağlamı — Üye/yoklama/görev bilgileri YALNIZCA yöneticiye gönderilir
   if(marulIsAdmin()){
-    var users=g('bkvUsers')||[], nm={};
-    users.forEach(function(u){nm[u.email]=(u.username||u.email)+(u.grade?' ('+u.grade+')':'');});
-    if(users.length) c.push('Kayıtlı üyeler ('+users.length+'): '+users.map(function(u){return nm[u.email];}).join(', ').slice(0,900));
-    var att=g('bkvAttendance')||{}, ds=Object.keys(att).sort().slice(-21), lines=[];
+    var users=g('bkvUsers')||[], nm={}, adminUsers=[], studentUsers=[];
+    users.forEach(function(u){
+      nm[u.email]=(u.username||u.email)+(u.grade?' ('+u.grade+')':'');
+      if(u.role==='admin') adminUsers.push(nm[u.email]);
+      else studentUsers.push(nm[u.email]);
+    });
+    if(users.length){
+      c.push('Kayıtlı üyeler (toplam '+users.length+'):\n  Yöneticiler: '+adminUsers.join(', ')+'\n  Öğrenciler ('+studentUsers.length+'): '+studentUsers.join(', ').slice(0,700));
+    }
+    // Yoklama kayıtları — son 30 gün
+    var att=g('bkvAttendance')||{}, ds=Object.keys(att).sort().slice(-30), lines=[];
     var etiket={geldi:'geldi',gelmedi:'GELMEDİ',izinli:'izinli',raporlu:'raporlu',faaliyet:'faaliyette'};
+    var totalDays=ds.length, totalPresent=0, totalAbsent=0, absenteeCounts={};
     ds.forEach(function(d){
       var rec=att[d], absent=[], present=0;
-      Object.keys(rec).forEach(function(e){var st=rec[e].status; if(st==='geldi') present++; else absent.push((nm[e]||e)+' '+(etiket[st]||st)+(rec[e].note?' ['+rec[e].note+']':''));});
+      Object.keys(rec).forEach(function(e){
+        var st=rec[e].status;
+        if(st==='geldi'){present++; totalPresent++;}
+        else{
+          absent.push((nm[e]||e)+' '+(etiket[st]||st)+(rec[e].note?' ['+rec[e].note+']':''));
+          totalAbsent++;
+          absenteeCounts[nm[e]||e]=(absenteeCounts[nm[e]||e]||0)+1;
+        }
+      });
       var dd=new Date(d+'T12:00:00');
-      lines.push(d+' '+gunler[dd.getDay()]+': '+present+' geldi'+(absent.length?'; gelmeyen/diğer: '+absent.join(', '):''));
+      lines.push(d+' '+gunler[dd.getDay()]+': '+present+' geldi'+(absent.length?'; diğer: '+absent.join(', '):''));
     });
-    c.push('YOKLAMA KAYITLARI (son kayıtlı günler; listede olmayan tarih = yoklama alınmamış):\n'+(lines.join('\n')||'kayıt yok'));
+    // Devamsızlık analizi
+    var topAbsentees=Object.keys(absenteeCounts).sort(function(a,b){return absenteeCounts[b]-absenteeCounts[a];}).slice(0,5);
+    if(topAbsentees.length) c.push('Devamsızlık analizi (son 30 gün): En çok gelen: toplam '+totalDays+' toplantı, ort. katılım ~'+Math.round(totalPresent/(totalDays||1))+' kişi. En fazla devamsızlık: '+topAbsentees.map(function(n){return n+' ('+absenteeCounts[n]+' gün)';}).join(', '));
+    c.push('YOKLAMA KAYITLARI (son kayıtlı günler):\n'+(lines.join('\n')||'kayıt yok'));
+    // Görevler
     var tk=g('bkvTasks')||[];
-    if(tk.length) c.push('Görevler: '+tk.slice(0,30).map(function(t){return t.text+(t.assignee?' ['+t.assignee+']':'')+(t.completed?' (tamam)':' (açık)');}).join('; ').slice(0,900));
+    if(tk.length){
+      var open=tk.filter(function(t){return !t.completed;}), done=tk.filter(function(t){return t.completed;});
+      c.push('Görevler (toplam '+tk.length+', açık: '+open.length+', tamamlanan: '+done.length+'):\nAçık: '+open.slice(0,20).map(function(t){return '"'+t.text+'"'+(t.assignee?' ['+t.assignee+']':'');}).join('; ').slice(0,800));
+    }
+    // Alışveriş listesi
+    var sh=g('bkvShoppingList'); if(sh&&sh.length){var pending=sh.filter(function(x){return !x.done;});if(pending.length) c.push('Alışveriş listesi (bekleyen '+pending.length+' kalem): '+pending.map(function(x){return x.text;}).join(', ').slice(0,300));}
+    // Notlar
+    var notes=g('bkvNotes'); if(notes&&notes.length) c.push('Kulüp notları ('+notes.length+' not): '+notes.slice(0,3).map(function(n){return '"'+(n.text||n.content||'').slice(0,80)+'"';}).join('; '));
   }
-  return c.join('\n').slice(0,6000);
+  return c.join('\n').slice(0,8000);
 }
+
 var marulRec=null;
 function marulMic(input,where,btn){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -12445,14 +12540,17 @@ function marulMic(input,where,btn){
 function marulOpen(){var p=document.getElementById('marul-pop');p.classList.add('open');var i=document.getElementById('marul-pop-input');if(i)i.focus();}
 function marulClose(){document.getElementById('marul-pop').classList.remove('open');}
 function marulAdd(box,cls,text){var d=document.createElement('div');d.className='marul-msg '+cls;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;}
-// ===== Marul Ai araçları =====
+
+// ============================================================
+// ONAY DİYALOĞU
+// ============================================================
 function marulConfirm(text){
   return new Promise(function(resolve){
     var old=document.getElementById('marul-confirm'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='marul-confirm';
     ov.style.cssText='position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(2,30,60,.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);';
     var box=document.createElement('div');
-    box.style.cssText='width:100%;max-width:380px;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.9);border-radius:20px;box-shadow:0 20px 50px rgba(1,87,155,.3);padding:18px 18px 14px;font-family:inherit;color:#01579b;';
+    box.style.cssText='width:100%;max-width:400px;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.9);border-radius:20px;box-shadow:0 20px 50px rgba(1,87,155,.3);padding:18px 18px 14px;font-family:inherit;color:#01579b;';
     var h=document.createElement('div'); h.textContent='🥬 Marul Ai onay istiyor'; h.style.cssText='font-weight:800;font-size:15px;margin-bottom:10px;';
     var b=document.createElement('div'); b.textContent=String(text).replace(/\n\nOnaylıyor musun\?$/,''); b.style.cssText='white-space:pre-wrap;font-size:13.5px;line-height:1.5;color:#263238;max-height:50vh;overflow:auto;margin-bottom:14px;';
     var row=document.createElement('div'); row.style.cssText='display:flex;gap:8px;justify-content:flex-end;';
@@ -12465,6 +12563,10 @@ function marulConfirm(text){
     box.appendChild(h);box.appendChild(b);box.appendChild(row);ov.appendChild(box);document.body.appendChild(ov);
   });
 }
+
+// ============================================================
+// YETKİ & YARDIMCI FONKSİYONLAR
+// ============================================================
 function marulIsAdmin(){ return (typeof window.bkvAiIsAdmin==='function') && window.bkvAiIsAdmin(); }
 function marulToday(){var d=new Date(),m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(x<10?'0':'')+x;}
 function marulNorm(t){return String(t||'').toLocaleLowerCase('tr').replace(/\s+/g,' ').trim();}
@@ -12478,37 +12580,135 @@ function marulFind(name){
   if(part.length>1) return {error:'"'+name+'" birden fazla kişiyle eşleşti: '+part.map(function(u){return u.username;}).join(', ')};
   return {error:'"'+name+'" adında üye bulunamadı'};
 }
-function marulMembers(){ // görev/yoklama için öğrenci üyeler (öğretmen/sistem hariç)
+function marulMembers(){
   return marulUsers().filter(function(u){return typeof bkvUserType==='function'?bkvUserType(u)==='ogrenci':u.role!=='admin';});
 }
 var MARUL_STATUS={geldi:'geldi',gelmedi:'gelmedi',izinli:'izinli',raporlu:'raporlu',faaliyet:'faaliyet'};
+
+// ============================================================
+// ARAÇ LİSTESİ — Role göre dinamik
+// ============================================================
 function marulTools(){
-  var t=[{type:'function',function:{name:'get_weather',description:'Bir şehir için güncel hava durumu ve günlük tahmin getirir. Şehir verilmezse panelde seçili şehir kullanılır.',parameters:{type:'object',properties:{city:{type:'string',description:'Şehir adı, örn. İstanbul'},days:{type:'integer',description:'Kaç günlük tahmin (1-7)'}}}}}];
+  // get_weather sadece panel verisi yoksa veya farklı şehir istenirse çağrılır
+  var t=[{type:'function',function:{name:'get_weather',description:'Panelin hava durumu menüsünde veri yoksa veya kullanıcı farklı bir şehir istiyorsa bu aracı çağır. Panel context\'inde hava durumu varsa bu aracı ÇAĞIRMA, direkt context\'teki veriyi kullan.',parameters:{type:'object',properties:{city:{type:'string',description:'Şehir adı, örn. İstanbul. Boş bırakılırsa paneldeki kayıtlı şehir kullanılır.'},days:{type:'integer',description:'Kaç günlük tahmin (1-7, varsayılan 3)'}}}}}];
   if(marulIsAdmin()){
-    t.push({type:'function',function:{name:'take_attendance',description:'Yoklamayı kaydeder. Herkese default_status uygulanır, exceptions listesindeki kişiler farklı işaretlenir. Örn: "herkes geldi, Ali gelmedi".',parameters:{type:'object',properties:{date:{type:'string',description:'YYYY-MM-DD, verilmezse bugün'},default_status:{type:'string',enum:['geldi','gelmedi','izinli','raporlu','faaliyet']},exceptions:{type:'array',items:{type:'object',properties:{name:{type:'string'},status:{type:'string',enum:['geldi','gelmedi','izinli','raporlu','faaliyet']},note:{type:'string'}},required:['name','status']}}},required:['default_status']}}});
-    t.push({type:'function',function:{name:'add_task',description:'Tek bir görev ekler, istenirse bir üyeye atar.',parameters:{type:'object',properties:{text:{type:'string'},assignee:{type:'string',description:'Üyenin adı (boş bırakılabilir)'}},required:['text']}}});
-    t.push({type:'function',function:{name:'auto_assign_tasks',description:'Verilen görevleri üyelere dengeli şekilde otomatik dağıtır. Varsayılan olarak bugün yoklamada "geldi" olanlar, yoklama yoksa tüm öğrenci üyeler arasından seçer. Üyeye ekstra bilgi sormadan çağır.',parameters:{type:'object',properties:{tasks:{type:'array',items:{type:'string'},description:'Dağıtılacak görev metinleri'},date:{type:'string'},only_present:{type:'boolean'}},required:['tasks']}}});
+    t.push({type:'function',function:{name:'take_attendance',description:'Yoklamayı kaydeder. Herkese default_status uygulanır, exceptions listesindeki kişiler farklı işaretlenir.',parameters:{type:'object',properties:{date:{type:'string',description:'YYYY-MM-DD formatında tarih. Verilmezse bugün kullanılır.'},default_status:{type:'string',enum:['geldi','gelmedi','izinli','raporlu','faaliyet'],description:'Tüm üyelere uygulanacak varsayılan durum'},exceptions:{type:'array',description:'Farklı durumda olan kişiler',items:{type:'object',properties:{name:{type:'string',description:'Üyenin adı'},status:{type:'string',enum:['geldi','gelmedi','izinli','raporlu','faaliyet']},note:{type:'string',description:'İsteğe bağlı açıklama (örn. hastalık, sınav)'}},required:['name','status']}}},required:['default_status']}}});
+    t.push({type:'function',function:{name:'add_task',description:'Tek bir görev ekler, isteğe bağlı olarak bir üyeye atar.',parameters:{type:'object',properties:{text:{type:'string',description:'Görev açıklaması'},assignee:{type:'string',description:'Sorumlu üyenin adı (isteğe bağlı)'},due_date:{type:'string',description:'Son tarih YYYY-MM-DD (isteğe bağlı)'}},required:['text']}}});
+    t.push({type:'function',function:{name:'auto_assign_tasks',description:'Verilen görevleri üyelere dengeli şekilde dağıtır. Bugün gelenlere verilmemişse tüm öğrenci üyelere dağıtır.',parameters:{type:'object',properties:{tasks:{type:'array',items:{type:'string'},description:'Dağıtılacak görev metinleri listesi'},date:{type:'string',description:'Yoklama tarihi (varsayılan bugün)'},only_present:{type:'boolean',description:'Sadece bugün gelen üyelere dağıt (varsayılan true)'}},required:['tasks']}}});
+    t.push({type:'function',function:{name:'get_attendance_report',description:'Yoklama istatistikleri ve devamsızlık raporunu döndürür. "Kaç kişi geldi", "kim en çok devamsız" gibi sorularda kullan.',parameters:{type:'object',properties:{days:{type:'integer',description:'Son kaç günlük veri (varsayılan 30)'},member_name:{type:'string',description:'Belirli bir üyenin kaydını getir (isteğe bağlı)'}}}}});
+    t.push({type:'function',function:{name:'get_task_summary',description:'Görev durumu özeti: açık görevler, tamamlananlar, üyeye göre dağılım.',parameters:{type:'object',properties:{member_name:{type:'string',description:'Belirli bir üyenin görevleri (isteğe bağlı)'}}}}});
   }
   return t;
 }
+
+// ============================================================
+// HAVA DURUMU — Önce panel verisi, sonra API
+// ============================================================
 async function marulWeather(a){
-  var city=(a&&a.city)||localStorage.getItem('bkvHavaDurumuSehir')||'İstanbul', days=Math.max(1,Math.min(7,parseInt(a&&a.days)||3));
-  var g=await (await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(city)+'&count=1&language=tr&format=json')).json();
-  if(!g.results||!g.results[0]) return {error:'Şehir bulunamadı: '+city};
-  var r=g.results[0];
-  var w=await (await fetch('https://api.open-meteo.com/v1/forecast?latitude='+r.latitude+'&longitude='+r.longitude+'&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,weather_code&timezone=auto&forecast_days='+days)).json();
-  var kod=function(c){return typeof wmoHavaDetaylari!=='undefined'&&wmoHavaDetaylari[c]?wmoHavaDetaylari[c].text:('kod '+c);};
-  var d=w.daily||{}, out=[];
-  for(var i=0;i<(d.time||[]).length;i++) out.push({tarih:d.time[i],durum:kod(d.weather_code[i]),min:d.temperature_2m_min[i],max:d.temperature_2m_max[i],yagis_mm:d.precipitation_sum[i],yagis_ihtimali:d.precipitation_probability_max[i]});
-  var c=w.current||{};
-  return {sehir:r.name,simdi:{sicaklik:c.temperature_2m,nem:c.relative_humidity_2m,ruzgar_kmh:c.wind_speed_10m,durum:kod(c.weather_code)},tahmin:out};
+  var city=(a&&a.city)||localStorage.getItem('bkvHavaDurumuSehir')||'İstanbul';
+  var days=Math.max(1,Math.min(7,parseInt(a&&a.days)||3));
+  // Panel verisi var ve aynı şehirse doğrudan döndür
+  try{
+    var cached=JSON.parse(localStorage.getItem('bkvLastWeatherData')||'null');
+    if(cached&&cached.city&&cached.tahmin){
+      var cacheAge=(Date.now()-new Date(cached.kaydedildi||0).getTime())/60000;
+      var sehirAy=marulNorm(cached.city).indexOf(marulNorm(city))>-1||marulNorm(city).indexOf(marulNorm(cached.city))>-1;
+      if(sehirAy&&cacheAge<30){
+        // Paneldeki veriyi döndür (30 dakikadan taze ve aynı şehir)
+        return {
+          kaynak:'panel_hava_durumu_menusu',
+          sehir:cached.city,
+          simdi:{sicaklik:cached.temp,hissedilen:cached.hissedilen,nem:cached.nem,ruzgar_kmh:cached.ruzgar_kmh,ruzgar_yon:cached.ruzgar_yon,durum:cached.text,icon:cached.icon,uv:cached.uv},
+          bugun:{min:cached.min,max:cached.max,yagis_mm:cached.yagis_mm,yagis_ihtimali:cached.yagis_ihtimali},
+          gundogumu:cached.gundogumu,gunbatimi:cached.gunbatimi,
+          tahmin:(cached.tahmin||[]).slice(0,days),
+          veri_yasi_dk:Math.round(cacheAge)
+        };
+      }
+    }
+  }catch(e){}
+  // Panel verisi yok veya eski — Open-Meteo API çağrısı
+  try{
+    var g=await (await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(city)+'&count=1&language=tr&format=json')).json();
+    if(!g.results||!g.results[0]) return {error:'Şehir bulunamadı: '+city};
+    var r=g.results[0];
+    var w=await (await fetch('https://api.open-meteo.com/v1/forecast?latitude='+r.latitude+'&longitude='+r.longitude+'&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,precipitation,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,weather_code,uv_index_max,sunrise,sunset&timezone=auto&forecast_days='+days)).json();
+    var kod=function(c){return typeof wmoHavaDetaylari!=='undefined'&&wmoHavaDetaylari[c]?wmoHavaDetaylari[c].text:('kod '+c);};
+    var d=w.daily||{}, out=[];
+    for(var i=0;i<(d.time||[]).length;i++) out.push({tarih:d.time[i],durum:kod(d.weather_code[i]),min:d.temperature_2m_min[i],max:d.temperature_2m_max[i],yagis_mm:d.precipitation_sum[i],yagis_ihtimali:d.precipitation_probability_max[i]});
+    var curr=w.current||{};
+    return {kaynak:'api',sehir:r.name,simdi:{sicaklik:curr.temperature_2m,hissedilen:curr.apparent_temperature,nem:curr.relative_humidity_2m,ruzgar_kmh:curr.wind_speed_10m,durum:kod(curr.weather_code)},tahmin:out};
+  }catch(e){return {error:'Hava verisi alınamadı: '+e.message};}
 }
+
+// ============================================================
+// YOKLAMA RAPORU ARACI
+// ============================================================
+function marulAttendanceReport(days, memberName){
+  try{
+    var att=JSON.parse(localStorage.getItem('bkvAttendance')||'{}')||{};
+    var users=marulUsers();
+    var nm={};
+    users.forEach(function(u){nm[u.email]=(u.username||u.email);});
+    var allDates=Object.keys(att).sort().slice(-Math.min(days||30,90));
+    if(!allDates.length) return {error:'Yoklama kaydı bulunamadı.'};
+    var gunler=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+    if(memberName){
+      var f=marulFind(memberName);
+      if(f.error) return f;
+      var email=f.user.email, name=f.user.username, records=[];
+      allDates.forEach(function(d){
+        var rec=att[d];
+        if(rec&&rec[email]){var dd=new Date(d+'T12:00:00');records.push({tarih:d,gun:gunler[dd.getDay()],durum:rec[email].status,not:rec[email].note||''});}
+        else {records.push({tarih:d,gun:new Date(d+'T12:00:00').toLocaleDateString('tr-TR',{weekday:'long'}),durum:'yoklama_yok'});}
+      });
+      var geldi=records.filter(function(r){return r.durum==='geldi';}).length;
+      return {uye:name,toplam_gun:allDates.length,geldi_gun:geldi,katilim_yuzdesi:Math.round(geldi/allDates.length*100),kayitlar:records};
+    }
+    // Genel rapor
+    var stats={};
+    users.forEach(function(u){stats[u.email]={isim:nm[u.email],geldi:0,gelmedi:0,izinli:0,raporlu:0,faaliyet:0,toplam:0};});
+    allDates.forEach(function(d){
+      var rec=att[d]||{};
+      Object.keys(rec).forEach(function(e){
+        if(stats[e]){stats[e][rec[e].status]=(stats[e][rec[e].status]||0)+1;stats[e].toplam++;}
+      });
+    });
+    var ozet=Object.keys(stats).map(function(e){var s=stats[e];return {isim:s.isim,geldi:s.geldi,gelmedi:s.gelmedi+s.izinli+s.raporlu,faaliyet:s.faaliyet,katilim_yuzdesi:allDates.length>0?Math.round(s.geldi/allDates.length*100):0};}).sort(function(a,b){return b.katilim_yuzdesi-a.katilim_yuzdesi;});
+    return {toplam_toplanti:allDates.length,tarih_araligi:allDates[0]+' - '+allDates[allDates.length-1],uye_istatistikleri:ozet};
+  }catch(e){return {error:'Rapor oluşturulamadı: '+e.message};}
+}
+
+// ============================================================
+// GÖREV ÖZETİ ARACI
+// ============================================================
+function marulTaskSummary(memberName){
+  try{
+    var tk=JSON.parse(localStorage.getItem('bkvTasks')||'[]')||[];
+    if(!tk.length) return {mesaj:'Henüz görev kaydı yok.'};
+    if(memberName){
+      var f=marulFind(memberName);
+      if(f.error) return f;
+      var name=f.user.username;
+      var mine=tk.filter(function(t){return marulNorm(t.assignee||'')===marulNorm(name);});
+      return {uye:name,toplam:mine.length,acik:mine.filter(function(t){return !t.completed;}).length,tamamlanan:mine.filter(function(t){return t.completed;}).length,acik_gorevler:mine.filter(function(t){return !t.completed;}).map(function(t){return t.text;})};
+    }
+    var open=tk.filter(function(t){return !t.completed;}), done=tk.filter(function(t){return t.completed;});
+    var uye_yukleri={};
+    open.forEach(function(t){if(t.assignee){uye_yukleri[t.assignee]=(uye_yukleri[t.assignee]||0)+1;}});
+    return {toplam:tk.length,acik:open.length,tamamlanan:done.length,atanmamis:open.filter(function(t){return !t.assignee;}).length,uye_yukleri:uye_yukleri,acik_gorevler:open.slice(0,15).map(function(t){return {metin:t.text,sorumlu:t.assignee||'atanmamış'};})};
+  }catch(e){return {error:'Görev özeti alınamadı: '+e.message};}
+}
+
+// ============================================================
+// GÖREV OTOMATİK ATAMA
+// ============================================================
 function marulPlanAssign(taskTexts,date,onlyPresent){
   var members=marulMembers(), att={};
   try{att=(JSON.parse(localStorage.getItem('bkvAttendance')||'{}')||{})[date]||{};}catch(e){}
   var hasAtt=Object.keys(att).length>0, pool=members;
-  if(onlyPresent!==false && hasAtt) pool=members.filter(function(u){var r=att[u.email];return !r||r.status==='geldi';});
-  if(!pool.length) return {error:'Atanabilecek üye yok'};
+  if(onlyPresent!==false&&hasAtt) pool=members.filter(function(u){var r=att[u.email];return !r||r.status==='geldi';});
+  if(!pool.length) return {error:'Atanabilecek üye yok. Yoklama kaydı yok veya bugün kimse gelmedi.'};
   var load={}, tk=[];
   try{tk=JSON.parse(localStorage.getItem('bkvTasks')||'[]')||[];}catch(e){}
   pool.forEach(function(u){load[u.username]=0;});
@@ -12518,56 +12718,73 @@ function marulPlanAssign(taskTexts,date,onlyPresent){
     var names=Object.keys(load).sort(function(a,b){return load[a]-load[b]||Math.random()-0.5;});
     plan.push({text:tx,assignee:names[0]}); load[names[0]]++;
   });
-  return {plan:plan,basis:(onlyPresent!==false&&hasAtt)?'yoklamada gelenler':'tüm öğrenci üyeler'};
+  return {plan:plan,basis:(onlyPresent!==false&&hasAtt)?'bugün yoklamada gelenler':'tüm öğrenci üyeler'};
 }
+
+// ============================================================
+// ARAÇ ÇALIŞTIRICISI — Güvenlik katmanıyla
+// ============================================================
 async function marulRunTool(name,a){
   a=a||{};
   if(name==='get_weather') return await marulWeather(a);
-  // Yönetici araçları: her çağrıda rol yeniden doğrulanır (model ne derse desin)
-  if(!marulIsAdmin()) return {error:'Bu işlem yalnızca yöneticilere açıktır.'};
+  if(name==='get_attendance_report'||name==='get_task_summary'){
+    // Salt okunur raporlar da yalnızca yöneticiye
+    if(!marulIsAdmin()) return {error:'Bu rapor yalnızca yöneticilere açıktır.'};
+    if(name==='get_attendance_report') return marulAttendanceReport(a.days,a.member_name);
+    if(name==='get_task_summary') return marulTaskSummary(a.member_name);
+  }
+  // 🔒 Yazma araçları: Her çağrıda rol yeniden doğrulanır (model ne derse desin)
+  if(!marulIsAdmin()) return {error:'Bu işlem yalnızca yöneticilere açıktır. Üye olarak bu işlemi yapamazsın.'};
   if(name==='take_attendance'){
     var date=/^\d{4}-\d{2}-\d{2}$/.test(a.date||'')?a.date:marulToday();
-    var def=MARUL_STATUS[a.default_status]; if(!def) return {error:'Geçersiz durum'};
+    var def=MARUL_STATUS[a.default_status]; if(!def) return {error:'Geçersiz durum: '+a.default_status};
     var members=marulUsers().filter(function(u){return typeof bkvUserType==='function'?bkvUserType(u)!=='sistem':true;});
+    if(!members.length) return {error:'Sistemde üye bulunamadı.'};
     var rec={}, notes=[];
     members.forEach(function(u){rec[u.email]={status:def,note:''};});
     for(var i=0;i<(a.exceptions||[]).length;i++){
       var ex=a.exceptions[i], f=marulFind(ex.name);
       if(f.error) return {error:f.error};
       if(!MARUL_STATUS[ex.status]) return {error:'Geçersiz durum: '+ex.status};
-      rec[f.user.email]={status:ex.status,note:ex.note||''}; notes.push(f.user.username+': '+ex.status);
+      rec[f.user.email]={status:ex.status,note:ex.note||''}; notes.push(f.user.username+': '+ex.status+(ex.note?' ['+ex.note+']':''));
     }
-    var msg=date+' tarihli yoklama kaydedilecek.\n'+members.length+' kişi: '+def+(notes.length?'\nİstisnalar: '+notes.join(', '):'')+'\n\nOnaylıyor musun?';
-    if(!(await marulConfirm(msg))) return {cancelled:true,info:'Yönetici işlemi onaylamadı.'};
+    var gelen=Object.values(rec).filter(function(r){return r.status==='geldi';}).length;
+    var msg=date+' tarihli yoklama kaydedilecek.\n'+'Toplam '+members.length+' kişi — Genel durum: '+def+'\n'+(notes.length?'İstisnalar:\n• '+notes.join('\n• '):'')+'\n\n'+gelen+' kişi geldi sayılacak.\n\nOnaylıyor musun?';
+    if(!(await marulConfirm(msg))) return {cancelled:true,info:'Yoklama kaydı iptal edildi.'};
     await window.bkvAiSaveAttendance(date,rec);
-    return {ok:true,tarih:date,kisi:members.length,istisnalar:notes};
+    return {ok:true,tarih:date,toplam_uye:members.length,geldi:gelen,istisnalar:notes,mesaj:date+' tarihi için yoklama başarıyla kaydedildi.'};
   }
   if(name==='add_task'){
     var as='';
     if(a.assignee){var f2=marulFind(a.assignee); if(f2.error) return {error:f2.error}; as=f2.user.username;}
-    if(!a.text) return {error:'Görev metni boş'};
-    if(!(await marulConfirm('Görev eklenecek:\n'+a.text+(as?'\nSorumlu: '+as:'')+'\n\nOnaylıyor musun?'))) return {cancelled:true};
+    if(!a.text||!a.text.trim()) return {error:'Görev metni boş olamaz.'};
+    var msg2='Görev eklenecek:\n"'+a.text+'"'+(as?'\nSorumlu: '+as:'\n(Sorumlu atanmamış)')+(a.due_date?'\nSon tarih: '+a.due_date:'')+'\n\nOnaylıyor musun?';
+    if(!(await marulConfirm(msg2))) return {cancelled:true};
     await window.bkvAiAddTask(String(a.text).slice(0,200),as);
-    return {ok:true,gorev:a.text,sorumlu:as||'atanmadı'};
+    return {ok:true,gorev:a.text,sorumlu:as||'atanmadı',mesaj:'Görev başarıyla eklendi.'};
   }
   if(name==='auto_assign_tasks'){
     var list=(a.tasks||[]).map(function(x){return String(x).slice(0,200);}).filter(Boolean).slice(0,15);
-    if(!list.length) return {error:'Görev listesi boş'};
+    if(!list.length) return {error:'Görev listesi boş.'};
     var dt=/^\d{4}-\d{2}-\d{2}$/.test(a.date||'')?a.date:marulToday();
     var pl=marulPlanAssign(list,dt,a.only_present);
     if(pl.error) return pl;
-    if(!(await marulConfirm('Otomatik görev dağıtımı ('+pl.basis+'):\n\n'+pl.plan.map(function(p){return '• '+p.text+' → '+p.assignee;}).join('\n')+'\n\nOnaylıyor musun?'))) return {cancelled:true};
+    var confirmMsg='Otomatik görev dağıtımı ('+pl.basis+'):\n\n'+pl.plan.map(function(p){return '• "'+p.text+'" → '+p.assignee;}).join('\n')+'\n\nOnaylıyor musun?';
+    if(!(await marulConfirm(confirmMsg))) return {cancelled:true};
     for(var k=0;k<pl.plan.length;k++) await window.bkvAiAddTask(pl.plan[k].text,pl.plan[k].assignee);
-    return {ok:true,dagitim:pl.plan};
+    return {ok:true,dagitim:pl.plan,basis:pl.basis,mesaj:pl.plan.length+' görev başarıyla dağıtıldı.'};
   }
-  return {error:'Bilinmeyen araç'};
+  return {error:'Bilinmeyen araç: '+name};
 }
-var MARUL_RULES='\n\nARAÇLAR: Yönetici araçlarını YALNIZCA kullanıcı açıkça yoklama girmeyi, görev eklemeyi veya görev atamayı isterse çağır; bilgi soran ya da sohbet eden birine görev ekleme, yalnızca soruyu cevapla. Bir konu hakkında soru sorulması görev eklenmesi demek değildir. Hava durumu sorulursa MUTLAKA get_weather aracını çağır, "yetkim yok" veya "bilgim yok" deme. Hava durumunu bahçe işlerine (sulama, ekim, don, sera) yorumla. Yönetici araçları (yoklama, görev ekleme, otomatik atama) sana verilmişse kullanıcı yöneticidir; "yoklama gir", "görev ekle/ata" gibi isteklerde ilgili aracı hemen çağır, gereksiz soru sorma. Eksik bilgi varsa makul varsayım yap (tarih yoksa bugün). Araç sana verilmemişse kullanıcı öğrencidir: yoklama, üye listesi, başka öğrencilerin bilgileri veya yönetici işlemleri isteniyorsa nazikçe bunun yalnızca yöneticilere açık olduğunu söyle; bu bilgileri asla paylaşma ve araç varmış gibi davranma. Araç sonucu cancelled ise işlemin iptal edildiğini söyle. Araç sonucundaki bilgiyi uydurmadan, kısa özetle.';
+
+// ============================================================
+// ANA SORU FONKSİYONU
+// ============================================================
 async function marulAsk(q,where,inputEl){
   q=(q||'').trim(); if(!q) return;
   if(where==='pop') marulOpen();
   var box=document.getElementById(where==='dash'?'marul-dash-answer':'marul-pop-answer');
-  if(sessionStorage.getItem('isUnlocked')!=='true' && !document.body.classList.contains('is-admin')){marulAdd(box,'a','Marul Ai için önce giriş yapmalısın.');return;}
+  if(sessionStorage.getItem('isUnlocked')!=='true'&&!document.body.classList.contains('is-admin')){marulAdd(box,'a','🥬 Marul Ai için önce giriş yapmalısın.');return;}
   if(MARUL_KEY.indexOf('BURAYA')===0){marulAdd(box,'a','Marul Ai henüz kurulmadı (anahtar eklenmemiş).');return;}
   if(Date.now()-marulLast<2000){marulAdd(box,'a','Biraz yavaş :) Birkaç saniye bekle.');return;}
   marulLast=Date.now(); if(inputEl) inputEl.value='';
@@ -12576,29 +12793,32 @@ async function marulAsk(q,where,inputEl){
   var t0=Date.now(), errs=[];
   var tick=setInterval(function(){wait.textContent='🥬 düşünüyor... ('+Math.round((Date.now()-t0)/1000)+' sn)';},1000);
   try{
+    var isAdmin=marulIsAdmin();
+    var sysPrompt=isAdmin?MARUL_SYSTEM_ADMIN:MARUL_SYSTEM_MEMBER;
+    var rules=isAdmin?MARUL_RULES_ADMIN:MARUL_RULES_MEMBER;
     var ctx=marulCtx(), tools=marulTools();
-    var msgs=[{role:'system',content:MARUL_SYSTEM+MARUL_RULES+(ctx?'\n\nPanel bilgisi:\n'+ctx:'')}];
-    marulHistory.slice(-6).forEach(function(m){msgs.push({role:m.role==='model'?'assistant':'user',content:m.text});});
-    msgs.push({role:'user',content:q.slice(0,500)});
+    var maxTok=isAdmin?1200:600;
+    var msgs=[{role:'system',content:sysPrompt+rules+(ctx?'\n\nPanel bilgisi (canlı veri):\n'+ctx:'')}];
+    marulHistory.slice(-8).forEach(function(m){msgs.push({role:m.role==='model'?'assistant':'user',content:m.text});});
+    msgs.push({role:'user',content:q.slice(0,800)});
     var H={'Content-Type':'application/json','Authorization':'Bearer '+MARUL_KEY};
     async function call(model){
-      var ac=new AbortController(), to=setTimeout(function(){ac.abort();},25000);
+      var ac=new AbortController(), to=setTimeout(function(){ac.abort();},30000);
       try{
-        var body={model:model,messages:msgs,max_tokens:700,temperature:0.4,tools:tools,tool_choice:'auto'};
+        var body={model:model,messages:msgs,max_tokens:maxTok,temperature:isAdmin?0.5:0.4,tools:tools,tool_choice:'auto'};
         var r=await fetch(MARUL_BASE+'/chat/completions',{method:'POST',signal:ac.signal,headers:H,body:JSON.stringify(body)});
-        var j=await r.json(); console.log('Marul Ai ('+model+'):',r.status,j);
+        var j=await r.json(); console.log('Marul Ai v13 ('+model+'):',r.status,j);
         var m=j.choices&&j.choices[0]&&j.choices[0].message;
         if(m) return m;
         errs.push(model+': '+(((j.error&&j.error.message)||('HTTP '+r.status)).split('\n')[0].slice(0,110)));
         return null;
-      }catch(e){errs.push(model+': '+(e.name==='AbortError'?'25 sn cevap yok':e.message));return null;}
+      }catch(e){errs.push(model+': '+(e.name==='AbortError'?'30 sn cevap yok':e.message));return null;}
       finally{clearTimeout(to);}
     }
     var ans='';
     for(var round=0;round<4&&!ans;round++){
       var m=await call(MARUL_MODEL);
       if(!m){
-        // Yedek: bilinen modelleri, sonra hesabın model listesini sırayla dene
         var tried={}; tried[MARUL_MODEL]=1;
         var cands=['llama-3.1-8b-instant','openai/gpt-oss-20b','openai/gpt-oss-120b','meta-llama/llama-4-scout-17b-16e-instruct','qwen/qwen3-32b'];
         try{
@@ -12618,19 +12838,21 @@ async function marulAsk(q,where,inputEl){
         for(var c=0;c<m.tool_calls.length;c++){
           var tc=m.tool_calls[c], args={}, res;
           try{args=JSON.parse(tc.function.arguments||'{}');}catch(e){}
-          wait.textContent='🥬 '+(tc.function.name==='get_weather'?'hava durumuna bakıyor':'işlem yapıyor')+'...';
+          var toolLabel={'get_weather':'🌤️ hava durumuna bakıyor','take_attendance':'📋 yoklama kaydediyor','add_task':'✅ görev ekliyor','auto_assign_tasks':'🔄 görevleri dağıtıyor','get_attendance_report':'📊 rapor hazırlıyor','get_task_summary':'📝 görev özeti hazırlıyor'};
+          wait.textContent='🥬 '+(toolLabel[tc.function.name]||'işlem yapıyor')+'...';
           try{res=await marulRunTool(tc.function.name,args);}catch(e){res={error:'İşlem başarısız: '+e.message};}
-          msgs.push({role:'tool',tool_call_id:tc.id,content:JSON.stringify(res).slice(0,3500)});
+          msgs.push({role:'tool',tool_call_id:tc.id,content:JSON.stringify(res).slice(0,4000)});
         }
       } else if(m.content){ ans=m.content.replace(/<think>[\s\S]*?<\/think>/g,'').trim(); }
       else break;
     }
     clearInterval(tick);
-    wait.textContent=ans||('Marul Ai şu an cevap veremiyor.\nDenenenler:\n• '+(errs.join('\n• ')||'boş cevap'));
-    if(ans){marulHistory.push({role:'user',text:q},{role:'model',text:ans});}
+    wait.textContent=ans||('🥬 Marul Ai şu an cevap veremiyor.\nDenenenler:\n• '+(errs.join('\n• ')||'boş cevap'));
+    if(ans){marulHistory.push({role:'user',text:q},{role:'model',text:ans});if(marulHistory.length>20)marulHistory=marulHistory.slice(-20);}
   }catch(e){clearInterval(tick);console.error('Marul Ai hata:',e);wait.textContent='Bağlantı hatası: '+e.message;}
   box.scrollTop=box.scrollHeight;
 }
+
 </script>
 </body>
 </html>
