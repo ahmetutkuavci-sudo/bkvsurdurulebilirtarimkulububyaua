@@ -3077,7 +3077,22 @@
         /* 🧠 MARUL AI v14 — yeni sohbet arayüzü */
         #marul-pop{display:none;position:fixed;z-index:99990;left:270px;bottom:70px;width:380px;max-width:calc(100vw - 24px);height:min(560px,calc(100vh - 110px));flex-direction:column;border-radius:22px;overflow:hidden;background:var(--glass-bg,rgba(255,255,255,.96));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glass-border,#fff);box-shadow:0 18px 50px rgba(0,0,0,.28)}
         #marul-pop.open{display:flex}
-        .marul-box{display:flex;flex-direction:column;min-height:0}
+        .marul-box{display:flex;flex-direction:column;min-height:0;position:relative}
+        .mh-panel{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;background:var(--glass-bg,rgba(255,255,255,.98));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+        .mh-head{display:flex;align-items:center;gap:8px;padding:12px 14px;background:linear-gradient(135deg,#16a34a,#22c55e 60%,#4ade80);color:#fff;font-weight:700;font-size:14px;flex:none}
+        .mh-head span{flex:1}
+        .mh-head button{border:none;background:rgba(255,255,255,.22);color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px}
+        .mh-list{flex:1;min-height:0;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+        .mh-empty{text-align:center;color:#64748b;font-size:13px;padding:30px 10px}
+        .mh-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;border:1px solid rgba(22,163,74,.25);background:rgba(220,252,231,.55);cursor:pointer;color:var(--text-main,#0c4a6e)}
+        .mh-item:hover{background:rgba(187,247,208,.8)}
+        .mh-item.cur{border-color:#16a34a;box-shadow:0 0 0 2px rgba(22,163,74,.25)}
+        .mh-item .mh-t{flex:1;min-width:0}
+        .mh-item b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .mh-item small{font-size:11px;opacity:.75}
+        .mh-item button{border:none;background:transparent;cursor:pointer;font-size:15px;padding:4px}
+        .mh-foot{flex:none;padding:10px;border-top:1px solid rgba(0,0,0,.08);text-align:center}
+        .mh-foot button{border:none;background:#fee2e2;color:#b91c1c;border-radius:10px;padding:7px 12px;font-size:12px;cursor:pointer}
         .marul-dash .marul-box{border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,.55)}
         .marul-dash .marul-answer{min-height:150px;max-height:380px}
         .mp-head{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 14px;background:linear-gradient(135deg,#16a34a,#22c55e 60%,#4ade80);color:#fff;flex:none}
@@ -4370,7 +4385,7 @@
                             <div class="mp-head">
                 <div class="mp-av">🧠</div>
                 <div class="mp-title"><b>EcoMind AI</b><small>Kulüp asistanın 🌱</small></div>
-                <button type="button" title="Sohbeti temizle" onclick="marulClear()">🗑️</button>
+                <button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button>
             </div>
                             <div class="marul-answer" id="marul-dash-answer"></div>
                             <div class="marul-compose">
@@ -5107,7 +5122,7 @@
             <div class="mp-head">
                 <div class="mp-av">🧠</div>
                 <div class="mp-title"><b>EcoMind AI</b><small>Kulüp asistanın 🌱</small></div>
-                <button type="button" title="Sohbeti temizle" onclick="marulClear()">🗑️</button><button type="button" title="Kapat" onclick="marulClose()">✕</button>
+                <button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button><button type="button" title="Kapat" onclick="marulClose()">✕</button>
             </div>
             <div class="marul-answer" id="marul-pop-answer"></div>
             <div class="marul-compose">
@@ -12656,6 +12671,17 @@ var marulLast = 0, marulHistory = [];
 // • Belge kimliği = SHA-256(e-posta); içerik AES-GCM ile şifreli, anahtar kullanıcının e-posta+şifresinden türetilir (şifre hiçbir yere yazılmaz).
 // • Uygulama yalnızca KENDİ belgesini okur/yazar; koleksiyonu listelemez. Panel verisi ve araç sonuçları kaydedilmez, yalnızca soru-cevap metni.
 var marulChatState = {email:'',hash:'',key:null,ready:false,gen:0,wiped:false};
+var marulChats = [], marulCurId = '';
+function marulNewId(){return 'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function marulCleanH(h){return (h||[]).filter(function(m){return m&&(m.role==='user'||m.role==='model')&&typeof m.text==='string';}).map(function(m){return {role:m.role,text:m.text.slice(0,1500)};});}
+function marulTitleOf(h){for(var i=0;i<h.length;i++){if(h[i].role==='user'){var t=h[i].text.replace(/\s+/g,' ').trim();return t.length>48?t.slice(0,48)+'…':t;}}return 'Sohbet';}
+function marulSyncCur(){
+  if(!marulHistory.length) return;
+  if(!marulCurId) marulCurId=marulNewId();
+  var ch=null;for(var i=0;i<marulChats.length;i++){if(marulChats[i].id===marulCurId){ch=marulChats[i];break;}}
+  if(!ch){ch={id:marulCurId,ts:Date.now(),title:'',h:[]};marulChats.push(ch);}
+  ch.h=marulCleanH(marulHistory.slice(-40)); ch.ts=Date.now(); ch.title=marulTitleOf(ch.h);
+}
 var marulCtxTimer = null;
 try{Object.keys(localStorage).forEach(function(k){if(k.indexOf('ecomind_ctx_v1_')===0)localStorage.removeItem(k);});}catch(e){} // eski, kullanıcıları karıştıran yerel kayıt
 function marulB64(buf){var b=new Uint8Array(buf),t='';for(var i=0;i<b.length;i++)t+=String.fromCharCode(b[i]);return btoa(t);}
@@ -12674,12 +12700,12 @@ function marulCtxUserRec(em){
   for(var i=0;i<us.length;i++){if(((us[i].email||'')+'').toLowerCase().trim()===em) return us[i];}
   return null;
 }
-function marulCtxRender(){
+function marulCtxRender(quiet){
   ['marul-pop-answer','marul-dash-answer'].forEach(function(id){
     var bx=document.getElementById(id); if(!bx) return; bx.innerHTML='';
     if(marulHistory.length){
       marulHistory.slice(-10).forEach(function(m){marulAdd(bx,m.role==='model'?'a':'u',m.text);});
-      marulAdd(bx,'a','↻ Önceki konuşmamızı hatırlıyorum, kaldığımız yerden devam edebiliriz. Baştan başlamak için 🗑️ düğmesine bas.');
+      if(!quiet)marulAdd(bx,'a','↻ Önceki konuşmamızı hatırlıyorum, kaldığımız yerden devam edebiliriz. Yeni sohbet için ➕ düğmesine bas.');
     }
   });
   if(!marulHistory.length){marulWelcome('pop');marulWelcome('dash');}
@@ -12702,14 +12728,23 @@ async function marulCtxInit(gen){
     if(snap.exists()){
       try{
         var o=await marulDec(c.key,snap.data());
-        if(o&&Array.isArray(o.h)&&Date.now()-(o.t||0)<30*864e5){
-          loaded=o.h.filter(function(m){return m&&(m.role==='user'||m.role==='model')&&typeof m.text==='string';}).map(function(m){return {role:m.role,text:m.text.slice(0,1500)};});
+        var now=Date.now();
+        if(o&&Array.isArray(o.chats)){
+          loaded=o.chats.map(function(x){return {id:String(x.id||marulNewId()),ts:+x.ts||0,title:String(x.title||'Sohbet').slice(0,80),h:marulCleanH(x.h)};}).filter(function(x){return x.h.length&&now-x.ts<30*864e5;});
+        }else if(o&&Array.isArray(o.h)&&now-(o.t||0)<30*864e5){
+          var h0=marulCleanH(o.h); if(h0.length) loaded=[{id:marulNewId(),ts:o.t||now,title:marulTitleOf(h0),h:h0}];
         }
       }catch(e){bad=true;} // şifre değişmiş veya bozuk kayıt: yok say, yeniden başla
     }
     if(marulChatState.gen!==gen) return;
     var hadLocal=marulHistory.length>0;
-    marulHistory=loaded.concat(marulHistory).slice(-40);
+    if(hadLocal&&!marulCurId) marulCurId=marulNewId();
+    marulChats=loaded;
+    if(!hadLocal&&loaded.length){
+      loaded.sort(function(a,b){return b.ts-a.ts;});
+      marulCurId=loaded[0].id; marulHistory=loaded[0].h.slice();
+    }
+    marulSyncCur();
     c.ready=true;
     if(!hadLocal) marulCtxRender();
     if(hadLocal||bad) marulCtxSave();
@@ -12721,7 +12756,7 @@ function marulCtxRestore(){
   clearTimeout(marulCtxTimer);
   var gen=marulChatState.gen+1;
   marulChatState={email:em,hash:'',key:null,ready:false,gen:gen,wiped:false};
-  marulHistory=[];
+  marulHistory=[]; marulChats=[]; marulCurId='';
   marulCtxRender();
   if(em) marulCtxInit(gen);
 }
@@ -12731,14 +12766,23 @@ function marulCtxSave(){
   marulCtxTimer=setTimeout(async function(){
     if(marulChatState!==c) return;
     try{
-      var payload={t:Date.now(),h:marulHistory.slice(-40).map(function(m){return {role:m.role,text:String(m.text).slice(0,1500)};})};
-      var e=await marulEnc(c.key,payload);
-      await window.setDoc(window.doc(window.db,'ecomind_chats',c.hash),{v:1,iv:e.iv,ct:e.ct,n:payload.h.length,updatedAt:Date.now()});
+      marulSyncCur();
+      var now=Date.now();
+      marulChats=marulChats.filter(function(x){return x.h.length&&now-x.ts<30*864e5;}).sort(function(p,q){return q.ts-p.ts;}).slice(0,20);
+      var payload,e;
+      while(true){
+        payload={t:now,cur:marulCurId,chats:marulChats};
+        if(JSON.stringify(payload).length<=600000||marulChats.length<=1) break;
+        var drop=marulChats.length-1; if(marulChats[drop].id===marulCurId&&drop>0) drop--; marulChats.splice(drop,1);
+      }
+      e=await marulEnc(c.key,payload);
+      var n=0;marulChats.forEach(function(x){n+=x.h.length;});
+      await window.setDoc(window.doc(window.db,'ecomind_chats',c.hash),{v:2,iv:e.iv,ct:e.ct,n:n,updatedAt:now});
     }catch(err){console.warn('EcoMind geçmişi kaydedilemedi:',err&&err.message);}
   },600);
 }
 async function marulCtxWipe(){
-  clearTimeout(marulCtxTimer); var c=marulChatState; c.wiped=true;
+  clearTimeout(marulCtxTimer); var c=marulChatState; c.wiped=true; marulChats=[]; marulCurId='';
   try{ if(c.hash&&window.deleteDoc&&window.db){await window.deleteDoc(window.doc(window.db,'ecomind_chats',c.hash));} }catch(e){console.warn('EcoMind geçmişi silinemedi:',e&&e.message);}
 }
 if(!window._marulCtxWatch){window._marulCtxWatch=setInterval(marulCtxRestore,1500);} // giriş/çıkış/kullanıcı değişimini izler
@@ -12909,11 +12953,94 @@ function marulWelcome(where){
     b.onclick=function(){marulAsk(x[1],where,document.getElementById(where==='dash'?'marul-dash-input':'marul-pop-input'));};c.appendChild(b);});
   w.appendChild(c); box.appendChild(w);
 }
-function marulClear(){
-  marulHistory=[]; marulCtxWipe();
-  ['marul-pop-answer','marul-dash-answer'].forEach(function(id){var b=document.getElementById(id);if(b)b.innerHTML='';});
-  marulWelcome('pop'); marulWelcome('dash');
+function marulRenderAll(quiet){
+  marulCtxRender(quiet);
 }
+function marulNewChat(){
+  if(!marulHistory.length) return;
+  marulSyncCur();
+  clearTimeout(marulCtxTimer);
+  var c=marulChatState;
+  if(c.ready&&c.key&&c.hash){marulCtxFlush();}
+  marulHistory=[]; marulCurId='';
+  document.querySelectorAll('.mh-panel').forEach(function(p){p.remove();});
+  marulRenderAll(true);
+}
+function marulCtxFlush(){
+  var c=marulChatState; if(!c.ready||!c.key||!c.hash) return;
+  (async function(){
+    try{
+      marulSyncCur();
+      var now=Date.now();
+      marulChats=marulChats.filter(function(x){return x.h.length&&now-x.ts<30*864e5;}).sort(function(p,q){return q.ts-p.ts;}).slice(0,20);
+      var payload;
+      while(true){
+        payload={t:now,cur:marulCurId,chats:marulChats};
+        if(JSON.stringify(payload).length<=600000||marulChats.length<=1) break;
+        var drop=marulChats.length-1; if(marulChats[drop].id===marulCurId&&drop>0) drop--; marulChats.splice(drop,1);
+      }
+      var e=await marulEnc(c.key,payload), n=0; marulChats.forEach(function(x){n+=x.h.length;});
+      await window.setDoc(window.doc(window.db,'ecomind_chats',c.hash),{v:2,iv:e.iv,ct:e.ct,n:n,updatedAt:now});
+    }catch(err){console.warn('EcoMind geçmişi kaydedilemedi:',err&&err.message);}
+  })();
+}
+function marulHistOpen(btn){
+  var host=btn&&btn.closest('#marul-pop, .marul-box'); if(!host) return;
+  var old=host.querySelector('.mh-panel'); if(old){old.remove();return;}
+  marulSyncCur();
+  var p=document.createElement('div'); p.className='mh-panel';
+  var hd=document.createElement('div'); hd.className='mh-head';
+  hd.innerHTML='<span>📜 Sohbet Geçmişi</span>';
+  var cl=document.createElement('button'); cl.type='button'; cl.textContent='✕'; cl.title='Kapat'; cl.onclick=function(){p.remove();};
+  hd.appendChild(cl); p.appendChild(hd);
+  var list=document.createElement('div'); list.className='mh-list'; p.appendChild(list);
+  var ft=document.createElement('div'); ft.className='mh-foot';
+  var wb=document.createElement('button'); wb.type='button'; wb.textContent='🗑️ Tüm geçmişi sil';
+  wb.onclick=async function(){
+    if(!(await marulConfirm('Tüm sohbet geçmişin kalıcı olarak silinsin mi?'))) return;
+    marulHistory=[]; await marulCtxWipe();
+    document.querySelectorAll('.mh-panel').forEach(function(x){x.remove();});
+    marulRenderAll(true);
+  };
+  ft.appendChild(wb); p.appendChild(ft);
+  function draw(){
+    list.innerHTML='';
+    var st=marulChatState;
+    if(st.email&&!st.ready&&!marulChats.length){list.innerHTML='<div class="mh-empty">Yükleniyor…</div>';return;}
+    var arr=marulChats.filter(function(x){return x.h.length;}).sort(function(a,b){return b.ts-a.ts;});
+    if(!arr.length){list.innerHTML='<div class="mh-empty">Henüz kayıtlı sohbet yok.</div>';return;}
+    arr.forEach(function(ch){
+      var it=document.createElement('div'); it.className='mh-item'+(ch.id===marulCurId?' cur':'');
+      var t=document.createElement('div'); t.className='mh-t';
+      var b=document.createElement('b'); b.textContent=ch.title||'Sohbet';
+      var sm=document.createElement('small'); sm.textContent=new Date(ch.ts).toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})+' · '+ch.h.length+' mesaj';
+      t.appendChild(b); t.appendChild(sm); it.appendChild(t);
+      var d=document.createElement('button'); d.type='button'; d.textContent='🗑️'; d.title='Bu sohbeti sil';
+      d.onclick=function(ev){
+        ev.stopPropagation();
+        marulChats=marulChats.filter(function(x){return x.id!==ch.id;});
+        if(ch.id===marulCurId){marulHistory=[];marulCurId='';marulRenderAll(true);}
+        marulCtxFlushOrWipe(); draw();
+      };
+      it.appendChild(d);
+      it.onclick=function(){
+        marulSyncCur();
+        marulCurId=ch.id; marulHistory=ch.h.slice();
+        marulCtxFlush();
+        p.remove(); marulRenderAll(true);
+      };
+      list.appendChild(it);
+    });
+  }
+  draw();
+  host.appendChild(p);
+  if(marulChatState.email&&!marulChatState.ready){var iv=setInterval(function(){if(!p.isConnected){clearInterval(iv);return;}if(marulChatState.ready){clearInterval(iv);draw();}},600);}
+}
+function marulCtxFlushOrWipe(){
+  if(marulChats.length) marulCtxFlush();
+  else { marulCtxWipe(); }
+}
+function marulClear(){ marulNewChat(); }
 
 // ============================================================
 // ONAY DİYALOĞU
