@@ -3057,7 +3057,7 @@
         }
 
 
-        /* 🥬 MARUL AI */
+        /* 🧠 MARUL AI */
         .marul-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.7);border:1px solid var(--glass-border,rgba(255,255,255,.85));border-radius:14px;padding:4px 6px 4px 12px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05)}
         .marul-bar input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-size:13px;font-weight:600;color:var(--text-main,#0c4a6e);padding:7px 0}
         .marul-bar button{border:none;cursor:pointer;border-radius:10px;padding:6px 10px;font-weight:800;background:linear-gradient(#86efac,#22c55e);color:#064e3b}
@@ -3065,7 +3065,7 @@
         .marul-bar button.marul-mic.rec{background:#ef4444;color:#fff;animation:marulPulse 1s infinite}
         @keyframes marulPulse{50%{opacity:.55}}
         .marul-bar button:disabled{opacity:.5;cursor:wait}
-        /* 🥬 Marul Ai — üst bar arama çubuğu (yeni arayüz) */
+        /* 🧠 EcoMind AI — üst bar arama çubuğu (yeni arayüz) */
         #mh-marul-search{flex:1 1 260px;min-width:150px;max-width:460px;margin:0 auto;display:none}
         body.ui-modern #mh-marul-search{display:block}
         #mh-marul-search .marul-bar{background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.95);border-radius:999px;padding:3px 5px 3px 12px;box-shadow:0 2px 8px rgba(0,0,0,.06),inset 0 1px 2px rgba(0,0,0,.04);transition:box-shadow .2s,border-color .2s}
@@ -3074,7 +3074,7 @@
         #mh-marul-search .marul-bar input::placeholder{color:#0369a1;opacity:.7;font-weight:600}
         #mh-marul-search .marul-bar button{width:32px;height:32px;padding:0;border-radius:50%;flex:none;font-size:14px;display:flex;align-items:center;justify-content:center}
         @media (max-width:900px){ body.ui-modern #mh-marul-search{display:none} }
-        /* 🥬 MARUL AI v14 — yeni sohbet arayüzü */
+        /* 🧠 MARUL AI v14 — yeni sohbet arayüzü */
         #marul-pop{display:none;position:fixed;z-index:99990;left:270px;bottom:70px;width:380px;max-width:calc(100vw - 24px);height:min(560px,calc(100vh - 110px));flex-direction:column;border-radius:22px;overflow:hidden;background:var(--glass-bg,rgba(255,255,255,.96));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glass-border,#fff);box-shadow:0 18px 50px rgba(0,0,0,.28)}
         #marul-pop.open{display:flex}
         .marul-box{display:flex;flex-direction:column;min-height:0}
@@ -3125,7 +3125,22 @@
             body.ui-modern .marul-dash{display:none}
         }
 
-        </style>
+        
+        /* 🔌 Powered by rozeti — her kartın ölçeğine orantılı (yükseklik kart genişliğiyle birlikte büyür/küçülür) */
+        .pb-badge{display:block;width:auto;height:var(--pb-h,48px);max-width:24%;object-fit:contain;flex:0 0 auto;filter:drop-shadow(0 2px 6px rgba(1,87,155,.14));user-select:none;-webkit-user-drag:none;pointer-events:none}
+        .bokashi-title-row .pb-main{flex:1 1 340px;min-width:0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px}
+        .bokashi-title-row .pb-badge{--pb-h:clamp(52px,6.8vw,104px);margin-left:auto}
+        .pb-top{display:flex;align-items:flex-start;gap:14px}
+        .pb-top .pb-text{flex:1 1 auto;min-width:0}
+        .pb-top .pb-badge{--pb-h:clamp(32px,3.2vw,50px);margin-top:2px}
+        @media (max-width:560px){ .bokashi-title-row .pb-badge{margin:0 auto;--pb-h:56px} .pb-top .pb-badge{--pb-h:32px} }
+                .pb-top.pb-edge{flex:1 1 auto}
+        .pb-top.pb-edge .pb-badge{margin:0 0 0 auto;--pb-h:clamp(52px,5.4vw,80px)}
+        .pb-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+        .pb-right .pb-badge{--pb-h:clamp(44px,4.6vw,68px)}
+        @media (max-width:560px){ .pb-top.pb-edge .pb-badge{--pb-h:44px} .pb-right .pb-badge{--pb-h:40px} }
+        @media print{ .pb-badge{display:none} }
+    </style>
 </head>
 <body>
 
@@ -3594,11 +3609,11 @@
             </div>
         </div>
 
-        <!-- 🥬 Marul Ai arama çubuğu -->
+        <!-- 🧠 EcoMind AI arama çubuğu -->
         <div id="mh-marul-search" class="hide-on-print">
             <div class="marul-bar">
-                <span style="font-size:17px;cursor:pointer;flex:none;" onclick="marulOpen()" title="Marul Ai">🥬</span>
-                <input type="text" id="mh-marul-input" placeholder="Marul Ai'ya sor..." autocomplete="off" onkeydown="if(event.key==='Enter'){marulAsk(this.value,'pop',this);}">
+                <span style="font-size:17px;cursor:pointer;flex:none;" onclick="marulOpen()" title="EcoMind AI">🧠</span>
+                <input type="text" id="mh-marul-input" placeholder="EcoMind AI'ya sor..." autocomplete="off" onkeydown="if(event.key==='Enter'){marulAsk(this.value,'pop',this);}">
                 <button type="button" class="marul-mic" title="Sesli sor" onclick="marulMic(document.getElementById('mh-marul-input'),'pop',this)">🎤</button>
                 <button type="button" title="Sor" onclick="marulAsk(document.getElementById('mh-marul-input').value,'pop',document.getElementById('mh-marul-input'))">➤</button>
             </div>
@@ -3762,7 +3777,7 @@
                     
                     <!-- 1. Üst Bilgi Kartı & 4 KPI Canlı İstatistik Göstergesi -->
                     <div class="bokashi-header-card">
-                        <div class="bokashi-title-row">
+                        <div class="bokashi-title-row"><div class="pb-main">
                             <div>
                                 <h2 class="bokashi-main-title">♻️ BKV Bokashi Kompost & Biyo-Fermantasyon İstasyonu</h2>
                                 <p class="bokashi-main-desc">Okul kafeteryası, mutfak ve sera organik atıklarını anaerobik (oksijensiz) faydalı mikroorganizmalarla (EM-1) fermente ederek yüksek kaliteli toprak besini ve biyo-sıvı gübreye dönüştürün.</p>
@@ -3772,7 +3787,7 @@
                                 <span class="bokashi-tag-pill">🪱 Biyo-Dönüşüm</span>
                                 <span class="bokashi-tag-pill">⚡ %100 Anaerobik Fermantasyon</span>
                             </div>
-                        </div>
+                        </div><img class="pb-badge" src="poweredbyicon.png" alt="Powered by" draggable="false" onerror="this.style.display='none'"></div>
 
                         <!-- 4 Canlı Metrik Sayacı -->
                         <div class="bokashi-stats-grid">
@@ -4030,8 +4045,8 @@
                 <div class="card glass">
                     <div class="ur-wrap">
                         <div class="ur-head">
-                            <h2>🌾 Üretimlerim</h2>
-                            <p>Ürününüzü ve üretim dönemini seçin; girdileri, süreci ve çıktıları ölçüm verileriyle kaydedin, maliyet ve verim analizini izleyin.</p>
+                            <div class="pb-top"><div class="pb-text"><h2>🌾 Üretimlerim</h2>
+                            <p>Ürününüzü ve üretim dönemini seçin; girdileri, süreci ve çıktıları ölçüm verileriyle kaydedin, maliyet ve verim analizini izleyin.</p></div><img class="pb-badge" src="poweredbyicon.png" alt="Powered by" draggable="false" onerror="this.style.display='none'"></div>
                             <div class="ur-row">
                                 <select id="ur-urun-sec" class="aero-input" title="Ürün"></select>
                                 <input type="text" id="ur-urun-diger" class="aero-input" placeholder="Ürün adını yazın (örn. Domates)" style="display:none;">
@@ -4069,8 +4084,8 @@
                 <div class="card glass">
                     <div class="ur-wrap">
                         <div class="ur-head">
-                            <h2>🌰 Tohum Bankası</h2>
-                            <p>Kulübün yerel ve atalık tohumlarının türü, saklama tarihi, çimlenme oranı, ideal ekim dönemi ve stoğu.</p>
+                            <div class="pb-top"><div class="pb-text"><h2>🌰 Tohum Bankası</h2>
+                            <p>Kulübün yerel ve atalık tohumlarının türü, saklama tarihi, çimlenme oranı, ideal ekim dönemi ve stoğu.</p></div><img class="pb-badge" src="poweredbyicon.png" alt="Powered by" draggable="false" onerror="this.style.display='none'"></div>
                             <div class="ur-row">
                                 <button class="aero-btn btn-green" data-sact="yeni">➕ Yeni Tohum Ekle</button>
                                 <button class="aero-btn" data-sact="csv">⬇️ CSV (Excel) İndir</button>
@@ -4102,9 +4117,9 @@
                                 </h2>
                                 <p style="color: #0277bd; margin: 4px 0 0 0; font-size: 13.5px;">81 il için canlı hava durumu, sürdürülebilir tarım faaliyet tavsiyeleri ve 7 günlük detaylı tahminler.</p>
                             </div>
-                            <div id="hd-son-guncelleme" style="font-size: 12px; font-weight: 700; color: #546e7a; background: rgba(255,255,255,0.7); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.9);">
+                            <div class="pb-right"><div id="hd-son-guncelleme" style="font-size: 12px; font-weight: 700; color: #546e7a; background: rgba(255,255,255,0.7); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.9);">
                                 🕒 Son Güncelleme: -
-                            </div>
+                            </div><img class="pb-badge" src="poweredbyicon.png" alt="Powered by" draggable="false" onerror="this.style.display='none'"></div>
                         </div>
 
                         <!-- Arama & Kontrol Çubuğu -->
@@ -4353,13 +4368,13 @@
                     <div class="card glass marul-dash hide-on-print">
                         <div class="marul-box">
                             <div class="mp-head">
-                <div class="mp-av">🥬</div>
-                <div class="mp-title"><b>Marul Ai</b><small>Kulüp asistanın 🌱</small></div>
+                <div class="mp-av">🧠</div>
+                <div class="mp-title"><b>EcoMind AI</b><small>Kulüp asistanın 🌱</small></div>
                 <button type="button" title="Sohbeti temizle" onclick="marulClear()">🗑️</button>
             </div>
                             <div class="marul-answer" id="marul-dash-answer"></div>
                             <div class="marul-compose">
-                <input type="text" id="marul-dash-input" placeholder="Marul Ai'ya sor..." autocomplete="off" onkeydown="if(event.key==='Enter'){marulAsk(this.value,'dash',this);}">
+                <input type="text" id="marul-dash-input" placeholder="EcoMind AI'ya sor..." autocomplete="off" onkeydown="if(event.key==='Enter'){marulAsk(this.value,'dash',this);}">
                 <button type="button" title="Emoji ekle" onclick="marulEmoji(document.getElementById('marul-dash-input'),this)">😊</button>
                 <button type="button" class="marul-mic" title="Sesli sor" onclick="marulMic(document.getElementById('marul-dash-input'),'dash',this)">🎤</button>
                 <button type="button" class="mc-send" title="Gönder" onclick="marulAsk(document.getElementById('marul-dash-input').value,'dash',document.getElementById('marul-dash-input'))">➤</button>
@@ -4424,10 +4439,10 @@
             <div id="tab-student-portal" class="tab-content">
                 <div class="card glass">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.7); padding-bottom: 12px; margin-bottom: 15px; flex-wrap: wrap; gap: 12px;">
-                        <div>
+                        <div class="pb-top pb-edge" style="align-items:center;"><div class="pb-text">
                             <h2 style="margin: 0; border: none; padding: 0;" id="portal-main-title">👑 Kulüp Yönetim ve Öğrenci İşlemleri Portalı</h2>
                             <p style="margin: 3px 0 0 0; font-size: 13px; opacity: 0.85;" id="portal-main-desc">Mesajlar, talepler, günlük yoklama ve kazanım defteri yönetimi</p>
-                        </div>
+                        </div><img class="pb-badge" src="poweredbyicon.png" alt="Powered by" draggable="false" onerror="this.style.display='none'"></div>
                         <div class="portal-subtabs" style="margin: 0; border: none; padding: 0; display: flex; gap: 8px; flex-wrap: wrap;">
                             <button class="portal-subtab-btn active" id="btn-subtab-messages" onclick="switchPortalSubTab('messages')">💬 Mesajlar & Duyurular</button>
                             <button class="portal-subtab-btn" id="btn-subtab-forms" onclick="switchPortalSubTab('forms')">📝 Öğrenci Talep Formları</button>
@@ -5087,16 +5102,16 @@
 
     </div>
 
-    <button id="marul-fab" class="hide-on-print" onclick="marulOpen()" title="Marul Ai">🥬</button>
+    <button id="marul-fab" class="hide-on-print" onclick="marulOpen()" title="EcoMind AI">🧠</button>
     <div id="marul-pop" class="hide-on-print">
             <div class="mp-head">
-                <div class="mp-av">🥬</div>
-                <div class="mp-title"><b>Marul Ai</b><small>Kulüp asistanın 🌱</small></div>
+                <div class="mp-av">🧠</div>
+                <div class="mp-title"><b>EcoMind AI</b><small>Kulüp asistanın 🌱</small></div>
                 <button type="button" title="Sohbeti temizle" onclick="marulClear()">🗑️</button><button type="button" title="Kapat" onclick="marulClose()">✕</button>
             </div>
             <div class="marul-answer" id="marul-pop-answer"></div>
             <div class="marul-compose">
-                <input type="text" id="marul-pop-input" placeholder="Marul Ai'ya sor..." autocomplete="off" onkeydown="if(event.key==='Enter'){marulAsk(this.value,'pop',this);}">
+                <input type="text" id="marul-pop-input" placeholder="EcoMind AI'ya sor..." autocomplete="off" onkeydown="if(event.key==='Enter'){marulAsk(this.value,'pop',this);}">
                 <button type="button" title="Emoji ekle" onclick="marulEmoji(document.getElementById('marul-pop-input'),this)">😊</button>
                 <button type="button" class="marul-mic" title="Sesli sor" onclick="marulMic(document.getElementById('marul-pop-input'),'pop',this)">🎤</button>
                 <button type="button" class="mc-send" title="Gönder" onclick="marulAsk(document.getElementById('marul-pop-input').value,'pop',document.getElementById('marul-pop-input'))">➤</button>
@@ -8192,7 +8207,7 @@
                 if (dashWeatherCity) dashWeatherCity.innerText = cityName;
                 const dashWeatherIcon = document.getElementById('dash-kpi-weather-icon');
                 if (dashWeatherIcon && weatherInfo.icon) dashWeatherIcon.innerText = weatherInfo.icon;
-                // 🥬 Marul AI için zengin hava durumu verisi kaydediliyor
+                // 🧠 Marul AI için zengin hava durumu verisi kaydediliyor
                 localStorage.setItem('bkvLastWeatherData', JSON.stringify({
                     temp: currentTemp,
                     city: cityName,
@@ -8505,6 +8520,7 @@
         window.getDoc = getDoc;
         window.getDocs = getDocs;
         window.collection = collection;
+        window.deleteDoc = deleteDoc;
 
         // 🌟 KULLANICI TERCİHLERİNİ (TEMA & ARAYÜZ MODU) FİREBASE'E KAYDETME FONKSİYONU
         // 🔥 FİREBASE KOLEKSİYONUNU TAMAMEN SİLME YARDIMCISI (Kalıcı Sıfırlama)
@@ -10723,7 +10739,7 @@
             }
         };
 
-        // 🥬 Marul AI köprüsü: yönetici araçları gerçek kayıt fonksiyonlarını kullanır (yalnızca yönetici)
+        // 🧠 Marul AI köprüsü: yönetici araçları gerçek kayıt fonksiyonlarını kullanır (yalnızca yönetici)
         function bkvAiIsAdmin() {
             if (sessionStorage.getItem('currentRole') !== 'admin') return false;
             try {
@@ -10742,7 +10758,7 @@
             localStorage.setItem('bkvAttendance', JSON.stringify(all));
             await setDoc(doc(db, "attendance", date), {
                 date: date, records: day, updatedAt: Date.now(),
-                updatedBy: (sessionStorage.getItem('currentUser') || 'Yönetici') + ' (Marul Ai)'
+                updatedBy: (sessionStorage.getItem('currentUser') || 'Yönetici') + ' (EcoMind AI)'
             }, { merge: true });
             try { loadAttendanceForDate(); } catch(e) {}
             try { if (window.renderDashCharts) window.renderDashCharts(); } catch(e) {}
@@ -10768,7 +10784,7 @@
             try { window.renderTasks(); updateDashKPIs(); } catch(e) {}
         };
 
-        // 🥬 Marul AI köprüsü v2 — ortak not defteri, alışveriş (alınacaklar) listesi ve görev işlemleri.
+        // 🧠 Marul AI köprüsü v2 — ortak not defteri, alışveriş (alınacaklar) listesi ve görev işlemleri.
         // Yetki kontrolü BURADA da yapılır (model ne derse desin): kurallar arayüzdekiyle aynıdır.
         //  • Yönetici: her şey.  • Standart üye: not ekler, listeye ürün ekler, SADECE kendine atanmış görevi BUGÜN için işaretler/ekler.
         function bkvAiEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -10795,7 +10811,7 @@
             const tempId = Date.now().toString() + Math.floor(Math.random() * 1000);
             const newNote = {
                 id: tempId,
-                author: (sessionStorage.getItem('currentUser') || 'Anonim') + ' (Marul Ai)',
+                author: (sessionStorage.getItem('currentUser') || 'Anonim') + ' (EcoMind AI)',
                 text: text,
                 date: new Date().toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
                 createdAt: Date.now()
@@ -12615,7 +12631,7 @@
 })();
 </script>
 <script>
-// 🥬 MARUL AI v13 (Groq) — YÖNETİCİ SINIFI ASISTAN
+// 🧠 MARUL AI v13 (Groq) — YÖNETİCİ SINIFI ASISTAN
 // Not: Anahtarı sayfayı açan herkes görebilir; üretim için backend proxy kullanın.
 var MARUL_KEY = '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';
 var MARUL_MODEL = 'llama-3.3-70b-versatile';
@@ -12624,9 +12640,9 @@ var MARUL_BASE = 'https://api.groq.com/openai/v1';
 // ============================================================
 // SİSTEM PROMPTLARI — Rol bazlı (admin vs üye)
 // ============================================================
-var MARUL_SYSTEM_ADMIN = 'Sen "Marul Ai"sin — BKV Sürdürülebilir Tarım Kulübü\'nün deneyimli YÖNETİCİ asistanısın. Türkçe konuş.\n\nROLÜN: Kulüp yöneticilerine (öğretmen ve yönetici öğrencilere) tam kapsamlı destek.\n\nBİLGİ BİRİKİMİN:\nKulüp Yönetimi:\n- Yoklama analizi, devamsızlık takibi, katılım raporları (paneldeki gerçek verilerle)\n- Görev atama, iş bölümü, sorumluluk dağılımı stratejileri\n- Üye motivasyonu, takım dinamikleri, liderlik önerileri\n- Etkinlik planlama: tarım günleri, hasat festivali, sergi, geziler, workshoplar\n- Toplantı yönetimi, gündem hazırlama, karar alma süreçleri\n- Proje geliştirme, bütçe yönetimi, malzeme talebi hazırlama\n- Duyuru metinleri, okul yönetimiyle iletişim, kulüp raporları\n- Yıllık faaliyet planı, takvim oluşturma\n\nTarım & Sürdürülebilirlik Uzmanlığı:\n- Bokashi fermantasyon (seyreltme oranları 1:50-1:100, olgunlaşma takibi, koku sorunları)\n- Kompost (C/N oranı 25-30:1, nem %45-55, karıştırma sıklığı, olgunluk testi)\n- Organik gübre: solucan gübresi, yeşil gübre, ahır gübresi kullanımı ve NPK değerleri\n- Tohum seçimi, yerel ve heirloom çeşitler, tohum bankası yönetimi, çimlendirme testi\n- Fide yetiştirme: viyol, substrat, ışık gereksinimleri, sıcaklık, sulama rejimi\n- Türkiye iklimine göre mevsimsel ekim-dikim takvimi (bölgeye özel)\n- Sebzeler: domates, biber, patlıcan, marul, semizotu, maydanoz, nane, brokoli, lahana, havuç, soğan, sarımsak, kabak, fasulye, bezelye, ıspanak, roka\n- Meyveler: çilek, ahududu, bektaşiüzümü, frenk üzümü\n- Sulama sistemleri: damla, yağmurlama, karık, çömlek sulama; sulama zamanlaması\n- Zararlı yönetimi: entegre mücadele, biyolojik kontrol, yapışkanlı tuzaklar, neem yağı\n- Hastalık tanı ve tedavisi: mantar (mildiyö, külleme), bakteri, virüs hastalıkları\n- Sera yönetimi: havalandırma, nem ve ısı kontrolü, gölgeleme\n- Toprak analizi: pH, NPK, mikrobiyom; kireçleme, perlit, vermikülit\n- Yağmur suyu hasadı, geri dönüşüm sistemleri, permakültür tasarım ilkeleri\n- Solucan çiftliği: kurulum, besleme, hasat, sorun giderme\n\nHava & Tarım İlişkisi:\n- Panelin hava durumu menüsünden alınan GERÇEK veriyi analiz et ve yorumla\n- Hava verisi zaten context\'te geliyorsa ek API çağrısı yapma, direkt yorumla\n- Don riski, dolu, fırtına gibi aşırı hava olaylarına karşı koruma önerileri\n- Sulama zamanlaması, ilaçlama penceresi, hasat zamanı optimizasyonu\n- Mevsimsel geçiş dönemlerinde sera/açık alan kararları\n\nCEVAP STİLİN:\n- Yöneticiye saygılı, profesyonel ama samimi hitap et\n- Bilgi sorularında detaylı ol (8-15 cümle kabul edilebilir), başlık/madde işareti kullan\n- İşlem yaparken (yoklama, görev) kısa ve öz ol, onay iste\n- Paneldeki gerçek verilerle (üye adları, yoklama kayıtları, görevler) konuş\n- Bilgi yoksa uydurma; "panelde bu bilgi yok" de\n- Araç kullanım kuralı: Yoklama/görev isteklerinde aracı hemen çağır, gereksiz soru sorma. Hava verisi context\'te varsa get_weather çağırma, direkt cevapla. Hava verisi yoksa veya başka şehir istenirse get_weather çağır.';
+var MARUL_SYSTEM_ADMIN = 'Sen "EcoMind AI"sin (eski adın Marul Ai; kullanıcılar sana "Marul" diye de seslenebilir, bu normaldir) — BKV Sürdürülebilir Tarım Kulübü\'nün deneyimli YÖNETİCİ asistanısın. Türkçe konuş.\n\nROLÜN: Kulüp yöneticilerine (öğretmen ve yönetici öğrencilere) tam kapsamlı destek.\nAyrıca bu yazılımın (panel) tüm özelliklerini — ne nerede, nasıl yapılır — "YAZILIM BİLGİSİ" bölümüne dayanarak anlatırsın.\n\nBİLGİ BİRİKİMİN:\nKulüp Yönetimi:\n- Yoklama analizi, devamsızlık takibi, katılım raporları (paneldeki gerçek verilerle)\n- Görev atama, iş bölümü, sorumluluk dağılımı stratejileri\n- Üye motivasyonu, takım dinamikleri, liderlik önerileri\n- Etkinlik planlama: tarım günleri, hasat festivali, sergi, geziler, workshoplar\n- Toplantı yönetimi, gündem hazırlama, karar alma süreçleri\n- Proje geliştirme, bütçe yönetimi, malzeme talebi hazırlama\n- Duyuru metinleri, okul yönetimiyle iletişim, kulüp raporları\n- Yıllık faaliyet planı, takvim oluşturma\n\nTarım & Sürdürülebilirlik Uzmanlığı:\n- Bokashi fermantasyon (panelin seyreltme hesaplayıcısı: sebze 1:500, saksı çiçeği 1:1000, meyve ağacı 1:100; olgunlaşma takibi, koku sorunları)\n- Kompost (C/N oranı 25-30:1, nem %45-55, karıştırma sıklığı, olgunluk testi)\n- Organik gübre: solucan gübresi, yeşil gübre, ahır gübresi kullanımı ve NPK değerleri\n- Tohum seçimi, yerel ve heirloom çeşitler, tohum bankası yönetimi, çimlendirme testi\n- Fide yetiştirme: viyol, substrat, ışık gereksinimleri, sıcaklık, sulama rejimi\n- Türkiye iklimine göre mevsimsel ekim-dikim takvimi (bölgeye özel)\n- Sebzeler: domates, biber, patlıcan, marul, semizotu, maydanoz, nane, brokoli, lahana, havuç, soğan, sarımsak, kabak, fasulye, bezelye, ıspanak, roka\n- Meyveler: çilek, ahududu, bektaşiüzümü, frenk üzümü\n- Sulama sistemleri: damla, yağmurlama, karık, çömlek sulama; sulama zamanlaması\n- Zararlı yönetimi: entegre mücadele, biyolojik kontrol, yapışkanlı tuzaklar, neem yağı\n- Hastalık tanı ve tedavisi: mantar (mildiyö, külleme), bakteri, virüs hastalıkları\n- Sera yönetimi: havalandırma, nem ve ısı kontrolü, gölgeleme\n- Toprak analizi: pH, NPK, mikrobiyom; kireçleme, perlit, vermikülit\n- Yağmur suyu hasadı, geri dönüşüm sistemleri, permakültür tasarım ilkeleri\n- Solucan çiftliği: kurulum, besleme, hasat, sorun giderme\n\nHava & Tarım İlişkisi:\n- Panelin hava durumu menüsünden alınan GERÇEK veriyi analiz et ve yorumla\n- Hava verisi zaten context\'te geliyorsa ek API çağrısı yapma, direkt yorumla\n- Don riski, dolu, fırtına gibi aşırı hava olaylarına karşı koruma önerileri\n- Sulama zamanlaması, ilaçlama penceresi, hasat zamanı optimizasyonu\n- Mevsimsel geçiş dönemlerinde sera/açık alan kararları\n\nCEVAP STİLİN:\n- Yöneticiye saygılı, profesyonel ama samimi hitap et\n- Bilgi sorularında detaylı ol (8-15 cümle kabul edilebilir), başlık/madde işareti kullan\n- İşlem yaparken (yoklama, görev) kısa ve öz ol, onay iste\n- Paneldeki gerçek verilerle (üye adları, yoklama kayıtları, görevler) konuş\n- Bilgi yoksa uydurma; "panelde bu bilgi yok" de\n- Araç kullanım kuralı: Yoklama/görev isteklerinde aracı hemen çağır, gereksiz soru sorma. Hava verisi context\'te varsa get_weather çağırma, direkt cevapla. Hava verisi yoksa veya başka şehir istenirse get_weather çağır.';
 
-var MARUL_SYSTEM_MEMBER = 'Sen "Marul Ai"sin: BKV Sürdürülebilir Tarım Kulübü\'nün lise öğrenci üyelerine yardım eden samimi tarım asistanısın. Türkçe, kısa (en fazla 5 cümle) ve anlaşılır cevap ver. Konular: tarım, bokashi, kompost, tohum, sulama, hava durumuna göre bahçe işleri, kulüp etkinlikleri. Kulüp dışı konularda nazikçe konuya dön. Tehlikeli veya zararlı talimat verme. YASAK: Yoklama kaydetme, üye listesi görme, başka üyelerin bilgileri, yönetici işlemleri — bunlar yalnızca yöneticilere açıktır, asla paylaşma veya yapmaya çalışma. Araçlarla yalnızca şunları yapabilirsin: ortak not defterine not eklemek, alınacaklar listesine ürün eklemek, sana atanmış görevleri bugün için tamamlandı işaretlemek. Paneldeki hava durumu verisini kullanabilirsin.';
+var MARUL_SYSTEM_MEMBER = 'Sen "EcoMind AI"sin (eski adın Marul Ai; kullanıcılar sana "Marul" diye de seslenebilir, bu normaldir): BKV Sürdürülebilir Tarım Kulübü\'nün lise öğrenci üyelerine yardım eden samimi tarım asistanısın. Türkçe, kısa (en fazla 5 cümle) ve anlaşılır cevap ver. Konular: tarım, bokashi, kompost, tohum, sulama, hava durumuna göre bahçe işleri, kulüp etkinlikleri. Kulüp dışı konularda nazikçe konuya dön. Tehlikeli veya zararlı talimat verme. YASAK: Yoklama kaydetme, üye listesi görme, başka üyelerin bilgileri, yönetici işlemleri — bunlar yalnızca yöneticilere açıktır, asla paylaşma veya yapmaya çalışma. Araçlarla yalnızca şunları yapabilirsin: ortak not defterine not eklemek, alınacaklar listesine ürün eklemek, sana atanmış görevleri bugün için tamamlandı işaretlemek. Paneldeki hava durumu verisini kullanabilirsin. Ayrıca bu yazılımın (panel) kullanımı — hangi özellik nerede, nasıl yapılır — konusunda da yardım edersin; bunlar için "YAZILIM BİLGİSİ" bölümünü kullan.';
 
 // ============================================================
 // ARAÇ KURALLARI — Role göre dinamik seçim
@@ -12636,6 +12652,96 @@ var MARUL_RULES_ADMIN = "\n\nARAÇ KURALLARI (YÖNETİCİ):\n- Yoklama: tüm ö�
 var MARUL_RULES_MEMBER = "\n\nARAÇ KURALLARI (STANDART ÜYE):\n- Yapabildiklerin: ortak not defterine not eklemek (add_note), alınacaklar listesine ürün eklemek (add_shopping_item), SANA ATANMIŞ görevleri BUGÜN için tamamlandı işaretlemek (complete_task), kendine görev eklemek (add_task, yalnızca kendin için), hava durumu.\n- GÖREV TAMAMLAMA: «görevi tamamla / yaptım» denince complete_task çağır; asla add_task ile aynı görevi tekrar ekleme.\n- YAPAMADIKLARIN (yalnızca yöneticilere açık): yoklama, görev atama/düzenleme/silme, başkasının görevini işaretleme, not düzenleme/silme, alınacaklar listesinden ürün silme, üye ve yoklama bilgileri. İstenirse «Bu işlem yalnızca yöneticilere açıktır» de ve yöneticiye başvurmasını öner; bu araçlar sana verilmemiştir, çalıştırmayı deneme.\n- Araç {error:...} dönerse nedenini kısaca söyle; yapıldığını iddia etme. Yalnızca ok:true görürsen «yapıldı» de.\n- Sistem kilitliyse veya işlem saati dışındaysa üye işlemleri yapılamaz; araç bunu bildirir.\n- Hava durumu context'te mevcutsa get_weather çağırma; yoksa çağırabilirsin.";
 
 var marulLast = 0, marulHistory = [];
+// 🧠 EcoMind AI — kullanıcıya özel, şifreli bulut sohbet geçmişi (Firestore: ecomind_chats)
+// • Belge kimliği = SHA-256(e-posta); içerik AES-GCM ile şifreli, anahtar kullanıcının e-posta+şifresinden türetilir (şifre hiçbir yere yazılmaz).
+// • Uygulama yalnızca KENDİ belgesini okur/yazar; koleksiyonu listelemez. Panel verisi ve araç sonuçları kaydedilmez, yalnızca soru-cevap metni.
+var marulChatState = {email:'',hash:'',key:null,ready:false,gen:0,wiped:false};
+var marulCtxTimer = null;
+try{Object.keys(localStorage).forEach(function(k){if(k.indexOf('ecomind_ctx_v1_')===0)localStorage.removeItem(k);});}catch(e){} // eski, kullanıcıları karıştıran yerel kayıt
+function marulB64(buf){var b=new Uint8Array(buf),t='';for(var i=0;i<b.length;i++)t+=String.fromCharCode(b[i]);return btoa(t);}
+function marulUnB64(t){var x=atob(t),b=new Uint8Array(x.length);for(var i=0;i<x.length;i++)b[i]=x.charCodeAt(i);return b;}
+async function marulSha(t){var d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return Array.from(new Uint8Array(d)).map(function(x){return ('0'+x.toString(16)).slice(-2);}).join('');}
+async function marulDeriveKey(email,pass){
+  var km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass+'\u0000'+email),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt:new TextEncoder().encode('ecomind-chat-v1:'+email),iterations:120000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+}
+async function marulEnc(key,obj){var iv=crypto.getRandomValues(new Uint8Array(12));var ct=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(obj)));return {iv:marulB64(iv),ct:marulB64(ct)};}
+async function marulDec(key,rec){var pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:marulUnB64(rec.iv)},key,marulUnB64(rec.ct));return JSON.parse(new TextDecoder().decode(pt));}
+function marulCtxEmail(){try{return (sessionStorage.getItem('currentEmail')||'').toLowerCase().trim();}catch(e){return '';}}
+function marulCtxCanCloud(){return !!(window.crypto&&window.crypto.subtle&&window.db&&window.getDoc&&window.setDoc&&window.doc);}
+function marulCtxUserRec(em){
+  var us=(window._liveUsers&&window._liveUsers.length)?window._liveUsers:(typeof getSafeUsers==='function'?getSafeUsers():[]);
+  for(var i=0;i<us.length;i++){if(((us[i].email||'')+'').toLowerCase().trim()===em) return us[i];}
+  return null;
+}
+function marulCtxRender(){
+  ['marul-pop-answer','marul-dash-answer'].forEach(function(id){
+    var bx=document.getElementById(id); if(!bx) return; bx.innerHTML='';
+    if(marulHistory.length){
+      marulHistory.slice(-10).forEach(function(m){marulAdd(bx,m.role==='model'?'a':'u',m.text);});
+      marulAdd(bx,'a','↻ Önceki konuşmamızı hatırlıyorum, kaldığımız yerden devam edebiliriz. Baştan başlamak için 🗑️ düğmesine bas.');
+    }
+  });
+  if(!marulHistory.length){marulWelcome('pop');marulWelcome('dash');}
+}
+async function marulCtxInit(gen){
+  var c=marulChatState, rec=null;
+  for(var t=0;t<12;t++){
+    if(marulChatState.gen!==gen) return;
+    if(marulCtxCanCloud()){rec=marulCtxUserRec(c.email); if(rec&&rec.password) break;}
+    await new Promise(function(r){setTimeout(r,1500);});
+  }
+  if(marulChatState.gen!==gen) return;
+  if(!marulCtxCanCloud()||!rec||!rec.password){console.warn('EcoMind: bulut sohbet geçmişi kullanılamıyor, bu oturumda yalnızca bellekte tutulacak.');return;}
+  try{
+    c.hash=await marulSha('ecomind-chat:'+c.email);
+    c.key=await marulDeriveKey(c.email,String(rec.password));
+    var ref=window.doc(window.db,'ecomind_chats',c.hash);
+    if(c.wiped){ if(window.deleteDoc){try{await window.deleteDoc(ref);}catch(e){}} c.ready=true; return; }
+    var snap=await window.getDoc(ref), loaded=[], bad=false;
+    if(snap.exists()){
+      try{
+        var o=await marulDec(c.key,snap.data());
+        if(o&&Array.isArray(o.h)&&Date.now()-(o.t||0)<30*864e5){
+          loaded=o.h.filter(function(m){return m&&(m.role==='user'||m.role==='model')&&typeof m.text==='string';}).map(function(m){return {role:m.role,text:m.text.slice(0,1500)};});
+        }
+      }catch(e){bad=true;} // şifre değişmiş veya bozuk kayıt: yok say, yeniden başla
+    }
+    if(marulChatState.gen!==gen) return;
+    var hadLocal=marulHistory.length>0;
+    marulHistory=loaded.concat(marulHistory).slice(-40);
+    c.ready=true;
+    if(!hadLocal) marulCtxRender();
+    if(hadLocal||bad) marulCtxSave();
+  }catch(e){console.warn('EcoMind geçmişi yüklenemedi:',e&&e.message);}
+}
+function marulCtxRestore(){
+  var em=marulCtxEmail();
+  if(em===marulChatState.email) return;
+  clearTimeout(marulCtxTimer);
+  var gen=marulChatState.gen+1;
+  marulChatState={email:em,hash:'',key:null,ready:false,gen:gen,wiped:false};
+  marulHistory=[];
+  marulCtxRender();
+  if(em) marulCtxInit(gen);
+}
+function marulCtxSave(){
+  clearTimeout(marulCtxTimer);
+  var c=marulChatState; if(!c.ready||!c.key||!c.hash) return;
+  marulCtxTimer=setTimeout(async function(){
+    if(marulChatState!==c) return;
+    try{
+      var payload={t:Date.now(),h:marulHistory.slice(-40).map(function(m){return {role:m.role,text:String(m.text).slice(0,1500)};})};
+      var e=await marulEnc(c.key,payload);
+      await window.setDoc(window.doc(window.db,'ecomind_chats',c.hash),{v:1,iv:e.iv,ct:e.ct,n:payload.h.length,updatedAt:Date.now()});
+    }catch(err){console.warn('EcoMind geçmişi kaydedilemedi:',err&&err.message);}
+  },600);
+}
+async function marulCtxWipe(){
+  clearTimeout(marulCtxTimer); var c=marulChatState; c.wiped=true;
+  try{ if(c.hash&&window.deleteDoc&&window.db){await window.deleteDoc(window.doc(window.db,'ecomind_chats',c.hash));} }catch(e){console.warn('EcoMind geçmişi silinemedi:',e&&e.message);}
+}
+if(!window._marulCtxWatch){window._marulCtxWatch=setInterval(marulCtxRestore,1500);} // giriş/çıkış/kullanıcı değişimini izler
 
 // 😊 EMOJİ DESTEĞİ — AI cevaplarında emoji kullanımı + yazı alanı için emoji seçici
 var MARUL_EMOJI_RULE = '\n\nEMOJİ KULLANIMI:\n- Cevaplarında konuya uygun emojileri doğal biçimde kullan (🌱🥬🍅💧☀️🌧️🐛🪱♻️📋✅📊👏).\n- Başlıkların başına ve önemli maddelere uygun bir emoji koy; her cümleye emoji ekleme, abartma (genelde cevap başına 2-6 emoji).\n- Kullanıcı emoji gönderirse veya emojiyle yazarsa sen de aynı samimiyetle emojiyle karşılık ver; 🙂 gibi emojileri anla ve yorumla.\n- Ciddi veya uyarı içeren konularda (hastalık, tehlike, disiplin) emojiyi az ve yerinde kullan.\n- ÖNEMLİ: Yıldız (*), çift yıldız (**), diyez (#) gibi Markdown işaretleri KULLANMA, ekranda düz yazı olarak görünüyor. Başlık için emoji + düz yazı kullan (örn: 📌 Özet), madde işareti olarak tire yerine konuya uygun emoji koy (örn: 📅 Kuruluş: 10 Ekim 2008), vurgu için büyük harf veya emoji kullan.';
@@ -12782,28 +12888,29 @@ function marulTime(){var d=new Date();return d.getHours()+':'+('0'+d.getMinutes(
 function marulAdd(box,cls,text){
   var w=box.querySelector('.marul-welcome'); if(w) w.remove();
   var row=document.createElement('div'); row.className='marul-row '+cls;
-  if(cls==='a'){var av=document.createElement('div');av.className='av';av.textContent='🥬';row.appendChild(av);}
+  if(cls==='a'){var av=document.createElement('div');av.className='av';av.textContent='🧠';row.appendChild(av);}
   var mc=document.createElement('div'); mc.className='mc';
   var d=document.createElement('div'); d.className='marul-msg '+cls; d.textContent=(cls==='a')?marulClean(text):text;
   var t=document.createElement('div'); t.className='marul-time'; t.textContent=marulTime();
   mc.appendChild(d); mc.appendChild(t); row.appendChild(mc); box.appendChild(row); box.scrollTop=box.scrollHeight; return d;
 }
 function marulWelcome(where){
+  marulCtxRestore();
   var box=document.getElementById(where==='dash'?'marul-dash-answer':'marul-pop-answer');
   if(!box||box.querySelector('.marul-row')) return;
   var adm=marulIsAdmin();
-  var ch=adm?[['🌤️','Hava durumu nasıl?'],['📊','Geçen haftanın devamsızlık raporu'],['✅','Açık görevleri özetle'],['📝','Not defterine not ekle'],['🌱','Bu ay ne ekebiliriz?']]
-            :[['✅','Görevlerimi göster'],['🌤️','Bugün bahçe işi var mı?'],['♻️','Bokashi nasıl yapılır?'],['🌱','Bu ay ne ekebilirim?'],['💧','Sulama ne sıklıkla yapılır?']];
+  var ch=adm?[['🌤️','Hava durumu nasıl?'],['📊','Geçen haftanın devamsızlık raporu'],['✅','Açık görevleri özetle'],['📝','Not defterine not ekle'],['🌱','Bu ay ne ekebiliriz?'],['🧭','Panelde ne nerede?']]
+            :[['✅','Görevlerimi göster'],['🌤️','Bugün bahçe işi var mı?'],['♻️','Bokashi nasıl yapılır?'],['🌱','Bu ay ne ekebilirim?'],['💧','Sulama ne sıklıkla yapılır?'],['🧭','Panelde ne nerede?']];
   box.innerHTML='';
   var w=document.createElement('div'); w.className='marul-welcome';
-  w.innerHTML='<div class="big">🥬</div><h3>Merhaba, ben Marul Ai! 🌱</h3><p>'+(adm?'Yoklama, görev, not defteri, alınacaklar ve tarım işlerinde yardım ederim.':'Tarım, bahçe işleri, not ve alınacaklar listesinde yardım ederim.')+'</p>';
+  w.innerHTML='<div class="big">🧠</div><h3>Merhaba, ben EcoMind AI! 🌱</h3><p>'+(adm?'Yoklama, görev, not defteri, alınacaklar ve tarım işlerinde yardım ederim.':'Tarım, bahçe işleri, not ve alınacaklar listesinde yardım ederim.')+'</p>';
   var c=document.createElement('div'); c.className='marul-chips';
   ch.forEach(function(x){var b=document.createElement('button');b.type='button';b.className='marul-chip';b.textContent=x[0]+' '+x[1];
     b.onclick=function(){marulAsk(x[1],where,document.getElementById(where==='dash'?'marul-dash-input':'marul-pop-input'));};c.appendChild(b);});
   w.appendChild(c); box.appendChild(w);
 }
 function marulClear(){
-  marulHistory=[];
+  marulHistory=[]; marulCtxWipe();
   ['marul-pop-answer','marul-dash-answer'].forEach(function(id){var b=document.getElementById(id);if(b)b.innerHTML='';});
   marulWelcome('pop'); marulWelcome('dash');
 }
@@ -12818,7 +12925,7 @@ function marulConfirm(text){
     ov.style.cssText='position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(2,30,60,.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);';
     var box=document.createElement('div');
     box.style.cssText='width:100%;max-width:400px;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.9);border-radius:20px;box-shadow:0 20px 50px rgba(1,87,155,.3);padding:18px 18px 14px;font-family:inherit;color:#01579b;';
-    var h=document.createElement('div'); h.textContent='🥬 Marul Ai onay istiyor'; h.style.cssText='font-weight:800;font-size:15px;margin-bottom:10px;';
+    var h=document.createElement('div'); h.textContent='🧠 EcoMind AI onay istiyor'; h.style.cssText='font-weight:800;font-size:15px;margin-bottom:10px;';
     var b=document.createElement('div'); b.textContent=String(text).replace(/\n\nOnaylıyor musun\?$/,''); b.style.cssText='white-space:pre-wrap;font-size:13.5px;line-height:1.5;color:#263238;max-height:50vh;overflow:auto;margin-bottom:14px;';
     var row=document.createElement('div'); row.style.cssText='display:flex;gap:8px;justify-content:flex-end;';
     function mk(label,bg,fg,val){var x=document.createElement('button');x.textContent=label;x.style.cssText='border:none;cursor:pointer;border-radius:12px;padding:9px 18px;font-weight:700;font-size:13.5px;background:'+bg+';color:'+fg+';';x.onclick=function(){done(val);};return x;}
@@ -13305,26 +13412,71 @@ async function marulRemoveDupTasks(){
 // ============================================================
 // ANA SORU FONKSİYONU
 // ============================================================
+
+// ============================================================
+// 📚 MARUL BİLGİ TABANI — Kullanım Kılavuzu + yazılım haritası (ne nerede, nasıl)
+// Her soruda en ilgili bölümler seçilip sistem istemine eklenir. adm:true bölümler yalnızca yöneticiye gönderilir.
+// ============================================================
+var MARUL_KB = [{"id": "harita", "t": "Menü haritası (ne nerede)", "k": ["nerede", "nereden", "menu", "sekme", "harita", "bolum", "hangi", "ekran", "neler var", "ozellik", "modul"], "a": false, "x": "MENÜ HARİTASI: 📋 Anasayfa (KPI kartları, görevler, not defteri, alınacaklar) • 👑 Yönetim İşlemleri (yönetici) / 🎓 Öğrenci İşlemleri (öğrenci): mesajlar, talepler, yoklama, kazanım defteri • ♻️ Bokashi Takip • 🌾 Üretimlerim • 🌰 Tohum Bankası • ⛅ Hava Durumu • 🏷️ Barkod/Satış • 📊 Tablo & Grafikler • ⚙️ Ayarlar (yalnızca yöneticilere görünür).\nÜst bar: kullanıcı kartı (tıkla = Profilim), bulut göstergesi, 🔲 Tam Ekran, 🎓 BKV Akademi, Çıkış. Alt bar: kayan duyuru yazısı ve saat.\nYeni arayüzde (Yan Menü / Aero 2.0) sekmeler solda, Klasik arayüzde üstte yatay hap düğmelerdir. Grafikler Anasayfada değil, Tablo & Grafikler sekmesindedir."}, {"id": "genel", "t": "Yazılım nedir, modüller", "k": ["nedir", "ne ise yarar", "amac", "genel", "hakkinda", "bkv", "yazilim", "sistem", "panel", "kulup", "firestore", "modul"], "a": false, "x": "BKV Sürdürülebilir Tarım Kulübü Bilgi ve Yönetim Sistemi: BJK-Kabataş Vakfı Özel Okulları Sürdürülebilir Tarım Kulübü'nün sera, bahçe, Bokashi, üretim dönemleri, ata tohumu, hasat/kermes satışı, yoklama ve mesajlaşmasını tek yerden kayıt altına alır. Veriler Google Cloud Firestore'da saklanır, tüm cihazlarda canlı eşitlenir.\nModüller: Anasayfa & Görevler • Yönetim/Öğrenci Portalı • Bokashi İstasyonu • Üretimlerim • Tohum Bankası & Ekim Takvimi • Tarımsal Meteoroloji • Barkod, Satış Kasası & Stok • Tablo & Grafikler • Ayarlar & Güvenlik • EcoMind AI asistanı. PWA olarak telefona/masaüstüne kurulabilir, çevrimdışı çalışır."}, {"id": "roller", "t": "Roller ve yetkiler", "k": ["yetki", "rol", "admin", "yonetici", "ogretmen", "ogrenci", "normal uye", "kurucu", "rozet", "kim yapabilir", "yapamiyorum", "gorunmuyor", "gizli", "izin", "yoklama", "talep onay", "stok degis", "cihaz defteri", "ayarlar", "duyuru gonder", "uye ekle", "gorev ekle", "gorev ata", "gorev sil", "urun tanimla", "sifirla"], "a": false, "x": "Kullanıcı türleri: 🎓 Öğrenci (yoklama listesinde yer alır), 👩‍🏫 Öğretmen (yoklamada öğrenci sayılmaz, yönetici yetkili), ⚙️ Sistem hesabı (akıllı tahta/kurucu profili). Yetki rolleri: Normal Üye ve Yönetici. Rozet: 👑 Kurucu, 👑 Öğretmen, 👑 Yönetici veya 👤 Normal Üye (üst bardaki kullanıcı kartında).\nNormal üye YAPABİLİR: giriş, profil/şifre/tema, kendine atanan görevi tamamlama, not ve alınacaklara ekleme (saat sınırı içinde), mesaj gönderme/okuma, talep formu gönderme, Üretimlerim ve Tohum Bankası'na kayıt ekleme, kasada satış yapma, EcoMind AI kullanma.\nNormal üye YAPAMAZ (yalnızca yöneticide): görev ekleme/düzenleme/silme, not ve alınacaklardan silme/düzenleme, talep onaylama, yoklama ve kazanım defteri, toplu duyuru, gelen mesaj silme, barkodlu ürün tanımlama ve stok değiştirme, satış geçmişi/grafik sıfırlama, cihaz defteri, kısıtlama saatleri/kilit, kayan duyuru, üye ekleme/rol değiştirme/silme. Ayarlar sekmesi normal üyede hiç görünmez."}, {"id": "arayuz", "t": "Klasik ve Yan Menü arayüz, telefon, tam ekran", "k": ["arayuz", "klasik", "yan menu", "aero", "cekmece", "telefon", "mobil", "hamburger", "menu gorunmuyor", "tam ekran", "f11", "akademi", "cikis", "yeni arayuz", "eski arayuz", "gecis"], "a": false, "x": "İki arayüz var: 🚀 Yan Menü (Aero 2.0, solda katlanabilir simgeli menü + akıllı üst bar) ve 💎 Klasik (üstte yatay kayan cam düğmeler). Geçiş: üstteki kullanıcı kartına tıkla → Profilim penceresi → Arayüz Görünümü & Modu. Seçim hesabına kaydedilir.\nTelefonda (≈768 px ve altı) Yan Menü gizlidir: üst bardaki ☰ düğmesiyle çekmece olarak açılır; menü dışına dokunarak, sekme seçerek veya Esc ile kapanır. Masaüstünde ☰ menüyü daraltır/genişletir.\n🔲 Tam Ekran (akıllı tahta/projeksiyon; F11 de çalışır), 🎓 BKV Akademi (yeni sekmede açar, oturum etkilenmez), Çıkış: Klasik arayüzde üst barda, Yan Menü'de menünün en altındadır."}, {"id": "giris", "t": "Giriş, Kayıt Ol, Beni Hatırla", "k": ["giris", "kayit ol", "hesap", "uye ol", "sifre", "unuttum", "hatirla", "oturum", "e-posta", "eposta", "yeni hesap", "katil"], "a": false, "x": "Giriş: e-posta + şifre → \"Giriş Yap\". Aynı cihazda tekrar şifre girmemek için \"🔐 Beni Hatırla\" kutusunu işaretle.\nHesabın yoksa: giriş ekranındaki \"Kulübümüze Katılmak İçin Kayıt Ol\" bağlantısı → Ad Soyad, Sınıf/Şube (öğretmense \"Öğretmen\"), e-posta, şifre → Kayıt Ol. Hesap Normal Üye olarak açılır; yönetici yetkisini kulüp yöneticisi Ayarlar > Kayıtlı Üyeler'den verir. Aynı e-postayla ikinci kayıt yapılamaz.\nŞifreyi değiştirmek: kullanıcı kartı → Profilim → Şifremi Değiştir (mevcut şifre + en az 4 karakterli yeni şifre). Tamamen unutulduysa kulüp öğretmenine başvur; yönetici Ayarlar'daki üye listesinden yeni şifre tanımlayabilir."}, {"id": "profil", "t": "Profilim penceresi, tema, PWA kurulum", "k": ["profil", "tema", "renk", "buz mavisi", "zumrut", "amber", "yakut", "rose", "pudra", "uygulamayi yukle", "pwa", "ana ekrana ekle", "kur", "yukle", "masaustu", "iphone", "android"], "a": false, "x": "Üstteki kullanıcı kartına (ad, sınıf, rozet) tıklayınca Profilim & Kişisel Tercihler açılır: hesap bilgileri, arayüz modu (Klasik/Yan Menü), renk teması, Şifremi Değiştir, 🔔 Bildirimleri Aç, 📲 Uygulamayı Yükle, 📖 Kullanım Kılavuzu, 🚪 Güvenli Çıkış.\n5 tema: 💧 Buz Mavisi (varsayılan), 🌿 Doğa Zümrüt, 🍊 Sıcak Amber, 🍷 Kraliyet Yakutu, 🌸 Pudra Rose Gold. Tema ve arayüz tercihi buluttaki profiline kaydedilir; başka cihazdan girince aynı açılır.\nPWA kurulumu: Android Chrome → ⋮ → \"Ana Ekrana Ekle/Uygulamayı Yükle\". iPhone Safari → Paylaş → \"Ana Ekrana Ekle\". Masaüstü Chrome/Edge → adres çubuğunun sağındaki yükle simgesi."}, {"id": "anasayfa", "t": "Anasayfa ve KPI kartları", "k": ["anasayfa", "kpi", "kart", "sayac", "ozet", "dashboard", "gosterge", "ana sayfa"], "a": false, "x": "Anasayfa 4 canlı kart içerir: 📋 Aktif Görevler (seçili günde tamamlanan/bekleyen, örn. 3/5; tıklayınca görev listesine kayar), ♻️ Bokashi Atığı (toplam kg; tıklayınca Bokashi Takip'e gider), ⛅ Anlık Hava Sıcaklığı (tıklayınca Hava Durumu'na gider), 💬 Mesaj & Bildirim (okunmamış sayısı; tıklayınca gelen kutusu). Altında: 📌 Günlük Görev Tablosu, 📝 Ortak Not Defteri, 🛒 Alınacaklar Listesi. Klasik arayüzde ayrıca yeşil 🧠 EcoMind AI kartı bulunur."}, {"id": "gorev", "t": "Günlük görevler", "k": ["gorev", "tamamla", "isaretle", "atanan", "sorumlu", "tarih", "arsiv", "gecmis gun", "excel", "yapildi", "bitti", "gorev tablosu"], "a": false, "x": "📌 Günlük Görev Tablosu (Anasayfa): görevler her gün için ayrı kaydedilir. Görevi tamamlamak için kutucuğu işaretle (yalnızca atanan öğrenci veya yönetici işaretleyebilir). Tarih seçici veya ◀ ▶ ile geçmiş güne gidip o günün durumunu arşiv olarak görebilir, \"Bugün\" ile dönebilirsin. \"📊 Excel\" düğmesi o günün listesini Tarim_Gorevleri_GG.AA.YYYY.xlsx olarak indirir.\nYeni görev ekleme, ✏️ düzenleme ve ❌ silme yalnızca yöneticidedir (öğrencide bu düğmeler gizli). Öğrenci EcoMind AI'ya \"görevimi tamamla\" diyerek de kendi görevini bugün için işaretleyebilir."}, {"id": "gorev_admin", "t": "Görev ekleme/düzenleme (yönetici)", "k": ["gorev ekle", "gorev ata", "duzenle", "sil", "gorev sil", "sorumlu sec", "gorev yonet", "kopya", "tekrar"], "a": true, "x": "Yönetici görev ekleme: Anasayfa > Günlük Görev Tablosu → görev açıklamasını yaz, açılır listeden sorumlu öğrenciyi seç (genel görevse boş bırak) → \"Ekle ➕\". Görev tüm cihazlara anında dağılır. Düzenleme: görevin yanındaki sarı \"Düzenle ✏️\" → metin ve sorumlu değiştirilir. Silme: ❌. EcoMind AI ile de yapılır: \"Sera sulama görevini Ayşe'ye ekle\", \"görevleri dağıt\" (o gün gelen öğrencilere dengeli dağıtır), \"kopya görevleri temizle\"."}, {"id": "not", "t": "Ortak not defteri", "k": ["not", "defter", "word", "doc", "toplanti notu", "not ekle", "not sil", "disa aktar"], "a": false, "x": "📝 Ortak Not Defteri (Anasayfa): toplantı/bahçe notları yazarın adı, tarihi ve saatiyle canlı Firestore'a kaydedilir ve herkese görünür. \"💾 Dışa Aktar (Word)\" tüm notları Word (.doc) belgesi olarak indirir. Not ekleme: normal üye saat sınırı içinde, yönetici sınırsız. Not silme/düzenleme yalnızca yöneticidedir. EcoMind AI ile de not eklenebilir (\"Not defterine ... yaz\")."}, {"id": "alinacak", "t": "Alınacaklar listesi", "k": ["alinacak", "alisveris", "sepet liste", "malzeme", "butce", "toplam", "liste", "fiyat", "miktar", "talep formu"], "a": false, "x": "🛒 Alınacaklar Listesi (Anasayfa): tohum, fide, saksı, hortum, kompost vb. temin edilecek malzemeler. Ürün adı + miktar + birim fiyat girilince satır toplamı ve en altta Genel Toplam Bütçe otomatik hesaplanır. \"📊 Excel'e Aktar\" listeyi Excel'e (malzeme talep formu düzeninde) aktarır. Ekleme herkes (üye saat sınırı içinde), silme/düzenleme yalnızca yönetici. EcoMind AI ile: \"Alınacaklara 5 saksı ekle, 20 TL\"; miktar verilmezse 1, fiyat verilmezse 0 yazılır."}, {"id": "mesaj", "t": "Mesajlar, duyurular, gelen kutusu", "k": ["mesaj", "duyuru", "gelen kutusu", "gonderilen", "yanitla", "okunmamis", "toplu", "sinif mesaj", "ozel mesaj", "bildirim", "iletisim"], "a": false, "x": "Mesajlar: 👑 Yönetim İşlemleri / 🎓 Öğrenci İşlemleri sekmesinde \"✉️ Yeni Mesaj Gönder\". Türler: bireysel özel mesaj (USER), sınıf/şube mesajı (GRADE, örn. 10-A veya 9) ve kulüp genel duyurusu (ALL — yalnızca yönetici). 📥 Gelen Kutusu / 📤 Gönderilenler düğmeleriyle geçiş yapılır, \"🔄 Yenile\" listeyi tazeler. Okunmamışlar mavi şeritlidir ve üst sayaçta görünür. Mesajın altındaki \"↩️ Yanıtla\" alıcı ve konuyu otomatik doldurur. Gelen mesajı silmek yalnızca yöneticidedir.\nYeni mesaj gelince panel açıkken kısa bildirim kutusu, arka plandayken cihaz bildirimi çıkar (bkz. bildirimler)."}, {"id": "talep", "t": "Öğrenci talep formları", "k": ["talep", "ayrilma", "mazeret", "izin bildir", "proje oner", "etkinlik oner", "basvuru", "durum", "bekliyor", "onaylandi", "reddedildi", "kulupten ayril"], "a": false, "x": "Öğrenci İşlemleri sekmesinde 3 form: 🔴 Kulüpten Ayrılma Talebi, 📄 Mazeret/İzin Bildirimi (tarih + mazeret türü), 💡 Proje & Etkinlik Önerisi (kategori seçilir). Gönderilenler ve durumları (bekliyor / onaylandı / reddedildi + yönetici notu) aynı ekranın altındaki \"📋 Gönderdiğim Talepler & Başvuru Durumları\" bölümünde izlenir."}, {"id": "talep_admin", "t": "Öğrenci talep masası (yönetici)", "k": ["talep masasi", "onayla", "reddet", "talep onay", "bilgilendirme"], "a": true, "x": "Yönetim İşlemleri > 📑 Öğrenci Talep Masası: talepler kategoriye göre (Tümü, Ayrılma, Mazeret, Proje) filtrelenir. Her talep için \"✅ Onayla\" / \"❌ Reddet\" → öğrenciye gidecek açıklama notu girilir (boş bırakılırsa standart not yazılır); durum öğrencinin ekranında güncellenir. Kartın mesaj düğmesi o öğrenciye alıcı ve konusu (\"Bilgilendirme: ...\") dolu mesaj penceresi açar. 🗑️ Sil onay sorar; \"🔄 Talepleri Yenile\" listeyi günceller."}, {"id": "yoklama", "t": "Yoklama (yönetici)", "k": ["yoklama", "geldi", "gelmedi", "izinli", "raporlu", "faaliyet", "devamsiz", "katilim", "yoklama al", "excel indir"], "a": true, "x": "Yönetim İşlemleri > 📋 Yoklama Yönetim Sistemi: tarih seç, öğrencileri işaretle. Durumlar: ✅ Geldi, ❌ Gelmedi, 📝 İzinli, 🏥 Raporlu, 🏃 Faaliyet/Görevli; her öğrenciye açıklama notu yazılabilir. \"Öğretmen / Sistem de görünsün\" seçeneği tüm hesapları listeler (varsayılan: yalnızca öğrenciler). \"💾 Excel İndir\" resmi idare yoklama listesini verir. Katılım halkası grafiği Tablo & Grafikler'dedir.\nEcoMind AI ile: \"Bugün herkes geldi, Ahmet gelmedi\" (toplu kayıt) veya \"Ali'yi izinli yap\" (yalnızca adı geçenleri günceller); \"geçen haftanın devamsızlık raporu\" gibi rapor da istenebilir. Yoklama yalnızca öğrenciler içindir, gelecek tarihe alınamaz."}, {"id": "kazanim", "t": "Kazanım defteri (yönetici)", "k": ["kazanim", "defter", "mufredat", "etkinlik kayd", "yillik plan", "kazanim ekle"], "a": true, "x": "Yönetim İşlemleri > 📝 Kazanım Defteri: Milli Eğitim müfredatı ve kulüp yıllık planı kapsamındaki etkinlikler kaydedilir: etkinlik tarihi, konu başlığı, kazanım açıklaması. \"➕ Yeni Kazanım / Etkinlik Ekle\" ile eklenir, \"📖 Geçmiş Kazanım Kayıtları\" bölümünde arşivlenir; tek tıkla Excel'e aktarılabilir."}, {"id": "bokashi", "t": "Bokashi takip ve kova başlatma", "k": ["bokashi", "kova", "fermantasyon", "kepek", "hasat", "organik atik", "kompost", "bucket", "yeni kova", "dongu"], "a": false, "x": "♻️ Bokashi Takip sekmesi: 4 canlı gösterge — 🪣 Fermantasyondaki kovalar, 🎉 Hasada hazır kovalar, ⚖️ Dönüştürülen organik atık (kg), 💧 Toplanan sıvı gübre (hasat adedi).\nYeni kova: \"Yeni Bokashi Kovası Tanımla ve Döngü Başlat\" kartı → 1) kova kodu/adı (örn. Kova #3 - Kafeterya Sebze) ve atık türü, 2) tahmini kg ve fermantasyon süresi (14 gün standart, 21/28 gün derin), 3) sorumlu öğrenci grubu + kepeğin homojen serpildiğini işaretle → \"Yeni Döngüyü Başlat\". Kova listesi Tümü / ⏳ Fermantasyonda / 🎉 Tamamlananlar filtrelenir. Kova kartındaki \"💧 Sıvı Alındı\" sıvı hasadını sayar."}, {"id": "bokashi_sivi", "t": "Bokashi sıvısı seyreltme hesaplayıcı", "k": ["sivi", "seyreltme", "seyrelt", "kompost cayi", "hesaplayici", "oran", "1:500", "litre", "ml", "su miktari", "sivi gubre"], "a": false, "x": "Bokashi Takip sekmesindeki \"Bokashi Sıvısı (Kompost Çayı) Seyreltme Hesaplayıcı\": aldığın mililitreyi ve kullanım amacını seç, eklenecek klorsuz su miktarını hesaplar. Oranlar: 🌿 Bahçe & Sera Sebzeleri 1:500 (standart; 20 ml + 10 L su), 🪴 Salon & Saksı Çiçekleri 1:1000 (hassas; 20 ml + 20 L), 🌳 Meyve Ağaçları & Çalılar 1:100 (güçlü; 20 ml + 2 L), lavabo/gider açıcı 1:1 saf. Seyreltilmeyen sıvı asidiktir, kökleri yakabilir."}, {"id": "bokashi_kural", "t": "Bokashi altın kurallar ve atık rehberi", "k": ["kural", "altin", "atilir", "atilmaz", "atik rehberi", "kemik", "kuf", "beyaz kuf", "koku", "hava", "presle", "kirmizi liste", "yesil liste"], "a": false, "x": "Altın kurallar: hava almamalı (her eklemede preslenir, kapak sıkı kapanır); her 3-5 cm atık tabakasına 1-2 avuç Bokashi kepeği serpilir; dipteki sıvı 2-3 günde bir tahliye edilir (aksi halde nem ve koku); yüzeydeki beyaz pamuksu küf başarı işaretidir, siyah/yeşil küf hava sızıntısıdır.\n🔍 Organik Atık Rehberi (Bokashi sekmesinde açılır tablo): ✅ Atılabilir: meyve-sebze kabukları, ekmek/unlu mamuller, çay-kahve telvesi, yumurta kabuğu, sera budama artıkları, peynir kabuğu. ❌ Atılmaz: kalın kasap kemikleri, çorba ve saf süt gibi aşırı sıvılar, küflü/çürümüş atık, plastik/streç film, izmarit, deterjan artığı."}, {"id": "uretim", "t": "Üretimlerim: ürün ve dönem", "k": ["uretim", "donem", "cycle", "urun sec", "m2", "alan", "hedef", "sera 1", "parsel", "yeni donem", "durum", "planlandi", "devam ediyor"], "a": false, "x": "🌾 Üretimlerim: üstteki alana ürün adını yaz/listeden seç (ürün seçilmeden Genel Bakış ve kayıt sekmeleri boş kalır; \"Tüm Ürünler\" ürün seçmeden çalışır). Dönem seçimiyle ürünün tüm dönemlerini, dönemsiz kayıtları veya tek dönemi görürsün; \"➕ Yeni Dönem\", \"✏️ Düzenle\", \"🗑️ Sil\" düğmeleri seçili dönem içindir.\nDönem kaydı: yer (Sera 1, Parsel A...), alan (m²), başlangıç/tahmini bitiş tarihi, hedef hasat miktarı ve birimi, durum (Planlandı / Devam Ediyor / Tamamlandı / İptal). Girdi, süreç ve çıktı kayıtları sonradan düzenlenebilir/silinebilir."}, {"id": "uretim_sekme", "t": "Üretimlerim alt sekmeleri, maliyet, rapor", "k": ["girdi", "surec", "cikti", "genel bakis", "tum urunler", "maliyet", "gelir", "kar", "zarar", "fire", "verim", "sensor", "ph", "ec", "nem", "sicaklik", "rapor", "csv", "yazdir", "hasat kaydi", "satis fiyati"], "a": false, "x": "Alt sekmeler: 📊 Genel Bakış (hedef gerçekleşme çubuğu, 8 KPI: girdi, çıktı, süreç, maliyet, gelir, net kâr/zarar, fire oranı, verim kg/m²; maliyet ve çıktı grafikleri, ölçüm ortalamaları, son hareketler) • 📥 Girdiler (tohum/fide, gübre, su, bitki koruma, işgücü, enerji; maliyet TL ve köken: kendi üretimimiz/satın alma/bağış/geri dönüşüm) • ⚙️ Süreç (ekim, sulama, budama, çapalama, zararlı kontrolü; süre dk, ekip; sıcaklık, hava nemi, toprak nemi, pH, EC) • 📤 Çıktılar (ana ürün/yan ürün/fire, kalite sınıfı 1-3, birim fiyat TL/kg, hedef: satış/tüketim/bağış/stok) • 🗂️ Tüm Ürünler (tüm ürünleri maliyet ve gelirle tek tabloda karşılaştırır; satıra tıklayınca ürün açılır).\nDışa aktarma: \"⬇️ CSV (Excel) İndir\" ve \"🖨️ Rapor / Yazdır\" (resmi faaliyet raporu, PDF'e de kaydedilebilir)."}, {"id": "tohum", "t": "Tohum Bankası: kayıt, arama, uyarılar", "k": ["tohum", "atalik", "yerel", "hibrit", "cimlen", "raf omru", "son kullanma", "asgari stok", "stok az", "uyari", "rozet", "filtre", "simdi ekilebilir", "dikkat gereken", "kategori", "arama"], "a": false, "x": "🌰 Tohum Bankası: kayıtta tohum adı, çeşit/yöre (örn. Ayaş Domatesi - Ankara), tür (Atalık/Yerel, Standart, Hibrit), kategori (Sebze, Meyve, Tahıl, Baklagil, Çiçek, Şifalı), temin kaynağı, saklama tarihi ve yeri, raf ömrü (yıl; son kullanma otomatik hesaplanır), mevcut miktar (gram/adet/paket), asgari stok, son çimlenme testi tarihi ve yüzdesi, ideal ekim ayları girilir. Arama kutusu ad/çeşit/yöreye göre arar; filtreler: tür, kategori, durum (🌱 Şimdi ekilebilir, ⚠️ Dikkat gerekenler).\nUyarı rozetleri: ⌛ Raf ömrü doldu (kırmızı), ⌛ N gün kaldı (sarı, ≤90 gün), 🧪 Düşük çimlenme (kırmızı, <%70), 📉 Stok az (sarı, mevcut ≤ asgari)."}, {"id": "tohum_takvim", "t": "Ekim takvimi ve hızlı butonlar", "k": ["ekim takvimi", "takvim", "ekimde kullan", "cimlenme testi", "hangi ay", "ideal ekim", "12 aylik", "csv indir tohum", "turuncu"], "a": false, "x": "🗓️ İdeal Ekim Takvimi (Tohum Bankası üstünde): 12 aylık çubuk grafik, her ay bankadaki kaç çeşidin ekilebilir olduğunu gösterir; içinde bulunulan ay turuncu \"Şimdi Ekilebilir\" vurgulanır. Hızlı butonlar: 📉 Ekimde Kullan (ekilen miktarı girer, stoktan otomatik düşer), 🧪 Çimlenme Testi (son test yüzdesini günceller, tarihi bugüne eşitler), ⬇️ CSV İndir (tüm tohum arşivi Excel'e)."}, {"id": "hava", "t": "Tarımsal meteoroloji / hava durumu", "k": ["hava", "meteoroloji", "sicaklik", "don", "ilaclama", "sulama", "yagis", "ruzgar", "uv", "tahmin", "il sec", "konum", "gps", "81 il", "nem", "gunes", "saha danismani"], "a": false, "x": "⛅ Hava Durumu sekmesi (Open-Meteo verisi): 81 il seçici (seçilen şehir hatırlanır), ⚡ hızlı seçim çipleri (İstanbul, Ankara, İzmir, Bursa, Antalya, Adana, Konya), 🎯 Konumumu Bul (GPS). Göstergeler: sıcaklık, bağıl nem, rüzgar hızı/yönü, yağış ihtimali ve mm, maks. UV, gündoğumu/günbatımı, 7 günlük tahmin tablosu.\n🌱 Saha Danışmanı: ❄️ Don riski (gece <0 °C \"Kritik Don!\", <3 °C \"Don Riski Var\"), 🚜 İlaçlama & gübreleme (yağış ihtimali %40 üstü veya rüzgar 20 km/s üstü ise ertele; sakin havada \"Çok Uygun\"), 💧 Sulama ihtiyacı (düşük nem/yüksek sıcaklıkta artar, yağışlı günde \"Sulamayı Ertele\"), 🌿 Tarla & sera faaliyeti (fırtına/sağanak/karda sera içi bakım veya Bokashi önerir). EcoMind AI de bu veriyi kullanır, \"yarın hava nasıl?\" diye sorulabilir."}, {"id": "barkod", "t": "Barkod oluşturma, kasa, satış", "k": ["barkod", "kasa", "satis", "sepet", "kamera", "okuyucu", "usb", "tahsil", "stok dus", "kermes", "fis", "satisi tamamla", "bip", "skt"], "a": false, "x": "🏷️ Barkod/Satış sekmesi bölümleri: 🖨️ Barkod Oluştur ve Yazdır (numara yazınca CODE128 barkod çizilir; \"Sadece Barkodu Yazdır\" yalnızca etiketi yazıcıya gönderir) • 📦 Barkodlu Ürün Tanımla (yönetici) • 📷 Barkod Okuyucu / Kasa • 📊 Satış Geçmişi • 📋 Kayıtlı Ürünler Listesi.\nKasa: \"Kamerayı Aç 📷\" (telefon/tablet kamerası) veya USB okuyucu ile barkodu okut (bip sesi) → ürün adı, fiyat, kalan stok, SKT kartı görünür (stok yoksa kırmızı uyarı) → adedi seç, \"🛒 Sepete Ekle\" (birden çok ürün biriktirilebilir) → \"✅ Satışı Tamamla\": tutar tahsil sayılır, adetler stoktan kalıcı düşer, satış geçmişine fiş eklenir. Satış yapmak normal üyeye de açıktır."}, {"id": "stok_admin", "t": "Ürün tanımlama ve stok yönetimi (yönetici)", "k": ["urun tanimla", "stok", "stok duzenle", "urun sil", "okunandan al", "stok kaydedilemedi", "eski haline", "geri donuyor", "yenileyince", "stok bitti", "uretim tarihi"], "a": true, "x": "Yönetici: 📦 Barkodlu Ürün Tanımla → barkod, ad, satış fiyatı, mevcut stok, üretim ve son kullanma tarihi → kaydet (\"Okunandan Al\" kasada az önce okutulan barkodu forma taşır). Kayıtlı Ürünler Listesinde stok rengi: ✅ yeşil (6+), ⚠️ turuncu (1-5), ❌ kırmızı (0). Stok düzenleme: ürünün \"Stok\" kutusuna yeni miktar (0 veya üzeri) → \"💾 Kaydet\" veya Enter. Ürün silme onay sorar, tüm cihazlardan kaldırır. Stok ve satışlar buluta yazılır, yenilemede geri dönmez; buluta yazılamazsa \"Stok buluta kaydedilemedi\" uyarısı çıkar → bağlantıyı kontrol edip tekrar kaydet. Satış geçmişini temizleme de yalnızca yöneticidedir."}, {"id": "grafik", "t": "Tablo & Grafikler", "k": ["grafik", "tablo", "donut", "halka", "ciro", "trend", "excel gor", "xlsx", "xls", "yoklama orani", "goruntuleyici", "analitik", "anasayfadaki grafik"], "a": false, "x": "📊 Tablo & Grafikler sekmesinde iki düğme: 📈 Grafikler ve 📋 Tablo. Grafikler (dışarıdan eklenti gerektirmeyen SVG): ♻️ Aylık Bokashi Atık Miktarı (son 6 ay, kg), 💰 Satış Cirosu Trendi (₺), 📅 Kulüp Yoklama Oranı (Geldi/Gelmedi/İzinli halka grafiği; Son 7/30/90 gün veya Tümü). Düzen telefona uyumludur. Anasayfadaki grafikler bu sekmeye taşındı.\n📋 Tablo görünümü: cihazdaki herhangi bir Excel dosyasını (.xlsx/.xls) seçince canlı tabloya çevirir; yöneticiler hücreleri düzenleyip \"💾 Düzenlemeyi İndir (.xlsx)\" ile geri indirebilir."}, {"id": "grafik_sifirla", "t": "Grafik sıfırlama (yönetici)", "k": ["sifirla", "sifirlama", "tumunu sifirla", "geri getir", "silindi", "kalici"], "a": true, "x": "Yönetici: her grafik başlığındaki \"↺ Sıfırla\" yalnızca o grafiğin, sekme üstündeki \"↺ Tümünü Sıfırla\" üç grafiğin verisini siler (öncesinde onay çıkar). Bu KALICIDIR ve geri alınamaz; kayıtları Firestore'dan ve cihazlardan siler: Bokashi grafiği → Bokashi kova kayıtları (Bokashi Takip de boşalır); Satış grafiği → satış ve ciro geçmişi; Yoklama grafiği → günlük yoklama kayıtları. Yalnızca yeni eğitim yılı/dönem başında, önce Excel/CSV raporları indirip kullan. Normal üyelerde bu düğmeler görünmez."}, {"id": "ayar_duyuru", "t": "Ayarlar: canlı duyuru, kayan yazı (yönetici)", "k": ["ayar", "duyuru yazi", "kayan", "ticker", "canli yayin", "metni guncelle", "alt bar"], "a": true, "x": "⚙️ Ayarlar sekmesi (yalnızca yönetici) 4 bölüm: 🎨 Görünüm & Canlı Duyuru • 🔒 Sistem Kısıtlaması & Bulut Durumu • 🖥️ Cihaz Kayıt Defteri • 👥 Kullanıcı ve Hesap Yönetimi. Tema, şifre, profil artık Profilim penceresindedir.\n📢 Canlı Kayan Duyuru: metni yaz → \"Metni Güncelle ve Tüm Cihazlarda Canlı Yayınla\"; tüm cihazların alt çubuğundaki kayan yazı sayfa yenilemeden güncellenir."}, {"id": "kilit", "t": "Sistem kilidi ve saat kısıtlaması", "k": ["kilit", "kilitli", "kisit", "engellendi", "saat", "kapanis", "acilis", "mesai", "cutoff", "islem engellendi", "aninda"], "a": false, "x": "Yönetici iki kısıtlama kullanabilir (Ayarlar > Sistem Kısıtlaması): 🚨 Anında Tüm Cihazları Kilitle (normal üyeler görev/not ekleme-silme yapamaz) ve ⏰ Saat Bazlı Otomatik Kısıtlama (örn. kapanış 18:00 – açılış 08:00). Kilitliyken ekranın üstünde kırmızı uyarı şeridi çıkar; normal üyeler yalnızca görüntüleyebilir (\"İşlem Engellendi / Sistem Kilitli\"), yöneticiler serbestçe çalışır. Çözüm: açılış saatini beklemek veya yöneticiye danışmak. EcoMind AI de kilitliyken üye işlemlerini yapamaz."}, {"id": "bulut", "t": "Bulut senkronizasyonu ve çevrimdışı çalışma", "k": ["bulut", "senkron", "cevrimdisi", "internet", "ping", "baglanti", "canli bagli", "offline", "kirmizi", "veri kaybol", "telefon bozul", "gecikme", "eslen"], "a": false, "x": "Sistem Google Cloud Firestore ile iki yönlü canlı çalışır. Üst bardaki bulut göstergesi yeşilse 🟢 CANLI BAĞLI; tıklayınca anlık gecikme (Ping, ms) ölçülür. Bir kullanıcının değişikliği 1 saniyeden kısa sürede tüm ekranlara yansır. İnternet kopunca gösterge kırmızıya döner, sistem yerel önbelleğe geçer ve çalışmaya devam edilir; bağlantı dönünce bekleyen veriler otomatik eşitlenir. Veriler buluttadır: telefon bozulsa/başka cihazdan girilse kaybolmaz.\nYöneticide Ayarlar'daki ☁️ Bulut Veri Senkronizasyonu kartı durumu, veri modelini, proje adını, ping'i ve son senkronu gösterir; \"Bulut Bağlantısını ve Senkronizasyonu Şimdi Test Et\" düğmesi yeniden ölçer."}, {"id": "bildirim", "t": "Mesaj bildirimleri", "k": ["bildirim", "izin ver", "bildirimleri ac", "bildirim gelmiyor", "push", "ses", "uyari gelmiyor", "arka plan"], "a": false, "x": "Bildirim izni: giriş sonrası ilk dokunuşta tarayıcı izin sorar; sonradan Profilim > \"🔔 Bildirimleri Aç\" (izin verilince \"🔔 Bildirimler Açık\" yazar). Bildirim alanlar: sana özel mesajlar, sınıfına/şubene toplu mesajlar, genel duyurular; kendi gönderdiğin ve okuduğun mesajlar bildirim üretmez. Panel açıkken kısa kutu, arka plandayken cihaz bildirimi çıkar; 3'ten fazla yeni mesaj tek özet bildirimi olur. iPhone'da önce Safari'den \"Ana Ekrana Ekle\" gerekir. İzin reddedildiyse tarayıcı/telefon site ayarlarından açılmalıdır. Uygulama tamamen kapalıysa bildirim, panel açılınca ulaşır; mesajlar her durumda gelen kutusunda ve Anasayfa \"Mesaj & Bildirim\" sayacındadır."}, {"id": "kilavuz", "t": "Kullanım kılavuzu", "k": ["kilavuz", "rehber", "pdf", "yazdir", "yardim", "nasil kullan", "dokuman", "geri don", "uygulamaya don"], "a": false, "x": "📖 Kullanım Kılavuzu: Profilim penceresinden (veya Ayarlar'daki bağlantıdan) açılır. Yeni sekme açmaz; uygulama içi katman olarak açılır, oturum ve açık ekran korunur. Kapatmak için sol üstteki \"← Uygulamaya Dön\" (veya telefonun geri tuşu); tekrar giriş gerekmez. Sağ üstteki \"📄 PDF Olarak Kaydet / Yazdır\" kılavuzu PDF yapar."}, {"id": "cihaz", "t": "Cihaz kayıt defteri (yönetici)", "k": ["cihaz", "kayit defteri", "ip", "isp", "ulke", "tarayici", "device", "giris kaydi", "denetim"], "a": true, "x": "Ayarlar > 🖥️ Cihaz Kayıt Defteri (device_logs): girişte her cihaz için tür (iPhone/Android/PC/Mac), işletim sistemi, tarayıcı, ekran çözünürlüğü, dil, IP, ISP, ülke bayrağı, şehir, ilk giriş, son görülme, giriş sayısı, \"Beni Hatırla\" durumu tutulur. Arama kutusu (kullanıcı, IP, ülke, tarayıcı), \"Tüm cihaz türleri\"/\"Tüm ülkeler\" filtreleri, \"🔄 Yenile\" ve \"⬇️ CSV (Excel) İndir\" vardır. IP/ülke üçüncü taraf servisten gelir; VPN'de farklı görünebilir. Kayıtlar kişisel veridir, yalnızca yönetim amacıyla kullanılmalıdır."}, {"id": "uyeyon", "t": "Üye ve hesap yönetimi (yönetici)", "k": ["uye ekle", "kullanici ekle", "uye sil", "kayitli uyeler", "rol degistir", "gorev turu", "yetki ver", "yonetici yap", "sifre tanimla", "hesap ac", "mezun", "uye", "kullanici", "hesap yonet"], "a": true, "x": "Ayarlar > 👥 Kullanıcı ve Hesap Yönetimi: \"➕ Yeni Kullanıcı Ekle\" (Ad Soyad, Sınıf/Şube, e-posta, şifre, Görev Türü: Öğrenci/Öğretmen/Sistem, Yetki Rolü: Normal Üye/Yönetici). \"👥 Kayıtlı Üyeler\" listesinde görev türü (yoklama listesini etkiler) ve yetki rolü tek tıkla değiştirilir, mezun üyeler silinir. Kurucu hesabı güvenlik gereği silinemez. Unutulan şifre için yeni şifre buradan tanımlanabilir."}, {"id": "marul", "t": "EcoMind AI: nedir, nereden erişilir, nasıl kullanılır", "k": ["marul", "yapay zeka", "asistan", "ai", "sesli", "mikrofon", "mic", "soru sor", "balon", "arama cubugu", "nereden ulas", "emoji", "sohbet", "temizle", "yavas", "chrome", "firefox", "safari"], "a": false, "x": "🧠 EcoMind AI: panele entegre yapay zeka asistanı (Groq üzerinde LLaMA 3.3 70B). Tarım, Bokashi, tohum, sulama, hava durumu, kulüp işleri VE bu yazılımın kullanımı (ne nerede, nasıl) sorularını yanıtlar. Giriş yapmadan kullanılamaz.\nNereden erişilir: ① yeni arayüzde üst barda başlık ile kullanıcı kartı arasındaki \"EcoMind AI'ya sor...\" arama çubuğu (geniş ekran); ② Klasik arayüzde Anasayfadaki yeşil 🧠 EcoMind AI kartı; ③ telefon/dar ekranda sağ alttaki yüzen yeşil 🧠 balonu (sohbet penceresini açar). Pencerede 🗑️ sohbeti temizler, ✕ kapatır, 😊 emoji seçici, 🎤 sesli soru, ➤ gönderir.\nKullanım: yaz + Enter/➤. 🎤'ye bas, mikrofon izni ver, Türkçe konuş; tekrar basınca durur. Sesli dikte Chrome, Edge, Safari'de çalışır, Firefox'ta çalışmaz (yazılı mod çalışır). Sorular arasında 2 sn bekleme vardır (\"Biraz yavaş :)\"). Son birkaç mesajı hatırlar, önceki soruya atıf yapabilirsin. Yapay zeka yanılabilir; önemli kararları öğretmenle doğrula. Sohbet geçmişin yalnızca sana özeldir: şifreli olarak buluta kaydedilir (30 gün, son 40 mesaj), başka kullanıcı göremez, yönetici ekranında listelenmez. 🗑️ düğmesi geçmişi buluttan da siler. Şifreni değiştirirsen eski geçmiş okunamaz ve sıfırlanır."}, {"id": "marul_uye", "t": "EcoMind AI: normal üye yetenekleri", "k": ["marul ne yapabilir", "yapabilirsin", "yetenek", "uye marul", "ogrenci marul", "not ekle marul", "gorevimi tamamla", "kendime gorev"], "a": false, "x": "Normal üye EcoMind AI ile: tarım/Bokashi/tohum/sulama soruları, hava durumu, yazılım kullanım sorusu; ortak not defterine not ekleme; alınacaklar listesine ürün ekleme; KENDİNE atanmış görevi BUGÜN için tamamlandı işaretleme/geri alma; kendine görev ekleme yapabilir. Yoklama, başkasının görevi, not/ürün silme-düzenleme, üye ve yoklama bilgileri yalnızca yöneticilere açıktır; istenirse yöneticiye başvurması söylenir. Sistem kilitliyse veya işlem saati dışındaysa üye işlemleri yapılamaz."}, {"id": "marul_admin", "t": "EcoMind AI: yönetici araçları", "k": ["marul yonetici", "yoklama gir", "gorev dagit", "otomatik gorev", "rapor", "kopya gorev", "marul arac", "onay penceresi", "komut", "dagit", "toplu"], "a": true, "x": "Yönetici EcoMind AI'ya şunları yaptırabilir (yalnızca açıkça istenince çalışır; ekle/sil/yoklama/dağıtım gibi işlemlerde 🧠 onay penceresi çıkabilir: Enter/✅ Onayla, Esc/İptal): 📋 yoklama (toplu: \"Bugün herkes geldi, Ahmet gelmedi\"; tek tek: \"Ali'yi izinli yap\"; yalnızca öğrenciler, gelecek tarih olmaz) • ➕ görev ekle/✏️ düzenle/❌ sil/✅ tamamla (mevcut görevi işaretler, kopya oluşturmaz; \"hepsini tamamla\" da olur)/🤖 görevleri o gün gelen öğrencilere dengeli dağıt/kopya görevleri temizle • 📝 not ekle/düzenle/sil • 🛒 alınacaklara ekle/sil • 📊 yoklama ve devamsızlık raporu, görev özeti • ⛅ hava durumu. Ad eşleşmezse veya birden çok eşleşirse hangisini kastettiğini sorar. Araç hata verirse işlemin yapılmadığını söyler."}, {"id": "sss", "t": "Sık karşılaşılan sorunlar", "k": ["sorun", "hata", "calismiyor", "gorunmuyor", "acilmiyor", "neden", "olmuyor", "cozum", "yapamiyorum", "bos", "gelmiyor"], "a": false, "x": "• Telefonda yan menü yok → üst bardaki ☰'ye dokun. • Grafikler Anasayfada yok → 📊 Tablo & Grafikler sekmesinde. • Bildirim gelmiyor → Profilim > 🔔 Bildirimleri Aç, tarayıcı iznini kontrol et; iPhone'da önce Ana Ekrana Ekle. • \"İşlem Engellendi / Sistem Kilitli\" → yönetici kilit/saat kısıtlaması açmış; açılış saatini bekle. • Stok yenileyince eski haline dönüyor → \"Stok buluta kaydedilemedi\" uyarısı çıktıysa bağlantıyı kontrol edip yeniden kaydet (yalnızca yönetici stok değiştirir). • Ayarlar sekmesi yok → yalnızca yöneticide görünür. • EcoMind AI sesli almıyor → Chrome/Edge/Safari kullan, adres çubuğunun kilit simgesinden mikrofona izin ver. • Şifremi unuttum → öğretmene başvur. • Verilerim kaybolur mu → hayır, buluttadır. • Kılavuzdan dönünce tekrar giriş → gerekmez, kılavuz uygulama içi katmandır. • Grafik sıfırlanınca veri geri gelmez (kalıcı silme)."}];
+var MARUL_KB_RULES = '\n\nYAZILIM BİLGİSİ KURALLARI:\n- "Şu nerede / nasıl yapılır / ne işe yarar / hangi sekme" gibi YAZILIM KULLANIMI sorularında aşağıdaki YAZILIM BİLGİSİ bölümünü esas al; sekme, düğme ve bölüm adlarını aynen yaz, adımları numaralandır (1️⃣ 2️⃣ 3️⃣). Bu tür sorularda kullanım adımlarını eksiksiz anlatmak için yeterince uzun cevap verebilirsin (en fazla ~10 satır).\n- Bilgi bölümünde olmayan bir özelliği UYDURMA; \"Kılavuzda bu konuda bilgi bulamadım\" de ve ilgili sekmeyi öner.\n- Kullanıcının yetkisi bir işlemi yapmaya yetmiyorsa (yönetici olmayan) o işlemi adım adım anlatma; \"bu işlem yalnızca yöneticilere açık\" de ve yöneticiye başvurmasını öner.\n- BAĞLAM: Önceki konuşma sana ayrı mesajlar olarak verilir. "bu", "şu", "onu", "peki ya...", "devam et", "bir önceki" gibi atıfları o mesajlardan çöz; kullanıcının daha önce söylediği bilgileri (adı, ürünü, kova/tohum adı, tercihi) tekrar sorma, cevabında tutarlı kal.\n- Yazılımın hangi ekranında olduğunu söylerken kullanıcının arayüzünü (Klasik üst menü / Yan Menü) ve telefonda ☰ çekmecesini unutma.';
+function marulKbTokens(q){return marulFold(q).replace(/eco ?mind( ai)?/g,'marul ai').replace(/[^a-z0-9: ]+/g,' ');}
+function marulKnowledge(q,isAdmin){
+  try{
+    var prev='';
+    for(var i=marulHistory.length-1;i>=0;i--){ if(marulHistory[i].role==='user'){prev=marulHistory[i].text;break;} }
+    var cur=marulKbTokens(q), old=marulKbTokens(prev);
+    var scored=[];
+    MARUL_KB.forEach(function(sec){
+      if(sec.a && !isAdmin) return;
+      var sc=0;
+      sec.k.forEach(function(kw){
+        var w=marulFold(kw), sh=w.length<=4;
+        function has(t){return sh?((' '+t).indexOf(' '+w)>-1):(t.indexOf(w)>-1);}
+        if(has(cur)) sc+=2+Math.min(3,Math.floor(w.length/5));
+        else if(old && has(old)) sc+=0.6;
+      });
+      if(sc>0) scored.push({s:sc,sec:sec});
+    });
+    scored.sort(function(a,b){return b.s-a.s;});
+    var top=scored.slice(0,3).filter(function(o){return o.s>=2;});
+    var hasMap=false;
+    var out='';
+    // Menü haritası her zaman (kısa)
+    var map=MARUL_KB[0]; out+='\n\nYAZILIM BİLGİSİ (Kullanım Kılavuzu + panel haritası):\n['+map.t+'] '+map.x;
+    var used=0;
+    top.forEach(function(o){
+      if(o.sec.id==='harita') return;
+      var x=o.sec.x; if(x.length>1500) x=x.slice(0,1500)+'…';
+      out+='\n\n['+o.sec.t+'] '+x; used++;
+    });
+    if(!used){ var g=MARUL_KB[1]; out+='\n\n['+g.t+'] '+g.x; }
+    return {text:MARUL_KB_RULES+out, n:used};
+  }catch(e){ console.warn('Marul KB hata:',e); return {text:'',n:0}; }
+}
+
 async function marulAsk(q,where,inputEl){
   q=(q||'').trim(); if(!q) return;
+  marulCtxRestore();
   if(where==='pop') marulOpen();
   var box=document.getElementById(where==='dash'?'marul-dash-answer':'marul-pop-answer');
-  if(sessionStorage.getItem('isUnlocked')!=='true'&&!document.body.classList.contains('is-admin')){marulAdd(box,'a','🥬 Marul Ai için önce giriş yapmalısın.');return;}
-  if(MARUL_KEY.indexOf('BURAYA')===0){marulAdd(box,'a','Marul Ai henüz kurulmadı (anahtar eklenmemiş).');return;}
+  if(sessionStorage.getItem('isUnlocked')!=='true'&&!document.body.classList.contains('is-admin')){marulAdd(box,'a','🧠 EcoMind AI için önce giriş yapmalısın.');return;}
+  if(MARUL_KEY.indexOf('BURAYA')===0){marulAdd(box,'a','EcoMind AI henüz kurulmadı (anahtar eklenmemiş).');return;}
   if(Date.now()-marulLast<2000){marulAdd(box,'a','Biraz yavaş :) Birkaç saniye bekle.');return;}
   marulLast=Date.now(); if(inputEl) inputEl.value='';
   marulAdd(box,'u',q);
-  var wait=marulAdd(box,'a','🥬 düşünüyor...'); wait.classList.add('thinking');
+  var wait=marulAdd(box,'a','🧠 düşünüyor...'); wait.classList.add('thinking');
   var t0=Date.now(), errs=[];
-  var tick=setInterval(function(){wait.textContent='🥬 düşünüyor... ('+Math.round((Date.now()-t0)/1000)+' sn)';},1000);
+  var tick=setInterval(function(){wait.textContent='🧠 düşünüyor... ('+Math.round((Date.now()-t0)/1000)+' sn)';},1000);
   try{
     var isAdmin=marulIsAdmin();
     var sysPrompt=isAdmin?MARUL_SYSTEM_ADMIN:MARUL_SYSTEM_MEMBER;
     var rules=isAdmin?MARUL_RULES_ADMIN:MARUL_RULES_MEMBER;
     var ctx=marulCtx(), tools=marulTools();
-    var maxTok=isAdmin?1200:600;
-    var msgs=[{role:'system',content:sysPrompt+rules+marulLimits()+MARUL_EMOJI_RULE+(ctx?'\n\nPanel bilgisi (canlı veri):\n'+ctx:'')}];
-    marulHistory.slice(-8).forEach(function(m){msgs.push({role:m.role==='model'?'assistant':'user',content:m.text});});
+    var kb=marulKnowledge(q,isAdmin);
+    if(kb.n&&ctx) ctx=ctx.slice(0,Math.max(5000,9500-kb.text.length));
+    var maxTok=kb.n?(isAdmin?1200:900):(isAdmin?1200:600);
+    var msgs=[{role:'system',content:sysPrompt+rules+marulLimits()+MARUL_EMOJI_RULE+kb.text+(ctx?'\n\nPanel bilgisi (canlı veri):\n'+ctx:'')}];
+    marulHistory.slice(-10).forEach(function(m){msgs.push({role:m.role==='model'?'assistant':'user',content:String(m.text).slice(0,m.role==='model'?550:400)});});
     msgs.push({role:'user',content:q.slice(0,800)});
     var H={'Content-Type':'application/json','Authorization':'Bearer '+MARUL_KEY};
     async function call(model){
@@ -13332,7 +13484,7 @@ async function marulAsk(q,where,inputEl){
       try{
         var body={model:model,messages:msgs,max_tokens:maxTok,temperature:isAdmin?0.5:0.4,tools:tools,tool_choice:'auto'};
         var r=await fetch(MARUL_BASE+'/chat/completions',{method:'POST',signal:ac.signal,headers:H,body:JSON.stringify(body)});
-        var j=await r.json(); console.log('Marul Ai v13 ('+model+'):',r.status,j);
+        var j=await r.json(); console.log('EcoMind AI v13 ('+model+'):',r.status,j);
         var m=j.choices&&j.choices[0]&&j.choices[0].message;
         if(m) return m;
         errs.push(model+': '+(((j.error&&j.error.message)||('HTTP '+r.status)).split('\n')[0].slice(0,110)));
@@ -13347,7 +13499,7 @@ async function marulAsk(q,where,inputEl){
         var tried={}; tried[MARUL_MODEL]=1;
         var cands=['llama-3.1-8b-instant','openai/gpt-oss-20b','openai/gpt-oss-120b','meta-llama/llama-4-scout-17b-16e-instruct','qwen/qwen3-32b'];
         try{
-          var lr=await fetch(MARUL_BASE+'/models',{headers:H}); var lj=await lr.json(); console.log('Marul Ai model listesi:',lj);
+          var lr=await fetch(MARUL_BASE+'/models',{headers:H}); var lj=await lr.json(); console.log('EcoMind AI model listesi:',lj);
           if(lj.error) errs.push('model listesi: '+String(lj.error.message||'').slice(0,110));
           var avail=((lj.data)||[]).map(function(x){return x.id;}).filter(function(id){return !/whisper|guard|tts|playai|orpheus|embed|prompt|safeguard/i.test(id);});
           if(avail.length) cands=cands.filter(function(c){return avail.indexOf(c)>-1;}).concat(avail);
@@ -13364,7 +13516,7 @@ async function marulAsk(q,where,inputEl){
           var tc=m.tool_calls[c], args={}, res;
           try{args=JSON.parse(tc.function.arguments||'{}');}catch(e){}
           var toolLabel={'get_weather':'🌤️ hava durumuna bakıyor','take_attendance':'📋 yoklama kaydediyor','add_task':'✅ görev ekliyor','auto_assign_tasks':'🔄 görevleri dağıtıyor','get_attendance_report':'📊 rapor hazırlıyor','get_task_summary':'📝 görev özeti hazırlıyor','complete_task':'✅ görevi işaretliyor','update_attendance':'📋 yoklamayı güncelliyor','edit_task':'✏️ görevi düzenliyor','delete_task':'🗑️ görevi siliyor','remove_duplicate_tasks':'🧹 kopya görevleri temizliyor','add_note':'📝 not ekliyor','edit_note':'✏️ notu düzenliyor','delete_note':'🗑️ notu siliyor','add_shopping_item':'🛒 listeye ekliyor','delete_shopping_item':'🗑️ listeden siliyor'};
-          wait.textContent='🥬 '+(toolLabel[tc.function.name]||'işlem yapıyor')+'...';
+          wait.textContent='🧠 '+(toolLabel[tc.function.name]||'işlem yapıyor')+'...';
           try{res=await marulRunTool(tc.function.name,args);}catch(e){res={error:'İşlem başarısız: '+e.message};}
           msgs.push({role:'tool',tool_call_id:tc.id,content:JSON.stringify(res).slice(0,4000)});
         }
@@ -13372,9 +13524,9 @@ async function marulAsk(q,where,inputEl){
       else break;
     }
     clearInterval(tick);
-    wait.classList.remove('thinking');wait.textContent=ans?marulClean(ans):('🥬 Marul Ai şu an cevap veremiyor.\nDenenenler:\n• '+(errs.join('\n• ')||'boş cevap'));
-    if(ans){marulHistory.push({role:'user',text:q},{role:'model',text:ans});if(marulHistory.length>20)marulHistory=marulHistory.slice(-20);}
-  }catch(e){clearInterval(tick);wait.classList.remove('thinking');console.error('Marul Ai hata:',e);wait.textContent='Bağlantı hatası: '+e.message;}
+    wait.classList.remove('thinking');wait.textContent=ans?marulClean(ans):('🧠 EcoMind AI şu an cevap veremiyor.\nDenenenler:\n• '+(errs.join('\n• ')||'boş cevap'));
+    if(ans){marulHistory.push({role:'user',text:q},{role:'model',text:ans});if(marulHistory.length>40)marulHistory=marulHistory.slice(-40);marulCtxSave();}
+  }catch(e){clearInterval(tick);wait.classList.remove('thinking');console.error('EcoMind AI hata:',e);wait.textContent='Bağlantı hatası: '+e.message;}
   box.scrollTop=box.scrollHeight;
 }
 
