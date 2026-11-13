@@ -3154,6 +3154,9 @@
         .pb-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
         .pb-right .pb-badge{--pb-h:clamp(44px,4.6vw,68px)}
         @media (max-width:560px){ .pb-top.pb-edge .pb-badge{--pb-h:44px} .pb-right .pb-badge{--pb-h:40px} }
+        /* Mobil/yan menü modunda 'main-content img{height:auto;max-width:100%}' kuralı rozeti devasa yapıyordu — burada kesin boyut */
+        body .pb-badge, body.ui-modern .main-content img.pb-badge{width:auto !important;height:var(--pb-h,48px) !important;max-width:24% !important;max-height:var(--pb-h,48px) !important;flex:0 0 auto !important}
+        @media (max-width:560px){ body .pb-badge{max-width:30% !important} }
         @media print{ .pb-badge{display:none} }
     </style>
 </head>
@@ -4385,7 +4388,7 @@
                             <div class="mp-head">
                 <div class="mp-av">🧠</div>
                 <div class="mp-title"><b>EcoMind AI</b><small>Kulüp asistanın 🌱</small></div>
-                <button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button>
+                <button type="button" class="marul-tts-btn" title="Sesli cevap" onclick="marulTtsToggle()">🔊</button><button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button>
             </div>
                             <div class="marul-answer" id="marul-dash-answer"></div>
                             <div class="marul-compose">
@@ -5122,7 +5125,7 @@
             <div class="mp-head">
                 <div class="mp-av">🧠</div>
                 <div class="mp-title"><b>EcoMind AI</b><small>Kulüp asistanın 🌱</small></div>
-                <button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button><button type="button" title="Kapat" onclick="marulClose()">✕</button>
+                <button type="button" class="marul-tts-btn" title="Sesli cevap" onclick="marulTtsToggle()">🔊</button><button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button><button type="button" title="Kapat" onclick="marulClose()">✕</button>
             </div>
             <div class="marul-answer" id="marul-pop-answer"></div>
             <div class="marul-compose">
@@ -12910,10 +12913,47 @@ function marulCtx(){
 }
 
 var marulRec=null;
+
+/* ===== EcoMind AI sesli cevap (TTS) ===== */
+var marulVoiceNext=false, marulTtsVoice=null;
+function marulTtsOn(){try{return localStorage.getItem('marulTtsOff')!=='1';}catch(e){return true;}}
+function marulTtsPaint(){var on=marulTtsOn();document.querySelectorAll('.marul-tts-btn').forEach(function(b){b.textContent=on?'🔊':'🔇';b.title=on?'Sesli cevap açık (sesli sorularda)':'Sesli cevap kapalı';});}
+function marulTtsToggle(){var on=marulTtsOn();try{localStorage.setItem('marulTtsOff',on?'1':'0');}catch(e){} if(on)marulStopSpeak(); marulTtsPaint();}
+function marulPickVoice(){
+  if(!window.speechSynthesis)return null;
+  var v=speechSynthesis.getVoices()||[];
+  marulTtsVoice=v.filter(function(x){return /^tr/i.test(x.lang);})[0]||null;
+  return marulTtsVoice;
+}
+if(window.speechSynthesis){marulPickVoice();try{speechSynthesis.addEventListener('voiceschanged',marulPickVoice);}catch(e){}}
+function marulStopSpeak(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
+function marulSpeakText(t){
+  return String(t||'').replace(/```[\s\S]*?```/g,' ').replace(/https?:\/\/\S+/g,' ')
+   .replace(/\*\*(.+?)\*\*/g,'$1').replace(/__(.+?)__/g,'$1').replace(/^\s{0,3}#{1,6}\s*/gm,'')
+   .replace(/^\s*[-*•]\s+/gm,'').replace(/[*_`#>~|]/g,'')
+   .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu,'')
+   .replace(/\s*\n+\s*/g,'. ').replace(/\.\s*\./g,'.').replace(/\s{2,}/g,' ').trim();
+}
+function marulSpeak(text){
+  if(!window.speechSynthesis||!marulTtsOn())return;
+  var clean=marulSpeakText(text); if(!clean)return;
+  marulStopSpeak();
+  var parts=clean.match(/[^.!?]+[.!?]*/g)||[clean], chunks=[], cur='';
+  parts.forEach(function(p){if((cur+p).length>180&&cur){chunks.push(cur);cur=p;}else cur+=p;});
+  if(cur)chunks.push(cur);
+  var v=marulTtsVoice||marulPickVoice();
+  chunks.forEach(function(c){
+    var u=new SpeechSynthesisUtterance(c.trim()); u.lang='tr-TR'; if(v)u.voice=v; u.rate=1; u.pitch=1;
+    speechSynthesis.speak(u);
+  });
+}
+window.addEventListener('beforeunload',marulStopSpeak);
+window.addEventListener('load',marulTtsPaint);
 function marulMic(input,where,btn){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){showNotification('Bu tarayıcı sesli dikteyi desteklemiyor. Chrome veya Edge kullan.','warning');return;}
   if(marulRec){try{marulRec.stop();}catch(e){} return;}
+  marulStopSpeak(); try{if(window.speechSynthesis&&marulTtsOn()){var pu=new SpeechSynthesisUtterance(' ');pu.volume=0;speechSynthesis.speak(pu);}}catch(e){}
   var rec=new SR(); marulRec=rec; rec.lang='tr-TR'; rec.interimResults=true; rec.continuous=false;
   var finalText='';
   btn.classList.add('rec'); if(where==='pop') marulOpen();
@@ -12922,11 +12962,11 @@ function marulMic(input,where,btn){
     var m={'not-allowed':'Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden mikrofona izin ver.','service-not-allowed':'Mikrofon izni verilmedi.','no-speech':'Ses duyulmadı, tekrar dene.','audio-capture':'Mikrofon bulunamadı.','network':'Sesli dikte için internet gerekli.'};
     showNotification(m[ev.error]||('Sesli dikte hatası: '+ev.error),'warning');
   };
-  rec.onend=function(){btn.classList.remove('rec');marulRec=null;var t=(finalText||input.value||'').trim();if(t){marulAsk(t,where,input);}};
+  rec.onend=function(){btn.classList.remove('rec');marulRec=null;var t=(finalText||input.value||'').trim();if(t){marulVoiceNext=true;marulAsk(t,where,input);}};
   try{rec.start();}catch(e){btn.classList.remove('rec');marulRec=null;}
 }
 function marulOpen(){var p=document.getElementById('marul-pop');p.classList.add('open');marulWelcome('pop');var i=document.getElementById('marul-pop-input');if(i)i.focus();}
-function marulClose(){document.getElementById('marul-pop').classList.remove('open');}
+function marulClose(){marulStopSpeak();document.getElementById('marul-pop').classList.remove('open');}
 function marulClean(t){return String(t||'').replace(/\*\*(.+?)\*\*/g,'$1').replace(/__(.+?)__/g,'$1').replace(/^\s{0,3}#{1,6}\s*/gm,'').replace(/^(\s*)[-*]\s+/gm,'$1• ').replace(/\*{1,2}/g,'');}
 function marulTime(){var d=new Date();return d.getHours()+':'+('0'+d.getMinutes()).slice(-2);}
 function marulAdd(box,cls,text){
@@ -12957,6 +12997,7 @@ function marulRenderAll(quiet){
   marulCtxRender(quiet);
 }
 function marulNewChat(){
+  marulStopSpeak();
   if(!marulHistory.length) return;
   marulSyncCur();
   clearTimeout(marulCtxTimer);
@@ -13583,6 +13624,7 @@ function marulKnowledge(q,isAdmin){
 
 async function marulAsk(q,where,inputEl){
   q=(q||'').trim(); if(!q) return;
+  var marulWasVoice=marulVoiceNext; marulVoiceNext=false; if(!marulWasVoice||!marulTtsOn()) marulStopSpeak();
   marulCtxRestore();
   if(where==='pop') marulOpen();
   var box=document.getElementById(where==='dash'?'marul-dash-answer':'marul-pop-answer');
@@ -13652,7 +13694,7 @@ async function marulAsk(q,where,inputEl){
     }
     clearInterval(tick);
     wait.classList.remove('thinking');wait.textContent=ans?marulClean(ans):('🧠 EcoMind AI şu an cevap veremiyor.\nDenenenler:\n• '+(errs.join('\n• ')||'boş cevap'));
-    if(ans){marulHistory.push({role:'user',text:q},{role:'model',text:ans});if(marulHistory.length>40)marulHistory=marulHistory.slice(-40);marulCtxSave();}
+    if(ans){if(marulWasVoice)marulSpeak(ans);marulHistory.push({role:'user',text:q},{role:'model',text:ans});if(marulHistory.length>40)marulHistory=marulHistory.slice(-40);marulCtxSave();}
   }catch(e){clearInterval(tick);wait.classList.remove('thinking');console.error('EcoMind AI hata:',e);wait.textContent='Bağlantı hatası: '+e.message;}
   box.scrollTop=box.scrollHeight;
 }
