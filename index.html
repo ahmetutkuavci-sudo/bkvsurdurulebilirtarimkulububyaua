@@ -3156,7 +3156,12 @@
         @media (max-width:560px){ .pb-top.pb-edge .pb-badge{--pb-h:44px} .pb-right .pb-badge{--pb-h:40px} }
         /* Mobil/yan menü modunda 'main-content img{height:auto;max-width:100%}' kuralı rozeti devasa yapıyordu — burada kesin boyut */
         body .pb-badge, body.ui-modern .main-content img.pb-badge{width:auto !important;height:var(--pb-h,48px) !important;max-width:24% !important;max-height:var(--pb-h,48px) !important;flex:0 0 auto !important}
-        @media (max-width:560px){ body .pb-badge{max-width:30% !important} }
+        /* Telefon: tüm kartlarda hava durumu gibi — yazı tam genişlik, rozet altta ortada */
+        @media (max-width:700px){
+            .pb-top, .pb-top.pb-edge{flex-direction:column !important;align-items:stretch !important;gap:8px !important;width:100%}
+            .pb-top .pb-text{flex:0 0 auto !important;width:100%}
+            .pb-top .pb-badge, .pb-top.pb-edge .pb-badge, .bokashi-title-row .pb-badge, .pb-right .pb-badge{--pb-h:64px;margin:4px auto 0 !important;align-self:center;max-width:70% !important}
+        }
         @media print{ .pb-badge{display:none} }
     </style>
 </head>
