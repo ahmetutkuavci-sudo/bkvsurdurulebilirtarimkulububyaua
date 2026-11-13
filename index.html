@@ -5990,7 +5990,7 @@
                 const bokashiRecords = JSON.parse(localStorage.getItem('bkvBokashi') || localStorage.getItem('bkvBokashiRecords') || '[]');
                 let totalWaste = 0;
                 bokashiRecords.forEach(r => {
-                    const w = parseFloat(r.wasteKg || r.miktar || 0);
+                    const w = parseFloat(r.agirlik || r.wasteKg || r.miktar || 0);
                     if (!isNaN(w)) totalWaste += w;
                 });
                 const bokashiEl = document.getElementById('dash-kpi-bokashi');
@@ -11257,6 +11257,7 @@
             if (elTamam) elTamam.innerText = tamamlananSayisi;
             if (elAtik) elAtik.innerText = `${toplamAtikKg.toFixed(1)} kg`;
             if (elSivi) elSivi.innerText = `${toplamSiviHasat} Hasat`;
+            if (typeof updateDashKPIs === 'function') updateDashKPIs();
 
             // Filtre uygula
             const filter = window.currentBokashiFilter || 'ALL';
