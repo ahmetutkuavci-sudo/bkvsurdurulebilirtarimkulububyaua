@@ -3439,7 +3439,11 @@
 
             <!-- 1. Kişi Bilgileri Kartı -->
             <div style="background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.95); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-                <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #81d4fa 0%, #0288d1 100%); display: flex; align-items: center; justify-content: center; font-size: 25px; box-shadow: 0 4px 10px rgba(2,136,209,0.3); color: white; flex-shrink: 0;" id="prof-avatar">🌱</div>
+                <div style="position: relative; width: 64px; height: 64px; flex-shrink: 0;">
+                    <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #81d4fa 0%, #0288d1 100%); display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 10px rgba(2,136,209,0.3); color: white; cursor: pointer;" id="prof-avatar" onclick="bkvPickAvatar()" title="Profil fotoğrafı yükle">🌱</div>
+                    <button type="button" onclick="bkvPickAvatar()" title="Fotoğraf yükle" style="position: absolute; right: -4px; bottom: -4px; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; background: #0288d1; color: #fff; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.25);">📷</button>
+                    <input type="file" id="prof-photo-input" accept="image/*" style="display: none;" onchange="bkvAvatarFileChosen(this)">
+                </div>
                 <div style="flex: 1; display: flex; flex-direction: column; gap: 3px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
                         <strong style="font-size: 16.5px; color: #01579b;" id="prof-name">Kullanıcı Adı</strong>
@@ -3448,6 +3452,10 @@
                     <div style="font-size: 12.5px; color: #555; display: flex; gap: 12px; flex-wrap: wrap; margin-top: 2px;">
                         <span>📧 <b id="prof-email" style="color: #333;">email@bkv.com</b></span>
                         <span>🏫 <b id="prof-grade" style="color: #333;">Sınıf / Şube</b></span>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+                        <button type="button" onclick="bkvPickAvatar()" style="font-size: 11.5px; font-weight: 700; padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(2,136,209,0.35); background: rgba(2,136,209,0.1); color: #0277bd; cursor: pointer;">📷 Fotoğraf Yükle</button>
+                        <button type="button" id="prof-photo-remove" onclick="bkvRemoveAvatar()" style="display: none; font-size: 11.5px; font-weight: 700; padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(211,47,47,0.35); background: rgba(211,47,47,0.08); color: #c62828; cursor: pointer;">🗑️ Kaldır</button>
                     </div>
                 </div>
             </div>
@@ -3647,7 +3655,7 @@
         <!-- Center User Card (Clickable -> openProfileModal) & Cloud Pill -->
         <div class="mh-center" style="display: flex; align-items: center; gap: 10px;">
             <div class="modern-header-user-card" onclick="openProfileModal()" title="Profilim, Şifre Değiştirme ve Tema Ayarları (Tıklayın)" style="cursor: pointer; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); padding: 5px 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 2px 6px rgba(0,0,0,0.04); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-                <div style="width: 28px; height: 28px; border-radius: 50%; background: #bae6fd; color: #0369a1; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 13px;">
+                <div id="modern-avatar-circle" style="width: 28px; height: 28px; border-radius: 50%; background: #bae6fd; color: #0369a1; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0;">
                     🌱
                 </div>
                 <div style="display: flex; flex-direction: column; text-align: left;">
@@ -6283,6 +6291,7 @@
             if (newPass) newPass.value = '';
             if (confPass) confPass.value = '';
 
+            try { if (window.bkvApplyAvatar) window.bkvApplyAvatar(); } catch(e) {}
             modal.style.display = 'flex';
         }
 
@@ -6517,6 +6526,8 @@
                     modernRoleBadge.style.background = "#94a3b8";
                 }
             }
+
+            try { if (window.bkvApplyAvatar) window.bkvApplyAvatar(); } catch(e) {}
 
             // Modern sidebar updates
             const sidebarPortalText = document.getElementById('portal-sidebar-text');
@@ -9665,6 +9676,7 @@
             if (currentEmail) {
                 const activeUser = userList.find(u => u.email && u.email.toLowerCase().trim() === currentEmail);
                 if (activeUser) {
+                    try { if (window.bkvApplyAvatar) window.bkvApplyAvatar(activeUser.photo || ''); } catch(e) {}
                     if (activeUser.theme && !sessionStorage.getItem('_themeAppliedFromFB')) {
                         sessionStorage.setItem('_themeAppliedFromFB', 'true');
                         if (typeof changeTheme === 'function') {
@@ -13762,6 +13774,131 @@ async function marulAsk(q,where,inputEl){
 
 marulWelcome('dash');
 document.addEventListener('focusin',function(e){if(e.target&&e.target.id==='marul-dash-input')marulWelcome('dash');});
+</script>
+<script>
+// ========================================================
+// 📷 PROFİL FOTOĞRAFI (Firebase Firestore -> users/{e-posta}.photo)
+// Seçilen fotoğraf telefonda/bilgisayarda kare kırpılıp 256x256 JPEG'e küçültülür (~15-30 KB)
+// ve kullanıcının belgesine kaydedilir; tüm cihazlarda canlı eşitlenir.
+// ========================================================
+(function(){
+  const AVATAR_IDS = ['header-avatar-circle','modern-avatar-circle','prof-avatar'];
+
+  function curEmail(){ return (sessionStorage.getItem('currentEmail')||'').toLowerCase().trim(); }
+
+  function localPhoto(){
+    try{
+      const em = curEmail();
+      const us = JSON.parse(localStorage.getItem('bkvUsers')||'[]');
+      const u = us.find(x => (x.email||'').toLowerCase().trim() === em);
+      return (u && u.photo) || '';
+    }catch(e){ return ''; }
+  }
+
+  function setLocalPhoto(photo){
+    try{
+      const em = curEmail();
+      const us = JSON.parse(localStorage.getItem('bkvUsers')||'[]');
+      const u = us.find(x => (x.email||'').toLowerCase().trim() === em);
+      if(u){ u.photo = photo; localStorage.setItem('bkvUsers', JSON.stringify(us)); }
+    }catch(e){}
+    try{
+      if(Array.isArray(window._liveUsers)){
+        const u2 = window._liveUsers.find(x => (x.email||'').toLowerCase().trim() === curEmail());
+        if(u2) u2.photo = photo;
+      }
+    }catch(e){}
+  }
+
+  // photo verilmezse (undefined) yerel kayıttan okunur; '' ise fotoğraf kaldırılır
+  window.bkvApplyAvatar = function(photo){
+    if(photo === undefined) photo = localPhoto();
+    AVATAR_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      let img = el.querySelector(':scope > img.bkv-avatar-img');
+      if(photo){
+        el.style.position = 'relative';
+        el.style.overflow = 'hidden';
+        if(!img){
+          img = document.createElement('img');
+          img.className = 'bkv-avatar-img';
+          img.alt = '';
+          img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;';
+          el.appendChild(img);
+        }
+        if(img.getAttribute('src') !== photo) img.src = photo;
+      } else if(img){
+        img.remove();
+      }
+    });
+    const rm = document.getElementById('prof-photo-remove');
+    if(rm) rm.style.display = photo ? 'inline-block' : 'none';
+  };
+
+  function notify(msg, type){
+    if(typeof showNotification === 'function') showNotification(msg, type || 'info');
+    else alert(msg);
+  }
+
+  async function savePhoto(photo){
+    const em = curEmail();
+    if(!em){ notify('⚠️ Önce giriş yapmalısınız.', 'warning'); return false; }
+    if(!window.db || !window.setDoc || !window.doc){ notify('⚠️ Bulut bağlantısı hazır değil, biraz sonra tekrar deneyin.', 'warning'); return false; }
+    try{
+      await window.setDoc(window.doc(window.db, 'users', em), { photo: photo }, { merge: true });
+      setLocalPhoto(photo);
+      window.bkvApplyAvatar(photo);
+      return true;
+    }catch(err){
+      console.error('Profil fotoğrafı kaydedilemedi:', err);
+      notify('❌ Fotoğraf buluta kaydedilemedi: ' + (err && err.message ? err.message : err), 'error');
+      return false;
+    }
+  }
+
+  window.bkvPickAvatar = function(){
+    const inp = document.getElementById('prof-photo-input');
+    if(inp) inp.click();
+  };
+
+  window.bkvAvatarFileChosen = function(input){
+    const f = input && input.files && input.files[0];
+    if(input) input.value = '';
+    if(!f) return;
+    if(!/^image\//i.test(f.type)){ notify('⚠️ Lütfen bir resim dosyası seçin.', 'warning'); return; }
+    if(f.size > 25 * 1024 * 1024){ notify('⚠️ Fotoğraf çok büyük (en fazla 25 MB).', 'warning'); return; }
+    const reader = new FileReader();
+    reader.onerror = () => notify('❌ Fotoğraf okunamadı.', 'error');
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => notify('❌ Bu fotoğraf biçimi desteklenmiyor. JPG veya PNG deneyin.', 'error');
+      img.onload = async () => {
+        const S = 256;
+        const min = Math.min(img.width, img.height);
+        const sx = (img.width - min) / 2, sy = (img.height - min) / 2;
+        const cv = document.createElement('canvas');
+        cv.width = S; cv.height = S;
+        const ctx = cv.getContext('2d');
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, S, S);
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, sx, sy, min, min, 0, 0, S, S);
+        const data = cv.toDataURL('image/jpeg', 0.82);
+        notify('⏳ Fotoğraf kaydediliyor...', 'info', 1500);
+        if(await savePhoto(data)) notify('📷 Profil fotoğrafınız kaydedildi ve tüm cihazlarda güncellenecek.', 'success');
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(f);
+  };
+
+  window.bkvRemoveAvatar = async function(){
+    if(!confirm('Profil fotoğrafınız kaldırılsın mı?')) return;
+    if(await savePhoto('')) notify('🗑️ Profil fotoğrafı kaldırıldı.', 'success');
+  };
+
+  document.addEventListener('DOMContentLoaded', () => { try{ window.bkvApplyAvatar(); }catch(e){} });
+})();
 </script>
 </body>
 </html>
