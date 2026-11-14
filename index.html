@@ -828,6 +828,7 @@
             border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 2px 6px rgba(0,0,0,0.04); transition: 0.2s;
         }
         .message-card.unread { background: rgba(255, 255, 255, 0.95); border-left: 5px solid #0288d1; }
+        .msg-avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; object-fit: cover; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg,#66bb6a,#2e7d32); color: #fff; font-size: 13px; font-weight: 800; vertical-align: middle; overflow: hidden; }
         .message-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); background: white; }
     
         /* Frutiger Aero Özel Kaydırma Çubuğu (Scrollbar) & Akıcı Kaydırma */
@@ -3659,7 +3660,7 @@
                     🌱
                 </div>
                 <div style="display: flex; flex-direction: column; text-align: left;">
-                    <span id="modern-user-badge" style="font-size: 12px; font-weight: 800; color: #1e293b; line-height: 1;">👤 Kullanıcı</span>
+                    <span id="modern-user-badge" style="font-size: 12px; font-weight: 800; color: #1e293b; line-height: 1;">Kullanıcı</span>
                     <div style="display: flex; align-items: center; gap: 4px; margin-top: 2px;">
                         <span id="modern-grade-badge" style="font-size: 10px; font-weight: 700; background: #e0f2fe; color: #0369a1; padding: 1px 5px; border-radius: 5px; border: 1px solid #bae6fd;">Sınıf</span>
                         <span id="modern-role-badge" style="font-size: 10px; font-weight: 800; background: #f59e0b; color: white; padding: 1px 5px; border-radius: 5px;">Yetki</span>
@@ -3698,7 +3699,7 @@
                     <div class="user-avatar-circle" id="header-avatar-circle">🌱</div>
                     <div class="user-info-text">
                         <div style="display: flex; align-items: center; gap: 4px;">
-                            <span id="current-user-badge" class="user-name">👤 Kullanıcı</span>
+                            <span id="current-user-badge" class="user-name">Kullanıcı</span>
                             <span style="font-size: 10px; opacity: 0.65;">⚙️</span>
                         </div>
                         <div class="user-tags">
@@ -6417,7 +6418,7 @@
             if (btnResetAll) btnResetAll.style.display = isAdmin ? 'inline-block' : 'none';
             
             const userBadge = document.getElementById('current-user-badge');
-            if (userBadge) userBadge.innerText = `👤 ${username}`;
+            if (userBadge) userBadge.innerText = `${username}`;
             
             const gradeBadge = document.getElementById('current-grade-badge');
             const roleBadge = document.getElementById('current-role-badge');
@@ -6498,7 +6499,7 @@
 
             // Modern header updates
             const modernUserBadge = document.getElementById('modern-user-badge');
-            if (modernUserBadge) modernUserBadge.innerText = `👤 ${username}`;
+            if (modernUserBadge) modernUserBadge.innerText = `${username}`;
             const modernGradeBadge = document.getElementById('modern-grade-badge');
             const modernRoleBadge = document.getElementById('modern-role-badge');
             if (modernGradeBadge && modernRoleBadge) {
@@ -9656,6 +9657,7 @@
             window._liveUsers = userList;
             localStorage.setItem('bkvUsers', JSON.stringify(userList));
             if (typeof updateUsersLists === 'function') updateUsersLists();
+            try { if (document.getElementById('portal-messages-list') && typeof window.loadPortalMessages === 'function') window.loadPortalMessages(); } catch(e) {}
 
             // 🔐 Beni Hatırla: oturum henüz açılmadıysa bulut verisiyle geri yüklemeyi dene
             try {
@@ -10207,6 +10209,21 @@
                                   msg.targetType === 'GRADE' ? `<span style="background: #e8f5e9; color: #2e7d32; font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: 10px;">🏫 ${msg.targetLabel || ''}</span>` :
                                   `<span style="background: #fff3e0; color: #e65100; font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: 10px;">👤 ÖZEL MESAJ</span>`;
 
+                let avatarHtml = '';
+                try {
+                    const avEmail = (msgView === 'inbox' ? msg.fromEmail : (msg.targetType === 'USER' ? msg.targetValue : currentEmail) || '').toString().toLowerCase().trim();
+                    const avName = (msgView === 'inbox' ? msg.fromUser : (msg.targetType === 'USER' ? msg.targetLabel : '')) || '';
+                    const avUsers = (typeof window.getSafeUsers === 'function') ? window.getSafeUsers() : [];
+                    const avUser = (Array.isArray(avUsers) ? avUsers : Object.values(avUsers || {})).find(u => u && (u.email || '').toString().toLowerCase().trim() === avEmail);
+                    const avPhoto = avUser && typeof avUser.photo === 'string' && avUser.photo.startsWith('data:image/') ? avUser.photo : '';
+                    if (avPhoto) {
+                        avatarHtml = `<img class="msg-avatar" alt="" src="${avPhoto}">`;
+                    } else {
+                        const ini = String(avName || (avUser && avUser.name) || '').trim().charAt(0).toUpperCase();
+                        avatarHtml = `<span class="msg-avatar">${ini ? ini.replace(/[<>&"']/g, '') || '🌱' : '🌱'}</span>`;
+                    }
+                } catch (e) { avatarHtml = ''; }
+
                 const senderInfo = msgView === 'inbox' ? 
                     `<b>Gönderen:</b> ${msg.fromUser || 'Kullanıcı'} <small style="opacity:0.7;">(🏫 ${msg.fromGrade || 'Belirtilmedi'})</small>` : 
                     `<b>Alıcı:</b> ${msg.targetLabel || ''}`;
@@ -10224,7 +10241,7 @@
                         <div>${typeBadge} &nbsp;<span style="font-weight: bold; color: #01579b; font-size: 15px;">${msg.subject || ''}</span></div>
                         <div style="font-size: 11px; opacity: 0.7;">${msg.date || ''} ${msg.time || ''}</div>
                     </div>
-                    <div style="font-size: 13px; color: #444; margin-bottom: 8px;">${senderInfo}</div>
+                    <div style="font-size: 13px; color: #444; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">${avatarHtml}<span>${senderInfo}</span></div>
                     <div style="font-size: 14px; color: #222; background: rgba(255,255,255,0.7); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.05); white-space: pre-wrap;">${msg.body || ''}</div>
                     <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 8px; gap: 8px;">
                         ${replyBtn}
