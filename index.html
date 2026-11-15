@@ -6491,6 +6491,7 @@
 
         function lockSystem() {
             try { if (typeof window.bkvDeviceLog === 'function') window.bkvDeviceLog(null, 'logout', false); } catch(e) {}
+            try { if (window.bkvPushUnregister) window.bkvPushUnregister(); } catch(e) {}
             try { localStorage.removeItem('bkvRemember'); } catch(e) {}
             sessionStorage.removeItem('isUnlocked'); 
             sessionStorage.removeItem('currentUser');
@@ -12954,6 +12955,55 @@
     </script>
 
 
+    <!-- 🔔 ARKA PLAN PUSH (FCM) — uygulama kapalıyken bildirim -->
+    <script type="module">
+        import { getMessaging, getToken, isSupported } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-messaging.js";
+
+        // Firebase Console > Proje Ayarları > Cloud Messaging > Web Push sertifikaları > "Anahtar çifti oluştur"
+        // ile aldığınız GENEL (public) anahtarı buraya yapıştırın:
+        const VAPID_KEY = "BURAYA_VAPID_ANAHTARI";
+
+        let busy = false, lastKey = '', curToken = '';
+
+        async function register() {
+            if (busy) return;
+            const email = (sessionStorage.getItem('currentEmail') || '').toLowerCase();
+            if (!email || !('Notification' in window) || Notification.permission !== 'granted') return;
+            if (!VAPID_KEY || VAPID_KEY.indexOf('BURAYA') === 0) { return; }
+            if (!window.db || !window.setDoc) return;
+            if (lastKey === email) return;
+            busy = true;
+            try {
+                if (!(await isSupported())) return;
+                const reg = await navigator.serviceWorker.register('./firebase-messaging-sw.js', { scope: './fcm-push/' });
+                const messaging = getMessaging(window.firebaseApp);
+                const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+                if (!token) return;
+                await window.setDoc(window.doc(window.db, 'push_tokens', token), {
+                    token: token,
+                    email: email,
+                    grade: sessionStorage.getItem('currentGrade') || '',
+                    role: sessionStorage.getItem('currentRole') || '',
+                    ua: (navigator.userAgent || '').slice(0, 200),
+                    updatedAt: Date.now()
+                });
+                curToken = token; lastKey = email;
+                console.log('🔔 Push kaydı tamam');
+            } catch (e) {
+                console.warn('Push kaydı başarısız:', e);
+            } finally { busy = false; }
+        }
+
+        window.bkvPushRegister = register;
+        window.bkvPushUnregister = function () {
+            const t = curToken; curToken = ''; lastKey = '';
+            try { if (t && window.deleteDoc) window.deleteDoc(window.doc(window.db, 'push_tokens', t)); } catch (e) {}
+        };
+
+        window.addEventListener('load', function () { setTimeout(register, 1500); });
+        setInterval(register, 5000); // giriş yapılınca / izin verilince otomatik kaydeder
+    </script>
+
     <!-- 📲 PWA Service Worker & Akıllı Yükleme Motoru -->
     <script>
     (function() {
@@ -13108,6 +13158,7 @@
     Notification.requestPermission().then(function(p){
       if(typeof showNotification==='function') showNotification(p==='granted'?'🔔 Bildirimler açıldı!':'Bildirim izni verilmedi.',p==='granted'?'success':'warning');
       bkvNotifBtn();
+      if(p==='granted' && window.bkvPushRegister) window.bkvPushRegister();
     });
   };
   function bkvNotifBtn(){
