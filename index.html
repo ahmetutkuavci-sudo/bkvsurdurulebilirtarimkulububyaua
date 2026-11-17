@@ -8881,6 +8881,7 @@
 
         // Firestore'dan canlı olarak anlık dinle
         onSnapshot(doc(db, "system_settings", "ticker"), (docSnap) => {
+            if (docSnap.metadata && docSnap.metadata.fromCache && !docSnap.exists()) return; // önbellekten boş geldi: yok sayma
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 if (data && data.text) {
@@ -8894,15 +8895,10 @@
                         inputEl.value = text;
                     }
                 }
-            } else if (!tickerInitialSynced) {
-                // Doküman henüz yoksa mevcut duyuruyu buluta ilk kez yaz
-                const defaultText = localStorage.getItem('bkvTickerText') || "DUYURU: BKV Tarım Kulübü paneline hoş geldiniz.";
-                setDoc(doc(db, "system_settings", "ticker"), {
-                    text: defaultText,
-                    updatedAt: new Date().toISOString(),
-                    updatedBy: "Sistem Başlangıcı"
-                }, { merge: true }).catch(err => console.warn("Ticker init uyarısı:", err));
             }
+            // NOT: Doküman yoksa / sunucudan henüz gelmediyse buluta ASLA varsayılan metin yazılmaz.
+            // (Eski sürüm, çevrimdışı/önbellek anlarında "doküman yok" sanıp "hoş geldiniz" metnini
+            //  Firebase'e yazarak yöneticinin duyurusunun üzerine yazıyordu.)
             tickerInitialSynced = true;
         }, (err) => {
             console.error("Duyuru senkronizasyon dinleyici hatası:", err);
