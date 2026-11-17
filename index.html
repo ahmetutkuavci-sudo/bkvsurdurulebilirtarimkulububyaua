@@ -5255,7 +5255,11 @@
                 </div>
                 <button type="button" class="marul-model-btn" title="Yapay zeka modeli" onclick="marulModelMenu(event)">⚡ Flash ⌄</button>
             </div>
+            <div id="marul-img-prev" style="display:none"></div>
+            <input type="file" id="marul-file" accept="image/*" style="display:none" onchange="marulPickImg(this)">
             <div class="marul-compose">
+                <button type="button" title="Resim ekle" onclick="document.getElementById('marul-file').click()">📎</button>
+                <button type="button" id="marul-gen-btn" title="Resim üretme modu" onclick="marulGenToggle()">🎨</button>
                 <input type="text" id="marul-pop-input" placeholder="EcoMind AI'ya sor..." autocomplete="off" onkeydown="if(event.key==='Enter'){marulAsk(this.value,'pop',this);}">
                 <button type="button" title="Emoji ekle" onclick="marulEmoji(document.getElementById('marul-pop-input'),this)">😊</button>
                 <button type="button" class="marul-mic" title="Sesli sor" onclick="marulMic(document.getElementById('marul-pop-input'),'pop',this)">🎤</button>
@@ -14408,7 +14412,7 @@ function marulKnowledge(q,isAdmin){
 
 async function marulAsk(q,where,inputEl){
   if(!marulSyncAuth()){ if(inputEl) inputEl.value=''; return; }
-  q=(q||'').trim(); if(!q) return;
+  q=(q||'').trim(); if(!q && window._marulImg) q=marulT('Bu resmi incele ve açıkla.','Look at this image and describe it.'); if(!q) return;
   var marulWasVoice=marulVoiceNext; marulVoiceNext=false; if(!marulWasVoice||!marulTtsOn()) marulStopSpeak();
   marulCtxRestore();
   if(where==='pop') marulOpen();
@@ -14434,7 +14438,10 @@ async function marulAsk(q,where,inputEl){
   }
   if(Date.now()-marulLast<2000){marulAdd(box,'a',marulT('Biraz yavaş :) Birkaç saniye bekle.','Slow down a little :) Wait a few seconds.'));return;}
   marulLast=Date.now(); if(inputEl) inputEl.value=''; if(!_adm) marulQInc();
-  marulAdd(box,'u',q);
+  var _ub=marulAdd(box,'u',q);
+  var _img=window._marulImg||null; window._marulImg=null; marulImgPrevClear();
+  if(_img){ var _th=document.createElement('img'); _th.src=_img.url; _th.className='marul-pic'; _ub.appendChild(_th); }
+  if(marulWantsImage(q)){ await marulGenImage(q,_img,box); return; }
   var wait=marulAdd(box,'a',marulT('🧠 düşünüyor...','🧠 thinking...')); wait.classList.add('thinking');
   var t0=Date.now(), errs=[];
   var tick=setInterval(function(){wait.textContent=marulT('🧠 düşünüyor... (','🧠 thinking... (')+Math.round((Date.now()-t0)/1000)+marulT(' sn)',' s)');},1000);
@@ -14449,26 +14456,31 @@ async function marulAsk(q,where,inputEl){
     var maxTok=kb.n?(isAdmin?1200:900):(isAdmin?1200:600); maxTok=marulStyleTok(maxTok);
     var msgs=[{role:'system',content:sysPrompt+MARUL_IDENTITY+marulPersonal()+rules+marulLimits()+MARUL_EMOJI_RULE+marulStyleRule()+kb.text+(ctx?'\n\nPanel bilgisi (canlı veri):\n'+ctx:'')+marulLangRule(marulWasVoice,q)}];
     marulHistory.slice(-10).forEach(function(m){msgs.push({role:m.role==='model'?'assistant':'user',content:String(m.text).slice(0,m.role==='model'?550:400)});});
-    msgs.push({role:'user',content:q.slice(0,800)});
+    msgs.push({role:'user',content:_img?[{type:'text',text:q.slice(0,800)},{type:'image_url',image_url:{url:_img.url}}]:q.slice(0,800)});
     var H={'Content-Type':'application/json','Authorization':'Bearer '+MARUL_KEY,'x-goog-api-key':MARUL_KEY};
     async function call(model){
-      var ac=new AbortController(), to=setTimeout(function(){ac.abort();},30000);
+      var ac=new AbortController(), _tmo=(model===MARUL_MODEL?60000:30000), to=setTimeout(function(){ac.abort();},_tmo);
       try{
-        var body={model:model,messages:msgs,max_tokens:maxTok,temperature:isAdmin?0.5:0.4,tools:tools,tool_choice:'auto'};
+        var body={model:model,messages:msgs,max_tokens:maxTok,temperature:isAdmin?0.5:0.4,tools:tools,tool_choice:'auto',reasoning_effort:'low'};
         var r=await fetch(MARUL_BASE+'/chat/completions',{method:'POST',signal:ac.signal,headers:H,body:JSON.stringify(body)});
-        var j=await r.json(); console.log('EcoMind AI v14 ('+model+'):',r.status,j);
+        var j=await r.json();
+        if(!(j.choices&&j.choices[0])&&/reasoning|thinking/i.test(JSON.stringify(j.error||''))){
+          delete body.reasoning_effort;
+          r=await fetch(MARUL_BASE+'/chat/completions',{method:'POST',signal:ac.signal,headers:H,body:JSON.stringify(body)});
+          j=await r.json();
+        } console.log('EcoMind AI v14 ('+model+'):',r.status,j);
         var m=j.choices&&j.choices[0]&&j.choices[0].message;
         if(m) return m;
         errs.push(model+': '+(((j.error&&j.error.message)||('HTTP '+r.status)).split('\n')[0].slice(0,110)));
         return null;
-      }catch(e){errs.push(model+': '+(e.name==='AbortError'?'30 sn cevap yok':e.message));return null;}
+      }catch(e){errs.push(model+': '+(e.name==='AbortError'?(_tmo/1000)+' sn cevap yok':e.message));return null;}
       finally{clearTimeout(to);}
     }
-    var ans='';
+    var ans='', useModel=MARUL_MODEL;
     for(var round=0;round<6&&!ans;round++){
-      var m=await call(MARUL_MODEL);
+      var m=await call(useModel);
       if(!m){
-        var tried={}; tried[MARUL_MODEL]=1;
+        var tried={}; tried[useModel]=1;
         var cands=['gemini-flash-latest','gemini-2.5-flash','gemini-flash-lite-latest'];
         try{
           var lr=await fetch(MARUL_BASE+'/models',{headers:H}); var lj=await lr.json(); console.log('EcoMind AI model listesi:',lj);
@@ -14478,7 +14490,7 @@ async function marulAsk(q,where,inputEl){
         }catch(e){errs.push('model listesi: '+e.message);}
         for(var ci=0;ci<cands.length&&ci<6&&!m;ci++){
           if(tried[cands[ci]]) continue; tried[cands[ci]]=1;
-          m=await call(cands[ci]); if(m) MARUL_MODEL=cands[ci];
+          m=await call(cands[ci]); if(m) useModel=cands[ci];
         }
       }
       if(!m) break;
@@ -14632,6 +14644,76 @@ document.addEventListener('focusin',function(e){if(e.target&&e.target.id==='maru
 
   document.addEventListener('DOMContentLoaded', () => { try{ window.bkvApplyAvatar(); }catch(e){} });
 })();
+</script>
+
+<style>
+#marul-img-prev{padding:6px 10px 0;display:flex;align-items:center;gap:8px}
+#marul-img-prev img{height:54px;width:54px;object-fit:cover;border-radius:8px;border:1px solid rgba(0,0,0,.15)}
+#marul-img-prev button{border:none;background:#e53935;color:#fff;border-radius:50%;width:22px;height:22px;cursor:pointer;line-height:20px;padding:0}
+.marul-pic{display:block;max-width:100%;max-height:260px;border-radius:10px;margin-top:8px;cursor:pointer}
+.marul-dl{display:inline-block;margin-top:6px;font-size:12px;text-decoration:none;color:#2e7d32;font-weight:600}
+#marul-gen-btn.on{background:#c8e6c9!important;border-radius:8px;outline:2px solid #43a047}
+</style>
+<script>
+// ===== EcoMind AI: resim yükleme + resim üretme =====
+window._marulImg=null; window._marulGen=false;
+function marulPickImg(inp){
+  var f=inp.files&&inp.files[0]; inp.value=''; if(!f) return;
+  if(!/^image\//.test(f.type)){ if(typeof showNotification==='function') showNotification('Lütfen bir resim dosyası seçin.','warning'); return; }
+  var r=new FileReader();
+  r.onload=function(){
+    var im=new Image();
+    im.onload=function(){
+      var M=1280, k=Math.min(1,M/Math.max(im.width,im.height)), c=document.createElement('canvas');
+      c.width=Math.round(im.width*k); c.height=Math.round(im.height*k);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      window._marulImg={url:c.toDataURL('image/jpeg',0.85),mime:'image/jpeg'};
+      marulImgPrevShow();
+    };
+    im.onerror=function(){ if(typeof showNotification==='function') showNotification('Resim okunamadı.','warning'); };
+    im.src=r.result;
+  };
+  r.readAsDataURL(f);
+}
+function marulImgPrevShow(){
+  var b=document.getElementById('marul-img-prev'); if(!b||!window._marulImg) return;
+  b.innerHTML=''; var i=document.createElement('img'); i.src=window._marulImg.url; b.appendChild(i);
+  var x=document.createElement('button'); x.type='button'; x.textContent='×'; x.title='Kaldır';
+  x.onclick=function(){ window._marulImg=null; marulImgPrevClear(); }; b.appendChild(x); b.style.display='flex';
+}
+function marulImgPrevClear(){ var b=document.getElementById('marul-img-prev'); if(b){ b.style.display='none'; b.innerHTML=''; } }
+function marulGenToggle(){
+  window._marulGen=!window._marulGen;
+  var b=document.getElementById('marul-gen-btn'); if(b) b.classList.toggle('on',window._marulGen);
+  if(typeof showNotification==='function') showNotification(window._marulGen?'🎨 Resim üretme modu açık: yazdığın her şey resme dönüşür.':'Resim üretme modu kapandı.','info');
+}
+function marulWantsImage(q){
+  if(window._marulGen) return true;
+  var t=String(q||'').toLowerCase();
+  return /(resim|görsel|gorsel|fotoğraf|fotograf|logo|poster|afiş|afis|illüstrasyon|ilustrasyon|karikatür|karikatur|image|picture|drawing)\s*(\S+\s+){0,6}(çiz|ciz|üret|uret|oluştur|olustur|yap|hazırla|hazirla|tasarla|generate|create|make|draw)/.test(t)
+      || /^\s*(çiz|ciz|draw|generate an? image)\b/.test(t);
+}
+async function marulGenImage(prompt,img,box){
+  var wait=marulAdd(box,'a',marulT('🎨 resim hazırlanıyor... (10-30 sn sürebilir)','🎨 generating image... (may take 10-30 s)')); wait.classList.add('thinking');
+  var models=['gemini-3.1-flash-image','gemini-2.5-flash-image','gemini-3-pro-image'], errs=[], pic=null, txt='';
+  var parts=[{text:prompt}];
+  if(img) parts.push({inlineData:{mimeType:img.mime,data:img.url.split(',')[1]}});
+  for(var i=0;i<models.length&&!pic;i++){
+    try{
+      var r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+models[i]+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':MARUL_KEY},body:JSON.stringify({contents:[{parts:parts}],generationConfig:{responseModalities:['TEXT','IMAGE']}})});
+      var j=await r.json(); console.log('EcoMind resim ('+models[i]+'):',r.status,j);
+      var ps=(j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts)||[];
+      ps.forEach(function(p){ var d=p.inlineData||p.inline_data; if(d&&d.data&&!pic) pic='data:'+(d.mimeType||d.mime_type||'image/png')+';base64,'+d.data; else if(p.text) txt+=p.text; });
+      if(!pic) errs.push(models[i]+': '+(((j.error&&j.error.message)||(j.promptFeedback&&j.promptFeedback.blockReason)||txt||'resim dönmedi')+'').split('\n')[0].slice(0,110));
+    }catch(e){ errs.push(models[i]+': '+e.message); }
+  }
+  wait.classList.remove('thinking');
+  if(!pic){ wait.textContent=marulT('😕 Resim üretilemedi. ','😕 Could not generate the image. ')+errs.join(' | '); return; }
+  wait.textContent=(txt&&txt.trim())||marulT('🎨 İşte resmin!','🎨 Here is your image!');
+  var im=document.createElement('img'); im.src=pic; im.className='marul-pic'; wait.appendChild(im);
+  var a=document.createElement('a'); a.href=pic; a.download='ecomind-resim.png'; a.className='marul-dl'; a.textContent='⬇ '+marulT('İndir','Download'); wait.appendChild(a);
+  box.scrollTop=box.scrollHeight;
+}
 </script>
 </body>
 </html>
