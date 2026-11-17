@@ -5155,6 +5155,16 @@
                                         <span class="aero-toggle-track"></span>
                                     </div>
                                 </label>
+                                <label class="aero-switch-item" for="eco-cfg-imggen">
+                                    <div class="aero-switch-text">
+                                        <span class="aero-switch-title">🎨 Resim üretme özelliği açık olsun</span>
+                                        <span class="aero-switch-desc">Kapatırsanız yöneticiler dahil herkes için 🎨 butonu gizlenir ve "resim çiz" istekleri çalışmaz. (Resim yükleme/yapıştırma etkilenmez.)</span>
+                                    </div>
+                                    <div class="aero-toggle-switch">
+                                        <input type="checkbox" id="eco-cfg-imggen" class="toggle-blue" checked>
+                                        <span class="aero-toggle-track"></span>
+                                    </div>
+                                </label>
                                 <div>
                                     <label for="eco-cfg-length" style="font-size:13px; font-weight:700; display:block; margin-bottom:4px;">📏 Cevap uzunluğu</label>
                                     <select id="eco-cfg-length" class="aero-input" style="width:100%; box-sizing:border-box;">
@@ -9001,6 +9011,8 @@
         function _ecoCfgPaint(c, meta) {
             const set = (id, fn) => { const el = document.getElementById(id); if (el && document.activeElement !== el) fn(el); };
             set('eco-cfg-students', el => el.checked = c.studentsEnabled !== false);
+            set('eco-cfg-imggen', el => el.checked = c.imageGenEnabled !== false);
+            try { if (typeof window.marulApplyImgGen === 'function') window.marulApplyImgGen(); } catch(e) {}
             set('eco-cfg-length', el => el.value = c.length || 'normal');
             set('eco-cfg-tone', el => el.value = c.tone || 'friendly');
             set('eco-cfg-emoji', el => el.value = c.emoji || 'many');
@@ -9022,6 +9034,7 @@
             let lim = parseInt(g('eco-cfg-limit').value, 10); if (isNaN(lim) || lim < 0) lim = 0; if (lim > 500) lim = 500;
             const cfg = {
                 studentsEnabled: !!g('eco-cfg-students').checked,
+                imageGenEnabled: !!g('eco-cfg-imggen').checked,
                 length: g('eco-cfg-length').value,
                 tone: g('eco-cfg-tone').value,
                 emoji: g('eco-cfg-emoji').value,
@@ -9033,6 +9046,7 @@
                 await setDoc(doc(db, "system_settings", "ecomind_config"), cfg, { merge: true });
                 window._ecoCfg = cfg;
                 try { localStorage.setItem('ecomindConfig', JSON.stringify(cfg)); } catch(e) {}
+                try { if (typeof window.marulApplyImgGen === 'function') window.marulApplyImgGen(); } catch(e) {}
                 showNotification("⚙️ EcoMind AI ayarları kaydedildi ve tüm cihazlarda uygulandı!", "success");
             } catch(err) {
                 console.error("EcoMind ayar kayıt hatası:", err);
@@ -14441,7 +14455,10 @@ async function marulAsk(q,where,inputEl){
   var _ub=marulAdd(box,'u',q);
   var _img=window._marulImg||null; window._marulImg=null; marulImgPrevClear();
   if(_img){ var _th=document.createElement('img'); _th.src=_img.url; _th.className='marul-pic'; _ub.appendChild(_th); }
-  if(marulWantsImage(q)){ await marulGenImage(q,_img,box); return; }
+  if(marulWantsImage(q)){
+    if(!marulImgGenOn()){ marulAdd(box,'a',marulT('🔒 Resim üretme özelliği kulüp yönetimi tarafından kapatıldı.','🔒 Image generation has been turned off by the club administrators.')); return; }
+    await marulGenImage(q,_img,box); return;
+  }
   var wait=marulAdd(box,'a',marulT('🧠 düşünüyor...','🧠 thinking...')); wait.classList.add('thinking');
   var t0=Date.now(), errs=[];
   var tick=setInterval(function(){wait.textContent=marulT('🧠 düşünüyor... (','🧠 thinking... (')+Math.round((Date.now()-t0)/1000)+marulT(' sn)',' s)');},1000);
@@ -14657,8 +14674,18 @@ document.addEventListener('focusin',function(e){if(e.target&&e.target.id==='maru
 <script>
 // ===== EcoMind AI: resim yükleme + resim üretme =====
 window._marulImg=null; window._marulGen=false;
+function marulImgGenOn(){ try{ return marulCfg().imageGenEnabled!==false; }catch(e){ return true; } }
+window.marulApplyImgGen=function(){
+  var on=marulImgGenOn(), b=document.getElementById('marul-gen-btn');
+  if(b) b.style.display=on?'':'none';
+  if(!on && window._marulGen){ window._marulGen=false; if(b) b.classList.remove('on'); }
+};
 function marulPickImg(inp){
   var f=inp.files&&inp.files[0]; inp.value=''; if(!f) return;
+  marulLoadImgFile(f);
+}
+function marulLoadImgFile(f){
+  if(!f) return;
   if(!/^image\//.test(f.type)){ if(typeof showNotification==='function') showNotification('Lütfen bir resim dosyası seçin.','warning'); return; }
   var r=new FileReader();
   r.onload=function(){
@@ -14683,6 +14710,7 @@ function marulImgPrevShow(){
 }
 function marulImgPrevClear(){ var b=document.getElementById('marul-img-prev'); if(b){ b.style.display='none'; b.innerHTML=''; } }
 function marulGenToggle(){
+  if(!marulImgGenOn()){ window._marulGen=false; if(typeof showNotification==='function') showNotification('Resim üretme özelliği yönetim tarafından kapatıldı.','warning'); window.marulApplyImgGen(); return; }
   window._marulGen=!window._marulGen;
   var b=document.getElementById('marul-gen-btn'); if(b) b.classList.toggle('on',window._marulGen);
   if(typeof showNotification==='function') showNotification(window._marulGen?'🎨 Resim üretme modu açık: yazdığın her şey resme dönüşür.':'Resim üretme modu kapandı.','info');
@@ -14714,6 +14742,19 @@ async function marulGenImage(prompt,img,box){
   var a=document.createElement('a'); a.href=pic; a.download='ecomind-resim.png'; a.className='marul-dl'; a.textContent='⬇ '+marulT('İndir','Download'); wait.appendChild(a);
   box.scrollTop=box.scrollHeight;
 }
+// ===== Ctrl+V ile resim yapıştırma (sohbet kutuları ve açık EcoMind penceresi) =====
+document.addEventListener('paste',function(e){
+  var t=e.target; if(!t||!t.closest) return;
+  var inChat=t.closest('#marul-pop')||t.id==='mh-marul-input'||t.id==='marul-dash-input';
+  if(!inChat) return;
+  var items=(e.clipboardData&&e.clipboardData.items)||[], f=null;
+  for(var i=0;i<items.length;i++){ if(items[i].kind==='file'&&/^image\//.test(items[i].type)){ f=items[i].getAsFile(); break; } }
+  if(!f) return; // düz metin yapıştırma normal çalışsın
+  e.preventDefault();
+  marulLoadImgFile(f);
+  if(!t.closest('#marul-pop')){ try{ marulOpen(); }catch(x){} } // önizleme açık pencerede görünsün
+});
+window.marulApplyImgGen();
 </script>
 </body>
 </html>
