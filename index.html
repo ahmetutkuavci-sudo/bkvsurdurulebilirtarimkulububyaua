@@ -4227,13 +4227,13 @@
                             <!-- Sol: Anlık Meteoroloji -->
                             <div class="hd-hero-left">
                                 <h3 id="hd-sehir-ad" style="margin: 0 0 6px 0; color: #01579b; font-size: 24px; font-weight: 800;">📍 İstanbul</h3>
-                                <div id="hd-hero-icon" class="hd-hero-icon">☀️</div>
-                                <div id="hd-anlik-derece" class="hd-temp-main">22°C</div>
-                                <div id="hd-anlik-durum" class="hd-condition-badge">Açık & Güneşli ☀️</div>
+                                <div id="hd-hero-icon" class="hd-hero-icon">⏳</div>
+                                <div id="hd-anlik-derece" class="hd-temp-main">--°C</div>
+                                <div id="hd-anlik-durum" class="hd-condition-badge">Yükleniyor...</div>
                                 <div class="hd-hero-meta">
-                                    <span id="hd-hissedilen" title="Hissedilen Sıcaklık">🌡️ Hissedilen: <b>23°C</b></span>
+                                    <span id="hd-hissedilen" title="Hissedilen Sıcaklık">🌡️ Hissedilen: <b>--°C</b></span>
                                     <span>•</span>
-                                    <span id="hd-bugun-aralik" title="Günün En Yüksek ve En Düşük Sıcaklığı">🔺 <b>25°C</b> / 🔻 <b>16°C</b></span>
+                                    <span id="hd-bugun-aralik" title="Günün En Yüksek ve En Düşük Sıcaklığı">🔺 <b>--°C</b> / 🔻 <b>--°C</b></span>
                                 </div>
                             </div>
 
@@ -4376,7 +4376,7 @@
                     </div>
 
                     <div class="kpi-card kpi-amber" onclick="openTab('tab-hava-durumu')">
-                        <div class="kpi-icon" id="dash-kpi-weather-icon">⛅</div>
+                        <div class="kpi-icon" id="dash-kpi-weather-icon">⏳</div>
                         <div class="kpi-body">
                             <p class="kpi-label">Anlık Hava</p>
                             <h3 class="kpi-value" id="dash-kpi-weather">--°C</h3>
@@ -5187,6 +5187,30 @@
                                         <option value="few">Az</option>
                                         <option value="many" selected>Çok</option>
                                     </select>
+                                </div>
+                                <div>
+                                    <div style="font-size:13px; font-weight:700; margin-bottom:6px;">🤖 Öğrenciler hangi yapay zeka modelini kullanabilsin?</div>
+                                    <label class="aero-switch-item" for="eco-cfg-model-flash" style="margin-bottom:6px;">
+                                        <div class="aero-switch-text">
+                                            <span class="aero-switch-title">⚡ Terra</span>
+                                            <span class="aero-switch-desc">Daha güçlü model.</span>
+                                        </div>
+                                        <div class="aero-toggle-switch">
+                                            <input type="checkbox" id="eco-cfg-model-flash" class="toggle-blue" checked>
+                                            <span class="aero-toggle-track"></span>
+                                        </div>
+                                    </label>
+                                    <label class="aero-switch-item" for="eco-cfg-model-lite">
+                                        <div class="aero-switch-text">
+                                            <span class="aero-switch-title">🪶 Terra Lite</span>
+                                            <span class="aero-switch-desc">Daha hızlı ve ekonomik model.</span>
+                                        </div>
+                                        <div class="aero-toggle-switch">
+                                            <input type="checkbox" id="eco-cfg-model-lite" class="toggle-blue" checked>
+                                            <span class="aero-toggle-track"></span>
+                                        </div>
+                                    </label>
+                                    <div style="font-size:11.5px; opacity:.8; margin-top:4px;">İkisi de açıksa öğrenci sohbet penceresinden seçer; yalnızca biri açıksa o model otomatik kullanılır. En az biri açık olmalı. Yöneticiler etkilenmez.</div>
                                 </div>
                                 <div>
                                     <label for="eco-cfg-limit" style="font-size:13px; font-weight:700; display:block; margin-bottom:4px;">🔢 Öğrenci başına günlük soru limiti</label>
@@ -6131,14 +6155,14 @@
                 const savedCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
                 if (weatherCityEl) weatherCityEl.innerText = savedCity;
                 const cachedWeather = JSON.parse(localStorage.getItem('bkvLastWeatherData') || 'null');
-                if (cachedWeather && weatherEl) {
+                if (cachedWeather && weatherEl && !window._bkvWeatherDown && navigator.onLine !== false) {
                     weatherEl.innerText = `${cachedWeather.temp}°C`;
                     const weatherIconEl = document.getElementById('dash-kpi-weather-icon');
                     if (weatherIconEl && cachedWeather.icon) weatherIconEl.innerText = cachedWeather.icon;
                     if (weatherCityEl && cachedWeather.city) weatherCityEl.innerText = cachedWeather.city;
                 }
                 const hdTempEl = document.getElementById('hd-anlik-derece');
-                if (hdTempEl && hdTempEl.innerText && hdTempEl.innerText !== '--°C' && weatherEl) {
+                if (hdTempEl && hdTempEl.innerText && /\d/.test(hdTempEl.innerText) && weatherEl && !window._bkvWeatherDown) {
                     weatherEl.innerText = hdTempEl.innerText;
                 }
 
@@ -8335,6 +8359,7 @@
 
                 if (!geoData.results || geoData.results.length === 0) {
                     showNotification("Şehir koordinatları bulunamadı.", "warning");
+                    try { window.bkvWeatherUnavailable(); } catch(e) {}
                     if(yukleniyor) yukleniyor.style.display = "none";
                     if(sonucAlani) sonucAlani.style.display = "flex";
                     return;
@@ -8347,11 +8372,26 @@
             } catch (error) {
                 console.error("Hava durumu çekilemedi:", error);
                 showNotification("Hava durumu bilgileri alınırken bir hata oluştu.", "error");
+                try { window.bkvWeatherUnavailable(); } catch(e) {}
                 if(yukleniyor) yukleniyor.style.display = "none";
                 if(sonucAlani) sonucAlani.style.display = "flex";
             }
         }
 
+        // ⚠️ Hava durumu alınamadığında sahte derece yerine uyarı göster (önbellekte gerçek veri varsa onu kullan)
+        window.bkvWeatherUnavailable = function() {
+            try {
+                window._bkvWeatherDown = true;
+                var set = function(id, t) { var el = document.getElementById(id); if (el) el.innerText = t; };
+                set('dash-kpi-weather', '⚠️');
+                set('dash-kpi-weather-icon', '⚠️');
+                set('dash-kpi-weather-text', navigator.onLine === false ? 'İnternet yok' : 'Veri alınamadı');
+                var tEl = document.getElementById('dash-kpi-weather'); if (tEl) tEl.title = 'Hava durumu bilgisi alınamadı. İnternet bağlantınızı kontrol edin.';
+                set('hd-anlik-derece', '⚠️');
+                set('hd-hero-icon', '⚠️');
+                set('hd-anlik-durum', navigator.onLine === false ? 'İnternet bağlantısı yok' : 'Hava durumu alınamadı');
+            } catch(e) {}
+        };
         async function havaDurumuKoordinatGetir(latitude, longitude, cityName) {
             const yukleniyor = document.getElementById("hd-yukleniyor");
             const sonucAlani = document.getElementById("hava-durumu-sonuc");
@@ -8367,7 +8407,9 @@
                 const weatherCode = current.weather_code !== undefined ? current.weather_code : 0;
                 const weatherInfo = wmoHavaDetaylari[weatherCode] || { text: "Açık", icon: "☀️", bg: "linear-gradient(135deg, rgba(225, 245, 254, 0.85), rgba(179, 229, 252, 0.85))" };
 
-                                // Update Dashboard KPI
+                window._bkvWeatherDown = false;
+                try { var _wt = document.getElementById('dash-kpi-weather'); if (_wt) _wt.title = ''; } catch(e) {}
+                // Update Dashboard KPI
                 const currentTemp = Math.round(current.temperature_2m || 0);
                 const dashWeather = document.getElementById('dash-kpi-weather');
                 if (dashWeather) dashWeather.innerText = `${currentTemp}°C`;
@@ -8581,6 +8623,7 @@
             } catch (error) {
                 console.error("Hava durumu detayları işlenemedi:", error);
                 showNotification("Hava durumu detayları alınırken bir hata oluştu.", "error");
+                try { window.bkvWeatherUnavailable(); } catch(e) {}
                 if(yukleniyor) yukleniyor.style.display = "none";
                 if(sonucAlani) sonucAlani.style.display = "flex";
             }
@@ -9017,6 +9060,9 @@
             set('eco-cfg-tone', el => el.value = c.tone || 'friendly');
             set('eco-cfg-emoji', el => el.value = c.emoji || 'many');
             set('eco-cfg-limit', el => el.value = Number(c.dailyLimit) || 0);
+            { const sm = Array.isArray(c.studentModels) ? c.studentModels : ['flash','lite'];
+              set('eco-cfg-model-flash', el => el.checked = sm.indexOf('flash') > -1);
+              set('eco-cfg-model-lite', el => el.checked = sm.indexOf('lite') > -1); }
             const m = document.getElementById('eco-cfg-meta'); if (m && meta) m.textContent = meta;
         }
         onSnapshot(doc(db, "system_settings", "ecomind_config"), (docSnap) => {
@@ -9032,7 +9078,12 @@
             if (!isAdm) { showNotification("Bu ayarlar yalnızca yöneticiler tarafından değiştirilebilir.", "warning"); return; }
             const g = id => document.getElementById(id);
             let lim = parseInt(g('eco-cfg-limit').value, 10); if (isNaN(lim) || lim < 0) lim = 0; if (lim > 500) lim = 500;
+            const sModels = [];
+            if (g('eco-cfg-model-flash').checked) sModels.push('flash');
+            if (g('eco-cfg-model-lite').checked) sModels.push('lite');
+            if (!sModels.length) { showNotification("Öğrenciler için en az bir yapay zeka modeli seçili olmalı. (Hiç kullanım istemiyorsanız 'Öğrenciler EcoMind AI'ı kullanabilsin' anahtarını kapatın.)", "warning"); return; }
             const cfg = {
+                studentModels: sModels,
                 studentsEnabled: !!g('eco-cfg-students').checked,
                 imageGenEnabled: !!g('eco-cfg-imggen').checked,
                 length: g('eco-cfg-length').value,
@@ -12883,17 +12934,26 @@
                         localStorage.setItem('bkvLastWeatherData', JSON.stringify({temp, city, icon}));
                         // Also update main weather display
                         const hdEl = document.getElementById('hd-anlik-derece');
-                        if (hdEl && (hdEl.innerText === '--°C' || hdEl.innerText === '22°C')) {
+                        if (hdEl && !/\d/.test(hdEl.innerText)) {
                             hdEl.innerText = temp + '°C';
                         }
                     })
-                    .catch(() => {});
+                    .catch(() => { try { window.bkvWeatherUnavailable(); } catch(e) {} });
             }
             // Also ensure KPIs are updated
             if (typeof updateDashKPIs === 'function') {
                 setTimeout(() => updateDashKPIs(), 2000);
             }
         }
+
+        // 📶 İnternet koptuğu anda ⚠️ göster, geri geldiğinde hava durumunu yenile
+        window.addEventListener('offline', function() { try { window.bkvWeatherUnavailable(); } catch(e) {} });
+        window.addEventListener('online', function() {
+            window._bkvWeatherDown = false;
+            var city = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
+            try { if (typeof havaDurumuGetir === 'function') havaDurumuGetir(city); else autoFetchWeatherKPI(); } catch(e) {}
+        });
+        if (navigator.onLine === false) { setTimeout(function(){ try { window.bkvWeatherUnavailable(); } catch(e) {} }, 900); }
 
         // Run on page load
         if (document.readyState === 'complete') {
@@ -13656,9 +13716,19 @@ function marulMic(input,where,btn){
 }
 var MARUL_MODEL_FLASH='gemini-flash-latest', MARUL_MODEL_LITE='gemini-flash-lite-latest';
 function marulModelIsLite(){return /lite/i.test(String(MARUL_MODEL||''));}
+// Öğrencilere izin verilen modeller (yönetici ayarı). Tanımsız = ikisi de serbest.
+function marulStudentAllowed(){ var a=marulCfg().studentModels; if(!Array.isArray(a)) return ['flash','lite']; a=a.filter(function(x){return x==='flash'||x==='lite';}); return a.length?a:['flash','lite']; }
+function marulIsAdminNow(){ try{ return (sessionStorage.getItem('isUnlocked')==='true') && (typeof marulIsAdmin==='function') && marulIsAdmin(); }catch(e){ return false; } }
+// Bu kullanıcının fiilen kullanacağı model (öğrenci için izin listesine uyar)
+function marulEffectiveModel(){
+  if(marulIsAdminNow()) return MARUL_MODEL;
+  var al=marulStudentAllowed(), cur=marulModelIsLite()?'lite':'flash';
+  if(al.indexOf(cur)>-1) return MARUL_MODEL;
+  return al[0]==='lite'?MARUL_MODEL_LITE:MARUL_MODEL_FLASH;
+}
 function marulModelPaint(){
-  var show=false; try{ show=(sessionStorage.getItem('isUnlocked')==='true') && (typeof marulIsAdmin==='function') && marulIsAdmin(); }catch(e){}
-  var lite=marulModelIsLite();
+  var show=false; try{ show=marulIsAdminNow() || (sessionStorage.getItem('isUnlocked')==='true' && marulStudentAllowed().length>1); }catch(e){}
+  var lite=/lite/i.test(String(marulEffectiveModel()||''));
   document.querySelectorAll('.marul-modelbar').forEach(function(bar){ bar.style.display=show?'':'none'; });
   document.querySelectorAll('.marul-model-btn').forEach(function(b){ b.textContent=(lite?'🪶 Terra Lite':'⚡ Terra')+' ⌄'; });
   document.querySelectorAll('.marul-model-menu button').forEach(function(b){ b.classList.toggle('sel',(b.getAttribute('data-m')==='lite')===lite); });
@@ -14381,7 +14451,7 @@ MARUL_KB.push(
  {"id":"marul_kopya","t":"EcoMind AI: kopyala butonu","k":["kopyala","kopya","kopyalama","metni al","cevabi al","copy","yapistir"],"a":false,"x":"📋 EcoMind AI sohbetinde her mesajın (hem senin yazdığın hem EcoMind'in verdiği cevap) altında, saatin yanında küçük bir \"Kopyala\" butonu vardır. Tıklayınca o mesajın metni panoya kopyalanır (buton kısa süre \"Kopyalandı ✓\" yazar), sonra istediğin yere yapıştırabilirsin. Cevap hazırlanırken (düşünüyor... yazısı sırasında) buton görünmez, cevap gelince belirir."},
  {"id":"marul_kisisel_zeka","t":"EcoMind AI: Kişisel Zeka (Ayarlar > Yapay Zeka Ayarları)","k":["kisisel zeka","yapay zeka ayarlari","ai ayarlari","egit","egitim","ogret","ozel bilgi","kulup bilgisi ekle","ecomind ayar","bilgi ekle"],"a":true,"x":"🧠 Kişisel Zeka (yalnızca yönetici): Ayarlar sekmesi > \"🧠 Yapay Zeka Ayarları\" bölümündeki \"Kişisel Zeka\" kutusuna kulüp hakkında HERKES için geçerli bilgileri (kurallar, etkinlik/toplantı günleri, kulüp geleneği, sık sorulan sorular vb.) yazıp \"💾 Kaydet ve Herkese Öğret\" düğmesine basarsın. Metin buluta kaydedilir ve hem öğrenci hem yönetici tüm kullanıcıların EcoMind AI'ı sayfa yenilemeden bu bilgilerle eğitilmiş olur. Şifre, kişisel veri veya gizli bilgi yazma: herkes için geçerlidir. \"Temizle\" ile bilgiler silinir. En fazla 6000 karakter."}
 );
-MARUL_KB.push({"id":"marul_ayar","t":"EcoMind AI: kullanım ayarları (aç/kapat, cevap tarzı, günlük limit)","k":["ayar","kapat","ac kapat","limit","gunluk limit","soru limiti","hak","cevap tarzi","uzunluk","kisa cevap","resmi","samimi","ton","emoji miktar","ogrenciye kapat","kota"],"a":true,"x":"⚙️ Yönetici: Ayarlar > 🧠 Yapay Zeka Ayarları > \"EcoMind AI Kullanım Ayarları\" kartı: (1) öğrenciler için EcoMind AI'ı aç/kapat (kapalıyken yalnızca yöneticiler kullanır), (2) cevap uzunluğu: Kısa / Normal / Detaylı, (3) ton: Samimi / Resmî, (4) emoji: Hiç / Az / Çok, (5) öğrenci başına günlük soru limiti (0 = sınırsız; yöneticiler etkilenmez; her gün sıfırlanır). \"Ayarları Kaydet ve Uygula\" ile tüm cihazlarda anında geçerli olur. Limit sayacı cihazdaki tarayıcı kaydında tutulur."});
+MARUL_KB.push({"id":"marul_ayar","t":"EcoMind AI: kullanım ayarları (aç/kapat, cevap tarzı, günlük limit)","k":["ayar","kapat","ac kapat","limit","gunluk limit","soru limiti","hak","cevap tarzi","uzunluk","kisa cevap","resmi","samimi","ton","emoji miktar","ogrenciye kapat","kota"],"a":true,"x":"⚙️ Yönetici: Ayarlar > 🧠 Yapay Zeka Ayarları > \"EcoMind AI Kullanım Ayarları\" kartı: (1) öğrenciler için EcoMind AI'ı aç/kapat (kapalıyken yalnızca yöneticiler kullanır), (2) cevap uzunluğu: Kısa / Normal / Detaylı, (3) ton: Samimi / Resmî, (4) emoji: Hiç / Az / Çok, (5) öğrencilerin kullanabileceği yapay zeka modelleri: Terra ve/veya Terra Lite (ikisi açıksa öğrenci sohbetten seçer, biri açıksa o model otomatik kullanılır, en az biri açık olmalı), (6) öğrenci başına günlük soru limiti (0 = sınırsız; yöneticiler etkilenmez; her gün sıfırlanır). \"Ayarları Kaydet ve Uygula\" ile tüm cihazlarda anında geçerli olur. Limit sayacı cihazdaki tarayıcı kaydında tutulur."});
 MARUL_KB.push({"id":"marul_hatirlatici","t":"EcoMind AI: zamanlı hatırlatıcılar","k":["hatirlat","hatirlatici","hatirlatma","hatirlatma kur","her persembe","her gun","her hafta","zamanli mesaj","otomatik mesaj","alarm","zamanlayici","bana mesaj at","mesaj at","ecomind mesaj"],"a":false,"x":"⏰ EcoMind AI zamanlı hatırlatma kurabilir. Örnek: \"Her Perşembe 09:00'da bana yoklama ve kazanım defterini hatırlat\", \"Yarın 15:00'te herkese duyur: ...\", \"Cuma günleri yöneticilere not tutmayı hatırlat\". Zamanı gelince EcoMind AI adına 💬 gelen kutusuna mesaj düşer (bildirim izni açıksa cihaz bildirimi de çıkar). Yönetici kendine, tüm yöneticilere, tüm kulübe veya tek bir üyeye kurabilir; standart üye yalnızca kendine kurabilir. \"Hatırlatıcılarımı listele\" ve \"... hatırlatıcısını iptal et\" komutları da çalışır. Not: sunucu tarafı zamanlayıcı yoktur; mesaj, panel o saatte herhangi bir cihazda açıksa saatinde, kapalıysa paneli ilk açan kişinin cihazından (en geç 36 saat içinde) gönderilir. Aynı hatırlatma yalnızca bir kez gönderilir."});
 var MARUL_KB_RULES = '\n\nYAZILIM VE KULÜP BİLGİSİ KURALLARI:\n- "Şu nerede / nasıl yapılır / ne işe yarar / hangi sekme / kurucu kim / kulübün amacı ne / tohumlar nasıl saklanır / bokashi seyreltme" gibi YAZILIM ve KULÜP sorularında aşağıdaki YAZILIM VE KULÜP BİLGİSİ bölümünü esas al; sekme, düğme, tesis ve kulüp bilgilerini eksiksiz, samimi ve net aktar. Gerekli adımları numaralandır (1️⃣ 2️⃣ 3️⃣).\n- Bilgi bölümünde olmayan bir özelliği UYDURMA; "Kulüp kılavuzunda bu konuda bilgi bulamadım" de ve ilgili konuyu öner.\n- Kullanıcının yetkisi bir işlemi yapmaya yetmiyorsa (yönetici olmayan) o işlemi adım adım anlatma; "bu işlem yalnızca yöneticilere açık" de ve yöneticiye başvurmasını öner.\n- BAĞLAM: Önceki konuşma sana ayrı mesajlar olarak verilir. "bu", "şu", "onu", "peki ya...", "devam et", "bir önceki" gibi atıfları o mesajlardan çöz; kullanıcının daha önce söylediği bilgileri (adı, ürünü, kova/tohum adı, tercihi) tekrar sorma, cevabında tutarlı kal.\n- Yazılımın hangi ekranında olduğunu söylerken kullanıcının arayüzünü (Klasik üst menü / Yan Menü) ve telefonda ☰ çekmecesini unutma.';
 function marulKbTokens(q){
@@ -14476,7 +14546,7 @@ async function marulAsk(q,where,inputEl){
     msgs.push({role:'user',content:_img?[{type:'text',text:q.slice(0,800)},{type:'image_url',image_url:{url:_img.url}}]:q.slice(0,800)});
     var H={'Content-Type':'application/json','Authorization':'Bearer '+MARUL_KEY,'x-goog-api-key':MARUL_KEY};
     async function call(model){
-      var ac=new AbortController(), _tmo=(model===MARUL_MODEL?60000:20000), to=setTimeout(function(){ac.abort();},_tmo);
+      var ac=new AbortController(), _tmo=(model===useModel?60000:20000), to=setTimeout(function(){ac.abort();},_tmo);
       try{
         var body={model:model,messages:msgs,max_tokens:maxTok,temperature:isAdmin?0.5:0.4,tools:tools,tool_choice:'auto',reasoning_effort:'low'};
         var r=await fetch(MARUL_BASE+'/chat/completions',{method:'POST',signal:ac.signal,headers:H,body:JSON.stringify(body)});
@@ -14493,7 +14563,7 @@ async function marulAsk(q,where,inputEl){
       }catch(e){errs.push(model+': '+(e.name==='AbortError'?(_tmo/1000)+' sn cevap yok':e.message));return null;}
       finally{clearTimeout(to);}
     }
-    var ans='', useModel=MARUL_MODEL;
+    var ans='', useModel=marulEffectiveModel();
     for(var round=0;round<6&&!ans;round++){
       var m=await call(useModel);
       if(!m){
@@ -14505,6 +14575,7 @@ async function marulAsk(q,where,inputEl){
           var avail=((lj.data)||[]).map(function(x){return String(x.id).replace(/^models\//,'');}).filter(function(id){return /^gemini/i.test(id)&&!/embed|tts|image|live|audio|vision|robotics|computer|aqa|learnlm/i.test(id);});
           if(avail.length) cands=cands.filter(function(c){return avail.indexOf(c)>-1;}).concat(avail);
         }catch(e){errs.push('model listesi: '+e.message);}
+        if(!isAdmin){ var _al=marulStudentAllowed(); if(_al.length===1){ var _wl=_al[0]==='lite'; cands=cands.filter(function(c){return /lite/i.test(c)===_wl;}); } }
         for(var ci=0;ci<cands.length&&ci<2&&!m;ci++){
           if(tried[cands[ci]]) continue; tried[cands[ci]]=1;
           m=await call(cands[ci]); if(m) useModel=cands[ci];
