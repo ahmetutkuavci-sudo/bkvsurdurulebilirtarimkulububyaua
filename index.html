@@ -5260,10 +5260,10 @@
             <div class="marul-answer" id="marul-pop-answer"></div>
             <div class="marul-modelbar" style="display:none">
                 <div class="marul-model-menu" id="marul-model-menu">
-                    <button type="button" data-m="flash" onclick="marulModelPick('flash')"><b>⚡ Flash</b><small>Daha güçlü, işlem komutları için</small><i>✓</i></button>
-                    <button type="button" data-m="lite" onclick="marulModelPick('lite')"><b>🪶 Flash-Lite</b><small>Daha hızlı ve ekonomik</small><i>✓</i></button>
+                    <button type="button" data-m="flash" onclick="marulModelPick('flash')"><b>⚡ Terra</b><small>Daha güçlü, işlem komutları için</small><i>✓</i></button>
+                    <button type="button" data-m="lite" onclick="marulModelPick('lite')"><b>🪶 Terra Lite</b><small>Daha hızlı ve ekonomik</small><i>✓</i></button>
                 </div>
-                <button type="button" class="marul-model-btn" title="Yapay zeka modeli" onclick="marulModelMenu(event)">⚡ Flash ⌄</button>
+                <button type="button" class="marul-model-btn" title="Yapay zeka modeli" onclick="marulModelMenu(event)">⚡ Terra ⌄</button>
             </div>
             <div id="marul-img-prev" style="display:none"></div>
             <input type="file" id="marul-file" accept="image/*" style="display:none" onchange="marulPickImg(this)">
@@ -13660,7 +13660,7 @@ function marulModelPaint(){
   var show=false; try{ show=(sessionStorage.getItem('isUnlocked')==='true') && (typeof marulIsAdmin==='function') && marulIsAdmin(); }catch(e){}
   var lite=marulModelIsLite();
   document.querySelectorAll('.marul-modelbar').forEach(function(bar){ bar.style.display=show?'':'none'; });
-  document.querySelectorAll('.marul-model-btn').forEach(function(b){ b.textContent=(lite?'🪶 Flash-Lite':'⚡ Flash')+' ⌄'; });
+  document.querySelectorAll('.marul-model-btn').forEach(function(b){ b.textContent=(lite?'🪶 Terra Lite':'⚡ Terra')+' ⌄'; });
   document.querySelectorAll('.marul-model-menu button').forEach(function(b){ b.classList.toggle('sel',(b.getAttribute('data-m')==='lite')===lite); });
   if(!show){ var m=document.getElementById('marul-model-menu'); if(m) m.classList.remove('open'); }
 }
@@ -13670,7 +13670,7 @@ function marulModelPick(which){
   try{localStorage.setItem('GEMINI_MODEL',MARUL_MODEL);}catch(e){}
   var m=document.getElementById('marul-model-menu'); if(m) m.classList.remove('open');
   marulModelPaint();
-  try{ if(typeof showNotification==='function') showNotification(which==='lite'?'🪶 EcoMind AI: Gemini Flash-Lite seçildi':'⚡ EcoMind AI: Gemini Flash seçildi','info'); }catch(e){}
+  try{ if(typeof showNotification==='function') showNotification(which==='lite'?'🪶 EcoMind AI: Terra Lite seçildi':'⚡ EcoMind AI: Terra seçildi','info'); }catch(e){}
 }
 document.addEventListener('click',function(e){ var m=document.getElementById('marul-model-menu'); if(m&&m.classList.contains('open')&&!e.target.closest('.marul-modelbar')) m.classList.remove('open'); });
 function marulAuthOk(){
