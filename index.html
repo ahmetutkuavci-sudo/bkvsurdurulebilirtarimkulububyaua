@@ -13387,9 +13387,9 @@ async function marulCtxInit(gen){
     var hadLocal=marulHistory.length>0;
     if(hadLocal&&!marulCurId) marulCurId=marulNewId();
     marulChats=loaded;
+    // Uygulamaya her girişte YENİ sohbet başlar; eski sohbetler 📜 geçmişinde durur.
     if(!hadLocal&&loaded.length){
       loaded.sort(function(a,b){return b.ts-a.ts;});
-      marulCurId=loaded[0].id; marulHistory=loaded[0].h.slice();
     }
     marulSyncCur();
     c.ready=true;
@@ -13433,6 +13433,15 @@ async function marulCtxWipe(){
   try{ if(c.hash&&window.deleteDoc&&window.db){await window.deleteDoc(window.doc(window.db,'ecomind_chats',c.hash));} }catch(e){console.warn('EcoMind geçmişi silinemedi:',e&&e.message);}
 }
 if(!window._marulCtxWatch){window._marulCtxWatch=setInterval(marulCtxRestore,1500);} // giriş/çıkış/kullanıcı değişimini izler
+// Uygulamadan çıkıp (arka plana atıp) 30 sn+ sonra geri dönünce de yeni sohbet aç
+(function(){
+  var hiddenAt=0;
+  document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='hidden'){ hiddenAt=Date.now(); }
+    else if(hiddenAt && Date.now()-hiddenAt>=30000){ hiddenAt=0; try{ marulNewChat(); }catch(e){} }
+    else { hiddenAt=0; }
+  });
+})();
 
 // 😊 EMOJİ DESTEĞİ — AI cevaplarında emoji kullanımı + yazı alanı için emoji seçici
 var MARUL_IDENTITY = '\n\nKİMLİĞİN VE GEÇMİŞİN (doğru bil, sorulunca anlat):\n- Eskiden adın \"Marul Ai\" idi ve Groq altyapısını kullanan bir yapay zekaydın.\n- Kulüp daha kapsamlı bir yapay zeka istediği için Google altyapısına (Google Gemini) geçildi. Bu geçişle adın \"EcoMind AI\" olarak yenilendi ve çok daha kapsamlı bir yapay zeka oldun.\n- Artık Groq kullanmıyorsun; altyapın Google. Adının neden değiştiği, eski adın veya hangi altyapıyı kullandığın sorulursa bunu net ve samimi biçimde anlat. Cevabın sonunda bir kopyala (Kopyala) butonu olduğunu, yazılanları veya verdiğin cevabı oradan kopyalayabileceklerini de gerektiğinde söyleyebilirsin.';
