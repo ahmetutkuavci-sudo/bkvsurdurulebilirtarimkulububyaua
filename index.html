@@ -9268,6 +9268,8 @@
 
         let notesInitialSynced = false;
         onSnapshot(collection(db, "notes"), async (snapshot) => {
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !notesInitialSynced) {
                 notesInitialSynced = true;
                 let localNotes = [];
@@ -9717,6 +9719,8 @@
 
         let shoppingInitialSynced = false;
         onSnapshot(collection(db, "shopping"), async (snapshot) => {
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !shoppingInitialSynced) {
                 shoppingInitialSynced = true;
                 let localItems = [];
@@ -9948,6 +9952,8 @@
         let usersInitialSynced = false;
         onSnapshot(collection(db, "users"), async (snapshot) => {
             const kurucuEmail = 'www.ahmetutkuavci@gmail.com'.toLowerCase();
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !usersInitialSynced) {
                 usersInitialSynced = true;
                 let localUsers = window.getSafeUsers();
@@ -10214,6 +10220,8 @@
         // Realtime Listener: Barkodlu Ürünler
         let productsInitialSynced = false;
         onSnapshot(collection(db, "products"), async (snapshot) => {
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !productsInitialSynced) {
                 productsInitialSynced = true;
                 let localProducts = [];
@@ -10707,6 +10715,8 @@
 
         // Realtime Listener: Messages
         onSnapshot(collection(db, "messages"), async (snapshot) => {
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !messagesInitialSynced) {
                 messagesInitialSynced = true;
                 let localMsgs = window.getSafeMessages();
@@ -10982,6 +10992,8 @@
 
         // Realtime Listener: Student Requests
         onSnapshot(collection(db, "student_requests"), async (snapshot) => {
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !requestsInitialSynced) {
                 requestsInitialSynced = true;
                 let localReqs = window.getSafeRequests();
@@ -11317,6 +11329,8 @@
 
         // Realtime Listener: Attendance
         onSnapshot(collection(db, "attendance"), async (snapshot) => {
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !attendanceInitialSynced) {
                 attendanceInitialSynced = true;
                 let localAtt = {};
@@ -11467,6 +11481,8 @@
 
         // Realtime Listener: Club Logs
         onSnapshot(collection(db, "club_logs"), async (snapshot) => {
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !clubLogsInitialSynced) {
                 clubLogsInitialSynced = true;
                 let localLogs = [];
@@ -11817,6 +11833,8 @@
 
         // Realtime Listener: Bokashi
         onSnapshot(collection(db, "bokashi"), async (snapshot) => {
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !bokashiInitialSynced) {
                 bokashiInitialSynced = true;
                 let localB = [];
@@ -11873,6 +11891,8 @@
         function uretimDinle(koleksiyon, anahtar) {
             let ilk = false;
             onSnapshot(collection(db, koleksiyon), async (snapshot) => {
+                // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+                if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
                 if (snapshot.empty && !ilk) {
                     ilk = true;
                     let yerel = [];
@@ -11907,6 +11927,8 @@
         };
         let tohumIlk = false;
         onSnapshot(collection(db, "seed_bank"), async (snapshot) => {
+            // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
+            if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
             if (snapshot.empty && !tohumIlk) {
                 tohumIlk = true;
                 let yerel = [];
