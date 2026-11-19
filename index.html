@@ -14420,7 +14420,7 @@ function marulKnowledge(q,isAdmin){
       out+='\n\n['+o.sec.t+'] '+x; used++;
     });
     if(!used){ var g=MARUL_KB[1]; out+='\n\n['+g.t+'] '+g.x; }
-    return {text:MARUL_KB_RULES+out, n:used};
+    return {text:MARUL_KB_RULES+out, body:out, n:used};
   }catch(e){ console.warn('Marul KB hata:',e); return {text:'',n:0}; }
 }
 
@@ -14435,7 +14435,7 @@ async function marulAsk(q,where,inputEl){
   if(!MARUL_KEY || MARUL_KEY.indexOf('BURAYA')===0){
     var kb0=marulKnowledge(q,false);
     if(kb0&&kb0.n&&kb0.text){
-      marulAdd(box,'a',marulT('🌱 *(EcoMind Bilgi Bankası)*:\n\n','🌱 *(EcoMind Knowledge Base)*:\n\n')+marulClean(kb0.text.replace(/^\[.*?\]\s*/gm,'')));
+      marulAdd(box,'a',marulT('🌱 *(EcoMind Bilgi Bankası)*:\n\n','🌱 *(EcoMind Knowledge Base)*:\n\n')+marulClean((kb0.body||'').replace(/^\[.*?\]\s*/gm,'')));
       return;
     }
     marulAdd(box,'a',marulT('EcoMind AI henüz kurulmadı (anahtar eklenmemiş).','EcoMind AI is not configured yet.'));
@@ -14476,7 +14476,7 @@ async function marulAsk(q,where,inputEl){
     msgs.push({role:'user',content:_img?[{type:'text',text:q.slice(0,800)},{type:'image_url',image_url:{url:_img.url}}]:q.slice(0,800)});
     var H={'Content-Type':'application/json','Authorization':'Bearer '+MARUL_KEY,'x-goog-api-key':MARUL_KEY};
     async function call(model){
-      var ac=new AbortController(), _tmo=(model===MARUL_MODEL?60000:30000), to=setTimeout(function(){ac.abort();},_tmo);
+      var ac=new AbortController(), _tmo=(model===MARUL_MODEL?60000:20000), to=setTimeout(function(){ac.abort();},_tmo);
       try{
         var body={model:model,messages:msgs,max_tokens:maxTok,temperature:isAdmin?0.5:0.4,tools:tools,tool_choice:'auto',reasoning_effort:'low'};
         var r=await fetch(MARUL_BASE+'/chat/completions',{method:'POST',signal:ac.signal,headers:H,body:JSON.stringify(body)});
@@ -14505,7 +14505,7 @@ async function marulAsk(q,where,inputEl){
           var avail=((lj.data)||[]).map(function(x){return String(x.id).replace(/^models\//,'');}).filter(function(id){return /^gemini/i.test(id)&&!/embed|tts|image|live|audio|vision|robotics|computer|aqa|learnlm/i.test(id);});
           if(avail.length) cands=cands.filter(function(c){return avail.indexOf(c)>-1;}).concat(avail);
         }catch(e){errs.push('model listesi: '+e.message);}
-        for(var ci=0;ci<cands.length&&ci<6&&!m;ci++){
+        for(var ci=0;ci<cands.length&&ci<2&&!m;ci++){
           if(tried[cands[ci]]) continue; tried[cands[ci]]=1;
           m=await call(cands[ci]); if(m) useModel=cands[ci];
         }
@@ -14525,10 +14525,8 @@ async function marulAsk(q,where,inputEl){
       else break;
     }
     clearInterval(tick);
-    if(!ans && kb && kb.n && kb.text){
-      ans = marulT('🌱 *(EcoMind Bilgi Bankası Yanıtı)*:\n\n', '🌱 *(EcoMind Knowledge Base Answer)*:\n\n') + kb.text.replace(/^\[.*?\]\s*/gm, '');
-    }
-    wait.classList.remove('thinking');wait.textContent=ans?marulClean(ans):('🧠 EcoMind AI şu an cevap veremiyor.\nDenenenler:\n• '+(errs.join('\n• ')||'boş cevap'));
+    if(!ans){ console.warn('EcoMind AI cevap veremedi:',errs); }
+    wait.classList.remove('thinking');wait.textContent=ans?marulClean(ans):marulT('⏳ EcoMind AI şu an yoğun, cevap zamanında gelmedi. Birkaç saniye sonra sorunu tekrar gönderir misin?','⏳ EcoMind AI is busy right now and did not answer in time. Please send your question again in a few seconds.');
     if(ans){if(marulWasVoice)marulSpeak(ans);marulHistory.push({role:'user',text:q},{role:'model',text:ans});if(marulHistory.length>40)marulHistory=marulHistory.slice(-40);marulCtxSave();}
   }catch(e){clearInterval(tick);wait.classList.remove('thinking');console.error('EcoMind AI hata:',e);wait.textContent=marulT('Bağlantı hatası: ','Connection error: ')+e.message;}
   box.scrollTop=box.scrollHeight;
