@@ -556,7 +556,7 @@
         .lg-brand-name { font-weight: 800; font-size: 17px; letter-spacing: .6px; line-height: 1.2; max-width: 360px; }
         .lg-brand-name span { display: block; font-weight: 500; font-size: 12.5px; letter-spacing: .3px; opacity: .8; margin-top: 3px; }
 
-        .lg-hero { position: relative; z-index: 2; margin-top: auto; padding-bottom: 36px; max-width: 520px; }
+        .lg-hero { position: relative; z-index: 2; margin-top: 0; padding-top: 10px; padding-bottom: 36px; max-width: 520px; }
         .lg-kicker { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); margin-bottom: 18px; }
         .lg-headline { font-size: clamp(30px, 3.4vw, 46px); font-weight: 800; line-height: 1.08; letter-spacing: -.5px; }
         .lg-headline em { font-style: normal; color: var(--lg-l); }
@@ -636,7 +636,7 @@
         /* ---- Mobil / dar ekran ---- */
         @media (max-width: 880px) {
             .lg-wrap { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-            .lg-brand { min-height: 0; padding: calc(22px + env(safe-area-inset-top, 0px)) 22px 0; }
+            .lg-brand { display: none; }
             .lg-hero, .lg-brand .lg-feats, .lg-brand .lg-lead { display: none; }
             .lg-brand-name { font-size: 14px; letter-spacing: .4px; }
             .lg-logo { width: 46px; height: 46px; border-radius: 14px; }
@@ -738,13 +738,13 @@
         .lg-card.lg-shake { animation: lgShakeC .5s cubic-bezier(.36,.07,.19,.97); }
         @keyframes lgShakeC { 10%,90% { transform: translateX(-2px); } 20%,80% { transform: translateX(4px); } 30%,50%,70% { transform: translateX(-7px); } 40%,60% { transform: translateX(7px); } }
         .lg-hint { animation: lgUp .35s ease both; }
-        .lg-banner-wrap { position: relative; width: 100%; max-width: 340px; margin: 0 auto 26px; padding: 10px; border-radius: 28px; background: linear-gradient(145deg, #ffffff, color-mix(in srgb, var(--lg-l) 14%, #ffffff)); border: 1px solid var(--lg-line); box-shadow: 0 1px 0 #fff inset, 0 2px 4px color-mix(in srgb, var(--lg-d) 8%, transparent), 0 22px 44px -22px color-mix(in srgb, var(--lg-d) 45%, transparent); overflow: hidden; isolation: isolate; animation: lgUp .8s cubic-bezier(.2,.8,.2,1) both; }
-        .lg-banner-wrap::before { content: ""; position: absolute; inset: -40% -20% auto auto; width: 70%; height: 90%; background: radial-gradient(closest-side, color-mix(in srgb, var(--lg-l) 38%, transparent), transparent); z-index: -1; pointer-events: none; }
-        .lg-banner-wrap::after { content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-18deg); animation: lgBannerShine 6.5s ease-in-out 1.4s infinite; pointer-events: none; }
+        .lg-banner-wrap { position: relative; width: 100%; max-width: 340px; margin: 0 auto 26px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; overflow: visible; animation: lgUp .8s cubic-bezier(.2,.8,.2,1) both; }
+        .lg-banner-wrap::before { display: none; content: ""; position: absolute; inset: -40% -20% auto auto; width: 70%; height: 90%; background: radial-gradient(closest-side, color-mix(in srgb, var(--lg-l) 38%, transparent), transparent); z-index: -1; pointer-events: none; }
+        .lg-banner-wrap::after { display: none; content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-18deg); animation: lgBannerShine 6.5s ease-in-out 1.4s infinite; pointer-events: none; }
         @keyframes lgBannerShine { 0%, 62% { left: -60%; } 100% { left: 140%; } }
-        .lg-banner { display: block; width: 100%; height: auto; border-radius: 19px; image-rendering: auto; }
-        @media (max-width: 880px) { .lg-banner-wrap { max-width: 300px; margin-bottom: 20px; border-radius: 24px; } .lg-banner { border-radius: 15px; } }
-        @media (min-width: 881px) and (max-height: 760px) { .lg-banner-wrap { max-width: 250px; margin-bottom: 16px; padding: 8px; border-radius: 22px; } .lg-banner { border-radius: 15px; } }
+        .lg-banner { display: block; width: 100%; height: auto; border-radius: 0; image-rendering: auto; }
+        @media (max-width: 880px) { .lg-banner-wrap { max-width: 300px; margin-bottom: 20px; border-radius: 0; } .lg-banner { border-radius: 0; } }
+        @media (min-width: 881px) and (max-height: 760px) { .lg-banner-wrap { max-width: 250px; margin-bottom: 16px; padding: 0; border-radius: 0; } .lg-banner { border-radius: 0; } }
         @media (prefers-reduced-motion: reduce) { .lg-banner-wrap::after { display: none; } }
 
           /* Başarılı girişte kapılar açılır */
@@ -3840,13 +3840,13 @@
                 <p style="margin: 0 0 10px 0; font-size: 12px; opacity: 0.8;">Klasik Frutiger Aero, modern Aero 2.0 Komuta Merkezi ve giriş ekranıyla uyumlu Fresh görünümü arasında dilediğiniz an geçiş yapın.</p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="aero-btn ui-version-btn" data-version="classic" onclick="switchUIVersion('classic')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
-                        <span>💎</span> <span>Klasik (ESKİ)</span>
+                        <span>💎</span> <span>Klasik (Üst Menü)</span>
                     </button>
                     <button class="aero-btn ui-version-btn" data-version="modern" onclick="switchUIVersion('modern')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
-                        <span>🚀</span> <span>Yan Menü (KLASİK)</span>
+                        <span>🚀</span> <span>Yan Menü (YENİ)</span>
                     </button>
                     <button class="aero-btn ui-version-btn" data-version="fresh" onclick="switchUIVersion('fresh')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
-                        <span>🌿</span> <span>Fresh (YENİ)</span>
+                        <span>🌿</span> <span>Fresh (Giriş Teması)</span>
                     </button>
                 </div>
             </div>
@@ -3962,14 +3962,6 @@
             <aside class="lg-brand">
                 <div class="lg-blob b1"></div><div class="lg-blob b2"></div><div class="lg-blob b3"></div>
                 <div class="lg-particles" aria-hidden="true"></div>
-                <div class="lg-brand-top">
-                    <div class="lg-logo">
-                        <img src="Logo.jpg" alt="BKV Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <svg style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.5 6-7"/></svg>
-                    </div>
-                    <div class="lg-brand-name">BJK KABATAŞ VAKFI ÖZEL OKULLARI<span>Sürdürülebilir Tarım Kulübü</span></div>
-                </div>
-
                 <div class="lg-hero">
                     <div class="lg-kicker"><i class="lg-live"></i>Bilgi ve Yönetim Paneli</div>
                     <div class="lg-headline" role="heading" aria-level="2">Toprağın, tohumun ve emeğin <em>tek panelde.</em></div>
