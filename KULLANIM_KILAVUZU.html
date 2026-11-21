@@ -599,7 +599,8 @@
                     <span class="meta-pill">🌱 Sürdürülebilir Tarım</span>
                     <span class="meta-pill meta-pill-blue">☁️ Google Cloud Firestore Realtime</span>
                     <span class="meta-pill">📱 PWA Çevrimdışı Destekli</span>
-                    <span class="meta-pill">🚀 Aero 2.0 Çift Arayüz</span>
+                    <span class="meta-pill">🚀 Aero 2.0 Üç Arayüz Modu</span>
+                    <span class="meta-pill">🎨 5 Renk Teması</span>
                     <span class="meta-pill">📱 Telefon Uyumlu Yan Menü</span>
                     <span class="meta-pill meta-pill-blue">🔔 Mesaj Bildirimleri</span>
                     <span class="meta-pill">🔒 Rol & Cihaz Güvenliği</span>
@@ -620,6 +621,11 @@
                             <tr><th>Özellik</th><th>Ne Değişti?</th><th>Ayrıntı</th></tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td><strong>🌿 Fresh Arayüz &amp; Temalar</strong> <span class="badge badge-purple">Yeni</span></td>
+                                <td>Klasik ve Yan Menü'ye ek olarak üçüncü bir görünüm modu eklendi: <em>Fresh (Giriş Teması)</em>. Beş renk teması Fresh görünümüne ve giriş ekranına da uygulanır; seçiminiz hesabınıza kaydedilir.</td>
+                                <td><a href="#sec-tema-pwa">Bölüm 3</a></td>
+                            </tr>
                             <tr>
                                 <td><strong>📱 Telefonda Yan Menü</strong> <span class="badge badge-purple">Yeni</span></td>
                                 <td>Yan Menü (Aero 2.0) arayüzü artık telefon ekranlarına uyumludur: menü ☰ düğmesiyle açılan bir çekmece olarak çalışır.</td>
@@ -887,18 +893,22 @@
             <section id="sec-tema-pwa">
                 <h2><span>🎨</span> 3. Arayüz Mimarisi (Aero 2.0), Temalar, Profil & PWA</h2>
                 
-                <h3>Çift Arayüz Mimarisi:</h3>
+                <h3>Üç Arayüz Modu:</h3>
                 <p>
-                    Kullanıcılar paneli kendi kullanım alışkanlıklarına veya kullandıkları ekrana göre iki farklı arayüz modunda kullanabilirler:
+                    Kullanıcılar paneli kendi kullanım alışkanlıklarına veya kullandıkları ekrana göre üç farklı arayüz modunda kullanabilirler:
                 </p>
                 <ul>
                     <li><strong>🚀 Modern Yan Menü (Aero 2.0 Komuta Merkezi):</strong> Sol tarafta yer alan katlanabilir (collapsible) simgeli kenar çubuğu ve üstteki akıllı başlık barı. Masaüstü ekranlarda, akıllı tahtalarda, tabletlerde ve artık <strong>telefonlarda</strong> hızlı ve ergonomik geçiş sağlar.</li>
                     <li><strong>💎 Klasik Üst Menü Modu (Segmented Tab Bar):</strong> Ekranın en üstünde yatay kayan cam hap butonlar sunar. Alışılmış masaüstü deneyimini tercih edenler için idealdir.</li>
+                    <li><strong>🌿 Fresh (Giriş Teması):</strong> Yan Menü düzenini kullanır, ancak giriş ekranındaki sade ve ferah görünümü panelin tamamına taşır: seçtiğiniz temanın rengine boyanmış koyu degrade yan menü, beyaz kartlar, düz ve yumuşak köşeli düğmeler. Fresh seçildiğinde giriş ekranı da yeni yerleşimiyle açılır.</li>
                 </ul>
+                <p>
+                    Üç görünüm <strong>Profilim</strong> penceresindeki <em>"Arayüz Görünümü &amp; Modu"</em> bölümünden tek tıkla değiştirilir. Yan Menü ve Fresh aynı menü düzenini kullandığı için sekmeler, ☰ düğmesi ve telefondaki çekmece davranışı ikisinde de aynıdır.
+                </p>
 
                                 <h3>📱 Telefonda Yan Menü (Çekmece):</h3>
                 <p>
-                    Yan Menü arayüzü dar ekranlarda (yaklaşık 768 piksel ve altı) telefona uygun çalışır: menü varsayılan olarak gizlidir.
+                    Yan Menü ve Fresh arayüzleri dar ekranlarda (yaklaşık 768 piksel ve altı) telefona uygun çalışır: menü varsayılan olarak gizlidir.
                 </p>
                 <ul>
                     <li><strong>Açma:</strong> Üst bardaki <code>☰</code> düğmesine dokunun; menü soldan bir çekmece olarak açılır.</li>
@@ -936,7 +946,7 @@
 
 <h3>Frutiger Aero Renk Temaları:</h3>
                 <p>
-                    Sistem 5 farklı canlı cam temasını destekler:
+                    Sistem 5 farklı renk temasını destekler. Temalar her üç arayüz modunda da çalışır; görünüm mod bazında değişir: Klasik ve Yan Menü'de canlı cam (Frutiger Aero) efektiyle, Fresh'te sade beyaz kartlar ve temanın ana rengiyle uygulanır. Seçilen tema giriş ekranının renklerini de belirler.
                 </p>
                 <ul>
                     <li>💧 <strong>Buz Mavisi (Varsayılan):</strong> Dinlendirici gökyüzü ve berrak su tonları.</li>
@@ -946,9 +956,14 @@
                     <li>🌸 <strong>Pudra Rose Gold:</strong> Dingin pudra ve pastel gül kurusu cam efekti.</li>
                 </ul>
 
+                <div class="callout callout-info">
+                    <strong>🎨 Temayı Nereden Değiştiririm?</strong>
+                    Üst bardaki kullanıcı kartına tıklayarak <em>Profilim &amp; Tercihler</em> penceresini açın; <em>"Renk Teması Seçimi"</em> bölümündeki beş düğmeden birine dokunun. Değişiklik anında uygulanır. Varsayılan tema 💧 Buz Mavisi'dir.
+                </div>
+
                 <div class="callout callout-success">
                     <strong>☁️ Kişisel Tercihlerin Buluta Kaydedilmesi:</strong>
-                    Seçtiğiniz renk teması ve arayüz modu (Klasik / Yan Menü), doğrudan <code>users</code> koleksiyonundaki profilinize kaydedilir. Farklı bir telefondan, tabletten veya bilgisayardan giriş yaptığınızda sistem sizi tanır ve kendi tema tercihinizle otomatik açılır.
+                    Seçtiğiniz renk teması ve arayüz modu (Klasik / Yan Menü / Fresh), doğrudan <code>users</code> koleksiyonundaki profilinize kaydedilir. Farklı bir telefondan, tabletten veya bilgisayardan giriş yaptığınızda sistem sizi tanır ve kendi tema tercihinizle otomatik açılır.
                 </div>
 
                 <h3>👤 "Profilim & Tercihler" Modalı Kullanımı:</h3>
@@ -957,8 +972,8 @@
                 </p>
                 <ul>
                     <li><strong>Hesap Bilgileri:</strong> Adınız, e-posta adresiniz, kayıtlı sınıfınız ve kulüp yetki seviyeniz görüntülenir.</li>
-                    <li><strong>Arayüz Görünümü & Modu:</strong> Klasik ve Yan Menü arasında tek tıkla anında geçiş yapabilirsiniz.</li>
-                    <li><strong>Renk Teması:</strong> 5 temadan dilediğinizi seçebilirsiniz.</li>
+                    <li><strong>Arayüz Görünümü & Modu:</strong> Klasik, Yan Menü ve Fresh arasında tek tıkla anında geçiş yapabilirsiniz.</li>
+                    <li><strong>Renk Teması:</strong> 💧 Buz Mavisi, 🌿 Doğa Zümrüt, 🍊 Sıcak Amber, 🍷 Kraliyet Yakutu ve 🌸 Pudra Rose Gold temalarından dilediğinizi seçebilirsiniz.</li>
                     <li><strong>Şifremi Değiştir:</strong> Mevcut şifrenizi girip en az 4 karakterlik yeni şifrenizi tanımlayarak şifrenizi güncelleyebilirsiniz (bulutla anında eşitlenir).</li>
                     <li><strong>🔔 Bildirimleri Aç:</strong> Tarayıcı / telefon bildirim iznini etkinleştirir. İzin verildiğinde düğmenin yazısı <em>"🔔 Bildirimler Açık"</em> olur. İzin daha önce reddedildiyse tarayıcı veya uygulama ayarlarından yeniden açmanız gerekir.</li>
                     <li><strong>📲 Uygulamayı Yükle:</strong> Cihazınıza PWA olarak tek tıkla kurar.</li>
@@ -1667,6 +1682,9 @@
                 <h3>S: Hesabım yok, sisteme nasıl üye olurum?</h3>
                 <p><strong>C:</strong> Giriş ekranındaki "Kulübümüze Katılmak İçin Kayıt Ol" bağlantısına dokunun, Ad Soyad, Sınıf/Şube, e-posta ve şifrenizi girin. Hesabınız Normal Üye olarak açılır; yönetici yetkisi için kulüp öğretmeninize başvurun.</p>
 
+                <h3>S: Temayı veya arayüzü nasıl değiştiririm?</h3>
+                <p><strong>C:</strong> Üst bardaki kullanıcı kartınıza tıklayıp Profilim penceresini açın. "Arayüz Görünümü &amp; Modu" bölümünden Klasik, Yan Menü veya Fresh'i; "Renk Teması Seçimi" bölümünden beş temadan birini seçin. Tercihiniz hesabınıza kaydedilir, başka cihazdan girince aynı açılır.</p>
+
                 <h3>S: Telefonda yan menü görünmüyor, sekmelere nasıl geçerim?</h3>
                 <p><strong>C:</strong> Yan Menü arayüzünde telefon ekranında menü gizlidir. Üst bardaki <code>☰</code> düğmesine dokunarak açın; bir sekmeyi seçtiğinizde veya menü dışına dokunduğunuzda kapanır. Dilerseniz Profilim penceresinden Klasik (üst menü) görünüme de geçebilirsiniz.</p>
 
@@ -1700,7 +1718,7 @@
 
             <!-- Belge Sonu -->
             <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
-                © 2026 BJK-Kabataş Vakfı Özel Okulları • Sürdürülebilir Tarım Kulübü Yönetim Sistemi • Tüm Hakları Saklıdır.<br>Kılavuz son güncelleme: 11 Kasım 2026 — EcoMind AI (v12) bölümü eklendi.
+                © 2026 BJK-Kabataş Vakfı Özel Okulları • Sürdürülebilir Tarım Kulübü Yönetim Sistemi • Tüm Hakları Saklıdır.<br>Kılavuz son güncelleme: 22 Kasım 2026 — Temalar ve Fresh arayüz bilgisi güncellendi.
             </div>
 
         </main>
