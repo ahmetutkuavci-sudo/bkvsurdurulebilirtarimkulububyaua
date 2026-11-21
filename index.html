@@ -763,6 +763,36 @@
             .lg-particles { display: none; }
         }
         
+
+        /* =========================================================
+           💎 KLASİK AERO GİRİŞ EKRANI (eski ekran geri getirildi)
+           Klasik / Yan Menü modunda görünür, 4 temayı da destekler.
+           ========================================================= */
+        #lg-layout-fresh, #lg-layout-classic { width: 100%; min-height: 100%; }
+        body.ui-fresh #lg-layout-classic { display: none !important; }
+        body:not(.ui-fresh) #lg-layout-fresh { display: none !important; }
+        body:not(.ui-fresh) #lg-layout-classic { display: flex; padding: 15px; }
+        body:not(.ui-fresh) #login-screen {
+            background: radial-gradient(circle at top left, rgba(225, 245, 254, 0.85) 0%, rgba(129, 212, 250, 0.9) 40%, rgba(2, 136, 209, 0.95) 100%);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+        }
+        body.theme-orange:not(.ui-fresh) #login-screen { background: radial-gradient(circle at top left, rgba(255, 250, 240, 0.9) 0%, rgba(255, 237, 213, 0.92) 40%, rgba(251, 146, 60, 0.95) 100%) !important; }
+        body.theme-green:not(.ui-fresh)  #login-screen { background: radial-gradient(circle at top left, rgba(236, 253, 245, 0.9) 0%, rgba(167, 243, 208, 0.92) 40%, rgba(52, 211, 153, 0.95) 100%) !important; }
+        body.theme-red:not(.ui-fresh)    #login-screen { background: radial-gradient(circle at top left, rgba(255, 241, 242, 0.9) 0%, rgba(254, 205, 211, 0.92) 40%, rgba(244, 63, 94, 0.95) 100%) !important; }
+        body.theme-pink:not(.ui-fresh)   #login-screen { background: radial-gradient(circle at top left, rgba(255, 241, 245, 0.9) 0%, rgba(252, 231, 240, 0.92) 40%, rgba(241, 156, 184, 0.95) 100%) !important; }
+        .login-box { width: 400px; max-width: 100%; margin: auto; padding: 40px; text-align: center; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        /* Masaüstünde eski ekran: yükseklik aynı, kutu biraz daha geniş */
+        @media (min-width: 681px) { body:not(.ui-fresh) .login-box { width: 460px; } }
+        @media (max-width: 680px) {
+            body:not(.ui-fresh) #login-screen { padding: 0 !important; }
+            .login-box { width: 100% !important; max-width: 360px !important; padding: 22px 16px !important; border-radius: 18px !important; }
+            .login-box img { width: 220px !important; max-width: 100% !important; height: auto !important; margin-bottom: 10px !important; }
+            .login-box h1 { font-size: 20px !important; }
+            .login-box p { font-size: 12.5px !important; }
+            .login-box .aero-input { font-size: 16px !important; padding: 12px 14px !important; }
+            .login-box button { padding: 12px !important; font-size: 15px !important; }
+        }
+
         .form-message { padding: 10px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; font-size: 13px; display: none; }
         .form-error { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
         .form-success { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
@@ -3924,6 +3954,8 @@
     </div>
 
     <div id="login-screen">
+        <!-- Fresh (yeni) giriş yerleşimi: body.ui-fresh iken kullanılır -->
+        <div id="lg-layout-fresh">
         <div class="lg-wrap">
 
             <!-- Sol: marka paneli -->
@@ -4076,6 +4108,51 @@
                 </div>
             </main>
         </div>
+        </div>
+
+        <!-- Klasik Aero giriş yerleşimi (eski ekran): Klasik / Yan Menü modlarında kullanılır -->
+        <div id="lg-layout-classic">
+        <div class="login-box glass">
+           <div id="login-section">
+                <img src="Login Screen.png" alt="Logo" style="width: 350px; display: block; margin: 0 auto 15px auto; border-radius: 15px; max-width: 90%; height: auto;" onerror="this.style.display='none';">
+                <h1 style="color: #01579b; text-shadow: 2px 2px 4px rgba(255,255,255,0.9); margin-bottom: 5px;">SİSTEM GİRİŞİ</h1>
+                <p style="color: #0277bd; margin-top: 0; font-size: 14px; text-shadow: 1px 1px 2px rgba(255,255,255,0.9); font-weight: bold; margin-bottom: 20px;">Sürdürülebilir Tarım Kulübü Bilgi ve Yönetim Paneli</p>
+                
+                <div id="login-error" class="form-message form-error"></div>
+
+                <input type="email" id="login-email" class="aero-input" placeholder="📧 E-posta Adresi" style="margin-bottom: 10px; width: 100%;">
+                <input type="password" id="login-pass" class="aero-input" placeholder="🔑 Şifre" onkeypress="if(event.key === 'Enter') login()" style="margin-bottom: 10px; width: 100%;">
+                <label for="login-remember" style="display:flex; align-items:center; gap:8px; margin: 0 2px 14px 2px; font-size:13.5px; font-weight:700; color:#01579b; cursor:pointer; text-align:left;">
+                    <input type="checkbox" id="login-remember" class="task-checkbox" style="width:18px; height:18px; flex-shrink:0;">
+                    <span>🔐 Beni Hatırla</span>
+                </label>
+                <button class="aero-btn" style="width: 100%; font-size: 16px; padding: 15px;" onclick="login()">Giriş Yap</button>
+                
+                <div style="margin-top: 25px; font-size: 14px; color: #01579b; font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">
+                    Kulübümüze Katılmak İçin <span onclick="toggleForms()" style="color: #d84315; font-weight: 900; cursor: pointer; text-decoration: underline;">Kayıt Ol</span>
+                </div>
+            </div>
+
+            <div id="register-section" class="hidden">
+                <img src="Login Screen.png" alt="Logo" style="width: 350px; display: block; margin: 0 auto 15px auto; border-radius: 15px; max-width: 90%; height: auto;" onerror="this.style.display='none';">
+                <h1 style="color: #01579b; text-shadow: 2px 2px 4px rgba(255,255,255,0.9); margin-bottom: 5px;">YENİ KAYIT</h1>
+                <p style="color: #0277bd; margin-top: 0; font-size: 14px; text-shadow: 1px 1px 2px rgba(255,255,255,0.9); font-weight: bold; margin-bottom: 20px;">Kulübe katılmak için bilgilerinizi girin.</p>
+                
+                <div id="reg-error" class="form-message form-error"></div>
+                <div id="reg-success" class="form-message form-success"></div>
+
+                <input type="text" id="reg-name" class="aero-input" placeholder="👤 Adınız Soyadınız" style="margin-bottom: 10px; width: 100%;">
+                <input type="text" id="reg-grade" class="aero-input" placeholder="🏫 Sınıf / Şube (Örn: 9-A, 10-B, Öğretmen)" style="margin-bottom: 10px; width: 100%;">
+                <input type="email" id="reg-email" class="aero-input" placeholder="📧 E-posta Adresi" style="margin-bottom: 10px; width: 100%;">
+                <input type="password" id="reg-pass" class="aero-input" placeholder="🔑 Şifre" onkeypress="if(event.key === 'Enter') registerUser()" style="margin-bottom: 15px; width: 100%;">
+                <button class="aero-btn btn-green" style="width: 100%; font-size: 16px; padding: 15px;" onclick="registerUser()">Kayıt Ol</button>
+                
+                <div style="margin-top: 25px; font-size: 14px; color: #01579b; font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">
+                    Zaten Üye Misin? <span onclick="toggleForms()" style="color: #d84315; font-weight: 900; cursor: pointer; text-decoration: underline;">Giriş Yap</span>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
     <script>
         /* ===== Giriş ekranı: yardımcılar + animasyonlar ===== */
@@ -4161,7 +4238,7 @@
                 var orig = window.login; if (typeof orig !== 'function' || orig.__lg || reduce) return;
                 var w = function () {
                     var r = orig.apply(this, arguments);
-                    if (ls.style.display === 'none') {
+                    if (ls.style.display === 'none' && document.body.classList.contains('ui-fresh')) {
                         ls.style.display = 'flex'; ls.classList.add('lg-leaving');
                         setTimeout(function () { ls.style.display = 'none'; ls.classList.remove('lg-leaving'); }, 780);
                     }
@@ -4169,6 +4246,27 @@
                 };
                 w.__lg = 1; window.login = w;
             });
+        })();
+    </script>
+
+    <script>
+        /* ===== Giriş ekranı yerleşimi: arayüz moduna göre Fresh ya da Klasik Aero =====
+           Aynı id'ler (login-email vb.) çakışmasın diye pasif yerleşim DOM'dan çıkarılır. */
+        (function () {
+            var ls = document.getElementById('login-screen'); if (!ls) return;
+            var holder = document.createDocumentFragment();
+            var fresh = document.getElementById('lg-layout-fresh'), classic = document.getElementById('lg-layout-classic');
+            var marker = { fresh: document.createComment('lg-fresh'), classic: document.createComment('lg-classic') };
+            fresh.parentNode.insertBefore(marker.fresh, fresh); classic.parentNode.insertBefore(marker.classic, classic);
+            function put(key, el, on) {
+                if (on && !el.parentNode.isSameNode(ls)) marker[key].parentNode.insertBefore(el, marker[key]);
+                if (!on && el.parentNode === ls) holder.appendChild(el);
+            }
+            window.lgApplyLayout = function () {
+                var useFresh = document.body.classList.contains('ui-fresh');
+                put('fresh', fresh, useFresh); put('classic', classic, !useFresh);
+            };
+            lgApplyLayout();
         })();
     </script>
 
@@ -6571,6 +6669,7 @@
             document.body.classList.remove('ui-classic', 'ui-modern', 'ui-fresh');
             if (version === 'fresh') document.body.classList.add('ui-modern', 'ui-fresh');   // Fresh = yan menü düzeni + giriş ekranı teması
             else document.body.classList.add('ui-' + version);
+            try { if (window.lgApplyLayout) lgApplyLayout(); } catch (e) {}
 
             // 🔥 Kullanıcının arayüz modu tercihini Firebase veritabanına kaydet
             const currentEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase().trim();
@@ -7061,6 +7160,7 @@
             sessionStorage.removeItem('currentRole');
             document.body.classList.remove('is-admin','bkv-auth');
             try{ var _mp=document.getElementById('marul-pop'); if(_mp) _mp.classList.remove('open'); }catch(e){}
+            try { if (window.lgApplyLayout) lgApplyLayout(); } catch (e) {}
             document.getElementById('login-screen').style.display = 'flex';
             document.getElementById('login-error').style.display = 'none';
             openTab('tab-dashboard', document.getElementById('tab-btn-dashboard') || document.querySelectorAll('.tab-btn')[0]);
