@@ -514,13 +514,254 @@
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); 
         }
 
-        #login-screen { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: radial-gradient(circle at top left, rgba(225, 245, 254, 0.85) 0%, rgba(129, 212, 250, 0.9) 40%, rgba(2, 136, 209, 0.95) 100%);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
-            z-index: 9999; display: flex; justify-content: center; align-items: center; 
+        /* =========================================================
+           🌱 YENİ GİRİŞ EKRANI (sıfırdan tasarım) — tema uyumlu
+           ========================================================= */
+        #login-screen {
+            --lg-d:#063a5a; --lg-m:#0288d1; --lg-l:#4fc3f7; --lg-bg:#f3f9fd; --lg-ink:#0b2a3d; --lg-mute:#5b7a8e; --lg-line:#d6e6f0;
+            position: fixed; inset: 0; z-index: 9999; display: flex;
+            background: var(--lg-bg); color: var(--lg-ink);
+            font-family: 'Outfit','Plus Jakarta Sans','Segoe UI',sans-serif;
+            overflow-y: auto; -webkit-overflow-scrolling: touch;
         }
-        .login-box { width: 400px; padding: 40px; text-align: center; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        body.theme-orange #login-screen { --lg-d:#7c2d12; --lg-m:#ea580c; --lg-l:#fdba74; --lg-bg:#fff8f1; --lg-ink:#3b1a0a; --lg-mute:#8a6a58; --lg-line:#f3dccb; }
+        body.theme-green  #login-screen { --lg-d:#064e3b; --lg-m:#059669; --lg-l:#6ee7b7; --lg-bg:#f2fbf6; --lg-ink:#0b2e22; --lg-mute:#5a7f6f; --lg-line:#cfe9dc; }
+        body.theme-red    #login-screen { --lg-d:#7f1d1d; --lg-m:#be123c; --lg-l:#fda4af; --lg-bg:#fff5f6; --lg-ink:#3b0d14; --lg-mute:#8a5f66; --lg-line:#f3d3d8; }
+        body.theme-pink   #login-screen { --lg-d:#831843; --lg-m:#db2777; --lg-l:#f9a8d4; --lg-bg:#fff5f9; --lg-ink:#3d0f26; --lg-mute:#8a5f73; --lg-line:#f3d3e2; }
+        #login-screen *, #login-screen *::before, #login-screen *::after { box-sizing: border-box; }
+        #login-screen input { user-select: text; -webkit-user-select: text; }
+
+        .lg-wrap { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); width: 100%; min-height: 100%; }
+
+        /* ---- Sol: marka paneli ---- */
+        .lg-brand {
+            position: relative; overflow: hidden; color: #fff; padding: 44px 52px 0;
+            display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh;
+            background: linear-gradient(155deg, var(--lg-d) 0%, color-mix(in srgb, var(--lg-d) 55%, var(--lg-m)) 55%, var(--lg-m) 100%);
+        }
+        .lg-brand::before { /* ince nokta ızgarası */
+            content: ""; position: absolute; inset: 0; opacity: .5; pointer-events: none;
+            background-image: radial-gradient(rgba(255,255,255,.14) 1px, transparent 1.4px); background-size: 22px 22px;
+            -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 70%); mask-image: linear-gradient(180deg, #000 0%, transparent 70%);
+        }
+        .lg-blob { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .55; pointer-events: none; animation: lgFloat 14s ease-in-out infinite; }
+        .lg-blob.b1 { width: 380px; height: 380px; background: var(--lg-l); top: -120px; right: -100px; }
+        .lg-blob.b2 { width: 300px; height: 300px; background: #ffffff; opacity: .16; bottom: 120px; left: -120px; animation-delay: -6s; }
+        @keyframes lgFloat { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-28px,22px) scale(1.08); } }
+
+        .lg-brand-top { position: relative; display: flex; align-items: center; gap: 14px; z-index: 2; }
+        .lg-logo { width: 52px; height: 52px; border-radius: 16px; background: rgba(255,255,255,.95); display: grid; place-items: center; overflow: hidden; flex-shrink: 0; box-shadow: 0 8px 22px rgba(0,0,0,.2); }
+        .lg-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .lg-logo svg { width: 28px; height: 28px; color: var(--lg-m); }
+        .lg-brand-name { font-weight: 800; font-size: 17px; letter-spacing: .6px; line-height: 1.2; max-width: 360px; }
+        .lg-brand-name span { display: block; font-weight: 500; font-size: 12.5px; letter-spacing: .3px; opacity: .8; margin-top: 3px; }
+
+        .lg-hero { position: relative; z-index: 2; margin-top: auto; padding-bottom: 36px; max-width: 520px; }
+        .lg-kicker { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); margin-bottom: 18px; }
+        .lg-headline { font-size: clamp(30px, 3.4vw, 46px); font-weight: 800; line-height: 1.08; letter-spacing: -.5px; }
+        .lg-headline em { font-style: normal; color: var(--lg-l); }
+        .lg-lead { font-size: 16px; line-height: 1.55; opacity: .86; margin: 16px 0 26px; max-width: 440px; }
+        .lg-feats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .lg-feats li { display: flex; align-items: center; gap: 11px; padding: 11px 13px; border-radius: 14px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); font-size: 13.5px; font-weight: 700; line-height: 1.2; }
+        .lg-feats li small { display: block; font-weight: 400; opacity: .75; font-size: 11.5px; margin-top: 2px; }
+        .lg-feats svg { width: 22px; height: 22px; flex-shrink: 0; color: var(--lg-l); }
+
+
+        /* ---- Sağ: form paneli ---- */
+        .lg-formside { display: flex; align-items: center; justify-content: center; padding: 40px 28px; position: relative; }
+        .lg-card { width: 100%; max-width: 410px; }
+        .lg-section { animation: lgIn .45s cubic-bezier(.2,.8,.2,1) both; }
+        @keyframes lgIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        .lg-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--lg-m); margin-bottom: 12px; }
+        .lg-eyebrow::before { content: ""; width: 22px; height: 2px; border-radius: 2px; background: var(--lg-m); }
+        .lg-title { font-size: 34px; font-weight: 800; letter-spacing: -.6px; line-height: 1.1; color: var(--lg-ink); margin: 0 0 8px; }
+        .lg-sub { font-size: 15px; color: var(--lg-mute); line-height: 1.5; margin: 0 0 26px; }
+
+        .lg-msg { display: none; padding: 11px 14px; border-radius: 12px; font-size: 13.5px; font-weight: 600; line-height: 1.4; margin-bottom: 16px; }
+        .lg-msg.err { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; animation: lgShake .4s; }
+        .lg-msg.ok  { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+        @keyframes lgShake { 20%,60% { transform: translateX(-5px); } 40%,80% { transform: translateX(5px); } }
+
+        .lg-field { margin-bottom: 15px; }
+        .lg-field label.lg-lab { display: block; font-size: 13px; font-weight: 700; color: var(--lg-ink); margin-bottom: 7px; }
+        .lg-inp { position: relative; }
+        .lg-inp > svg.lg-ic { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--lg-mute); pointer-events: none; transition: color .2s; }
+        .lg-inp input {
+            width: 100%; height: 52px; padding: 0 16px 0 44px; font: inherit; font-size: 15.5px; font-weight: 500; color: var(--lg-ink);
+            background: #fff; border: 1.5px solid var(--lg-line); border-radius: 14px; outline: none; margin: 0; box-shadow: 0 1px 2px rgba(0,0,0,.03);
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .lg-inp input::placeholder { color: #9db3c1; font-weight: 400; }
+        .lg-inp input:hover { border-color: color-mix(in srgb, var(--lg-m) 45%, var(--lg-line)); }
+        .lg-inp input:focus { border-color: var(--lg-m); box-shadow: 0 0 0 4px color-mix(in srgb, var(--lg-m) 18%, transparent); }
+        .lg-inp:focus-within > svg.lg-ic { color: var(--lg-m); }
+        .lg-inp.has-eye input { padding-right: 50px; }
+        .lg-eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 0; background: transparent; border-radius: 10px; color: var(--lg-mute); cursor: pointer; display: grid; place-items: center; padding: 0; }
+        .lg-eye:hover { background: color-mix(in srgb, var(--lg-m) 10%, transparent); color: var(--lg-m); }
+        .lg-eye svg { width: 20px; height: 20px; }
+        .lg-eye .off { display: none; } .lg-eye.on .off { display: block; } .lg-eye.on .show { display: none; }
+        .lg-caps { display: none; font-size: 12px; font-weight: 700; color: #b45309; margin-top: 6px; }
+
+        .lg-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 4px 0 20px; }
+        .lg-check { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 600; color: var(--lg-ink); cursor: pointer; }
+        .lg-check input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .lg-box { width: 20px; height: 20px; border-radius: 6px; border: 1.8px solid var(--lg-line); background: #fff; display: grid; place-items: center; transition: all .18s; flex-shrink: 0; }
+        .lg-box svg { width: 13px; height: 13px; color: #fff; opacity: 0; transform: scale(.5); transition: all .18s; }
+        .lg-check input:checked + .lg-box { background: var(--lg-m); border-color: var(--lg-m); }
+        .lg-check input:checked + .lg-box svg { opacity: 1; transform: none; }
+        .lg-check input:focus-visible + .lg-box { box-shadow: 0 0 0 4px color-mix(in srgb, var(--lg-m) 22%, transparent); }
+        .lg-link { background: none; border: 0; padding: 0; font: inherit; font-size: 13.5px; font-weight: 700; color: var(--lg-m); cursor: pointer; }
+        .lg-link:hover { text-decoration: underline; }
+        .lg-hint { display: none; font-size: 13px; line-height: 1.5; color: var(--lg-mute); background: color-mix(in srgb, var(--lg-m) 7%, #fff); border: 1px dashed color-mix(in srgb, var(--lg-m) 35%, var(--lg-line)); border-radius: 12px; padding: 10px 13px; margin: -8px 0 18px; }
+
+        .lg-btn {
+            width: 100%; height: 54px; border: 0; border-radius: 14px; cursor: pointer; font: inherit; font-size: 16px; font-weight: 800; letter-spacing: .2px; color: #fff;
+            display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; overflow: hidden;
+            background: linear-gradient(135deg, var(--lg-m), color-mix(in srgb, var(--lg-m) 60%, var(--lg-d)));
+            box-shadow: 0 10px 24px color-mix(in srgb, var(--lg-m) 38%, transparent), inset 0 1px 0 rgba(255,255,255,.25);
+            transition: transform .15s, box-shadow .2s, filter .2s;
+        }
+        .lg-btn::after { content: ""; position: absolute; top: 0; left: -80%; width: 50%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent); transform: skewX(-20deg); transition: left .6s; }
+        .lg-btn:hover { transform: translateY(-1px); filter: brightness(1.05); box-shadow: 0 14px 30px color-mix(in srgb, var(--lg-m) 45%, transparent), inset 0 1px 0 rgba(255,255,255,.25); }
+        .lg-btn:hover::after { left: 130%; }
+        .lg-btn:active { transform: translateY(1px) scale(.99); }
+        .lg-btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--lg-m) 40%, transparent); outline-offset: 3px; }
+        .lg-btn svg { width: 19px; height: 19px; transition: transform .2s; }
+        .lg-btn:hover svg { transform: translateX(3px); }
+        .lg-btn.alt { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 10px 24px rgba(22,163,74,.32), inset 0 1px 0 rgba(255,255,255,.25); }
+
+        .lg-switch { text-align: center; font-size: 14.5px; color: var(--lg-mute); margin-top: 24px; }
+        .lg-foot { text-align: center; font-size: 12px; color: var(--lg-mute); opacity: .8; margin-top: 30px; }
+
+        /* ---- Mobil / dar ekran ---- */
+        @media (max-width: 880px) {
+            .lg-wrap { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+            .lg-brand { min-height: 0; padding: calc(22px + env(safe-area-inset-top, 0px)) 22px 0; }
+            .lg-hero, .lg-brand .lg-feats, .lg-brand .lg-lead { display: none; }
+            .lg-brand-name { font-size: 14px; letter-spacing: .4px; }
+            .lg-logo { width: 46px; height: 46px; border-radius: 14px; }
+            .lg-scape { height: 120px; width: calc(100% + 44px); margin: 10px -22px 0; }
+            .lg-formside { align-items: flex-start; padding: 6px 20px calc(30px + env(safe-area-inset-bottom, 0px)); margin-top: -22px; z-index: 3; }
+            .lg-card { background: var(--lg-bg); border-radius: 26px; padding: 26px 20px 18px; box-shadow: 0 -10px 40px rgba(0,0,0,.12); max-width: 480px; }
+            .lg-title { font-size: 28px; }
+            .lg-sub { margin-bottom: 20px; }
+            .lg-inp input { font-size: 16px; } /* iOS yakınlaştırmayı engeller */
+        }
+        @media (max-width: 880px) and (max-height: 640px) { .lg-scape { display: none; } .lg-formside { margin-top: 0; } }
+
+        /* ===== Animasyon katmanı ===== */
+        #login-screen { --mx: 0; --my: 0; }
+        .lg-brand { background-size: 190% 190%; animation: lgShift 18s ease-in-out infinite alternate; }
+        @keyframes lgShift { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
+        .lg-blob { transform: translate(calc(var(--mx) * -22px), calc(var(--my) * -16px)); }
+        .lg-blob.b3 { width: 220px; height: 220px; background: var(--lg-l); opacity: .28; top: 38%; left: 46%; animation-duration: 19s; animation-delay: -3s; }
+        .lg-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+        .lg-p { position: absolute; bottom: -12px; left: var(--x); width: var(--s); height: var(--s); border-radius: 50%; background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 72%); opacity: 0; animation: lgRise var(--t) linear var(--dl) infinite; }
+        @keyframes lgRise { 0% { transform: translate(0,0); opacity: 0; } 12% { opacity: .95; } 85% { opacity: .6; } 100% { transform: translate(var(--dx), -105vh); opacity: 0; } }
+        .lg-fall { position: absolute; top: -34px; left: var(--x); width: var(--s); height: var(--s); color: var(--lg-l); opacity: 0; animation: lgFall var(--t) linear var(--dl) infinite; }
+        @keyframes lgFall { 0% { transform: translate(0,-30px) rotate(0); opacity: 0; } 10% { opacity: .6; } 90% { opacity: .45; } 100% { transform: translate(var(--dx), 108vh) rotate(560deg); opacity: 0; } }
+
+        .lg-logo { position: relative; }
+        .lg-logo::after { content: ""; position: absolute; inset: -2px; border-radius: 18px; border: 2px solid rgba(255,255,255,.7); animation: lgRing 2.8s ease-out infinite; pointer-events: none; }
+        @keyframes lgRing { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(1.55); opacity: 0; } }
+        .lg-brand-top { animation: lgDown .8s cubic-bezier(.2,.8,.2,1) both; }
+        @keyframes lgDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+        @keyframes lgUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+        .lg-hero > * { animation: lgUp .85s cubic-bezier(.2,.8,.2,1) both; }
+        .lg-hero > :nth-child(1) { animation-delay: .15s; } .lg-hero > :nth-child(2) { animation-delay: .27s; }
+        .lg-hero > :nth-child(3) { animation-delay: .39s; } .lg-hero > :nth-child(4) { animation-delay: .5s; } .lg-hero > :nth-child(5) { animation-delay: .6s; }
+        .lg-headline em { background: linear-gradient(90deg, var(--lg-l), #fff, var(--lg-l)); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: lgShine 5s linear infinite; }
+        @keyframes lgShine { from { background-position: 0% 0; } to { background-position: 220% 0; } }
+        .lg-live { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #4ade80; margin-right: 8px; box-shadow: 0 0 0 0 rgba(74,222,128,.7); animation: lgPing 1.8s ease-out infinite; vertical-align: 1px; }
+        @keyframes lgPing { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,.7); } 100% { box-shadow: 0 0 0 10px rgba(74,222,128,0); } }
+        .lg-type-row { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; margin: 14px 0 0; opacity: .95; min-height: 24px; }
+        .lg-type-row span { opacity: .75; font-weight: 500; }
+        .lg-type { color: var(--lg-l); font-weight: 800; border-right: 2px solid var(--lg-l); padding-right: 3px; animation: lgCaret .8s steps(1) infinite; }
+        @keyframes lgCaret { 50% { border-color: transparent; } }
+        .lg-lead { margin-top: 12px; }
+        .lg-feats li { animation: lgUp .7s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(.7s + var(--i) * .1s); transition: transform .25s, background .25s, border-color .25s; }
+        .lg-feats li:hover { transform: translateY(-3px); background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.4); }
+        .lg-feats li svg { transition: transform .35s cubic-bezier(.3,1.6,.4,1); }
+        .lg-feats li:hover svg { transform: scale(1.2) rotate(-8deg); }
+
+        /* Sahne */
+        .lg-scape { position: relative; z-index: 2; display: block; width: calc(100% + 104px); margin: 0 -52px; height: clamp(150px, 29vh, 270px); flex-shrink: 0; }
+        .lg-par { transition: transform .35s ease-out; }
+        .lg-par.pa { transform: translate(calc(var(--mx) * -3px), calc(var(--my) * -2px)); }
+        .lg-par.pb { transform: translate(calc(var(--mx) * -7px), calc(var(--my) * -3px)); }
+        .lg-par.pc { transform: translate(calc(var(--mx) * -12px), calc(var(--my) * -4px)); }
+        .lg-par.pd { transform: translate(calc(var(--mx) * -20px), calc(var(--my) * -5px)); }
+        .lg-rays { transform-box: fill-box; transform-origin: center; animation: lgSpin 36s linear infinite; }
+        @keyframes lgSpin { to { transform: rotate(360deg); } }
+        .lg-sunglow { transform-box: fill-box; transform-origin: center; animation: lgBreath 4.5s ease-in-out infinite; }
+        @keyframes lgBreath { 0%,100% { transform: scale(.92); opacity: .8; } 50% { transform: scale(1.12); opacity: 1; } }
+        .lg-cloud { animation: lgDrift 46s linear infinite; }
+        .lg-cloud.c2 { animation-duration: 64s; animation-delay: -28s; }
+        .lg-cloud.c1 { animation-delay: -12s; }
+        @keyframes lgDrift { from { transform: translateX(-140px); } to { transform: translateX(700px); } }
+        .lg-glow { animation: lgPulse 3.6s ease-in-out infinite; }
+        @keyframes lgPulse { 0%,100% { opacity: .18; } 50% { opacity: .55; } }
+        .lg-sera { animation: lgFade 1.2s ease both .3s; }
+        @keyframes lgFade { from { opacity: 0; } to { opacity: 1; } }
+        .lg-plant { transform-box: fill-box; transform-origin: 50% 100%; animation: lgSway 5.5s ease-in-out infinite; animation-delay: calc(var(--d) + 2s); }
+        @keyframes lgSway { 0%,100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
+        .lg-stem { fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: lgDraw 1.3s cubic-bezier(.3,.7,.2,1) forwards; animation-delay: var(--d); }
+        @keyframes lgDraw { to { stroke-dashoffset: 0; } }
+        .lg-leaf, .lg-bud, .lg-flower { transform-box: fill-box; transform-origin: 100% 100%; transform: scale(0); animation: lgPop .75s cubic-bezier(.3,1.6,.4,1) forwards; animation-delay: calc(var(--d) + .85s); }
+        .lg-leaf.r { transform-origin: 0% 100%; }
+        .lg-bud, .lg-flower { transform-origin: center; animation-delay: calc(var(--d) + 1.15s); }
+        .lg-flower { animation-name: lgPop, lgSpin; animation-duration: .9s, 24s; animation-timing-function: cubic-bezier(.3,1.6,.4,1), linear; animation-iteration-count: 1, infinite; animation-delay: calc(var(--d) + 1.3s), calc(var(--d) + 2.3s); animation-fill-mode: forwards, none; }
+        @keyframes lgPop { from { transform: scale(0); } to { transform: scale(1); } }
+
+        /* Form tarafı */
+        .lg-formside::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(520px circle at var(--sx, 70%) var(--sy, 25%), color-mix(in srgb, var(--lg-m) 11%, transparent), transparent 62%); }
+        .lg-card { position: relative; z-index: 1; }
+        .lg-section { animation: none; }
+        .lg-section > * { animation: lgUp .65s cubic-bezier(.2,.8,.2,1) both; }
+        .lg-section > :nth-child(1) { animation-delay: .05s; } .lg-section > :nth-child(2) { animation-delay: .11s; } .lg-section > :nth-child(3) { animation-delay: .17s; }
+        .lg-section > :nth-child(4) { animation-delay: .23s; } .lg-section > :nth-child(5) { animation-delay: .29s; } .lg-section > :nth-child(6) { animation-delay: .35s; }
+        .lg-section > :nth-child(7) { animation-delay: .41s; } .lg-section > :nth-child(8) { animation-delay: .47s; } .lg-section > :nth-child(9) { animation-delay: .53s; } .lg-section > :nth-child(10) { animation-delay: .59s; }
+        .lg-eyebrow::before { transform-origin: left; animation: lgGrowX .8s cubic-bezier(.2,.8,.2,1) .25s both; }
+        @keyframes lgGrowX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        .lg-inp > svg.lg-ic { transition: color .2s, transform .3s cubic-bezier(.3,1.6,.4,1); }
+        .lg-inp:focus-within > svg.lg-ic { transform: translateY(-50%) scale(1.18); }
+        .lg-inp input { transition: border-color .2s, box-shadow .25s, transform .2s; }
+        .lg-inp input:focus { transform: translateY(-1px); }
+        .lg-btn .lg-btn-t { position: relative; z-index: 1; }
+        .lg-ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,.5); transform: scale(0); animation: lgRipple .65s ease-out forwards; pointer-events: none; }
+        @keyframes lgRipple { to { transform: scale(1); opacity: 0; } }
+        .lg-spin { display: none; width: 22px; height: 22px; border: 3px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: lgRot .7s linear infinite; }
+        @keyframes lgRot { to { transform: rotate(360deg); } }
+        .lg-btn.loading { pointer-events: none; filter: saturate(.9); }
+        .lg-btn.loading .lg-btn-t, .lg-btn.loading > svg { display: none; }
+        .lg-btn.loading .lg-spin { display: block; }
+        .lg-card.lg-shake { animation: lgShakeC .5s cubic-bezier(.36,.07,.19,.97); }
+        @keyframes lgShakeC { 10%,90% { transform: translateX(-2px); } 20%,80% { transform: translateX(4px); } 30%,50%,70% { transform: translateX(-7px); } 40%,60% { transform: translateX(7px); } }
+        .lg-hint { animation: lgUp .35s ease both; }
+        .lg-banner-wrap { position: relative; width: 100%; max-width: 340px; margin: 0 auto 26px; padding: 10px; border-radius: 28px; background: linear-gradient(145deg, #ffffff, color-mix(in srgb, var(--lg-l) 14%, #ffffff)); border: 1px solid var(--lg-line); box-shadow: 0 1px 0 #fff inset, 0 2px 4px color-mix(in srgb, var(--lg-d) 8%, transparent), 0 22px 44px -22px color-mix(in srgb, var(--lg-d) 45%, transparent); overflow: hidden; isolation: isolate; animation: lgUp .8s cubic-bezier(.2,.8,.2,1) both; }
+        .lg-banner-wrap::before { content: ""; position: absolute; inset: -40% -20% auto auto; width: 70%; height: 90%; background: radial-gradient(closest-side, color-mix(in srgb, var(--lg-l) 38%, transparent), transparent); z-index: -1; pointer-events: none; }
+        .lg-banner-wrap::after { content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-18deg); animation: lgBannerShine 6.5s ease-in-out 1.4s infinite; pointer-events: none; }
+        @keyframes lgBannerShine { 0%, 62% { left: -60%; } 100% { left: 140%; } }
+        .lg-banner { display: block; width: 100%; height: auto; border-radius: 19px; image-rendering: auto; }
+        @media (max-width: 880px) { .lg-banner-wrap { max-width: 300px; margin-bottom: 20px; border-radius: 24px; } .lg-banner { border-radius: 15px; } }
+        @media (min-width: 881px) and (max-height: 760px) { .lg-banner-wrap { max-width: 250px; margin-bottom: 16px; padding: 8px; border-radius: 22px; } .lg-banner { border-radius: 15px; } }
+        @media (prefers-reduced-motion: reduce) { .lg-banner-wrap::after { display: none; } }
+
+          /* Başarılı girişte kapılar açılır */
+        #login-screen.lg-leaving { background: transparent; overflow: hidden; pointer-events: none; }
+        #login-screen.lg-leaving .lg-brand { transform: translateX(-102%); transition: transform .72s cubic-bezier(.7,0,.2,1); }
+        #login-screen.lg-leaving .lg-formside { transform: translateX(102%); transition: transform .72s cubic-bezier(.7,0,.2,1); background: var(--lg-bg); }
+        @media (max-width: 880px) {
+            #login-screen.lg-leaving .lg-brand { transform: translateY(-102%); }
+            #login-screen.lg-leaving .lg-formside { transform: translateY(102%); }
+            .lg-p:nth-child(n+9) { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #login-screen *, #login-screen *::before, #login-screen *::after { animation: none !important; transition: none !important; }
+            .lg-stem { stroke-dashoffset: 0; } .lg-leaf, .lg-bud, .lg-flower { transform: scale(1); }
+            .lg-particles { display: none; }
+        }
         
         .form-message { padding: 10px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; font-size: 13px; display: none; }
         .form-error { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
@@ -538,9 +779,6 @@
         body.theme-orange { 
             background: radial-gradient(circle at top left, #fffaf0 0%, #ffedd5 35%, #fed7aa 65%, #fb923c 90%, #d97706 100%) !important; 
             color: #78350f !important; 
-        }
-        body.theme-orange #login-screen { 
-            background: radial-gradient(circle at top left, rgba(255, 250, 240, 0.9) 0%, rgba(255, 237, 213, 0.92) 40%, rgba(251, 146, 60, 0.95) 100%) !important; 
         }
         body.theme-orange h1, body.theme-orange h2, body.theme-orange h3, body.theme-orange .modern-header-title { color: #9a3412 !important; }
         body.theme-orange .tab-btn { color: #9a3412 !important; }
@@ -581,9 +819,6 @@
             background: radial-gradient(circle at top left, #ecfdf5 0%, #a7f3d0 35%, #6ee7b7 65%, #34d399 90%, #059669 100%) !important; 
             color: #064e3b !important; 
         }
-        body.theme-green #login-screen { 
-            background: radial-gradient(circle at top left, rgba(236, 253, 245, 0.9) 0%, rgba(167, 243, 208, 0.92) 40%, rgba(52, 211, 153, 0.95) 100%) !important; 
-        }
         body.theme-green h1, body.theme-green h2, body.theme-green h3, body.theme-green .modern-header-title { color: #065f46 !important; }
         body.theme-green .tab-btn { color: #065f46 !important; }
         body.theme-green .tab-btn.active {
@@ -623,9 +858,6 @@
             background: radial-gradient(circle at top left, #fff1f2 0%, #ffe4e6 35%, #fecdd3 65%, #f43f5e 90%, #9f1239 100%) !important; 
             color: #4c0519 !important; 
         }
-        body.theme-red #login-screen { 
-            background: radial-gradient(circle at top left, rgba(255, 241, 242, 0.9) 0%, rgba(254, 205, 211, 0.92) 40%, rgba(244, 63, 94, 0.95) 100%) !important; 
-        }
         body.theme-red h1, body.theme-red h2, body.theme-red h3, body.theme-red .modern-header-title { color: #9f1239 !important; }
         body.theme-red .tab-btn { color: #9f1239 !important; }
         body.theme-red .tab-btn.active {
@@ -664,9 +896,6 @@
         body.theme-pink { 
             background: radial-gradient(circle at top left, #fff1f5 0%, #fce7f0 35%, #f7c5d9 65%, #f19cb8 90%, #d87093 100%) !important; 
             color: #6b2144 !important; 
-        }
-        body.theme-pink #login-screen { 
-            background: radial-gradient(circle at top left, rgba(255, 241, 245, 0.9) 0%, rgba(252, 231, 240, 0.92) 40%, rgba(241, 156, 184, 0.95) 100%) !important; 
         }
         body.theme-pink h1, body.theme-pink h2, body.theme-pink h3, body.theme-pink .modern-header-title { color: #831843 !important; }
         body.theme-pink .tab-btn { color: #831843 !important; }
@@ -2171,37 +2400,6 @@
                 font-size: 17px !important;
             }
 
-            /* Login & Register Ekranı */
-            #login-screen {
-                padding: 15px !important;
-            }
-            .login-box {
-                width: 100% !important;
-                max-width: 360px !important;
-                padding: 22px 16px !important;
-                border-radius: 18px !important;
-            }
-            .login-box img {
-                width: 220px !important;
-                max-width: 100% !important;
-                height: auto !important;
-                margin-bottom: 10px !important;
-            }
-            .login-box h1 {
-                font-size: 20px !important;
-            }
-            .login-box p {
-                font-size: 12.5px !important;
-            }
-            .login-box .aero-input {
-                font-size: 16px !important; /* iOS Safari zoom engelleme */
-                padding: 12px 14px !important;
-            }
-            .login-box button {
-                padding: 12px !important;
-                font-size: 15px !important;
-            }
-
             /* Alt Bilgi Çubuğu */
             .bottom-bar {
                 height: 34px !important;
@@ -3193,6 +3391,121 @@
             .pb-top .pb-badge, .pb-top.pb-edge .pb-badge, .bokashi-title-row .pb-badge, .pb-right .pb-badge{--pb-h:64px;margin:4px auto 0 !important;align-self:center;max-width:70% !important}
         }
         @media print{ .pb-badge{display:none} }
+    
+        /* =========================================================
+           🌿 FRESH ARAYÜZ — giriş ekranıyla uyumlu 3. görünüm modu
+           (Yan menü düzenini kullanır: body.ui-modern.ui-fresh)
+           ========================================================= */
+        body.ui-fresh {
+            --fr-d:#063a5a; --fr-m:#0288d1; --fr-l:#4fc3f7; --fr-bg:#f3f9fd; --fr-ink:#0b2a3d; --fr-mute:#5b7a8e; --fr-line:#d6e6f0;
+            --fr-shadow: 0 1px 2px rgba(11,42,61,.04), 0 10px 28px -14px rgba(11,42,61,.18);
+        }
+        body.theme-orange.ui-fresh { --fr-d:#7c2d12; --fr-m:#ea580c; --fr-l:#fdba74; --fr-bg:#fff8f1; --fr-ink:#3b1a0a; --fr-mute:#8a6a58; --fr-line:#f3dccb; }
+        body.theme-green.ui-fresh  { --fr-d:#064e3b; --fr-m:#059669; --fr-l:#6ee7b7; --fr-bg:#f2fbf6; --fr-ink:#0b2e22; --fr-mute:#5a7f6f; --fr-line:#cfe9dc; }
+        body.theme-red.ui-fresh    { --fr-d:#7f1d1d; --fr-m:#be123c; --fr-l:#fda4af; --fr-bg:#fff5f6; --fr-ink:#3b0d14; --fr-mute:#8a5f66; --fr-line:#f3d3d8; }
+        body.theme-pink.ui-fresh   { --fr-d:#831843; --fr-m:#db2777; --fr-l:#f9a8d4; --fr-bg:#fff5f9; --fr-ink:#3d0f26; --fr-mute:#8a5f73; --fr-line:#f3d3e2; }
+
+        body.ui-modern.ui-fresh { background: var(--fr-bg) !important; color: var(--fr-ink) !important; }
+        body.ui-modern.ui-fresh .ambient-orbs-container { display: none !important; }
+
+        /* Üst bar */
+        body.ui-modern.ui-fresh #modern-top-header {
+            background: #fff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+            border: 1px solid var(--fr-line) !important; box-shadow: var(--fr-shadow) !important;
+        }
+        body.ui-modern.ui-fresh #modern-top-header .mh-title h1,
+        body.ui-modern.ui-fresh #modern-top-header .modern-header-title { color: var(--fr-ink) !important; text-shadow: none !important; letter-spacing: -.2px; }
+        body.ui-modern.ui-fresh #modern-top-header .mh-sub { color: var(--fr-mute) !important; }
+        body.ui-modern.ui-fresh #modern-top-header .aero-btn {
+            background: #fff !important; color: var(--fr-ink) !important; border: 1.5px solid var(--fr-line) !important;
+            border-radius: 12px !important; box-shadow: none !important; text-shadow: none !important;
+        }
+        body.ui-modern.ui-fresh #modern-top-header .aero-btn:hover { border-color: var(--fr-m) !important; color: var(--fr-m) !important; }
+        body.ui-modern.ui-fresh #modern-top-header .modern-header-user-card {
+            background: color-mix(in srgb, var(--fr-m) 7%, #fff) !important; border: 1px solid var(--fr-line) !important; box-shadow: none !important; color: var(--fr-ink) !important;
+        }
+
+        /* Yan menü: giriş ekranındaki marka paneli gibi */
+        body.ui-modern.ui-fresh #main-sidebar {
+            background:
+                radial-gradient(rgba(255,255,255,.12) 1px, transparent 1.4px) 0 0 / 22px 22px,
+                linear-gradient(165deg, var(--fr-d) 0%, color-mix(in srgb, var(--fr-d) 55%, var(--fr-m)) 55%, var(--fr-m) 100%) !important;
+            backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+            border: 0 !important; color: #fff !important;
+            box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--fr-d) 70%, transparent) !important;
+        }
+        body.ui-modern.ui-fresh #main-sidebar .nav-link .sidebar-hide-on-collapse { color: inherit !important; }
+        body.ui-modern.ui-fresh #main-sidebar .sb-foot { border-top-color: rgba(255,255,255,.2) !important; }
+        body.ui-modern.ui-fresh #main-sidebar .sb-foot-btn {
+            background: rgba(255,255,255,.12) !important; color: #fff !important; border: 1px solid rgba(255,255,255,.26) !important;
+            box-shadow: none !important; text-shadow: none !important; border-radius: 12px !important;
+        }
+        body.ui-modern.ui-fresh #main-sidebar .sb-foot-btn:hover { background: rgba(255,255,255,.22) !important; }
+        body.ui-modern.ui-fresh #main-sidebar .sb-foot-logout { background: rgba(239,68,68,.85) !important; border-color: rgba(255,255,255,.35) !important; }
+        body.ui-modern.ui-fresh #main-sidebar .sb-foot-logout:hover { background: #ef4444 !important; }
+        body.ui-modern.ui-fresh #main-sidebar .sb-foot-btn span { color: inherit !important; text-shadow: none !important; }
+
+        /* Renkli düğme varyantları: düz, modern tonlar */
+        body.ui-modern.ui-fresh .main-content .aero-btn.btn-green  { background: linear-gradient(135deg,#22c55e,#15803d) !important; color:#fff !important; border:0 !important; box-shadow: 0 8px 18px -8px rgba(22,163,74,.6) !important; }
+        body.ui-modern.ui-fresh .main-content .aero-btn.btn-red    { background: linear-gradient(135deg,#f43f5e,#be123c) !important; color:#fff !important; border:0 !important; box-shadow: 0 8px 18px -8px rgba(225,29,72,.55) !important; }
+        body.ui-modern.ui-fresh .main-content .aero-btn.btn-orange { background: linear-gradient(135deg,#fb923c,#ea580c) !important; color:#fff !important; border:0 !important; box-shadow: 0 8px 18px -8px rgba(234,88,12,.55) !important; }
+        body.ui-modern.ui-fresh .main-content .aero-btn.btn-yellow { background: linear-gradient(135deg,#fcd34d,#f59e0b) !important; color:#422006 !important; border:0 !important; box-shadow: 0 8px 18px -8px rgba(245,158,11,.55) !important; }
+        body.ui-modern.ui-fresh .main-content .aero-btn.btn-purple { background: linear-gradient(135deg,#a78bfa,#7c3aed) !important; color:#fff !important; border:0 !important; box-shadow: 0 8px 18px -8px rgba(124,58,237,.55) !important; }
+        body.ui-modern.ui-fresh .main-content .aero-btn.btn-pink   { background: linear-gradient(135deg,#f472b6,#db2777) !important; color:#fff !important; border:0 !important; box-shadow: 0 8px 18px -8px rgba(219,39,119,.55) !important; }
+        body.ui-modern.ui-fresh #main-sidebar .nav-link { color: rgba(255,255,255,.9) !important; background: transparent !important; }
+        body.ui-modern.ui-fresh #main-sidebar .nav-link:hover { background: rgba(255,255,255,.14) !important; transform: translateX(2px); }
+        body.ui-modern.ui-fresh #main-sidebar .nav-link.active {
+            background: #fff !important; color: var(--fr-m) !important; font-weight: 800 !important;
+            box-shadow: 0 8px 20px -8px rgba(0,0,0,.35) !important;
+        }
+        body.ui-modern.ui-fresh #main-sidebar .aero-btn {
+            background: rgba(255,255,255,.14) !important; color: #fff !important; border: 1px solid rgba(255,255,255,.28) !important;
+            box-shadow: none !important; text-shadow: none !important; border-radius: 12px !important;
+        }
+        body.ui-modern.ui-fresh #main-sidebar .aero-btn:hover { background: rgba(255,255,255,.24) !important; }
+
+        /* İçerik alanı ve kartlar */
+        body.ui-modern.ui-fresh .main-content {
+            background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+            border: 0 !important; box-shadow: none !important;
+        }
+        body.ui-modern.ui-fresh .card,
+        body.ui-modern.ui-fresh .kpi-card,
+        body.ui-modern.ui-fresh .aero-glass:not(#modern-top-header):not(#main-sidebar),
+        body.ui-modern.ui-fresh #profile-modal > .glass {
+            background: #fff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+            border: 1px solid var(--fr-line) !important; box-shadow: var(--fr-shadow) !important; border-radius: 18px !important;
+        }
+        body.ui-modern.ui-fresh .kpi-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--fr-m) 45%, var(--fr-line)) !important; }
+        body.ui-modern.ui-fresh .main-content h1,
+        body.ui-modern.ui-fresh .main-content h2,
+        body.ui-modern.ui-fresh .main-content h3 { color: var(--fr-ink) !important; text-shadow: none !important; letter-spacing: -.2px; }
+
+        /* Form elemanları */
+        body.ui-modern.ui-fresh .aero-input, body.ui-modern.ui-fresh select.aero-input, body.ui-modern.ui-fresh textarea.aero-input {
+            background: #fff !important; color: var(--fr-ink) !important; border: 1.5px solid var(--fr-line) !important;
+            border-radius: 12px !important; box-shadow: none !important; transition: border-color .2s, box-shadow .2s;
+        }
+        body.ui-modern.ui-fresh .aero-input:focus { border-color: var(--fr-m) !important; box-shadow: 0 0 0 4px color-mix(in srgb, var(--fr-m) 18%, transparent) !important; outline: none; }
+
+        /* Düğmeler: ana düğme giriş ekranındaki gibi; renkli varyantlar (btn-*) kendi rengini korur */
+        body.ui-modern.ui-fresh .main-content .aero-btn:not([class*="btn-"]) {
+            background: linear-gradient(135deg, var(--fr-m), color-mix(in srgb, var(--fr-m) 60%, var(--fr-d))) !important;
+            color: #fff !important; border: 0 !important; border-radius: 12px !important; text-shadow: none !important;
+            box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--fr-m) 65%, transparent), inset 0 1px 0 rgba(255,255,255,.25) !important;
+        }
+        body.ui-modern.ui-fresh .main-content .aero-btn[class*="btn-"] { border-radius: 12px !important; text-shadow: none !important; }
+        body.ui-modern.ui-fresh .main-content .aero-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+
+        /* Tablolar */
+        body.ui-modern.ui-fresh .main-content th { background: color-mix(in srgb, var(--fr-m) 9%, #fff) !important; color: var(--fr-ink) !important; }
+        body.ui-modern.ui-fresh .main-content td { border-color: var(--fr-line) !important; }
+        body.ui-modern.ui-fresh .table-container { border: 1px solid var(--fr-line); border-radius: 14px; overflow: auto; background: #fff; }
+
+        /* Alt bar */
+        body.ui-modern.ui-fresh .bottom-bar { background: #fff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border-top: 1px solid var(--fr-line) !important; box-shadow: none !important; }
+        body.ui-modern.ui-fresh .bottom-bar .ticker { color: var(--fr-mute) !important; }
+        body.ui-modern.ui-fresh .bottom-bar .clock-panel { background: color-mix(in srgb, var(--fr-m) 8%, #fff) !important; border: 1px solid var(--fr-line) !important; color: var(--fr-ink) !important; }
     </style>
 </head>
 <body>
@@ -3429,7 +3742,7 @@
     </script>
 
 
-    <script>try{var _v=localStorage.getItem('bkvUIVersion');if(_v==='modern'||_v==='classic'){document.body.classList.add('ui-'+_v);}}catch(e){}</script>
+    <script>try{var _v=localStorage.getItem('bkvUIVersion');if(_v==='modern'||_v==='classic'){document.body.classList.add('ui-'+_v);}else if(_v==='fresh'){document.body.classList.add('ui-modern','ui-fresh');}}catch(e){}</script>
 
     <!-- Uygulama İçi Bildirim Toast Alanı -->
     <div id="app-toast-container"></div>
@@ -3494,13 +3807,16 @@
                 <h3 style="margin: 0 0 4px 0; font-size: 14.5px; color: #01579b; display: flex; align-items: center; gap: 6px;">
                     🖥️ Arayüz Görünümü & Modu
                 </h3>
-                <p style="margin: 0 0 10px 0; font-size: 12px; opacity: 0.8;">Klasik Frutiger Aero ile modern Aero 2.0 Komuta Merkezi arasında dilediğiniz an geçiş yapın.</p>
+                <p style="margin: 0 0 10px 0; font-size: 12px; opacity: 0.8;">Klasik Frutiger Aero, modern Aero 2.0 Komuta Merkezi ve giriş ekranıyla uyumlu Fresh görünümü arasında dilediğiniz an geçiş yapın.</p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="aero-btn ui-version-btn" data-version="classic" onclick="switchUIVersion('classic')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
                         <span>💎</span> <span>Klasik (Üst Menü)</span>
                     </button>
                     <button class="aero-btn ui-version-btn" data-version="modern" onclick="switchUIVersion('modern')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
                         <span>🚀</span> <span>Yan Menü (YENİ)</span>
+                    </button>
+                    <button class="aero-btn ui-version-btn" data-version="fresh" onclick="switchUIVersion('fresh')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
+                        <span>🌿</span> <span>Fresh (Giriş Teması)</span>
                     </button>
                 </div>
             </div>
@@ -3608,47 +3924,253 @@
     </div>
 
     <div id="login-screen">
-        <div class="login-box glass">
-           <div id="login-section">
-                <img src="Login Screen.png" alt="Logo" style="width: 350px; display: block; margin: 0 auto 15px auto; border-radius: 15px; max-width: 90%; height: auto;" onerror="this.style.display='none';">
-                <h1 style="color: #01579b; text-shadow: 2px 2px 4px rgba(255,255,255,0.9); margin-bottom: 5px;">SİSTEM GİRİŞİ</h1>
-                <p style="color: #0277bd; margin-top: 0; font-size: 14px; text-shadow: 1px 1px 2px rgba(255,255,255,0.9); font-weight: bold; margin-bottom: 20px;">Sürdürülebilir Tarım Kulübü Bilgi ve Yönetim Paneli</p>
-                
-                <div id="login-error" class="form-message form-error"></div>
+        <div class="lg-wrap">
 
-                <input type="email" id="login-email" class="aero-input" placeholder="📧 E-posta Adresi" style="margin-bottom: 10px; width: 100%;">
-                <input type="password" id="login-pass" class="aero-input" placeholder="🔑 Şifre" onkeypress="if(event.key === 'Enter') login()" style="margin-bottom: 10px; width: 100%;">
-                <label for="login-remember" style="display:flex; align-items:center; gap:8px; margin: 0 2px 14px 2px; font-size:13.5px; font-weight:700; color:#01579b; cursor:pointer; text-align:left;">
-                    <input type="checkbox" id="login-remember" class="task-checkbox" style="width:18px; height:18px; flex-shrink:0;">
-                    <span>🔐 Beni Hatırla</span>
-                </label>
-                <button class="aero-btn" style="width: 100%; font-size: 16px; padding: 15px;" onclick="login()">Giriş Yap</button>
-                
-                <div style="margin-top: 25px; font-size: 14px; color: #01579b; font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">
-                    Kulübümüze Katılmak İçin <span onclick="toggleForms()" style="color: #d84315; font-weight: 900; cursor: pointer; text-decoration: underline;">Kayıt Ol</span>
+            <!-- Sol: marka paneli -->
+            <aside class="lg-brand">
+                <div class="lg-blob b1"></div><div class="lg-blob b2"></div><div class="lg-blob b3"></div>
+                <div class="lg-particles" aria-hidden="true"></div>
+                <div class="lg-brand-top">
+                    <div class="lg-logo">
+                        <img src="Logo.jpg" alt="BKV Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <svg style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.5 6-7"/></svg>
+                    </div>
+                    <div class="lg-brand-name">BJK KABATAŞ VAKFI ÖZEL OKULLARI<span>Sürdürülebilir Tarım Kulübü</span></div>
                 </div>
-            </div>
 
-            <div id="register-section" class="hidden">
-                <img src="Login Screen.png" alt="Logo" style="width: 350px; display: block; margin: 0 auto 15px auto; border-radius: 15px; max-width: 90%; height: auto;" onerror="this.style.display='none';">
-                <h1 style="color: #01579b; text-shadow: 2px 2px 4px rgba(255,255,255,0.9); margin-bottom: 5px;">YENİ KAYIT</h1>
-                <p style="color: #0277bd; margin-top: 0; font-size: 14px; text-shadow: 1px 1px 2px rgba(255,255,255,0.9); font-weight: bold; margin-bottom: 20px;">Kulübe katılmak için bilgilerinizi girin.</p>
-                
-                <div id="reg-error" class="form-message form-error"></div>
-                <div id="reg-success" class="form-message form-success"></div>
-
-                <input type="text" id="reg-name" class="aero-input" placeholder="👤 Adınız Soyadınız" style="margin-bottom: 10px; width: 100%;">
-                <input type="text" id="reg-grade" class="aero-input" placeholder="🏫 Sınıf / Şube (Örn: 9-A, 10-B, Öğretmen)" style="margin-bottom: 10px; width: 100%;">
-                <input type="email" id="reg-email" class="aero-input" placeholder="📧 E-posta Adresi" style="margin-bottom: 10px; width: 100%;">
-                <input type="password" id="reg-pass" class="aero-input" placeholder="🔑 Şifre" onkeypress="if(event.key === 'Enter') registerUser()" style="margin-bottom: 15px; width: 100%;">
-                <button class="aero-btn btn-green" style="width: 100%; font-size: 16px; padding: 15px;" onclick="registerUser()">Kayıt Ol</button>
-                
-                <div style="margin-top: 25px; font-size: 14px; color: #01579b; font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">
-                    Zaten Üye Misin? <span onclick="toggleForms()" style="color: #d84315; font-weight: 900; cursor: pointer; text-decoration: underline;">Giriş Yap</span>
+                <div class="lg-hero">
+                    <div class="lg-kicker"><i class="lg-live"></i>Bilgi ve Yönetim Paneli</div>
+                    <div class="lg-headline" role="heading" aria-level="2">Toprağın, tohumun ve emeğin <em>tek panelde.</em></div>
+                    <div class="lg-type-row"><span>Şimdi takip et:</span><b class="lg-type">Bokashi Takip</b></div>
+                    <p class="lg-lead">Sera, bahçe, Bokashi ve ata tohumu çalışmalarını birlikte kaydet, takip et, paylaş.</p>
+                    <ul class="lg-feats">
+                        <li style="--i:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg><span>Bokashi Takip<small>Atığı değere dönüştür</small></span></li>
+                        <li style="--i:1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V11"/><path d="M12 11C12 7 9 4.5 5 4.5c0 4 2.5 6.5 7 6.5Z"/><path d="M12 14c0-3 2.4-5 6-5 0 3.2-2 5-6 5Z"/></svg><span>Tohum Bankası<small>Ata tohumlarını koru</small></span></li>
+                        <li style="--i:2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5v14M8 5v14M12 5v14M17 5v14M20 5v14"/></svg><span>Barkod &amp; Satış<small>Hasadı kasadan sat</small></span></li>
+                        <li style="--i:3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4Z"/><path d="M18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8Z"/></svg><span>EcoMind AI<small>Tarım asistanın yanında</small></span></li>
+                    </ul>
                 </div>
-            </div>
+                <svg class="lg-scape" viewBox="0 0 600 190" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs><radialGradient id="lgSunG"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+    <g class="lg-par pa">
+        <circle class="lg-sunglow" cx="500" cy="70" r="60" fill="url(#lgSunG)"/>
+        <g class="lg-rays" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"><line x1="530.0" y1="70.0" x2="541.0" y2="70.0"/><line x1="526.0" y1="85.0" x2="535.5" y2="90.5"/><line x1="515.0" y1="96.0" x2="520.5" y2="105.5"/><line x1="500.0" y1="100.0" x2="500.0" y2="111.0"/><line x1="485.0" y1="96.0" x2="479.5" y2="105.5"/><line x1="474.0" y1="85.0" x2="464.5" y2="90.5"/><line x1="470.0" y1="70.0" x2="459.0" y2="70.0"/><line x1="474.0" y1="55.0" x2="464.5" y2="49.5"/><line x1="485.0" y1="44.0" x2="479.5" y2="34.5"/><line x1="500.0" y1="40.0" x2="500.0" y2="29.0"/><line x1="515.0" y1="44.0" x2="520.5" y2="34.5"/><line x1="526.0" y1="55.0" x2="535.5" y2="49.5"/></g>
+        <circle cx="500" cy="70" r="20" fill="#fff" opacity=".95"/>
+        <g class="lg-cloud c1"><path d="M0 44 q10-18 28-10 q10-14 28 2 q16 0 14 14 H4 q-8-2 -4-6Z" fill="#fff" opacity=".32"/></g>
+        <g class="lg-cloud c2"><path d="M0 22 q8-14 22-8 q8-11 22 2 q12 0 11 11 H3 q-7-2 -3-5Z" fill="#fff" opacity=".24"/></g>
+    </g>
+    <g class="lg-par pb"><path d="M0 92 C90 58 180 68 280 86 S480 108 600 68 L600 190 L0 190Z" fill="#fff" opacity=".10"/></g>
+    <g class="lg-par pc">
+        <path d="M0 118 C110 88 210 103 320 115 S520 128 600 101 L600 190 L0 190Z" fill="#fff" opacity=".16"/>
+        <g class="lg-sera">
+            <polygon points="70,104 70,84 120,64 170,84 170,104" fill="rgba(255,255,255,.12)" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".85"/>
+            <path d="M95 74V104M120 64V104M145 74V104M70 84H170" stroke="#fff" stroke-width="1.2" opacity=".6"/>
+            <rect class="lg-glow" x="73" y="86" width="94" height="16" rx="2" fill="#fff"/>
+        </g>
+    </g>
+    <g class="lg-par pd">
+        <path d="M0 140 C130 118 240 132 360 140 S530 146 600 130 L600 190 L0 190Z" fill="#fff" opacity=".28"/>
+        <g class="lg-plant" style="--d:0.2s"><path class="lg-stem" pathLength="1" d="M38 148 C35 136.1 41 124.2 38 114" /><path class="lg-leaf" style="--d:0.2s" d="M38 131.0 C23 131.0 18 119.0 18 115.0 C30 115.0 38 121.0 38 131.0Z" fill="#fff" opacity=".9"/><path class="lg-leaf r" style="--d:0.35s" d="M38 121.5 C53 121.5 58 109.5 58 105.5 C46 105.5 38 111.5 38 121.5Z" fill="#fff" opacity=".78"/><g transform="translate(38,114)"><g class="lg-bud" style="--d:0.2s"><ellipse cx="0" cy="-4" rx="3.4" ry="5.4" fill="#fff"/></g></g></g><g class="lg-plant" style="--d:0.5s"><path class="lg-stem" pathLength="1" d="M205 146 C202 132.0 208 118.0 205 106" /><path class="lg-leaf" style="--d:0.5s" d="M205 126.0 C190 126.0 185 114.0 185 110.0 C197 110.0 205 116.0 205 126.0Z" fill="#fff" opacity=".9"/><path class="lg-leaf r" style="--d:0.65s" d="M205 114.8 C220 114.8 225 102.8 225 98.8 C213 98.8 205 104.8 205 114.8Z" fill="#fff" opacity=".78"/><g transform="translate(205,106)"><g class="lg-bud" style="--d:0.5s"><ellipse cx="0" cy="-4" rx="3.4" ry="5.4" fill="#fff"/></g></g></g><g class="lg-plant" style="--d:0.8s"><path class="lg-stem" pathLength="1" d="M262 150 C259 139.5 265 129.0 262 120" /><path class="lg-leaf" style="--d:0.8s" d="M262 135.0 C247 135.0 242 123.0 242 119.0 C254 119.0 262 125.0 262 135.0Z" fill="#fff" opacity=".9"/><path class="lg-leaf r" style="--d:0.9500000000000001s" d="M262 126.6 C277 126.6 282 114.6 282 110.6 C270 110.6 262 116.6 262 126.6Z" fill="#fff" opacity=".78"/><g transform="translate(262,120)"><g class="lg-bud" style="--d:0.8s"><ellipse cx="0" cy="-4" rx="3.4" ry="5.4" fill="#fff"/></g></g></g><g class="lg-plant" style="--d:1.0s"><path class="lg-stem" pathLength="1" d="M338 148 C335 132.6 341 117.2 338 104" /><path class="lg-leaf" style="--d:1.0s" d="M338 126.0 C323 126.0 318 114.0 318 110.0 C330 110.0 338 116.0 338 126.0Z" fill="#fff" opacity=".9"/><path class="lg-leaf r" style="--d:1.15s" d="M338 113.7 C353 113.7 358 101.7 358 97.7 C346 97.7 338 103.7 338 113.7Z" fill="#fff" opacity=".78"/><g transform="translate(338,101)"><g class="lg-flower" style="--d:1.0s"><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(0)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(60)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(120)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(180)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(240)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(300)"/><circle r="3.6" fill="#fde68a"/></g></g></g><g class="lg-plant" style="--d:1.3s"><path class="lg-stem" pathLength="1" d="M412 150 C409 138.8 415 127.6 412 118" /><path class="lg-leaf" style="--d:1.3s" d="M412 134.0 C397 134.0 392 122.0 392 118.0 C404 118.0 412 124.0 412 134.0Z" fill="#fff" opacity=".9"/><path class="lg-leaf r" style="--d:1.45s" d="M412 125.0 C427 125.0 432 113.0 432 109.0 C420 109.0 412 115.0 412 125.0Z" fill="#fff" opacity=".78"/><g transform="translate(412,118)"><g class="lg-bud" style="--d:1.3s"><ellipse cx="0" cy="-4" rx="3.4" ry="5.4" fill="#fff"/></g></g></g><g class="lg-plant" style="--d:1.5s"><path class="lg-stem" pathLength="1" d="M478 147 C475 130.9 481 114.8 478 101" /><path class="lg-leaf" style="--d:1.5s" d="M478 124.0 C463 124.0 458 112.0 458 108.0 C470 108.0 478 114.0 478 124.0Z" fill="#fff" opacity=".9"/><path class="lg-leaf r" style="--d:1.65s" d="M478 111.1 C493 111.1 498 99.1 498 95.1 C486 95.1 478 101.1 478 111.1Z" fill="#fff" opacity=".78"/><g transform="translate(478,98)"><g class="lg-flower" style="--d:1.5s"><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(0)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(60)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(120)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(180)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(240)"/><ellipse cx="0" cy="-6.5" rx="3.2" ry="5.8" fill="#fff" opacity=".95" transform="rotate(300)"/><circle r="3.6" fill="#fde68a"/></g></g></g><g class="lg-plant" style="--d:1.8s"><path class="lg-stem" pathLength="1" d="M560 146 C557 133.4 563 120.8 560 110" /><path class="lg-leaf" style="--d:1.8s" d="M560 128.0 C545 128.0 540 116.0 540 112.0 C552 112.0 560 118.0 560 128.0Z" fill="#fff" opacity=".9"/><path class="lg-leaf r" style="--d:1.95s" d="M560 117.9 C575 117.9 580 105.9 580 101.9 C568 101.9 560 107.9 560 117.9Z" fill="#fff" opacity=".78"/><g transform="translate(560,110)"><g class="lg-bud" style="--d:1.8s"><ellipse cx="0" cy="-4" rx="3.4" ry="5.4" fill="#fff"/></g></g></g>
+    </g>
+</svg>
+            </aside>
+
+            <!-- Sağ: form paneli -->
+            <main class="lg-formside">
+                <div class="lg-card">
+                    <div class="lg-banner-wrap"><img class="lg-banner" src="Login Screen.png" alt="BJK Kabataş Vakfı Özel Okulları · Sürdürülebilir Tarım Kulübü · EcoMind AI" onerror="this.parentNode.style.display='none';"></div>
+
+                    <!-- GİRİŞ -->
+                    <div id="login-section" class="lg-section">
+                        <div class="lg-eyebrow">Hoş geldin</div>
+                        <div class="lg-title" role="heading" aria-level="1">Sisteme giriş yap</div>
+                        <p class="lg-sub">Kulüp hesabınla panele eriş.</p>
+
+                        <div id="login-error" class="lg-msg err" role="alert"></div>
+
+                        <div class="lg-field">
+                            <label class="lg-lab" for="login-email">E-posta adresi</label>
+                            <div class="lg-inp">
+                                <svg class="lg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 8 8 6 8-6"/></svg>
+                                <input type="email" id="login-email" placeholder="ornek@mail.com" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('login-pass').focus();}">
+                            </div>
+                        </div>
+
+                        <div class="lg-field">
+                            <label class="lg-lab" for="login-pass">Şifre</label>
+                            <div class="lg-inp has-eye">
+                                <svg class="lg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                                <input type="password" id="login-pass" placeholder="Şifreni yaz" autocomplete="current-password" onkeydown="if(event.key==='Enter'){event.preventDefault();lgGo('login-section');}" onkeyup="lgCaps(event,this)" onblur="lgCaps(null,this)">
+                                <button type="button" class="lg-eye" onclick="lgTogglePw('login-pass',this)" aria-label="Şifreyi göster / gizle">
+                                    <svg class="show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.5 10.5 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.5 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 4.3-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+                                </button>
+                            </div>
+                            <div class="lg-caps">⇪ Caps Lock açık</div>
+                        </div>
+
+                        <div class="lg-row">
+                            <label class="lg-check" for="login-remember">
+                                <input type="checkbox" id="login-remember">
+                                <span class="lg-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+                                Beni hatırla
+                            </label>
+                            <button type="button" class="lg-link" onclick="lgForgot()">Şifremi unuttum</button>
+                        </div>
+                        <div class="lg-hint" id="lg-forgot-hint">Şifreni unuttuysan kulüp öğretmenine veya yöneticiye başvur; yönetici sana yeni bir şifre tanımlayabilir.</div>
+
+                        <button type="button" class="lg-btn" onclick="lgSubmit(event,this,'login','login-error')"><span class="lg-btn-t">Giriş Yap</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><i class="lg-spin"></i></button>
+
+                        <div class="lg-switch">Hesabın yok mu? <button type="button" class="lg-link" onclick="toggleForms()">Kulübe katıl, kayıt ol</button></div>
+                    </div>
+
+                    <!-- KAYIT -->
+                    <div id="register-section" class="lg-section hidden">
+                        <div class="lg-eyebrow">Aramıza katıl</div>
+                        <div class="lg-title" role="heading" aria-level="1">Yeni kayıt</div>
+                        <p class="lg-sub">Kulübe katılmak için bilgilerini gir.</p>
+
+                        <div id="reg-error" class="lg-msg err" role="alert"></div>
+                        <div id="reg-success" class="lg-msg ok" role="status"></div>
+
+                        <div class="lg-field">
+                            <label class="lg-lab" for="reg-name">Ad Soyad</label>
+                            <div class="lg-inp">
+                                <svg class="lg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                <input type="text" id="reg-name" placeholder="Adın Soyadın" autocomplete="name">
+                            </div>
+                        </div>
+                        <div class="lg-field">
+                            <label class="lg-lab" for="reg-grade">Sınıf / Şube</label>
+                            <div class="lg-inp">
+                                <svg class="lg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5Z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></svg>
+                                <input type="text" id="reg-grade" placeholder="Örn: 9-A, 10-B veya Öğretmen" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="lg-field">
+                            <label class="lg-lab" for="reg-email">E-posta adresi</label>
+                            <div class="lg-inp">
+                                <svg class="lg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 8 8 6 8-6"/></svg>
+                                <input type="email" id="reg-email" placeholder="ornek@mail.com" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false">
+                            </div>
+                        </div>
+                        <div class="lg-field" style="margin-bottom:20px;">
+                            <label class="lg-lab" for="reg-pass">Şifre</label>
+                            <div class="lg-inp has-eye">
+                                <svg class="lg-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                                <input type="password" id="reg-pass" placeholder="Bir şifre belirle" autocomplete="new-password" onkeydown="if(event.key==='Enter'){event.preventDefault();lgGo('register-section');}" onkeyup="lgCaps(event,this)" onblur="lgCaps(null,this)">
+                                <button type="button" class="lg-eye" onclick="lgTogglePw('reg-pass',this)" aria-label="Şifreyi göster / gizle">
+                                    <svg class="show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.5 10.5 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.5 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 4.3-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+                                </button>
+                            </div>
+                            <div class="lg-caps">⇪ Caps Lock açık</div>
+                        </div>
+
+                        <button type="button" class="lg-btn alt" onclick="lgSubmit(event,this,'registerUser','reg-error')"><span class="lg-btn-t">Kayıt Ol</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><i class="lg-spin"></i></button>
+
+                        <div class="lg-switch">Zaten üye misin? <button type="button" class="lg-link" onclick="toggleForms()">Giriş yap</button></div>
+                    </div>
+
+                    <div class="lg-foot">© BJK Kabataş Vakfı Özel Okulları · Sürdürülebilir Tarım Kulübü</div>
+                </div>
+            </main>
         </div>
     </div>
+    <script>
+        /* ===== Giriş ekranı: yardımcılar + animasyonlar ===== */
+        function lgTogglePw(id, btn) {
+            var el = document.getElementById(id); if (!el) return;
+            var show = el.type === 'password';
+            el.type = show ? 'text' : 'password';
+            if (btn) btn.classList.toggle('on', show);
+            el.focus();
+        }
+        function lgCaps(e, input) {
+            var f = input.closest('.lg-field'), warn = f && f.querySelector('.lg-caps');
+            if (!warn) return;
+            warn.style.display = (e && e.getModifierState && e.getModifierState('CapsLock')) ? 'block' : 'none';
+        }
+        function lgForgot() {
+            var h = document.getElementById('lg-forgot-hint');
+            if (h) h.style.display = (h.style.display === 'block') ? 'none' : 'block';
+        }
+        function lgGo(sectionId) { var b = document.querySelector('#' + sectionId + ' .lg-btn'); if (b) b.click(); }
+        function lgSubmit(ev, btn, fnName, errId) {
+            if (btn.classList.contains('loading')) return;
+            // dalga (ripple)
+            try {
+                var r = btn.getBoundingClientRect(), d = Math.max(r.width, r.height) * 1.6, sp = document.createElement('span');
+                sp.className = 'lg-ripple'; sp.style.cssText = 'width:' + d + 'px;height:' + d + 'px;left:' + ((ev.clientX || (r.left + r.width / 2)) - r.left - d / 2) + 'px;top:' + ((ev.clientY || (r.top + r.height / 2)) - r.top - d / 2) + 'px';
+                btn.appendChild(sp); setTimeout(function () { sp.remove(); }, 650);
+            } catch (e) {}
+            btn.classList.add('loading');
+            setTimeout(function () {
+                try { var f = window[fnName]; if (typeof f === 'function') f(); }
+                finally { btn.classList.remove('loading'); }
+                var err = document.getElementById(errId), card = document.querySelector('#login-screen .lg-card');
+                if (err && err.style.display === 'block' && card) { card.classList.remove('lg-shake'); void card.offsetWidth; card.classList.add('lg-shake'); }
+            }, 380);
+        }
+        (function () {
+            var ls = document.getElementById('login-screen'); if (!ls) return;
+            var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var fine = window.matchMedia && matchMedia('(pointer: fine)').matches;
+            function shown() { return ls.style.display !== 'none'; }
+            function rnd(a, b) { return a + Math.random() * (b - a); }
+
+            // Parıltılar ve düşen yapraklar
+            var pc = ls.querySelector('.lg-particles');
+            if (pc && !reduce) {
+                var h = '', i, t;
+                for (i = 0; i < 16; i++) { t = rnd(9, 19); h += '<span class="lg-p" style="--x:' + rnd(2, 98).toFixed(1) + '%;--s:' + rnd(3, 8).toFixed(1) + 'px;--t:' + t.toFixed(1) + 's;--dl:-' + rnd(0, t).toFixed(1) + 's;--dx:' + rnd(-40, 40).toFixed(0) + 'px"></span>'; }
+                for (i = 0; i < 6; i++) { t = rnd(11, 20); h += '<svg class="lg-fall" viewBox="0 0 24 24" style="--x:' + rnd(4, 92).toFixed(1) + '%;--s:' + rnd(14, 24).toFixed(0) + 'px;--t:' + t.toFixed(1) + 's;--dl:-' + rnd(0, t).toFixed(1) + 's;--dx:' + rnd(-90, 90).toFixed(0) + 'px"><path fill="currentColor" d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/></svg>'; }
+                pc.innerHTML = h;
+            }
+
+            // Fare paralaksı + form tarafı ışık lekesi
+            if (fine && !reduce) {
+                var fs = ls.querySelector('.lg-formside'), raf = 0, ex = 0, ey = 0;
+                ls.addEventListener('pointermove', function (e) {
+                    ex = e.clientX; ey = e.clientY;
+                    if (raf) return;
+                    raf = requestAnimationFrame(function () {
+                        raf = 0; var r = ls.getBoundingClientRect();
+                        ls.style.setProperty('--mx', ((ex / r.width - .5) * 2).toFixed(3));
+                        ls.style.setProperty('--my', ((ey / r.height - .5) * 2).toFixed(3));
+                        if (fs) { var f = fs.getBoundingClientRect(); ls.style.setProperty('--sx', (ex - f.left) + 'px'); ls.style.setProperty('--sy', (ey - f.top) + 'px'); }
+                    });
+                });
+            }
+
+            // Yazan metin
+            var el = ls.querySelector('.lg-type'), words = ['Bokashi Takip', 'Tohum Bankası', 'Sera & Üretim', 'Hasat Satışı', 'EcoMind AI Asistanı'];
+            if (el && reduce) el.textContent = words[0];
+            else if (el) {
+                var wi = 0, ci = 0, del = false;
+                (function tick() {
+                    if (!shown()) { setTimeout(tick, 1200); return; }
+                    var w = words[wi];
+                    if (!del) { ci++; el.textContent = w.slice(0, ci); if (ci === w.length) { del = true; setTimeout(tick, 1600); return; } setTimeout(tick, 75); }
+                    else { ci--; el.textContent = w.slice(0, ci); if (ci === 0) { del = false; wi = (wi + 1) % words.length; setTimeout(tick, 320); return; } setTimeout(tick, 34); }
+                })();
+            }
+
+            // Başarılı girişte "kapılar açılır" geçişi
+            window.addEventListener('load', function () {
+                var orig = window.login; if (typeof orig !== 'function' || orig.__lg || reduce) return;
+                var w = function () {
+                    var r = orig.apply(this, arguments);
+                    if (ls.style.display === 'none') {
+                        ls.style.display = 'flex'; ls.classList.add('lg-leaving');
+                        setTimeout(function () { ls.style.display = 'none'; ls.classList.remove('lg-leaving'); }, 780);
+                    }
+                    return r;
+                };
+                w.__lg = 1; window.login = w;
+            });
+        })();
+    </script>
 
     <!-- Ana Menü & Navigasyon Header (Yenilenen Modern & Mobil Uyumlu Üst Bar) -->
     
@@ -6044,10 +6566,11 @@
            🚀 AERO 2.0 DUAL-INTERFACE & KPI ENGINE
            ======================================================== */
         function switchUIVersion(version, showToast = true) {
-            if (version !== 'modern' && version !== 'classic') version = 'classic';
+            if (version !== 'modern' && version !== 'classic' && version !== 'fresh') version = 'classic';
             localStorage.setItem('bkvUIVersion', version);
-            document.body.classList.remove('ui-classic', 'ui-modern');
-            document.body.classList.add('ui-' + version);
+            document.body.classList.remove('ui-classic', 'ui-modern', 'ui-fresh');
+            if (version === 'fresh') document.body.classList.add('ui-modern', 'ui-fresh');   // Fresh = yan menü düzeni + giriş ekranı teması
+            else document.body.classList.add('ui-' + version);
 
             // 🔥 Kullanıcının arayüz modu tercihini Firebase veritabanına kaydet
             const currentEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase().trim();
@@ -6073,7 +6596,7 @@
                 }
             });
 
-            if (version === 'modern') {
+            if (version === 'modern' || version === 'fresh') {
                 updateDashKPIs();
                 const initWeatherCity = localStorage.getItem('bkvHavaDurumuSehir') || 'İstanbul';
                 if (typeof havaDurumuGetir === 'function') {
@@ -6093,7 +6616,7 @@
             }
 
             if (showToast) {
-                const label = version === 'modern' ? '🚀 Yan Menü (YENİ)' : '💎 Klasik (Üst Menü)';
+                const label = version === 'fresh' ? '🌿 Fresh (Giriş Teması)' : (version === 'modern' ? '🚀 Yan Menü (YENİ)' : '💎 Klasik (Üst Menü)');
                 if (typeof showNotification === 'function') {
                     showNotification(`Arayüz görünümü güncellendi: ${label}`, 'success');
                 }
