@@ -518,7 +518,8 @@
            🌱 YENİ GİRİŞ EKRANI (sıfırdan tasarım) — tema uyumlu
            ========================================================= */
         #login-screen {
-            --lg-d:#063a5a; --lg-m:#0288d1; --lg-l:#4fc3f7; --lg-bg:#f3f9fd; --lg-ink:#0b2a3d; --lg-mute:#5b7a8e; --lg-line:#d6e6f0;
+            --lg-d:#0277bd; --lg-m:#0288d1; --lg-l:#e1f5fe; --lg-bg:#eaf7fe; --lg-ink:#01579b; --lg-mute:#3a7ca5; --lg-line:#b3e0f7;
+            --lg-g: radial-gradient(circle at top left, #4fc3f7 0%, #29b6f6 38%, #0288d1 100%);
             position: fixed; inset: 0; z-index: 9999; display: flex;
             background: var(--lg-bg); color: var(--lg-ink);
             font-family: 'Outfit','Plus Jakarta Sans','Segoe UI',sans-serif;
@@ -528,6 +529,7 @@
         body.theme-green  #login-screen { --lg-d:#064e3b; --lg-m:#059669; --lg-l:#6ee7b7; --lg-bg:#f2fbf6; --lg-ink:#0b2e22; --lg-mute:#5a7f6f; --lg-line:#cfe9dc; }
         body.theme-red    #login-screen { --lg-d:#7f1d1d; --lg-m:#be123c; --lg-l:#fda4af; --lg-bg:#fff5f6; --lg-ink:#3b0d14; --lg-mute:#8a5f66; --lg-line:#f3d3d8; }
         body.theme-pink   #login-screen { --lg-d:#831843; --lg-m:#db2777; --lg-l:#f9a8d4; --lg-bg:#fff5f9; --lg-ink:#3d0f26; --lg-mute:#8a5f73; --lg-line:#f3d3e2; }
+        body.theme-orange #login-screen, body.theme-green #login-screen, body.theme-red #login-screen, body.theme-pink #login-screen { --lg-g: linear-gradient(155deg, var(--lg-d) 0%, color-mix(in srgb, var(--lg-d) 55%, var(--lg-m)) 55%, var(--lg-m) 100%); }
         #login-screen *, #login-screen *::before, #login-screen *::after { box-sizing: border-box; }
         #login-screen input { user-select: text; -webkit-user-select: text; }
 
@@ -537,7 +539,7 @@
         .lg-brand {
             position: relative; overflow: hidden; color: #fff; padding: 44px 52px 0;
             display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh;
-            background: linear-gradient(155deg, var(--lg-d) 0%, color-mix(in srgb, var(--lg-d) 55%, var(--lg-m)) 55%, var(--lg-m) 100%);
+            background: var(--lg-g);
         }
         .lg-brand::before { /* ince nokta ızgarası */
             content: ""; position: absolute; inset: 0; opacity: .5; pointer-events: none;
@@ -769,22 +771,56 @@
            Klasik / Yan Menü modunda görünür, 4 temayı da destekler.
            ========================================================= */
         #lg-layout-fresh, #lg-layout-classic { width: 100%; min-height: 100%; }
-        body.ui-fresh #lg-layout-classic { display: none !important; }
-        body:not(.ui-fresh) #lg-layout-fresh { display: none !important; }
-        body:not(.ui-fresh) #lg-layout-classic { display: flex; padding: 15px; }
-        body:not(.ui-fresh) #login-screen {
+        #lg-layout-classic { display: none !important; }
+
+        /* ===== Yan menü (Aero 2.0) arayüzünün hatlarına uyum: 20px yumuşak köşeler, 2px açık mavi çizgiler, hap butonlar, cam kartlar ===== */
+        #login-screen .lg-inp input { border: 2px solid #81d4fa; border-radius: 20px; background: rgba(255,255,255,.92); box-shadow: inset 0 2px 4px rgba(0,0,0,.08); font-weight: 700; color: #01579b; }
+        #login-screen .lg-inp input:focus { border-color: #0288d1; box-shadow: 0 0 10px rgba(2,136,209,.45), inset 0 2px 4px rgba(0,0,0,.08); }
+        #login-screen .lg-btn { border-radius: 30px; border: 1px solid #0288d1; border-top: 1px solid #fff; color: #01579b; text-shadow: 1px 1px 0 rgba(255,255,255,.6);
+            background: linear-gradient(to bottom, #ffffff 0%, #b3e5fc 45%, #81d4fa 50%, #29b6f6 100%);
+            box-shadow: 0 4px 8px rgba(0,0,0,.2), inset 0 2px 4px rgba(255,255,255,.9); }
+        #login-screen .lg-btn:hover { background: linear-gradient(to bottom, #ffffff 0%, #e1f5fe 45%, #b3e5fc 50%, #4fc3f7 100%); box-shadow: 0 6px 12px rgba(0,0,0,.28), inset 0 2px 4px rgba(255,255,255,.9); filter: none; }
+        #login-screen .lg-spin { border-color: rgba(1,87,155,.3); border-top-color: #01579b; }
+        #login-screen .lg-box { border: 2px solid #81d4fa; border-radius: 8px; }
+        #login-screen .lg-feats li { border-radius: 20px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.55); box-shadow: 0 4px 12px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.5); }
+        #login-screen .lg-kicker { border: 1px solid rgba(255,255,255,.6); }
+        #login-screen .lg-logo { border-radius: 20px; }
+        #login-screen .lg-msg, #login-screen .lg-hint { border-radius: 16px; }
+        /* Giriş kartı/menüsü: Çerçevesiz, sınır çizgisiz ve gölgesiz temiz görünüm */
+        #login-screen .lg-card {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        @media (min-width: 881px) {
+            #login-screen .lg-card {
+                padding: 10px 15px;
+                max-width: 440px;
+            }
+        }
+        @media (max-width: 880px) {
+            #login-screen .lg-card {
+                padding: 10px 15px;
+                max-width: 480px;
+            }
+        }
+                body.lg-classic-only #lg-layout-classic { display: flex; padding: 15px; }
+        body.lg-classic-only #login-screen {
             background: radial-gradient(circle at top left, rgba(225, 245, 254, 0.85) 0%, rgba(129, 212, 250, 0.9) 40%, rgba(2, 136, 209, 0.95) 100%);
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
         }
-        body.theme-orange:not(.ui-fresh) #login-screen { background: radial-gradient(circle at top left, rgba(255, 250, 240, 0.9) 0%, rgba(255, 237, 213, 0.92) 40%, rgba(251, 146, 60, 0.95) 100%) !important; }
-        body.theme-green:not(.ui-fresh)  #login-screen { background: radial-gradient(circle at top left, rgba(236, 253, 245, 0.9) 0%, rgba(167, 243, 208, 0.92) 40%, rgba(52, 211, 153, 0.95) 100%) !important; }
-        body.theme-red:not(.ui-fresh)    #login-screen { background: radial-gradient(circle at top left, rgba(255, 241, 242, 0.9) 0%, rgba(254, 205, 211, 0.92) 40%, rgba(244, 63, 94, 0.95) 100%) !important; }
-        body.theme-pink:not(.ui-fresh)   #login-screen { background: radial-gradient(circle at top left, rgba(255, 241, 245, 0.9) 0%, rgba(252, 231, 240, 0.92) 40%, rgba(241, 156, 184, 0.95) 100%) !important; }
+        body.theme-orange.lg-classic-only #login-screen { background: radial-gradient(circle at top left, rgba(255, 250, 240, 0.9) 0%, rgba(255, 237, 213, 0.92) 40%, rgba(251, 146, 60, 0.95) 100%) !important; }
+        body.theme-green.lg-classic-only  #login-screen { background: radial-gradient(circle at top left, rgba(236, 253, 245, 0.9) 0%, rgba(167, 243, 208, 0.92) 40%, rgba(52, 211, 153, 0.95) 100%) !important; }
+        body.theme-red.lg-classic-only    #login-screen { background: radial-gradient(circle at top left, rgba(255, 241, 242, 0.9) 0%, rgba(254, 205, 211, 0.92) 40%, rgba(244, 63, 94, 0.95) 100%) !important; }
+        body.theme-pink.lg-classic-only   #login-screen { background: radial-gradient(circle at top left, rgba(255, 241, 245, 0.9) 0%, rgba(252, 231, 240, 0.92) 40%, rgba(241, 156, 184, 0.95) 100%) !important; }
         .login-box { width: 400px; max-width: 100%; margin: auto; padding: 40px; text-align: center; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
         /* Masaüstünde eski ekran: yükseklik aynı, kutu biraz daha geniş */
-        @media (min-width: 681px) { body:not(.ui-fresh) .login-box { width: 460px; } }
+        @media (min-width: 681px) { body.lg-classic-only .login-box { width: 460px; } }
         @media (max-width: 680px) {
-            body:not(.ui-fresh) #login-screen { padding: 0 !important; }
+            body.lg-classic-only #login-screen { padding: 0 !important; }
             .login-box { width: 100% !important; max-width: 360px !important; padding: 22px 16px !important; border-radius: 18px !important; }
             .login-box img { width: 220px !important; max-width: 100% !important; height: auto !important; margin-bottom: 10px !important; }
             .login-box h1 { font-size: 20px !important; }
@@ -4230,7 +4266,7 @@
                 var orig = window.login; if (typeof orig !== 'function' || orig.__lg || reduce) return;
                 var w = function () {
                     var r = orig.apply(this, arguments);
-                    if (ls.style.display === 'none' && document.body.classList.contains('ui-fresh')) {
+                    if (ls.style.display === 'none') {
                         ls.style.display = 'flex'; ls.classList.add('lg-leaving');
                         setTimeout(function () { ls.style.display = 'none'; ls.classList.remove('lg-leaving'); }, 780);
                     }
@@ -4255,7 +4291,7 @@
                 if (!on && el.parentNode === ls) holder.appendChild(el);
             }
             window.lgApplyLayout = function () {
-                var useFresh = document.body.classList.contains('ui-fresh');
+                var useFresh = true; /* tek giriş ekranı: yeni düzen */
                 put('fresh', fresh, useFresh); put('classic', classic, !useFresh);
             };
             lgApplyLayout();
