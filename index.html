@@ -4077,7 +4077,7 @@
                             </label>
                             <button type="button" class="lg-link" onclick="lgForgot()">Şifremi unuttum</button>
                         </div>
-                        <div class="lg-hint" id="lg-forgot-hint">Şifreni unuttuysan kulüp öğretmenine veya yöneticiye başvur; yönetici sana yeni bir şifre tanımlayabilir.</div>
+                        <div class="lg-hint" id="lg-forgot-hint">Şifreni unuttuysan kulüp öğretmenine veya yöneticiye başvur; yönetici Ayarlar → Kayıtlı Üyeler bölümünden sana geçici bir şifre oluşturabilir.</div>
 
                         <button type="button" class="lg-btn" onclick="lgSubmit(event,this,'login','login-error')"><span class="lg-btn-t">Giriş Yap</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><i class="lg-spin"></i></button>
 
@@ -7417,6 +7417,10 @@
                     let deleteHtml = (isAdmin && !isKurucu && !isSelf && u.username !== currentUser) ? 
                         `<button onclick="deleteUser('${u.email}')" style="background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; padding: 4px 8px; margin-left: 8px; font-weight: bold; font-size: 12px;" title="Kullanıcıyı Sil">Sil</button>` : '';
 
+                    if (isAdmin && !isKurucu && !isSelf) {
+                        deleteHtml = `<button onclick="adminResetUserPassword('${u.email}')" style="background: #ff9800; color: white; border: none; border-radius: 5px; cursor: pointer; padding: 4px 8px; margin-left: 8px; font-weight: bold; font-size: 12px;" title="Geçici şifre oluştur">🔑 Şifre Sıfırla</button>` + deleteHtml;
+                    }
+
                     memList.innerHTML += `
                         <li style="padding: 10px 15px; background: rgba(255,255,255,0.6); border-radius: 10px; border: 1px solid rgba(255,255,255,0.8); display: flex; justify-content: space-between; align-items: center; color: #333; font-weight: bold; gap: 10px; flex-wrap: wrap;">
                             <div>
@@ -10596,6 +10600,36 @@
                 } catch(err) {
                     console.error("Firestore deleteUser hatası:", err);
                     if (typeof showNotification === 'function') showNotification("Kullanıcı silinirken hata: " + err.message, "error");
+                }
+            });
+        };
+
+        window.adminResetUserPassword = function(email) {
+            if (sessionStorage.getItem('currentRole') !== 'admin') {
+                showNotification("⚠️ Şifre sıfırlama yetkisi yalnızca yöneticilere aittir!", "warning");
+                return;
+            }
+            if (email.toLowerCase() === 'www.ahmetutkuavci@gmail.com') {
+                showNotification("Kurucu hesabının şifresi buradan sıfırlanamaz!", "warning");
+                return;
+            }
+            showCustomConfirm("Şifre Sıfırla", `"${email}" için rastgele geçici bir şifre oluşturulsun mu? Eski şifre geçersiz olur ve EcoMind sohbet geçmişi bu kullanıcı için sıfırlanır.`, async () => {
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+                const rnd = new Uint32Array(8);
+                crypto.getRandomValues(rnd);
+                const tmp = Array.from(rnd, n => chars[n % chars.length]).join('');
+                let users = window.getSafeUsers();
+                const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+                if (!user) { showNotification("Kullanıcı bulunamadı.", "error"); return; }
+                const docId = user._docId || email.toLowerCase();
+                try {
+                    await updateDoc(doc(db, "users", docId), { password: tmp, mustChangePassword: true, updatedAt: Date.now() });
+                    user.password = tmp;
+                    localStorage.setItem('bkvUsers', JSON.stringify(users));
+                    showCustomConfirm("✅ Geçici Şifre Hazır", `${user.username || email} için yeni geçici şifre: ${tmp}\n\nBunu kullanıcıya iletin; giriş yaptıktan sonra Profilim → Şifremi Değiştir'den kendi şifresini belirlemelidir.`, () => {});
+                } catch(err) {
+                    console.error("Şifre sıfırlama hatası:", err);
+                    showNotification("Şifre sıfırlanırken hata: " + err.message, "error");
                 }
             });
         };
