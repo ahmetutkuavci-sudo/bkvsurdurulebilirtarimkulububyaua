@@ -15481,6 +15481,180 @@ document.addEventListener('focusin',function(e){if(e.target&&e.target.id==='maru
 .marul-dl{display:inline-block;margin-top:6px;font-size:12px;text-decoration:none;color:#2e7d32;font-weight:600}
 #marul-gen-btn.on{background:#c8e6c9!important;border-radius:8px;outline:2px solid #43a047}
 </style>
+<style id="eco-skin-v2">
+/* =====================================================================
+   🧠 ECOMIND AI — "Aurora" görünüm katmanı (v2)
+   Renkler panelin temasına (mavi/yeşil/turuncu/kırmızı/pembe), efektler arayüze göre:
+   • Klasik  → cam/aero: parlak jel başlık, yumuşak ışık
+   • Yeni    → aurora: akan renkli başlık, süzülen ışık küreleri, dönen ışık halkası
+   • Fresh   → sade: düz yüzeyler, ince çizgiler, kısa ve sakin geçişler
+   ===================================================================== */
+@property --eco-ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+body{--eco-1:#0ea5e9;--eco-2:#38bdf8;--eco-3:#818cf8;--eco-d:#075985;--eco-glow:rgba(56,189,248,.45);--eco-tint:rgba(14,165,233,.12);--eco-ink:var(--text-main,#0c4a6e)}
+body.theme-green{--eco-1:#10b981;--eco-2:#4ade80;--eco-3:#2dd4bf;--eco-d:#065f46;--eco-glow:rgba(52,211,153,.45);--eco-tint:rgba(16,185,129,.12)}
+body.theme-orange{--eco-1:#f97316;--eco-2:#fbbf24;--eco-3:#fb7185;--eco-d:#9a3412;--eco-glow:rgba(251,146,60,.45);--eco-tint:rgba(249,115,22,.12)}
+body.theme-red{--eco-1:#e11d48;--eco-2:#fb7185;--eco-3:#f97316;--eco-d:#9f1239;--eco-glow:rgba(251,113,133,.45);--eco-tint:rgba(225,29,72,.10)}
+body.theme-pink{--eco-1:#db2777;--eco-2:#f472b6;--eco-3:#a78bfa;--eco-d:#831843;--eco-glow:rgba(244,114,182,.48);--eco-tint:rgba(219,39,119,.11)}
+body.ui-modern.ui-fresh{--eco-1:var(--fr-m);--eco-2:var(--fr-l);--eco-3:var(--fr-m);--eco-d:var(--fr-d);--eco-ink:var(--fr-ink)}
+@supports (color:color-mix(in srgb,red,blue)){body.ui-modern.ui-fresh{--eco-glow:color-mix(in srgb,var(--fr-m) 32%,transparent);--eco-tint:color-mix(in srgb,var(--fr-m) 9%,transparent)}}
+
+/* ---- Pencere ---- */
+body #marul-pop{border-radius:24px;background:linear-gradient(160deg,rgba(255,255,255,.93),rgba(255,255,255,.8));border:1px solid rgba(255,255,255,.95);box-shadow:0 26px 60px -14px var(--eco-glow),0 10px 30px rgba(0,0,0,.16),inset 0 1px 0 #fff;transform-origin:0 100%}
+body #marul-pop.open{animation:ecoPop .45s cubic-bezier(.2,1.1,.3,1) both}
+@media (min-width:769px){body.ui-modern #marul-pop{transform-origin:50% 0}body.ui-modern #marul-pop.open{animation-name:ecoPopDown}}
+@media (max-width:768px){body #marul-pop{transform-origin:100% 100%}}
+body #marul-pop::before,body .marul-dash .marul-box::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.6px;pointer-events:none;z-index:7;background:conic-gradient(from var(--eco-ang,0deg),transparent 0 52%,var(--eco-2) 72%,var(--eco-1) 86%,var(--eco-3) 95%,transparent 100%),linear-gradient(var(--eco-tint),var(--eco-tint));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude;animation:ecoSpin 7s linear infinite}
+body.ui-modern:not(.ui-fresh) #marul-pop::after{content:"";position:absolute;inset:-25%;z-index:-1;pointer-events:none;opacity:.26;filter:blur(34px);background:radial-gradient(circle at 18% 22%,var(--eco-2) 0,transparent 38%),radial-gradient(circle at 82% 72%,var(--eco-3) 0,transparent 40%),radial-gradient(circle at 60% 10%,var(--eco-1) 0,transparent 30%);animation:ecoOrbs 16s ease-in-out infinite alternate}
+
+/* ---- Başlık ---- */
+body .mp-head,body .mh-head{position:relative;overflow:hidden;color:#fff;background:linear-gradient(120deg,var(--eco-d),var(--eco-1) 42%,var(--eco-2) 74%,var(--eco-3));background-size:240% 100%;animation:ecoFlow 14s ease-in-out infinite alternate;padding:13px 12px 13px 14px;gap:9px}
+body .mp-head::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 36%,rgba(255,255,255,.3) 50%,transparent 64%);transform:translateX(-130%);animation:ecoSheen 7s ease-in-out infinite}
+body .mp-av{position:relative;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.6),0 4px 12px rgba(0,0,0,.22);animation:ecoRing 2.8s ease-out infinite}
+body .mp-av::after{content:"";position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;background:#4ade80;border:2px solid #fff;box-shadow:0 0 8px #4ade80}
+body .mp-title b{letter-spacing:.2px;text-shadow:0 1px 6px rgba(0,0,0,.18)}
+body .mp-head button,body .mh-head button{border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.2);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:transform .2s cubic-bezier(.3,1.4,.5,1),background .2s}
+body .mp-head button:hover,body .mh-head button:hover{background:rgba(255,255,255,.38);transform:translateY(-1px) scale(1.1)}
+body .mp-head button:active,body .mh-head button:active{transform:scale(.9)}
+
+/* ---- Sohbet alanı ---- */
+body .marul-answer{background:radial-gradient(60% 45% at 12% 0%,var(--eco-tint),transparent 72%),radial-gradient(55% 45% at 100% 100%,var(--eco-tint),transparent 72%);background-size:140% 140%;animation:ecoDrift 22s ease-in-out infinite alternate}
+body .marul-row{animation:ecoMsg .42s cubic-bezier(.2,.9,.3,1) both}
+body .marul-row.u{animation-name:ecoMsgU}
+body .marul-row .av{background:linear-gradient(135deg,#fff,var(--eco-tint));box-shadow:0 0 0 2px var(--eco-tint),0 3px 10px var(--eco-glow)}
+body .marul-row:has(.marul-msg.thinking) .av{animation:ecoBreath 1s ease-in-out infinite}
+body .marul-msg.a{background:rgba(255,255,255,.94);border:1px solid rgba(0,0,0,.05);border-left:3px solid var(--eco-1);border-radius:6px 18px 18px 18px;box-shadow:0 4px 14px -6px var(--eco-glow)}
+body .marul-msg.u{background:linear-gradient(135deg,var(--eco-2),var(--eco-1) 55%,var(--eco-d));color:#fff;border-radius:18px 18px 6px 18px;box-shadow:0 8px 18px -8px var(--eco-glow)}
+body .marul-msg.thinking{background:linear-gradient(100deg,rgba(255,255,255,.94) 32%,var(--eco-tint) 50%,rgba(255,255,255,.94) 68%);background-size:260% 100%;animation:ecoShimmer 1.7s linear infinite}
+body .marul-msg.thinking::after{content:"";display:inline-block;width:0;height:.62em;margin-left:7px;vertical-align:middle;overflow:hidden;background:radial-gradient(circle,var(--eco-1) 2.6px,transparent 3.2px) 0 50%/.6em 100% repeat-x;animation:ecoDots 1.2s steps(4,end) infinite}
+body .marul-copy:hover,body .marul-copy:focus-visible{background:var(--eco-tint)}
+body .marul-copy.ok{color:var(--eco-1)}
+
+/* ---- Karşılama ---- */
+body .marul-welcome .big{display:inline-block;animation:ecoFloat 3.8s ease-in-out infinite;filter:drop-shadow(0 10px 14px var(--eco-glow))}
+body .marul-welcome h3{background:linear-gradient(90deg,var(--eco-d),var(--eco-1),var(--eco-3));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body .marul-chip{color:var(--eco-d);background:var(--eco-tint);border:1px solid var(--eco-glow);animation:ecoMsg .5s cubic-bezier(.2,.9,.3,1) both;transition:transform .2s cubic-bezier(.3,1.4,.5,1),box-shadow .2s,background .2s}
+body .marul-chip:nth-child(2){animation-delay:.06s}body .marul-chip:nth-child(3){animation-delay:.12s}body .marul-chip:nth-child(4){animation-delay:.18s}body .marul-chip:nth-child(5){animation-delay:.24s}body .marul-chip:nth-child(n+6){animation-delay:.3s}
+body .marul-chip:hover{background:var(--eco-tint);transform:translateY(-2px) scale(1.04);box-shadow:0 8px 16px -8px var(--eco-glow)}
+
+/* ---- Yazma alanı ---- */
+body .marul-compose{background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.85);padding:10px 12px}
+body .marul-compose input{border:1.6px solid transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,rgba(0,0,0,.1),rgba(0,0,0,.1)) border-box;transition:box-shadow .25s,background .25s}
+body .marul-compose input:focus{border-color:transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,var(--eco-2),var(--eco-1),var(--eco-3)) border-box;box-shadow:0 0 0 4px var(--eco-tint),0 8px 20px -10px var(--eco-glow)}
+body .marul-compose button{transition:transform .2s cubic-bezier(.3,1.4,.5,1),background .2s}
+body .marul-compose button:hover{transform:translateY(-2px) scale(1.1);background:var(--eco-tint)}
+body .marul-compose button:active{transform:scale(.9)}
+body .marul-compose .mc-send{background:linear-gradient(135deg,var(--eco-2),var(--eco-1));box-shadow:0 8px 16px -6px var(--eco-glow)}
+body .marul-compose .mc-send:hover{background:linear-gradient(135deg,var(--eco-1),var(--eco-d));transform:translateX(2px) scale(1.12)}
+body .marul-compose .marul-mic.rec,body .marul-bar button.marul-mic.rec{background:#ef4444;color:#fff;animation:ecoRec 1.1s ease-out infinite}
+body #marul-gen-btn.on{background:var(--eco-tint)!important;outline:2px solid var(--eco-1);box-shadow:0 0 14px var(--eco-glow)}
+body .marul-note{opacity:.55}
+
+/* ---- Model seçici, emoji, geçmiş ---- */
+body .marul-model-btn{background:var(--eco-tint);color:var(--eco-d);border:1px solid var(--eco-glow);transition:transform .2s,box-shadow .2s}
+body .marul-model-btn:hover{background:var(--eco-tint);transform:translateY(-1px);box-shadow:0 6px 14px -8px var(--eco-glow)}
+body .marul-model-menu.open,body #marul-emoji.open{animation:ecoMenu .22s cubic-bezier(.2,1.2,.4,1) both}
+body .marul-model-menu button:hover,body #marul-emoji button:hover{background:var(--eco-tint)}
+body .marul-model-menu i{color:var(--eco-1)}
+body .mh-item{border-color:var(--eco-glow);background:var(--eco-tint);transition:transform .18s,box-shadow .18s}
+body .mh-item:hover{background:var(--eco-tint);transform:translateX(3px)}
+body .mh-item.cur{border-color:var(--eco-1);box-shadow:0 0 0 2px var(--eco-tint)}
+
+/* ---- Üst bar arama çubuğu (yeni arayüz) ---- */
+body #mh-marul-search .marul-bar{border:1.6px solid transparent;background:linear-gradient(rgba(255,255,255,.92),rgba(255,255,255,.92)) padding-box,linear-gradient(var(--eco-ang,135deg),var(--eco-2),var(--eco-3),var(--eco-1),var(--eco-2)) border-box;animation:ecoSpin 6s linear infinite paused;transition:box-shadow .25s,transform .25s}
+body #mh-marul-search .marul-bar:hover{transform:translateY(-1px)}
+body #mh-marul-search .marul-bar:focus-within{animation-play-state:running;box-shadow:0 0 0 4px var(--eco-tint),0 10px 26px -10px var(--eco-glow)}
+body #mh-marul-search .marul-bar>span{display:inline-block;animation:ecoBreath 3.2s ease-in-out infinite}
+body #mh-marul-search .marul-bar input::placeholder{color:var(--eco-d)}
+body #mh-marul-search .marul-bar button{transition:transform .2s cubic-bezier(.3,1.4,.5,1),background .2s}
+body #mh-marul-search .marul-bar button:hover{transform:scale(1.12);background:var(--eco-tint)}
+
+/* ---- Mobil açma düğmesi ---- */
+body #marul-fab{color:#fff;background:linear-gradient(135deg,var(--eco-2),var(--eco-1) 60%,var(--eco-d));box-shadow:0 12px 26px -8px var(--eco-glow),0 4px 10px rgba(0,0,0,.2);animation:ecoBreath 3.4s ease-in-out infinite}
+body #marul-fab::before,body #marul-fab::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--eco-2);opacity:0;pointer-events:none;animation:ecoPing 2.8s ease-out infinite}
+body #marul-fab::after{animation-delay:1.4s}
+
+/* ---- KLASİK arayüz: cam / aero ---- */
+body.ui-classic .marul-dash .marul-box{border-radius:22px;border:1px solid rgba(255,255,255,.9);background:linear-gradient(160deg,rgba(255,255,255,.82),rgba(255,255,255,.5));box-shadow:0 20px 44px -18px var(--eco-glow),inset 0 1px 0 #fff}
+body.ui-classic .mp-head::before{content:"";position:absolute;left:0;right:0;top:0;height:52%;pointer-events:none;background:linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,.04))}
+body.ui-classic .marul-msg.a,body.ui-classic .marul-msg.u{box-shadow:0 5px 14px -7px var(--eco-glow),inset 0 1px 0 rgba(255,255,255,.75)}
+body.ui-classic .marul-compose .mc-send{border:1px solid rgba(255,255,255,.55);box-shadow:0 8px 16px -6px var(--eco-glow),inset 0 1px 0 rgba(255,255,255,.7)}
+
+/* ---- FRESH arayüz: sade ve net ---- */
+body.ui-modern.ui-fresh #marul-pop{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none;border:1px solid var(--fr-line);border-radius:18px;box-shadow:var(--fr-shadow),0 26px 50px -22px rgba(11,42,61,.3)}
+body.ui-modern.ui-fresh #marul-pop.open{animation-duration:.28s;animation-timing-function:ease-out}
+body.ui-modern.ui-fresh #marul-pop::before{display:none}
+body.ui-modern.ui-fresh .mp-head,body.ui-modern.ui-fresh .mh-head{background:linear-gradient(135deg,var(--fr-d),var(--fr-m));background-size:100% 100%;animation:none;padding:14px}
+body.ui-modern.ui-fresh .mp-head::after{display:none}
+body.ui-modern.ui-fresh .mp-av{border-radius:12px;animation:none;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+body.ui-modern.ui-fresh .mp-head button,body.ui-modern.ui-fresh .mh-head button{border-radius:10px;-webkit-backdrop-filter:none;backdrop-filter:none}
+body.ui-modern.ui-fresh .marul-answer{background:var(--fr-bg);animation:none}
+body.ui-modern.ui-fresh .marul-row .av{border-radius:10px;background:#fff;box-shadow:0 0 0 1px var(--fr-line)}
+body.ui-modern.ui-fresh .marul-msg.a{background:#fff;border:1px solid var(--fr-line);border-radius:14px 14px 14px 4px;box-shadow:none;color:var(--fr-ink)}
+body.ui-modern.ui-fresh .marul-msg.u{background:var(--fr-m);border-radius:14px 14px 4px 14px;box-shadow:none}
+body.ui-modern.ui-fresh .marul-msg.thinking{background:#fff;animation:none}
+body.ui-modern.ui-fresh .marul-welcome .big{animation:none;filter:none}
+body.ui-modern.ui-fresh .marul-welcome h3{background:none;-webkit-text-fill-color:var(--fr-ink);color:var(--fr-ink)}
+body.ui-modern.ui-fresh .marul-chip{background:#fff;border:1px solid var(--fr-line);color:var(--fr-d)}
+body.ui-modern.ui-fresh .marul-chip:hover{background:var(--fr-bg);border-color:var(--fr-m);transform:none;box-shadow:none}
+body.ui-modern.ui-fresh .marul-compose{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none;border-top:1px solid var(--fr-line)}
+body.ui-modern.ui-fresh .marul-compose input{border-radius:12px;border:1px solid var(--fr-line);background:var(--fr-bg)}
+body.ui-modern.ui-fresh .marul-compose input:focus{border-color:var(--fr-m);background:#fff;box-shadow:0 0 0 3px var(--eco-tint)}
+body.ui-modern.ui-fresh .marul-compose button{border-radius:12px}
+body.ui-modern.ui-fresh .marul-compose .mc-send{background:var(--fr-m);box-shadow:none}
+body.ui-modern.ui-fresh .marul-compose .mc-send:hover{background:var(--fr-d);transform:none}
+body.ui-modern.ui-fresh #mh-marul-search .marul-bar{background:#fff;border:1px solid var(--fr-line);animation:none;box-shadow:none}
+body.ui-modern.ui-fresh #mh-marul-search .marul-bar:focus-within{border-color:var(--fr-m);box-shadow:0 0 0 3px var(--eco-tint)}
+body.ui-modern.ui-fresh #mh-marul-search .marul-bar>span{animation:none}
+
+/* ---- Hareketler ---- */
+@keyframes ecoPop{from{opacity:0;translate:0 26px;scale:.9}to{opacity:1;translate:0 0;scale:1}}
+@keyframes ecoPopDown{from{opacity:0;translate:0 -18px;scale:.94}to{opacity:1;translate:0 0;scale:1}}
+@keyframes ecoSpin{to{--eco-ang:360deg}}
+@keyframes ecoFlow{to{background-position:100% 0}}
+@keyframes ecoSheen{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+@keyframes ecoRing{0%{box-shadow:0 0 0 0 rgba(255,255,255,.6),0 4px 12px rgba(0,0,0,.22)}70%,100%{box-shadow:0 0 0 11px rgba(255,255,255,0),0 4px 12px rgba(0,0,0,.22)}}
+@keyframes ecoOrbs{from{transform:translate(-4%,-3%) scale(1)}to{transform:translate(5%,4%) scale(1.14)}}
+@keyframes ecoDrift{to{background-position:100% 100%}}
+@keyframes ecoMsg{from{opacity:0;translate:-12px 8px;scale:.96}to{opacity:1;translate:0 0;scale:1}}
+@keyframes ecoMsgU{from{opacity:0;translate:12px 8px;scale:.96}to{opacity:1;translate:0 0;scale:1}}
+@keyframes ecoShimmer{to{background-position:-160% 0}}
+@keyframes ecoDots{to{width:2.4em}}
+@keyframes ecoFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+@keyframes ecoBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes ecoRec{0%{box-shadow:0 0 0 0 rgba(239,68,68,.6)}100%{box-shadow:0 0 0 12px rgba(239,68,68,0)}}
+@keyframes ecoMenu{from{opacity:0;translate:0 8px;scale:.95}to{opacity:1;translate:0 0;scale:1}}
+@keyframes ecoPing{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.7)}}
+
+@media (max-width:768px){
+  body #marul-pop::after{display:none}
+  body #marul-pop{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+}
+@media (prefers-reduced-motion:reduce){
+  body #marul-pop,body #marul-pop *,body .marul-dash *,body #marul-fab,body #marul-fab::before,body #marul-fab::after,body #mh-marul-search *,body #marul-pop::before,body #marul-pop::after{animation:none!important;transition:none!important}
+}
+
+/* ---- 🌿 Yumuşak ton ayarı (daha sakin, pastel) ---- */
+body{--eco-1:#6aa9cf;--eco-2:#b6d9ec;--eco-3:#b9c3e8;--eco-d:#3f7191;--eco-glow:rgba(106,169,207,.24);--eco-tint:rgba(106,169,207,.08)}
+body.theme-green{--eco-1:#6fb996;--eco-2:#b4dcc7;--eco-3:#a5d6cb;--eco-d:#3f7a60;--eco-glow:rgba(111,185,150,.24);--eco-tint:rgba(111,185,150,.08)}
+body.theme-orange{--eco-1:#e49a68;--eco-2:#f4d3a4;--eco-3:#eeb0a6;--eco-d:#9c5c38;--eco-glow:rgba(228,154,104,.24);--eco-tint:rgba(228,154,104,.08)}
+body.theme-red{--eco-1:#d97789;--eco-2:#efb6c0;--eco-3:#eeb59c;--eco-d:#984357;--eco-glow:rgba(217,119,137,.24);--eco-tint:rgba(217,119,137,.08)}
+body.theme-pink{--eco-1:#d98ab4;--eco-2:#efc4da;--eco-3:#c6b6e8;--eco-d:#93496f;--eco-glow:rgba(217,138,180,.26);--eco-tint:rgba(217,138,180,.08)}
+@supports (color:color-mix(in srgb,red,blue)){body.ui-modern.ui-fresh{--eco-1:color-mix(in srgb,var(--fr-m) 76%,#fff);--eco-d:color-mix(in srgb,var(--fr-d) 82%,#fff);--eco-glow:color-mix(in srgb,var(--fr-m) 22%,transparent);--eco-tint:color-mix(in srgb,var(--fr-m) 7%,transparent)}}
+body .mp-head,body .mh-head{background:linear-gradient(120deg,var(--eco-d),var(--eco-1));background-size:170% 100%}
+body .mp-head::after{background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.13) 50%,transparent 60%)}
+body #marul-pop::before,body .marul-dash .marul-box::before{opacity:.5}
+body.ui-modern:not(.ui-fresh) #marul-pop::after{opacity:.13}
+body .marul-msg.u,body .marul-compose .mc-send,body #marul-fab{background:linear-gradient(135deg,var(--eco-1),var(--eco-d))}
+body .marul-compose .mc-send:hover{background:linear-gradient(135deg,var(--eco-d),var(--eco-d))}
+body .marul-msg.u{box-shadow:0 6px 14px -9px var(--eco-glow)}
+body .marul-msg.a{border-left-color:var(--eco-2)}
+body .marul-welcome h3{background:linear-gradient(90deg,var(--eco-d),var(--eco-1));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body .marul-welcome .big{filter:drop-shadow(0 8px 10px var(--eco-glow))}
+body.ui-modern.ui-fresh .mp-head,body.ui-modern.ui-fresh .mh-head{background:linear-gradient(135deg,var(--eco-d),var(--eco-1));background-size:100% 100%}
+body.ui-modern.ui-fresh .marul-msg.u,body.ui-modern.ui-fresh .marul-compose .mc-send{background:var(--eco-1)}
+body.ui-modern.ui-fresh .marul-compose .mc-send:hover{background:var(--eco-d)}
+body.ui-modern.ui-fresh .marul-welcome h3{background:none;-webkit-text-fill-color:var(--fr-ink)}
+</style>
 <script>
 // ===== EcoMind AI: resim yükleme + resim üretme =====
 window._marulImg=null; window._marulGen=false;
