@@ -3876,13 +3876,13 @@
                 <p style="margin: 0 0 10px 0; font-size: 12px; opacity: 0.8;">Klasik Frutiger Aero, modern Aero 2.0 Komuta Merkezi ve giriş ekranıyla uyumlu Fresh görünümü arasında dilediğiniz an geçiş yapın.</p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="aero-btn ui-version-btn" data-version="classic" onclick="switchUIVersion('classic')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
-                        <span>💎</span> <span>Klasik (ESKİ)</span>
+                        <span>💎</span> <span>Klasik (Üst Menü)</span>
                     </button>
                     <button class="aero-btn ui-version-btn" data-version="modern" onclick="switchUIVersion('modern')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
-                        <span>🚀</span> <span>Yan Menü (KLASİK)</span>
+                        <span>🚀</span> <span>Yan Menü (YENİ)</span>
                     </button>
                     <button class="aero-btn ui-version-btn" data-version="fresh" onclick="switchUIVersion('fresh')" style="flex: 1 1 180px; padding: 10px 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; cursor: pointer;">
-                        <span>🌿</span> <span>Fresh (YENİ)</span>
+                        <span>🌿</span> <span>Fresh (Giriş Teması)</span>
                     </button>
                 </div>
             </div>
@@ -4005,7 +4005,7 @@
                     <p class="lg-lead">Sera, bahçe, Bokashi ve ata tohumu çalışmalarını birlikte kaydet, takip et, paylaş.</p>
                     <ul class="lg-feats">
                         <li style="--i:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg><span>Bokashi Takip<small>Atığı değere dönüştür</small></span></li>
-                        <li style="--i:1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V11"/><path d="M12 11C12 7 9 4.5 5 4.5c0 4 2.5 6.5 7 6.5Z"/><path d="M12 14c0-3 2.4-5 6-5 0 3.2-2 5-6 5Z"/></svg><span>Görev Listesi<small>Sorumluluklarını Takip Et</small></span></li>
+                        <li style="--i:1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V11"/><path d="M12 11C12 7 9 4.5 5 4.5c0 4 2.5 6.5 7 6.5Z"/><path d="M12 14c0-3 2.4-5 6-5 0 3.2-2 5-6 5Z"/></svg><span>Tohum Bankası<small>Ata tohumlarını koru</small></span></li>
                         <li style="--i:2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5v14M8 5v14M12 5v14M17 5v14M20 5v14"/></svg><span>Barkod &amp; Satış<small>Hasadı kasadan sat</small></span></li>
                         <li style="--i:3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4Z"/><path d="M18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8Z"/></svg><span>EcoMind AI<small>Tarım asistanın yanında</small></span></li>
                     </ul>
@@ -12717,9 +12717,24 @@
             }
             window.bkvReminderTick = tick;
 
+            // Aynı hatırlatıcıyı ayırt eden imza (başlık+tekrar+gün+saat+tarih+alıcı+kuran)
+            const sigOf = r => [String(r.title || '').trim().toLowerCase(), r.recurrence, activeDays(r).slice().sort().join(','), r.time, r.date || '', r.target, String(r.targetValue || '').toLowerCase(), (r.createdByEmail || '').toLowerCase()].join('|');
+            const pendingAdds = {};
             window.bkvReminderAdd = async function (o) {
                 bkvAiMemberGate();
                 const em = myEmail();
+                // 🛡️ Kopya koruması: model aynı aracı iki kez çağırsa bile tek kayıt oluşur
+                const probe = { title: o.title, recurrence: o.recurrence, days: o.days || [], time: o.time, date: o.date || '', target: o.target, targetValue: o.targetValue || '', createdByEmail: em };
+                const psig = sigOf(probe);
+                const existing = (window._bkvReminders || []).find(r => r.active !== false && sigOf(r) === psig);
+                if (existing) return { id: existing.id, next: fmt(nextOccurrence(existing)), duplicate: true };
+                if (pendingAdds[psig]) return await pendingAdds[psig].then(x => Object.assign({}, x, { duplicate: true }));
+                const job = _addReminder(o, em);
+                pendingAdds[psig] = job;
+                try { return await job; } finally { setTimeout(() => { delete pendingAdds[psig]; }, 3000); }
+            };
+            async function _addReminder(o, em) {
+
                 const isAdm = bkvAiIsAdmin();
                 if (!isAdm) {
                     const mine = (window._bkvReminders || []).filter(r => r.active !== false && (r.createdByEmail || '').toLowerCase() === em).length;
@@ -12738,6 +12753,25 @@
                 window._bkvReminders.push(full);
                 setTimeout(tick, 800);
                 return { id: ref.id, next: fmt(nextOccurrence(full)) };
+            }
+            // 🧹 Birebir aynı (kopya) hatırlatıcı grupları: en eskisi kalır
+            window.bkvReminderDupGroups = function () {
+                const em = myEmail(), isAdm = bkvAiIsAdmin(), g = {}, order = [];
+                (window._bkvReminders || []).filter(r => r.active !== false && (isAdm || (r.createdByEmail || '').toLowerCase() === em)).forEach(r => {
+                    const k = sigOf(r); if (!g[k]) { g[k] = []; order.push(k); } g[k].push(r);
+                });
+                return order.map(k => g[k].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))).filter(a => a.length > 1);
+            };
+            window.bkvReminderDedupe = async function () {
+                bkvAiMemberGate();
+                let removed = 0; const errs = [];
+                for (const grp of window.bkvReminderDupGroups()) {
+                    for (const r of grp.slice(1)) {
+                        try { await deleteDoc(doc(db, RCOL, r.id)); window._bkvReminders = window._bkvReminders.filter(x => x.id !== r.id); removed++; }
+                        catch (e) { errs.push(e.message); }
+                    }
+                }
+                return { removed, errs };
             };
             window.bkvReminderList = function () {
                 const em = myEmail(), isAdm = bkvAiIsAdmin();
@@ -12745,7 +12779,8 @@
                     .map(r => ({
                         id: r.id, title: r.title, text: r.text, recurrence: r.recurrence,
                         days: activeDays(r).map(d => DAY_TR[d]), time: r.time, date: r.date,
-                        target: r.targetLabel || r.target, createdBy: r.createdBy, next: fmt(nextOccurrence(r))
+                        target: r.targetLabel || r.target, createdBy: r.createdBy, next: fmt(nextOccurrence(r)),
+                        createdAt: r.createdAt || 0, created: r.createdAt ? new Date(r.createdAt).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) : ''
                     }));
             };
             window.bkvReminderDelete = async function (id) {
@@ -13960,9 +13995,9 @@ var MARUL_SYSTEM_MEMBER = 'Sen "EcoMind AI"sin (eski adın Marul Ai; kullanıcı
 // ============================================================
 // ARAÇ KURALLARI — Role göre dinamik seçim
 // ============================================================
-var MARUL_RULES_ADMIN = "\n\nARAÇ KURALLARI (YÖNETİCİ):\n- Yoklama: tüm öğrencilere toplu kayıt → take_attendance (varsayılan durum + istisnalar). Sadece adı geçen birkaç öğrencinin durumunu değiştirmek → update_attendance (diğerlerine DOKUNMAZ). Yoklama YALNIZCA öğrenciler içindir; öğretmen/yönetici yoklaması alınmaz.\n- GÖREV TAMAMLAMA: «görevi tamamlandı işaretle / yapıldı / bitti» denince MUTLAKA complete_task çağır (MEVCUT görevi işaretler). Bunun için ASLA add_task veya auto_assign_tasks çağırma, yeni/kopya görev oluşturma. «Hepsini tamamla» → complete_task {all_open:true}. Geri almak için done:false.\n- Yeni görev YALNIZCA kullanıcı açıkça yeni bir görev eklenmesini isterse add_task / auto_assign_tasks ile eklenir.\n- Görev değiştir → edit_task, görev sil → delete_task, kopya/tekrarlayan görevleri temizle → remove_duplicate_tasks.\n- Ortak not defteri: not ekle → add_note, düzenle → edit_note, sil → delete_note. Alınacaklar listesi: ekle → add_shopping_item (miktar yoksa 1, fiyat yoksa 0; fiyat 0 ise bunu söyle), sil → delete_shopping_item.\n- Görev/not/ürün adı eşleşmez ya da birden fazla eşleşirse araç hata döner: tahmin etme, kullanıcıya hangisini kastettiğini sor.\n- Hava durumu context'te mevcutsa get_weather çağırma; yoksa veya farklı şehir istenirse çağır.\n- Araç sonucu {cancelled:true} ise «işlem iptal edildi» de.\n- Araç sonucu {error:...} ise hatayı kısaca ve dürüstçe söyle; işlemin yapıldığını İDDİA ETME.\n- Yalnızca araç sonucunda ok:true görürsen «yapıldı» de; araç çağırmadan «yaptım» deme.\n- Eksik bilgi varsa makul varsayım yap (tarih yoksa bugün, şehir yoksa kayıtlı şehir).\n- HATIRLATICI: «her Perşembe bana hatırlat», «yarın 09:00 da herkese duyur», «Cuma günleri yöneticilere yoklamayı hatırlat» gibi ZAMANLI mesaj isteklerinde create_reminder çağır (recurrence: once/daily/weekly; weekly için days: 0=Pazar,1=Pazartesi,2=Salı,3=Çarşamba,4=Perşembe,5=Cuma,6=Cumartesi; target: me=kullanıcının kendisi (varsayılan), admins=tüm yöneticiler, all=tüm kulüp ya da üye adı). Saat verilmediyse önce sor. Listele → list_reminders, iptal → delete_reminder. Zamanı gelince EcoMind AI adına gelen kutusuna mesaj düşer. Araç sonucundaki uyari alanını kullanıcıya dürüstçe aktar (mesaj sunucudan değil panel üzerinden gider). ASLA «hatırlatma özelliğim yok» deme.\n- ÇOKLU SORUMLU: bir göreve birden fazla kişi atanabilir → add_task için assignees dizisi, mevcut görevin sorumlularını değiştirmek için edit_task new_assignees dizisi (liste sorumluların TAMAMIDIR). Görev tek ortak tamamlanma durumuna sahiptir; atanan kişilerden herhangi biri işaretleyebilir.";
+var MARUL_RULES_ADMIN = "\n\nARAÇ KURALLARI (YÖNETİCİ):\n- Yoklama: tüm öğrencilere toplu kayıt → take_attendance (varsayılan durum + istisnalar). Sadece adı geçen birkaç öğrencinin durumunu değiştirmek → update_attendance (diğerlerine DOKUNMAZ). Yoklama YALNIZCA öğrenciler içindir; öğretmen/yönetici yoklaması alınmaz.\n- GÖREV TAMAMLAMA: «görevi tamamlandı işaretle / yapıldı / bitti» denince MUTLAKA complete_task çağır (MEVCUT görevi işaretler). Bunun için ASLA add_task veya auto_assign_tasks çağırma, yeni/kopya görev oluşturma. «Hepsini tamamla» → complete_task {all_open:true}. Geri almak için done:false.\n- Yeni görev YALNIZCA kullanıcı açıkça yeni bir görev eklenmesini isterse add_task / auto_assign_tasks ile eklenir.\n- Görev değiştir → edit_task, görev sil → delete_task, kopya/tekrarlayan görevleri temizle → remove_duplicate_tasks.\n- Ortak not defteri: not ekle → add_note, düzenle → edit_note, sil → delete_note. Alınacaklar listesi: ekle → add_shopping_item (miktar yoksa 1, fiyat yoksa 0; fiyat 0 ise bunu söyle), sil → delete_shopping_item.\n- Görev/not/ürün adı eşleşmez ya da birden fazla eşleşirse araç hata döner: tahmin etme, kullanıcıya hangisini kastettiğini sor.\n- Hava durumu context'te mevcutsa get_weather çağırma; yoksa veya farklı şehir istenirse çağır.\n- Araç sonucu {cancelled:true} ise «işlem iptal edildi» de.\n- Araç sonucu {error:...} ise hatayı kısaca ve dürüstçe söyle; işlemin yapıldığını İDDİA ETME.\n- Yalnızca araç sonucunda ok:true görürsen «yapıldı» de; araç çağırmadan «yaptım» deme.\n- Eksik bilgi varsa makul varsayım yap (tarih yoksa bugün, şehir yoksa kayıtlı şehir).\n- HATIRLATICI: «her Perşembe bana hatırlat», «yarın 09:00 da herkese duyur», «Cuma günleri yöneticilere yoklamayı hatırlat» gibi ZAMANLI mesaj isteklerinde create_reminder çağır (recurrence: once/daily/weekly; weekly için days: 0=Pazar,1=Pazartesi,2=Salı,3=Çarşamba,4=Perşembe,5=Cuma,6=Cumartesi; target: me=kullanıcının kendisi (varsayılan), admins=tüm yöneticiler, all=tüm kulüp ya da üye adı). Saat verilmediyse önce sor. Listele → list_reminders, iptal → delete_reminder. Aynı hatırlatıcıyı ASLA iki kez kurma (bir istek = tek create_reminder). Aynı adda birden fazla hatırlatıcı varsa kendin seçme: delete_reminder «birden fazla eşleşti» dönerse adayları numaralı göster ve kullanıcıya hangisini sileyim diye SOR, cevabına göre delete_reminder'ı number ile çağır; kopya temizliği (remove_duplicate_reminders) yalnızca kullanıcı isterse; araç sonucunda ok:true görmeden «sildim/temizledim» deme. Zamanı gelince EcoMind AI adına gelen kutusuna mesaj düşer. Araç sonucundaki uyari alanını kullanıcıya dürüstçe aktar (mesaj sunucudan değil panel üzerinden gider). ASLA «hatırlatma özelliğim yok» deme.\n- ÇOKLU SORUMLU: bir göreve birden fazla kişi atanabilir → add_task için assignees dizisi, mevcut görevin sorumlularını değiştirmek için edit_task new_assignees dizisi (liste sorumluların TAMAMIDIR). Görev tek ortak tamamlanma durumuna sahiptir; atanan kişilerden herhangi biri işaretleyebilir.";
 
-var MARUL_RULES_MEMBER = "\n\nARAÇ KURALLARI (STANDART ÜYE / ÖĞRENCİ):\n- Yapabildiklerin: ortak not defterine not eklemek (add_note), alınacaklar listesine ürün eklemek (add_shopping_item), SANA DAHA ÖNCE YÖNETİCİ TARAFINDAN ATANMIŞ görevleri BUGÜN için tamamlandı işaretlemek (complete_task), hava durumu.\n- KESİNLİKLE YAPAMADIKLARIN (GÖREV ATAMA/EKLEME YASAKTIR): Bir öğrencinin kendine dahi olsa görev atama veya görev oluşturma yetkisi YOKTUR. Kullanıcı «bana görev ata», «kendime görev ekle», «şu görevi bana ata», «bana iş ver» derse KESİNLİKLE reddet ve direkt şu cevabı ver: «Sen yönetici değilsin, görev atama veya görev oluşturma yetkin bulunmuyor. Görev atama yetkisi yalnızca kulüp yöneticilerine (Danışman Öğretmen / Kurucu / Yönetim Kurulu) aittir. Bir göreve talipsen lütfen kulüp yöneticine başvur.» Asla görev oluşturmaya çalışma, sana add_task aracı verilmemiştir.\n- DİĞER YAPAMADIKLARIN (yalnızca yöneticilere açık): yoklama almak/güncellemek, başkasının görevini işaretlemek, görev düzenlemek/silmek, not düzenlemek/silmek, listeden ürün silmek. Bunlar yalnızca yöneticilere açıktır.\n- GÖREV TAMAMLAMA: «görevi tamamla / yaptım» denince complete_task çağır.\n- Araç {error:...} dönerse nedenini kısaca söyle; yapıldığını iddia etme. Yalnızca ok:true görürsen «yapıldı» de.\n- Sistem kilitliyse veya işlem saati dışındaysa üye işlemleri yapılamaz; araç bunu bildirir.\n- Hava durumu context\'te mevcutsa get_weather çağırma; yoksa çağırabilirsin.\n- HATIRLATICI: kullanıcı KENDİNE zamanlı hatırlatma isterse create_reminder çağır (target me; başkasına/herkese kurulamaz), listele → list_reminders, iptal → delete_reminder. Saat verilmediyse sor. Araç sonucundaki uyari alanını dürüstçe aktar.";
+var MARUL_RULES_MEMBER = "\n\nARAÇ KURALLARI (STANDART ÜYE / ÖĞRENCİ):\n- Yapabildiklerin: ortak not defterine not eklemek (add_note), alınacaklar listesine ürün eklemek (add_shopping_item), SANA DAHA ÖNCE YÖNETİCİ TARAFINDAN ATANMIŞ görevleri BUGÜN için tamamlandı işaretlemek (complete_task), hava durumu.\n- KESİNLİKLE YAPAMADIKLARIN (GÖREV ATAMA/EKLEME YASAKTIR): Bir öğrencinin kendine dahi olsa görev atama veya görev oluşturma yetkisi YOKTUR. Kullanıcı «bana görev ata», «kendime görev ekle», «şu görevi bana ata», «bana iş ver» derse KESİNLİKLE reddet ve direkt şu cevabı ver: «Sen yönetici değilsin, görev atama veya görev oluşturma yetkin bulunmuyor. Görev atama yetkisi yalnızca kulüp yöneticilerine (Danışman Öğretmen / Kurucu / Yönetim Kurulu) aittir. Bir göreve talipsen lütfen kulüp yöneticine başvur.» Asla görev oluşturmaya çalışma, sana add_task aracı verilmemiştir.\n- DİĞER YAPAMADIKLARIN (yalnızca yöneticilere açık): yoklama almak/güncellemek, başkasının görevini işaretlemek, görev düzenlemek/silmek, not düzenlemek/silmek, listeden ürün silmek. Bunlar yalnızca yöneticilere açıktır.\n- GÖREV TAMAMLAMA: «görevi tamamla / yaptım» denince complete_task çağır.\n- Araç {error:...} dönerse nedenini kısaca söyle; yapıldığını iddia etme. Yalnızca ok:true görürsen «yapıldı» de.\n- Sistem kilitliyse veya işlem saati dışındaysa üye işlemleri yapılamaz; araç bunu bildirir.\n- Hava durumu context\'te mevcutsa get_weather çağırma; yoksa çağırabilirsin.\n- HATIRLATICI: kullanıcı KENDİNE zamanlı hatırlatma isterse create_reminder çağır (target me; başkasına/herkese kurulamaz), listele → list_reminders, iptal → delete_reminder (aynı adlıysa hangisini diye sor, number ile sil), toplu kopya temizliği → remove_duplicate_reminders. Aynı hatırlatıcıyı iki kez kurma. Saat verilmediyse sor. Araç sonucundaki uyari alanını dürüstçe aktar.";
 
 var marulLast = 0, marulHistory = [];
 // 🧠 EcoMind AI — kullanıcıya özel, şifreli bulut sohbet geçmişi (Firestore: ecomind_chats)
@@ -14710,7 +14745,8 @@ function marulTools(){
     marulTool('add_shopping_item','Alınacaklar (alışveriş) listesine ürün ekler. Miktar verilmezse 1, birim fiyat verilmezse 0 kullan.',{name:{type:'string',description:'Ürün adı'},quantity:{type:'number',description:'Miktar (varsayılan 1)'},unit_price:{type:'number',description:'Birim fiyat ₺ (varsayılan 0)'}},['name']),
     marulTool('create_reminder','Zamanlı hatırlatma mesajı kurar: belirlenen gün/saatte EcoMind AI adına gelen kutusuna otomatik mesaj düşer. «her Perşembe bana hatırlat», «yarın 09:00\'da yoklama hatırlat» gibi isteklerde kullan. Saat belirtilmediyse önce kullanıcıya sor.',{title:{type:'string',description:'Kısa konu başlığı, örn. Yoklama ve kazanım defteri'},text:{type:'string',description:'Mesaj metni (boşsa başlık kullanılır)'},recurrence:{type:'string',enum:['once','daily','weekly'],description:'once=tek sefer, daily=her gün, weekly=haftalık'},days:{type:'array',items:{type:'integer'},description:'Yalnızca weekly için günler: 0=Pazar,1=Pazartesi,2=Salı,3=Çarşamba,4=Perşembe,5=Cuma,6=Cumartesi'},time:{type:'string',description:'Saat HH:MM, örn. 09:00'},date:{type:'string',description:'Yalnızca once için tarih YYYY-MM-DD'},target:{type:'string',description:'me=kullanıcının kendisi (varsayılan), admins=tüm yöneticiler, all=tüm kulüp, ya da üye adı. Üye için yalnızca me kullanılabilir.'}},['title','recurrence','time']),
     marulTool('list_reminders','Kurulu aktif hatırlatıcıları listeler (yönetici hepsini, üye yalnızca kendisininkileri görür).',{}),
-    marulTool('delete_reminder','Bir hatırlatıcıyı iptal eder/siler (onay ister).',{reminder:{type:'string',description:'Hatırlatıcının başlığı veya ayırt edici kısmı'}},['reminder']),
+    marulTool('remove_duplicate_reminders','Birebir aynı (kopya) hatırlatıcıları bulur, en eskisini tutup fazlalıkları siler (onay ister). YALNIZCA kullanıcı «kopyaları temizle / fazlalıkları sil / her birinden bir tane kalsın» derse çağır. Kullanıcı belirli birini silmek istiyorsa BUNU ÇAĞIRMA, delete_reminder ile hangisini sileyim diye sor.',{}),
+    marulTool('delete_reminder','Bir hatırlatıcıyı iptal eder/siler (onay ister).',{reminder:{type:'string',description:'Hatırlatıcının başlığı veya ayırt edici kısmı'},number:{type:'integer',description:'list_reminders veya «birden fazla eşleşti» cevabındaki hatırlatıcı numarası (no). Kullanıcı hangisini seçtiyse onun numarası.'}}),
     marulTool('complete_task','MEVCUT görev(ler)i tamamlandı olarak işaretler veya geri alır. “Görevi tamamlandı işaretle / yaptım / bitti” isteklerinde BU aracı kullan; yeni görev OLUŞTURMAZ. Standart üye yalnızca kendine atanmış görevleri ve yalnızca bugünü işaretleyebilir.',{task:{type:'string',description:'İşaretlenecek görevin metni (veya metninin ayırt edici kısmı)'},all_open:{type:'boolean',description:'true ise kapsamdaki tüm açık görevler işaretlenir (üyede: kendi görevleri)'},assignee:{type:'string',description:'Sadece yönetici: all_open ile birlikte belirli üyenin görevleri'},done:{type:'boolean',description:'true=tamamlandı (varsayılan), false=tamamlanmadı olarak geri al'},date:{type:'string',description:'YYYY-MM-DD, varsayılan bugün; sadece yönetici geçmiş tarih verebilir'}})  ];
   if(adm){
     t.push(marulTool('add_task','YENİ bir görev ekler ve üyeye atar (yalnızca yönetici açıkça yeni görev isterse). Mevcut görevi tamamlamak için KULLANMA.',{text:{type:'string',description:'Görev açıklaması'},assignee:{type:'string',description:'Tek sorumlu üyenin adı (veya boş)'},assignees:{type:'array',items:{type:'string'},description:'BİRDEN FAZLA sorumlu üye adı (bir göreve birden çok kişi atanacaksa bunu kullan)'},due_date:{type:'string',description:'Son tarih YYYY-MM-DD (isteğe bağlı)'}},['text']));
@@ -14884,17 +14920,37 @@ async function marulRunTool(name,a){
     try{
       var rres=await window.bkvReminderAdd({title:rtitle,text:rbody,recurrence:rec,days:rdays,time:rtime,date:rdate,target:rtt,targetValue:rtv,targetLabel:rtl});
       var GN=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+      if(rres.duplicate) return {ok:true,zaten_vardi:true,baslik:rtitle,mesaj:'Aynı hatırlatıcı zaten kuruluydu, ikinci bir kopya OLUŞTURULMADI. Kullanıcıya hatırlatıcının tek olduğunu söyle.',sonraki_gonderim:rres.next};
       return {ok:true,baslik:rtitle,tekrar:rec==='once'?('tek sefer '+rdate):(rec==='daily'?'her gün':('her hafta '+rdays.map(function(d){return GN[d];}).join(', '))),saat:rtime,alici:rtl,sonraki_gonderim:rres.next,mesaj:'Hatırlatıcı kuruldu. Zamanı gelince EcoMind AI adına alıcının gelen kutusuna mesaj düşer.',uyari:'Sunucu tarafı zamanlayıcı yok: mesaj, panel o saatte herhangi bir cihazda açıksa saatinde; kapalıysa paneli ilk açan kişinin cihazından (en geç 36 saat içinde) gönderilir. Bunu kullanıcıya dürüstçe söyle.'};
     }catch(e){ return {error:'Hatırlatıcı kaydedilemedi: '+e.message}; }
   }
   if(name==='list_reminders'){
     var rl=window.bkvReminderList?window.bkvReminderList():[];
-    return {ok:true,adet:rl.length,hatirlaticilar:rl.map(function(r){return {baslik:r.title,tekrar:r.recurrence,gunler:r.days,saat:r.time,tarih:r.date,alici:r.target,kuran:r.createdBy,sonraki:r.next};})};
+    return {ok:true,adet:rl.length,hatirlaticilar:rl.map(function(r,i){return {no:i+1,kurulma_zamani:r.created,baslik:r.title,tekrar:r.recurrence,gunler:r.days,saat:r.time,tarih:r.date,alici:r.target,kuran:r.createdBy,sonraki:r.next};})};
+  }
+  if(name==='remove_duplicate_reminders'){
+    var gg=marulGate(); if(gg) return gg;
+    var dgs=window.bkvReminderDupGroups?window.bkvReminderDupGroups():[];
+    if(!dgs.length) return {info:'Kopya hatırlatıcı bulunamadı.'};
+    var dtot=dgs.reduce(function(s,g){return s+g.length-1;},0);
+    if(!(await marulConfirm('Kopya hatırlatıcılar temizlenecek ('+dtot+' kayıt silinecek, her birinden 1 tane kalacak):\n'+dgs.slice(0,10).map(function(g){return '• \"'+g[0].title+'\" ('+g[0].time+') — '+g.length+' kopya → 1';}).join('\n')+'\n\nOnaylıyor musun?'))) return {cancelled:true};
+    try{var dr=await window.bkvReminderDedupe(); return {ok:dr.errs.length===0,silinen_kopya:dr.removed,hatalar:dr.errs,mesaj:dr.removed+' kopya hatırlatıcı temizlendi, her birinden 1 tane kaldı.'};}catch(e){return {error:'Kopyalar temizlenemedi: '+e.message};}
   }
   if(name==='delete_reminder'){
     var rl2=window.bkvReminderList?window.bkvReminderList():[];
-    var rp=marulPick(rl2,a.reminder,function(r){return r.title;},'hatırlatıcı'); if(rp.error) return rp;
-    if(!(await marulConfirm('Hatırlatıcı SİLİNECEK:\n"'+rp.item.title+'" ('+(rp.item.days.length?rp.item.days.join(', ')+' ':'')+rp.item.time+')\n\nOnaylıyor musun?'))) return {cancelled:true};
+    var rp;
+    var rnum=parseInt(a.number);
+    if(rnum>=1&&rnum<=rl2.length) rp={item:rl2[rnum-1]};
+    else{
+      rp=marulPick(rl2,a.reminder,function(r){return r.title;},'hatırlatıcı');
+      if(rp.error&&rp.ambiguous){
+        var rq=marulFold(a.reminder);
+        var cand=[]; rl2.forEach(function(r,i){ if(marulFold(marulUnesc(r.title)).indexOf(rq)>-1) cand.push({no:i+1,baslik:r.title,saat:r.time,gunler:r.days,tekrar:r.recurrence,alici:r.target,kuran:r.createdBy,kurulma_zamani:r.created}); });
+        return {error:'Bu ada uyan birden fazla hatırlatıcı var. HİÇBİRİNİ SİLME: kullanıcıya adayları numarasıyla ve ayırt edici bilgileriyle (saat, gün, alıcı, kurulma zamanı) göster ve «hangisini sileyim?» diye SOR (aynıysa «ilkini / ikincisini / hepsini» seçenekleri). Kullanıcı seçince delete_reminder\'ı number ile çağır.',ambiguous:true,adaylar:cand};
+      }
+      if(rp.error) return rp;
+    }
+    if(!(await marulConfirm('Hatırlatıcı SİLİNECEK:\n"'+rp.item.title+'" ('+(rp.item.days.length?rp.item.days.join(', ')+' ':'')+rp.item.time+')'+(rp.item.created?' — kurulma: '+rp.item.created:'')+'\n\nOnaylıyor musun?'))) return {cancelled:true};
     try{await window.bkvReminderDelete(rp.item.id);}catch(e){return {error:'Hatırlatıcı silinemedi: '+e.message};}
     return {ok:true,silinen:rp.item.title,mesaj:'Hatırlatıcı iptal edildi.'};
   }
@@ -15272,7 +15328,7 @@ async function marulAsk(q,where,inputEl){
         for(var c=0;c<m.tool_calls.length;c++){
           var tc=m.tool_calls[c], args={}, res;
           try{args=JSON.parse(tc.function.arguments||'{}');}catch(e){}
-          var toolLabel={'get_weather':'🌤️ hava durumuna bakıyor','take_attendance':'📋 yoklama kaydediyor','add_task':'✅ görev ekliyor','auto_assign_tasks':'🔄 görevleri dağıtıyor','get_attendance_report':'📊 rapor hazırlıyor','get_task_summary':'📝 görev özeti hazırlıyor','complete_task':'✅ görevi işaretliyor','update_attendance':'📋 yoklamayı güncelliyor','edit_task':'✏️ görevi düzenliyor','delete_task':'🗑️ görevi siliyor','remove_duplicate_tasks':'🧹 kopya görevleri temizliyor','add_note':'📝 not ekliyor','edit_note':'✏️ notu düzenliyor','delete_note':'🗑️ notu siliyor','add_shopping_item':'🛒 listeye ekliyor','delete_shopping_item':'🗑️ listeden siliyor','create_reminder':'⏰ hatırlatıcı kuruyor','list_reminders':'⏰ hatırlatıcılara bakıyor','delete_reminder':'🗑️ hatırlatıcıyı siliyor'};
+          var toolLabel={'get_weather':'🌤️ hava durumuna bakıyor','take_attendance':'📋 yoklama kaydediyor','add_task':'✅ görev ekliyor','auto_assign_tasks':'🔄 görevleri dağıtıyor','get_attendance_report':'📊 rapor hazırlıyor','get_task_summary':'📝 görev özeti hazırlıyor','complete_task':'✅ görevi işaretliyor','update_attendance':'📋 yoklamayı güncelliyor','edit_task':'✏️ görevi düzenliyor','delete_task':'🗑️ görevi siliyor','remove_duplicate_tasks':'🧹 kopya görevleri temizliyor','add_note':'📝 not ekliyor','edit_note':'✏️ notu düzenliyor','delete_note':'🗑️ notu siliyor','add_shopping_item':'🛒 listeye ekliyor','delete_shopping_item':'🗑️ listeden siliyor','create_reminder':'⏰ hatırlatıcı kuruyor','list_reminders':'⏰ hatırlatıcılara bakıyor','delete_reminder':'🗑️ hatırlatıcıyı siliyor','remove_duplicate_reminders':'🧹 kopya hatırlatıcıları temizliyor'};
           wait.textContent='🧠 '+(toolLabel[tc.function.name]||'işlem yapıyor')+'...';
           try{res=await marulRunTool(tc.function.name,args);}catch(e){res={error:'İşlem başarısız: '+e.message};}
           msgs.push({role:'tool',tool_call_id:tc.id,content:JSON.stringify(res).slice(0,4000)});
