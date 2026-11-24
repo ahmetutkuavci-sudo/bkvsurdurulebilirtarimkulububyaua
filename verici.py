@@ -10,6 +10,8 @@
 # Yönetim sistemindeki 'Atölye Kamerası' sekmesine adres + şifre girilir.
 # Kullanıcı adı: admin   Şifre: verici.py'nin yanındaki sifre.txt dosyasında (ilk çalışmada oluşur).
 #
+# https'ten (GitHub Pages) izlemek için:  python verici.py --tunel   (cloudflared gerekir)
+#
 # Seçenekler:  python verici.py --port 8080 --kalite 60 --genislik 640 --fps 10 --kamera-ip 192.168.100.1
 
 import argparse
@@ -19,7 +21,10 @@ import json
 import os
 import secrets
 import socket
+import re
+import shutil
 import struct
+import subprocess
 import sys
 import threading
 import time
@@ -329,6 +334,7 @@ def sunucu_kur(yayin, kamera, sifre, aralik):
             self.send_response(204)
             self.send_header("Access-Control-Allow-Origin", "*")
             self.send_header("Access-Control-Allow-Headers", "Authorization")
+            self.send_header("Access-Control-Allow-Private-Network", "true")
             self.end_headers()
 
         def do_GET(self):
@@ -392,6 +398,8 @@ def main():
     ap.add_argument("--kalite", type=int, default=60, help="JPEG kalitesi 1-100 (düşük = az internet)")
     ap.add_argument("--genislik", type=int, default=640, help="yayın genişliği px (0 = orijinal)")
     ap.add_argument("--fps", type=float, default=10, help="izleyici başına en çok kare/saniye")
+    ap.add_argument("--tunel", action="store_true",
+                    help="cloudflared ile https adresi aç (GitHub Pages / https sitelerinden izlemek için)")
     a = ap.parse_args()
 
     sifre, sifre_yeri = sifreyi_al()
@@ -409,6 +417,23 @@ def main():
     print("    http://localhost:%d" % a.port)
     for ad in yerel_adresler():
         print("    http://%s:%d" % (ad, a.port))
+    tunel = None
+    if a.tunel:
+        exe = shutil.which("cloudflared")
+        if not exe:
+            print("\n!! cloudflared bulunamadi. Kurulum: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/")
+        else:
+            tunel = subprocess.Popen([exe, "tunnel", "--url", "http://localhost:%d" % a.port],
+                                     stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+
+            def tunel_oku():
+                son_adres = ""
+                for satir in tunel.stderr:
+                    m = re.search(r"https://[a-z0-9-]+\.trycloudflare\.com", satir)
+                    if m and m.group(0) != son_adres:
+                        son_adres = m.group(0)
+                        print("\n>>> INTERNET ADRESI (sisteme bunu yazin): %s\n" % son_adres)
+            threading.Thread(target=tunel_oku, daemon=True).start()
     print("Durdurmak icin Ctrl+C")
     last = ""
     try:
@@ -422,6 +447,8 @@ def main():
         pass
     finally:
         kamera.kapat()
+        if tunel:
+            tunel.terminate()
         sunucu.shutdown()
         time.sleep(0.5)
 
