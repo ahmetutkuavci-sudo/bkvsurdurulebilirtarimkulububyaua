@@ -4443,6 +4443,7 @@
             <button class="tab-btn" id="tab-btn-hava-durumu" onclick="openTab('tab-hava-durumu', this)"><span class="tab-icon">⛅</span> <span class="tab-text">Hava Durumu</span></button>
             <button class="tab-btn" id="tab-btn-barcode" onclick="openTab('tab-barcode', this)"><span class="tab-icon">🏷️</span> <span class="tab-text">Barkod/Satış</span></button>
             <button class="tab-btn" id="tab-btn-excel" onclick="openTab('tab-excel', this)"><span class="tab-icon">📊</span> <span class="tab-text">Tablo &amp; Grafikler</span></button>
+            <button class="tab-btn cam-admin" id="tab-btn-camera" onclick="openTab('tab-camera', this)"><span class="tab-icon">📹</span> <span class="tab-text">Atölye Kamerası</span></button>
             <button class="tab-btn" id="tab-btn-settings" onclick="openTab('tab-settings', this)"><span class="tab-icon">⚙️</span> <span class="tab-text">Ayarlar</span></button>
         </nav>
     </header>
@@ -4485,6 +4486,9 @@
                     </button>
                     <button onclick="openTab('tab-excel', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
                         <span style="font-size: 17px;">📊</span> <span class="sidebar-hide-on-collapse">Tablo &amp; Grafikler</span>
+                    </button>
+                    <button onclick="openTab('tab-camera', this)" class="nav-link cam-admin" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
+                        <span style="font-size: 17px;">📹</span> <span class="sidebar-hide-on-collapse">Atölye Kamerası</span>
                     </button>
                     <button id="sidebar-btn-settings" onclick="openTab('tab-settings', this)" class="nav-link" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; text-align: left; transition: all 0.2s;">
                         <span style="font-size: 17px;">⚙️</span> <span class="sidebar-hide-on-collapse">Ayarlar</span>
@@ -5642,6 +5646,134 @@
 
                 </div>
             </div>
+
+            <!-- TAB: ATÖLYE KAMERASI (Bood B9-A, verici.py üzerinden) -->
+            <style>
+                body:not(.is-admin) .cam-admin { display: none !important; }
+                #cam-wrap { position: relative; background: #000; border-radius: 14px; overflow: hidden; min-height: 240px;
+                            display: flex; align-items: center; justify-content: center; }
+                #cam-video { max-width: 100%; max-height: 72vh; display: none; }
+                #cam-placeholder { color: #bbb; padding: 40px 16px; text-align: center; font-size: 14px; }
+                #cam-durum { padding: 3px 10px; border-radius: 12px; background: #666; color: #fff; font-size: 12px; font-weight: 700; }
+                #cam-durum.canli { background: #1c7c3a; }
+                #cam-durum.sorun { background: #9a2a2a; }
+                .cam-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+                .cam-row input[type=text], .cam-row input[type=password] { flex: 1 1 220px; padding: 8px 10px; border-radius: 8px; border: 1px solid #9994; background: rgba(255,255,255,.85); color: #111; }
+            </style>
+            <div id="tab-camera" class="tab-content">
+                <div class="card glass" style="padding: 16px;">
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <h3 style="margin:0 auto 0 0;">📹 Atölye Kamerası</h3>
+                        <span id="cam-durum">Kapalı</span>
+                        <button class="aero-btn" onclick="kameraBaslat()">▶ Başlat</button>
+                        <button class="aero-btn" onclick="kameraDurdur()">⏹ Durdur</button>
+                        <button class="aero-btn" onclick="kameraFoto()">📷 Fotoğraf</button>
+                        <button class="aero-btn" onclick="kameraTamEkran()">⛶ Tam ekran</button>
+                    </div>
+                    <div id="cam-wrap" style="margin-top:12px;">
+                        <div id="cam-placeholder">Görüntü için aşağıdan verici adresini girip <b>Başlat</b>'a basın.</div>
+                        <img id="cam-video" alt="Atölye kamerası">
+                    </div>
+                    <div id="cam-uyari" style="display:none; margin-top:10px; padding:10px 12px; border-radius:10px; background:#fff3cd; color:#7a5b00; font-size:13px;"></div>
+                    <div class="cam-row">
+                        <input type="text" id="cam-adres" placeholder="Verici adresi (ör. https://atolye.example.com veya http://192.168.1.20:8080)" autocomplete="off">
+                        <input type="password" id="cam-sifre" placeholder="Verici şifresi (sifre.txt)" autocomplete="off">
+                        <label style="font-size:12px;"><input type="checkbox" id="cam-hatirla" checked> Bu cihazda hatırla</label>
+                        <button class="aero-btn" onclick="kameraKaydet(true)">💾 Kaydet ve bağlan</button>
+                    </div>
+                    <p style="font-size:12px; opacity:.75; margin:10px 0 0;">
+                        Okuldaki bilgisayarda <code>verici.py</code> çalışıyor olmalı; bilgisayar kameranın Wi-Fi'sine bağlı, telefon uygulaması kapalı olmalıdır.
+                        Bu sekme yalnızca yönetici hesaplarına görünür.
+                    </p>
+                </div>
+            </div>
+            <script>
+            (function () {
+                var LS = 'bkvKameraAyar', tmr = null, aktif = false, durumTmr = null, nonce = 0;
+                function $(id) { return document.getElementById(id); }
+                function oku() { try { return JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) { return {}; } }
+                function adres() { return ($('cam-adres').value || '').trim().replace(/\/+$/, ''); }
+                function sifre() { return $('cam-sifre').value || ''; }
+                function durumYaz(m, c) { var e = $('cam-durum'); e.textContent = m; e.className = c || ''; }
+                function uyari(m) { var e = $('cam-uyari'); e.style.display = m ? 'block' : 'none'; e.textContent = m || ''; }
+                function url(yol) { return adres() + yol + (yol.indexOf('?') < 0 ? '?' : '&') + 'k=' + encodeURIComponent(sifre()); }
+
+                window.kameraKaydet = function (baglan) {
+                    var a = adres();
+                    if (a && !/^https?:\/\//i.test(a)) { a = 'http://' + a; $('cam-adres').value = a; }
+                    try {
+                        if ($('cam-hatirla').checked) localStorage.setItem(LS, JSON.stringify({ a: a, s: sifre() }));
+                        else localStorage.removeItem(LS);
+                    } catch (e) {}
+                    if (baglan) window.kameraBaslat();
+                };
+
+                window.kameraAc = function () {
+                    var o = oku();
+                    if (!$('cam-adres').value && o.a) $('cam-adres').value = o.a;
+                    if (!$('cam-sifre').value && o.s) $('cam-sifre').value = o.s;
+                    if (!aktif && adres() && sifre()) window.kameraBaslat();
+                };
+
+                function durumSor() {
+                    if (!aktif) return;
+                    fetch(url('/durum'), { cache: 'no-store' }).then(function (r) {
+                        if (r.status === 401) throw new Error('sifre');
+                        return r.json();
+                    }).then(function (d) {
+                        durumYaz(d.durum, d.canli ? 'canli' : 'sorun');
+                    }).catch(function (e) {
+                        durumYaz(e.message === 'sifre' ? 'Şifre hatalı' : 'Verici ile bağlantı yok', 'sorun');
+                    });
+                }
+
+                window.kameraBaslat = function () {
+                    var a = adres();
+                    if (!a || !sifre()) { uyari('Önce verici adresini ve şifresini girin.'); return; }
+                    if (!/^https?:\/\//i.test(a)) { window.kameraKaydet(false); a = adres(); }
+                    if (location.protocol === 'https:' && /^http:\/\//i.test(a) && !/^http:\/\/(localhost|127\.)/i.test(a)) {
+                        uyari('Bu sistem https üzerinden açıldığı için tarayıcı http:// adresli görüntüyü engeller. Vericiyi https adresiyle (ör. Cloudflare Tunnel) yayınlayın.');
+                    } else uyari('');
+                    aktif = true; nonce++;
+                    var v = $('cam-video');
+                    v.onload = null;
+                    v.onerror = function () {
+                        if (!aktif) return;
+                        durumYaz('Bağlanamıyor, yeniden deneniyor...', 'sorun');
+                        clearTimeout(tmr); tmr = setTimeout(function () { if (aktif) window.kameraBaslat(); }, 3000);
+                    };
+                    v.style.display = 'block'; $('cam-placeholder').style.display = 'none';
+                    durumYaz('Bağlanıyor...', '');
+                    v.src = url('/akis?t=' + Date.now());
+                    clearInterval(durumTmr); durumTmr = setInterval(durumSor, 3000); durumSor();
+                };
+
+                window.kameraDurdur = function () {
+                    aktif = false; clearTimeout(tmr); clearInterval(durumTmr);
+                    var v = $('cam-video'); if (!v) return;
+                    v.onerror = null; v.removeAttribute('src'); v.style.display = 'none';
+                    $('cam-placeholder').style.display = 'block';
+                    durumYaz('Kapalı', '');
+                };
+
+                window.kameraFoto = function () {
+                    if (!adres()) return;
+                    fetch(url('/foto'), { cache: 'no-store' }).then(function (r) {
+                        if (!r.ok) throw new Error(r.status); return r.blob();
+                    }).then(function (b) {
+                        var l = document.createElement('a'), d = new Date(), p = function (n) { return ('0' + n).slice(-2); };
+                        l.href = URL.createObjectURL(b);
+                        l.download = 'atolye_' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '_' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()) + '.jpg';
+                        document.body.appendChild(l); l.click(); l.remove();
+                        setTimeout(function () { URL.revokeObjectURL(l.href); }, 2000);
+                    }).catch(function () { uyari('Fotoğraf alınamadı (görüntü yok veya bağlantı kesik).'); });
+                };
+
+                window.kameraTamEkran = function () {
+                    var w = $('cam-wrap'); if (w && w.requestFullscreen) w.requestFullscreen();
+                };
+            })();
+            </script>
 
             <!-- TAB 9: AYARLAR -->
             <div id="tab-settings" class="tab-content">
@@ -8017,7 +8149,7 @@
 
         function openTab(tabId, btnElement) {
             const isAdmin = sessionStorage.getItem('currentRole') === 'admin';
-            if (!isAdmin && tabId === 'tab-settings') {
+            if (!isAdmin && (tabId === 'tab-settings' || tabId === 'tab-camera')) {
                 showNotification("⚠️ Bu menüye erişim yetkiniz bulunmamaktadır (Yalnızca tam yetkili yöneticiler erişebilir)!", "warning");
                 return;
             }
@@ -8033,6 +8165,8 @@
                 return;
             }
 
+            if (tabId !== 'tab-camera' && typeof window.kameraDurdur === 'function') window.kameraDurdur();
+            if (tabId === 'tab-camera' && typeof window.kameraAc === 'function') setTimeout(window.kameraAc, 0);
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('#main-sidebar .nav-link').forEach(link => {
