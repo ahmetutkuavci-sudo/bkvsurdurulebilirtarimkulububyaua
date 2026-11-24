@@ -9497,6 +9497,9 @@
     });
     </script>
     <script type="module">
+        // ⛔ Bulut boş göründüğünde cihazdaki (eski) yerel kayıtları buluta TEKRAR YÜKLEME: silinen veriler eski cihazdan geri geliyordu.
+        // Bulut tek doğru kaynaktır; boşsa yerel de boşaltılır.
+        const BKV_REUPLOAD_LOCAL_TO_CLOUD = false;
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
         import { 
             getFirestore, 
@@ -10036,7 +10039,7 @@
         onSnapshot(collection(db, "notes"), async (snapshot) => {
             // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
             if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-            if (snapshot.empty && !notesInitialSynced) {
+            if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !notesInitialSynced) {
                 notesInitialSynced = true;
                 let localNotes = [];
                 try { localNotes = JSON.parse(localStorage.getItem('bkvNotesShared')) || []; } catch(e) {}
@@ -10487,7 +10490,7 @@
         onSnapshot(collection(db, "shopping"), async (snapshot) => {
             // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
             if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-            if (snapshot.empty && !shoppingInitialSynced) {
+            if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !shoppingInitialSynced) {
                 shoppingInitialSynced = true;
                 let localItems = [];
                 try { localItems = JSON.parse(localStorage.getItem('shoppingList')) || []; } catch(e){}
@@ -11066,7 +11069,7 @@
         onSnapshot(collection(db, "products"), async (snapshot) => {
             // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
             if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-            if (snapshot.empty && !productsInitialSynced) {
+            if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !productsInitialSynced) {
                 productsInitialSynced = true;
                 let localProducts = [];
                 try { localProducts = JSON.parse(localStorage.getItem('bkvProducts')) || []; } catch(e){}
@@ -11614,7 +11617,7 @@
         onSnapshot(collection(db, "messages"), async (snapshot) => {
             // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
             if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-            if (snapshot.empty && !messagesInitialSynced) {
+            if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !messagesInitialSynced) {
                 messagesInitialSynced = true;
                 let localMsgs = window.getSafeMessages();
                 if (localMsgs.length > 0) {
@@ -11891,7 +11894,7 @@
         onSnapshot(collection(db, "student_requests"), async (snapshot) => {
             // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
             if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-            if (snapshot.empty && !requestsInitialSynced) {
+            if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !requestsInitialSynced) {
                 requestsInitialSynced = true;
                 let localReqs = window.getSafeRequests();
                 if (localReqs.length > 0) {
@@ -12228,7 +12231,7 @@
         onSnapshot(collection(db, "attendance"), async (snapshot) => {
             // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
             if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-            if (snapshot.empty && !attendanceInitialSynced) {
+            if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !attendanceInitialSynced) {
                 attendanceInitialSynced = true;
                 let localAtt = {};
                 try { localAtt = JSON.parse(localStorage.getItem('bkvAttendance')) || {}; } catch(e) {}
@@ -12380,7 +12383,7 @@
         onSnapshot(collection(db, "club_logs"), async (snapshot) => {
             // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
             if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-            if (snapshot.empty && !clubLogsInitialSynced) {
+            if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !clubLogsInitialSynced) {
                 clubLogsInitialSynced = true;
                 let localLogs = [];
                 try { localLogs = JSON.parse(localStorage.getItem('clubLogs')) || []; } catch(e) {}
@@ -12732,7 +12735,7 @@
         onSnapshot(collection(db, "bokashi"), async (snapshot) => {
             // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
             if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-            if (snapshot.empty && !bokashiInitialSynced) {
+            if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !bokashiInitialSynced) {
                 bokashiInitialSynced = true;
                 let localB = [];
                 try { localB = JSON.parse(localStorage.getItem('bkvBokashi')) || []; } catch(e) {}
@@ -12790,7 +12793,7 @@
             onSnapshot(collection(db, koleksiyon), async (snapshot) => {
                 // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
                 if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-                if (snapshot.empty && !ilk) {
+                if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !ilk) {
                     ilk = true;
                     let yerel = [];
                     try { yerel = JSON.parse(localStorage.getItem(anahtar)) || []; } catch(e) {}
@@ -12826,7 +12829,7 @@
         onSnapshot(collection(db, "seed_bank"), async (snapshot) => {
             // 📶 Çevrimdışıyken önbellek boş gelir: bunu "bulut boş" sanıp yerel kayıtları tekrar yükleme (kopyalanma hatası)
             if (snapshot.empty && snapshot.metadata && snapshot.metadata.fromCache) { return; }
-            if (snapshot.empty && !tohumIlk) {
+            if (BKV_REUPLOAD_LOCAL_TO_CLOUD && snapshot.empty && !tohumIlk) {
                 tohumIlk = true;
                 let yerel = [];
                 try { yerel = JSON.parse(localStorage.getItem('bkvSeeds')) || []; } catch(e) {}
