@@ -3438,7 +3438,7 @@
         .marul-modelbar{position:relative;display:flex;justify-content:flex-end;padding:2px 12px 4px;flex:none}
         .marul-model-btn{border:none;cursor:pointer;background:rgba(0,0,0,.06);color:var(--text-main,#0c4a6e);border-radius:999px;padding:5px 11px;font-size:12px;font-weight:800;line-height:1.2;white-space:nowrap}
         .marul-model-btn:hover{background:rgba(34,197,94,.2)}
-        .marul-model-menu{display:none;position:absolute;right:12px;bottom:100%;width:min(260px,calc(100% - 24px));padding:6px;border-radius:14px;background:var(--glass-bg,rgba(255,255,255,.98));border:1px solid var(--glass-border,#fff);box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:5}
+        .marul-model-menu{display:none;position:absolute;right:12px;bottom:100%;width:min(260px,calc(100% - 24px));padding:6px;border-radius:14px;background:#ffffff;border:1px solid rgba(0,0,0,.12);box-shadow:0 10px 28px rgba(0,0,0,.22);z-index:20}
         .marul-model-menu.open{display:block}
         .marul-model-menu button{display:grid;grid-template-columns:1fr auto;align-items:center;width:100%;text-align:left;border:none;background:none;cursor:pointer;padding:8px 10px;border-radius:10px;color:var(--text-main,#0c4a6e)}
         .marul-model-menu button:hover{background:rgba(34,197,94,.15)}
@@ -5908,6 +5908,16 @@
                                 </div>
                                 <div>
                                     <div style="font-size:13px; font-weight:700; margin-bottom:6px;">🤖 Öğrenciler hangi yapay zeka modelini kullanabilsin?</div>
+                                    <label class="aero-switch-item" for="eco-cfg-model-auto" style="margin-bottom:6px;">
+                                        <div class="aero-switch-text">
+                                            <span class="aero-switch-title">🤖 Terra Otomatik</span>
+                                            <span class="aero-switch-desc">En uygun modeli otomatik seçer, yoğunlukta yedeklere geçer.</span>
+                                        </div>
+                                        <div class="aero-toggle-switch">
+                                            <input type="checkbox" id="eco-cfg-model-auto" class="toggle-blue">
+                                            <span class="aero-toggle-track"></span>
+                                        </div>
+                                    </label>
                                     <label class="aero-switch-item" for="eco-cfg-model-flash" style="margin-bottom:6px;">
                                         <div class="aero-switch-text">
                                             <span class="aero-switch-title">⚡ Terra</span>
@@ -6014,6 +6024,7 @@
             <div class="marul-answer" id="marul-pop-answer"></div>
             <div class="marul-modelbar" style="display:none">
                 <div class="marul-model-menu" id="marul-model-menu">
+                    <button type="button" data-m="auto" onclick="marulModelPick('auto')"><b>🤖 Terra Otomatik</b><small>En uygun modeli otomatik seçer</small><i>✓</i></button>
                     <button type="button" data-m="flash" onclick="marulModelPick('flash')"><b>⚡ Terra</b><small>Daha güçlü, işlem komutları için</small><i>✓</i></button>
                     <button type="button" data-m="lite" onclick="marulModelPick('lite')"><b>🪶 Terra Lite</b><small>Daha hızlı ve ekonomik</small><i>✓</i></button>
                     <button type="button" data-m="lettuce" onclick="marulModelPick('lettuce')"><b>🥬 Terra Lettuce</b><small>Groq altyapısı, çok hızlı</small><i>✓</i></button>
@@ -9841,6 +9852,7 @@
             set('eco-cfg-emoji', el => el.value = c.emoji || 'many');
             set('eco-cfg-limit', el => el.value = Number(c.dailyLimit) || 0);
             { const sm = Array.isArray(c.studentModels) ? c.studentModels : ['flash','lite'];
+              set('eco-cfg-model-auto', el => el.checked = sm.indexOf('auto') > -1);
               set('eco-cfg-model-flash', el => el.checked = sm.indexOf('flash') > -1);
               set('eco-cfg-model-lite', el => el.checked = sm.indexOf('lite') > -1);
               set('eco-cfg-model-lettuce', el => el.checked = sm.indexOf('lettuce') > -1); }
@@ -9860,6 +9872,7 @@
             const g = id => document.getElementById(id);
             let lim = parseInt(g('eco-cfg-limit').value, 10); if (isNaN(lim) || lim < 0) lim = 0; if (lim > 500) lim = 500;
             const sModels = [];
+            if (g('eco-cfg-model-auto') && g('eco-cfg-model-auto').checked) sModels.push('auto');
             if (g('eco-cfg-model-flash').checked) sModels.push('flash');
             if (g('eco-cfg-model-lite').checked) sModels.push('lite');
             if (g('eco-cfg-model-lettuce') && g('eco-cfg-model-lettuce').checked) sModels.push('lettuce');
@@ -14708,15 +14721,15 @@ function marulMic(input,where,btn){
   rec.onend=function(){btn.classList.remove('rec');marulRec=null;var t=(finalText||input.value||'').trim();if(t){marulVoiceNext=true;marulAsk(t,where,input);}};
   try{rec.start();}catch(e){btn.classList.remove('rec');marulRec=null;}
 }
-var MARUL_MODEL_FLASH='gemini-flash-latest', MARUL_MODEL_LITE='gemini-flash-lite-latest', MARUL_MODEL_LETTUCE='lettuce';
-var MARUL_LETTUCE_PICK=false; try{ MARUL_LETTUCE_PICK=(localStorage.getItem('MARUL_TIER')==='lettuce'); }catch(e){}
+var MARUL_MODEL_FLASH='gemini-flash-latest', MARUL_MODEL_LITE='gemini-flash-lite-latest', MARUL_MODEL_LETTUCE='lettuce', MARUL_MODEL_AUTO='auto';
+var MARUL_LETTUCE_PICK=false, MARUL_AUTO_PICK=false; try{ var _mt=localStorage.getItem('MARUL_TIER'); MARUL_LETTUCE_PICK=(_mt==='lettuce'); MARUL_AUTO_PICK=(_mt==='auto'); }catch(e){}
 function marulModelIsLite(){return /lite/i.test(String(MARUL_MODEL||''));}
 // Öğrencilere izin verilen modeller (yönetici ayarı). Tanımsız = Terra ve Terra Lite serbest.
-function marulStudentAllowed(){ var a=marulCfg().studentModels; if(!Array.isArray(a)) return ['flash','lite']; a=a.filter(function(x){return x==='flash'||x==='lite'||x==='lettuce';}); return a.length?a:['flash','lite']; }
+function marulStudentAllowed(){ var a=marulCfg().studentModels; if(!Array.isArray(a)) return ['flash','lite']; a=a.filter(function(x){return x==='auto'||x==='flash'||x==='lite'||x==='lettuce';}); return a.length?a:['flash','lite']; }
 function marulIsAdminNow(){ try{ return (sessionStorage.getItem('isUnlocked')==='true') && (typeof marulIsAdmin==='function') && marulIsAdmin(); }catch(e){ return false; } }
-// Bu kullanıcının fiilen kullanacağı katman: 'flash' | 'lite' | 'lettuce' (öğrenci için izin listesine uyar)
+// Bu kullanıcının fiilen kullanacağı katman: 'auto' | 'flash' | 'lite' | 'lettuce' (öğrenci için izin listesine uyar)
 function marulEffectiveTier(){
-  var cur=MARUL_LETTUCE_PICK?'lettuce':(marulModelIsLite()?'lite':'flash');
+  var cur=MARUL_AUTO_PICK?'auto':(MARUL_LETTUCE_PICK?'lettuce':(marulModelIsLite()?'lite':'flash'));
   if(marulIsAdminNow()) return cur;
   var al=marulStudentAllowed();
   return al.indexOf(cur)>-1?cur:al[0];
@@ -14724,6 +14737,7 @@ function marulEffectiveTier(){
 // Bu kullanıcının fiilen kullanacağı model
 function marulEffectiveModel(){
   var t=marulEffectiveTier();
+  if(t==='auto') return MARUL_MODEL_AUTO;
   if(t==='lettuce') return MARUL_MODEL_LETTUCE;
   if((t==='lite')===marulModelIsLite()) return MARUL_MODEL;
   return t==='lite'?MARUL_MODEL_LITE:MARUL_MODEL_FLASH;
@@ -14731,26 +14745,29 @@ function marulEffectiveModel(){
 function marulModelPaint(){
   var show=false; try{ show=marulIsAdminNow() || (sessionStorage.getItem('isUnlocked')==='true' && marulStudentAllowed().length>1); }catch(e){}
   var tier=marulEffectiveTier();
-  var label={flash:'⚡ Terra',lite:'🪶 Terra Lite',lettuce:'🥬 Terra Lettuce'}[tier]||'⚡ Terra';
+  var label={auto:'🤖 Terra Otomatik',flash:'⚡ Terra',lite:'🪶 Terra Lite',lettuce:'🥬 Terra Lettuce'}[tier]||'⚡ Terra';
   document.querySelectorAll('.marul-modelbar').forEach(function(bar){ bar.style.display=show?'':'none'; });
   document.querySelectorAll('.marul-model-btn').forEach(function(b){ b.textContent=label+' ⌄'; });
-  var al=marulIsAdminNow()?['flash','lite','lettuce']:marulStudentAllowed();
+  var al=marulIsAdminNow()?['auto','flash','lite','lettuce']:marulStudentAllowed();
   document.querySelectorAll('.marul-model-menu button').forEach(function(b){ var d=b.getAttribute('data-m'); b.classList.toggle('sel',d===tier); b.style.display=(al.indexOf(d)>-1)?'':'none'; });
   if(!show){ var m=document.getElementById('marul-model-menu'); if(m) m.classList.remove('open'); }
 }
 function marulModelMenu(e){ if(e) e.stopPropagation(); var m=document.getElementById('marul-model-menu'); if(m) m.classList.toggle('open'); }
 function marulModelPick(which){
-  if(which==='lettuce'){
-    MARUL_LETTUCE_PICK=true;
+  if(which==='auto'){
+    MARUL_AUTO_PICK=true; MARUL_LETTUCE_PICK=false;
+    try{localStorage.setItem('MARUL_TIER','auto');}catch(e){}
+  } else if(which==='lettuce'){
+    MARUL_AUTO_PICK=false; MARUL_LETTUCE_PICK=true;
     try{localStorage.setItem('MARUL_TIER','lettuce');}catch(e){}
   } else {
-    MARUL_LETTUCE_PICK=false;
+    MARUL_AUTO_PICK=false; MARUL_LETTUCE_PICK=false;
     MARUL_MODEL=(which==='lite')?MARUL_MODEL_LITE:MARUL_MODEL_FLASH;
     try{localStorage.setItem('MARUL_TIER','gemini');localStorage.setItem('GEMINI_MODEL',MARUL_MODEL);}catch(e){}
   }
   var m=document.getElementById('marul-model-menu'); if(m) m.classList.remove('open');
   marulModelPaint();
-  try{ if(typeof showNotification==='function') showNotification(which==='lettuce'?'🥬 EcoMind AI: Terra Lettuce seçildi':(which==='lite'?'🪶 EcoMind AI: Terra Lite seçildi':'⚡ EcoMind AI: Terra seçildi'),'info'); }catch(e){}
+  try{ if(typeof showNotification==='function') showNotification(which==='auto'?'🤖 EcoMind AI: Terra Otomatik seçildi':(which==='lettuce'?'🥬 EcoMind AI: Terra Lettuce seçildi':(which==='lite'?'🪶 EcoMind AI: Terra Lite seçildi':'⚡ EcoMind AI: Terra seçildi')),'info'); }catch(e){}
 }
 document.addEventListener('click',function(e){ var m=document.getElementById('marul-model-menu'); if(m&&m.classList.contains('open')&&!e.target.closest('.marul-modelbar')) m.classList.remove('open'); });
 function marulAuthOk(){
@@ -15612,9 +15629,9 @@ function marulKnowledge(q,isAdmin){
 // (d) her basit soruya 20+ araç tanımı + dev prompt gidiyordu.
 // ============================================================
 var MARUL_CHAINS = {
-  flash: ['gemini-3.6-flash','gemini-3.5-flash','gemini-2.5-flash','gemini-flash-latest'],
+  flash: ['gemini-3.8-flash','gemini-3.6-flash','gemini-3.5-flash','gemini-2.5-flash','gemini-flash-latest'],
   lite:  ['gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-2.5-flash-lite','gemini-flash-lite-latest'],
-  lettuce: ['qwen/qwen3.8-27b','llama-3.3-70b-versatile']   // 🥬 Terra Lettuce — Groq
+  lettuce: ['qwen/qwen3.8-27b','llama-3.1-8b-instant']   // 🥬 Terra Lettuce — Groq
 };
 function marulIsGroqModel(m){ return m===MARUL_MODEL_LETTUCE || MARUL_CHAINS.lettuce.indexOf(m)>-1; }
 var _marulBad = {};          // model -> bu zamana kadar atla (devre kesici)
@@ -15642,15 +15659,22 @@ async function marulDiscover(H){
 }
 
 // Kullanılacak model sırası: sabit sürümler önce, "-latest" takma adı en sona
-function marulChain(useModel,isAdmin){
+function marulChain(useModel,isAdmin,hasImg){
+  var av=_marulAvail;
+  if(useModel===MARUL_MODEL_AUTO){
+    var gem=MARUL_CHAINS.lite.concat(MARUL_CHAINS.flash);
+    if(av && av.length){ var gf=gem.filter(function(m){return av.indexOf(m)>-1 || /-latest$/.test(m);}); if(gf.length) gem=gf; }
+    var all=hasImg?gem:gem.concat(MARUL_CHAINS.lettuce);
+    var aok=all.filter(function(m){return !marulIsBad(m);});
+    return aok.length?aok:all;
+  }
   if(marulIsGroqModel(useModel)){ var gc=MARUL_CHAINS.lettuce.slice(), gok=gc.filter(function(m){return !marulIsBad(m);}); return gok.length?gok:gc; }
-  var lite=/lite/i.test(String(useModel||'')), tier=lite?'lite':'flash', other=lite?'flash':'lite';
+  var lite=/lite/i.test(String(useModel||'')), tier=lite?'lite':'flash';
   var base=MARUL_CHAINS[tier].slice();
   if(useModel && base.indexOf(useModel)<0 && !/-latest$/.test(useModel)) base.unshift(useModel); // config.js ile özel model
-  var av=_marulAvail;
   if(av && av.length){ var f=base.filter(function(m){return av.indexOf(m)>-1 || /-latest$/.test(m);}); if(f.length) base=f; }
   var ok=base.filter(function(m){return !marulIsBad(m);}); if(ok.length) base=ok;
-  // Katmanlar kesin ayrıdır: Terra yalnızca flash, Terra Lite yalnızca flash-lite modellerine gider (diğer katmana yedek geçiş yok)
+  // Katmanlar kesin ayrıdır: Terra yalnızca flash, Terra Lite yalnızca flash-lite modellerine gider (otomatik geçiş yalnızca Terra Otomatik modunda yapılır)
   return base;
 }
 
@@ -15694,6 +15718,7 @@ function marulKind(res){
   if(s===429) return /per\s*day|daily|PerDay/i.test(m)?'quota_day':'rate';
   if(s===401||s===403) return 'auth';
   if(s===404) return 'gone';
+  if(s===413) return 'too_large';
   if(s===400) return /reasoning|thinking/i.test(m)?'reasoning':'bad';
   return 'transient'; // 500/502/503/504/ağ
 }
@@ -15718,12 +15743,20 @@ async function marulGenerate(body,H,chain,deadline,errs,note){
       lastKind=marulKind(res); kinds.push(lastKind);
       errs.push(model+': '+res.status+' '+lastKind+' — '+res.msg);
       if(lastKind==='reasoning' && !droppedR){ droppedR=true; b=Object.assign({},b); delete b.reasoning_effort; tries--; continue; }
+      if(lastKind==='too_large'){
+        b=Object.assign({},b); delete b.tools; delete b.tool_choice;
+        if(b.messages && b.messages[0] && typeof b.messages[0].content==='string' && b.messages[0].content.length>3500){
+          b.messages=[Object.assign({},b.messages[0],{content:b.messages[0].content.slice(0,3500)})].concat(b.messages.slice(-3));
+          continue;
+        }
+        break;
+      }
       if(lastKind==='auth') return {ok:false,kind:'auth',kinds:kinds};      // anahtar sorunu: başka model denemek anlamsız
       if(lastKind==='quota_day'){ marulMarkBad(model,10*60*1000); break; }
       if(lastKind==='gone'){ marulMarkBad(model,6*3600*1000); break; }
       if(lastKind==='bad'||lastKind==='timeout') break;                      // aynı modeli tekrar denemek işe yaramaz
       if(tries<2){                                                           // rate / geçici hata: bekle ve tekrar dene
-        var w=res.retryAfter||(lastKind==='rate'?3500:1500);
+        var w=res.retryAfter||(lastKind==='rate'?3500:2500);
         w=Math.min(w,9000)*(0.8+Math.random()*0.4);
         if(Date.now()+w>=deadline-3000) break;
         if(note) note('🔄 yoğunluk var, yeniden deniyorum');
@@ -15804,11 +15837,19 @@ async function marulAsk(q,where,inputEl){
     var ctx=isUnlocked ? marulCtx() : '';
     var tools=isUnlocked ? marulTools() : [];
     var kb=marulKnowledge(q,isAdmin);
-    if(kb.n&&ctx) ctx=ctx.slice(0,Math.max(5000,9500-kb.text.length));
+    if(_tier0==='lettuce'){
+      if(ctx) ctx=ctx.slice(0,1200);
+      if(kb.text) kb.text=kb.text.slice(0,1200);
+      sysPrompt=sysPrompt.slice(0,1800);
+      rules=rules.slice(0,1000);
+    }
+    else if(kb.n&&ctx) ctx=ctx.slice(0,Math.max(5000,9500-kb.text.length));
     var maxTok=kb.n?(isAdmin?1200:900):(isAdmin?1200:600); maxTok=marulStyleTok(maxTok);
     var plantMode=!!_img||MARUL_PLANT_RE.test(q); if(plantMode) maxTok=Math.max(maxTok,1100);
-    var msgs=[{role:'system',content:sysPrompt+MARUL_IDENTITY+marulPersonal()+rules+marulLimits()+MARUL_EMOJI_RULE+(plantMode?MARUL_PLANT_RULE:'')+marulStyleRule()+kb.text+(ctx?'\n\nPanel bilgisi (canlı veri):\n'+ctx:'')+marulLangRule(marulWasVoice,q)}];
-    marulHistory.slice(-10).forEach(function(m){msgs.push({role:m.role==='model'?'assistant':'user',content:String(m.text).slice(0,m.role==='model'?550:400)});});
+    var sysFull=sysPrompt+MARUL_IDENTITY+marulPersonal()+rules+marulLimits()+MARUL_EMOJI_RULE+(plantMode?MARUL_PLANT_RULE:'')+marulStyleRule()+kb.text+(ctx?'\n\nPanel bilgisi (canlı veri):\n'+ctx:'')+marulLangRule(marulWasVoice,q);
+    if(_tier0==='lettuce' && sysFull.length>5000) sysFull=sysFull.slice(0,5000);
+    var msgs=[{role:'system',content:sysFull}];
+    marulHistory.slice(_tier0==='lettuce'?-4:-10).forEach(function(m){msgs.push({role:m.role==='model'?'assistant':'user',content:String(m.text).slice(0,m.role==='model'?550:400)});});
     msgs.push({role:'user',content:_img?[{type:'text',text:q.slice(0,800)},{type:'image_url',image_url:{url:_img.url}}]:q.slice(0,800)});
     var H={'Content-Type':'application/json','Authorization':'Bearer '+MARUL_KEY,'x-goog-api-key':MARUL_KEY};
     if(_tier0!=='lettuce') marulDiscover(H); // arka planda: anahtarın erişebildiği modeller (beklemez)
@@ -15819,7 +15860,7 @@ async function marulAsk(q,where,inputEl){
     if(needTools){ body.tools=tools; body.tool_choice='auto'; }
     var ans='', useModel=marulEffectiveModel(), failKind='', usedTools=false, deadline=Date.now()+90000;
     for(var round=0;round<6&&!ans;round++){
-      var g=await marulGenerate(body,H,marulChain(useModel,isAdmin),deadline,errs,function(n){_note=n;});
+      var g=await marulGenerate(body,H,marulChain(useModel,isAdmin,!!_img),deadline,errs,function(n){_note=n;});
       if(!g.ok){ failKind=g.kind; break; }
       _note=''; var m=g.msg; useModel=g.model;
       if(m.tool_calls&&m.tool_calls.length){
