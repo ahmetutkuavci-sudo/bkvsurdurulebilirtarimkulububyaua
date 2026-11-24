@@ -5207,8 +5207,16 @@
                                     </div>
 
                                     <div id="msg-target-user-container">
-                                        <label style="font-size: 12px; font-weight: bold; color: #01579b;">Kişi Seçin:</label>
-                                        <select id="msg-target-user" class="aero-input" style="width: 100%; margin-top: 4px;"></select>
+                                        <label style="font-size: 12px; font-weight: bold; color: #01579b; display: flex; justify-content: space-between; align-items: center;">
+                                            <span>Kişi(ler) Seçin:</span>
+                                            <span id="msg-recipient-count" style="font-weight: bold; color: #2e7d32;">0 kişi seçili</span>
+                                        </label>
+                                        <input type="text" id="msg-recipient-search" class="aero-input" placeholder="🔍 İsim veya sınıf ara..." oninput="renderMsgRecipientPicker()" style="width: 100%; margin-top: 4px;">
+                                        <div style="display: flex; gap: 6px; margin-top: 6px;">
+                                            <button type="button" class="aero-btn" onclick="msgRecipientsSelectAll(true)" style="padding: 4px 10px; font-size: 12px;">✅ Görünenleri Seç</button>
+                                            <button type="button" class="aero-btn" onclick="msgRecipientsSelectAll(false)" style="padding: 4px 10px; font-size: 12px;">✖ Temizle</button>
+                                        </div>
+                                        <div id="msg-recipient-list" style="margin-top: 6px; max-height: 190px; overflow-y: auto; border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; background: rgba(255,255,255,0.75); padding: 4px;"></div>
                                     </div>
 
                                     <div id="msg-target-grade-container" style="display: none;">
@@ -7439,17 +7447,15 @@
                 taskSelect.value = currentVal;
             }
 
-            // Mesaj alıcı dropdown
-            const msgUserSelect = document.getElementById('msg-target-user');
-            if(msgUserSelect) {
-                msgUserSelect.innerHTML = '<option value="">-- Alıcı Üye Seçin --</option>';
-                users.forEach(u => {
-                    if (u.email.toLowerCase() !== currentEmail) {
-                        msgUserSelect.innerHTML += `<option value="${u.email}">${u.username} (🏫 ${u.grade || 'Üye'} - ${BKV_USER_TYPES[bkvUserType(u)].icon} ${BKV_USER_TYPES[bkvUserType(u)].label})</option>`;
-                    }
-                });
-            }
-            
+            // Mesaj alıcı listesi (çoklu seçim)
+            window._msgRecipientUsers = users.filter(u => u && u.email && u.email.toLowerCase() !== currentEmail).map(u => ({
+                email: u.email.toLowerCase(),
+                username: u.username || u.email,
+                grade: u.grade || 'Üye',
+                typeText: BKV_USER_TYPES[bkvUserType(u)].icon + ' ' + BKV_USER_TYPES[bkvUserType(u)].label
+            }));
+            if (typeof renderMsgRecipientPicker === 'function') renderMsgRecipientPicker();
+
             // Ayarlar üye listesi
             const memList = document.getElementById('member-list-container');
             if(memList) {
@@ -8078,6 +8084,47 @@
             if (subTabName === 'logbook') loadLogs();
         }
 
+        // ===== Çoklu alıcı seçici =====
+        window._msgSel = window._msgSel || new Set();
+        function _msgEsc(x) { return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+        function renderMsgRecipientPicker() {
+            const box = document.getElementById('msg-recipient-list');
+            if (!box) return;
+            const all = window._msgRecipientUsers || [];
+            const valid = new Set(all.map(u => u.email));
+            Array.from(window._msgSel).forEach(e => { if (!valid.has(e)) window._msgSel.delete(e); });
+            const qEl = document.getElementById('msg-recipient-search');
+            const q = ((qEl && qEl.value) || '').trim().toLocaleLowerCase('tr');
+            const list = all.filter(u => !q || (u.username + ' ' + u.grade).toLocaleLowerCase('tr').includes(q));
+            box.innerHTML = list.length ? list.map(u => `
+                <label style="display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:13px;">
+                    <input type="checkbox" data-email="${_msgEsc(u.email)}" ${window._msgSel.has(u.email) ? 'checked' : ''} onchange="toggleMsgRecipient(this.dataset.email, this.checked)" style="width:16px; height:16px; flex-shrink:0;">
+                    <span><b>${_msgEsc(u.username)}</b> <small style="opacity:0.7;">(🏫 ${_msgEsc(u.grade)} · ${_msgEsc(u.typeText)})</small></span>
+                </label>`).join('') : '<div style="padding:10px; text-align:center; opacity:0.6; font-size:13px;">Kişi bulunamadı.</div>';
+            const cnt = document.getElementById('msg-recipient-count');
+            if (cnt) cnt.textContent = window._msgSel.size + ' kişi seçili';
+        }
+        function toggleMsgRecipient(email, on) {
+            email = String(email || '').toLowerCase();
+            if (on) window._msgSel.add(email); else window._msgSel.delete(email);
+            renderMsgRecipientPicker();
+        }
+        function msgRecipientsSelectAll(on) {
+            if (!on) { window._msgSel.clear(); renderMsgRecipientPicker(); return; }
+            const qEl = document.getElementById('msg-recipient-search');
+            const q = ((qEl && qEl.value) || '').trim().toLocaleLowerCase('tr');
+            (window._msgRecipientUsers || []).forEach(u => { if (!q || (u.username + ' ' + u.grade).toLocaleLowerCase('tr').includes(q)) window._msgSel.add(u.email); });
+            renderMsgRecipientPicker();
+        }
+        function setMsgRecipients(emails) {
+            window._msgSel = new Set((emails || []).map(e => String(e || '').toLowerCase()).filter(Boolean));
+            const qEl = document.getElementById('msg-recipient-search'); if (qEl) qEl.value = '';
+            renderMsgRecipientPicker();
+        }
+        function getMsgRecipients() { return Array.from(window._msgSel || []); }
+        window.renderMsgRecipientPicker = renderMsgRecipientPicker; window.toggleMsgRecipient = toggleMsgRecipient;
+        window.msgRecipientsSelectAll = msgRecipientsSelectAll; window.setMsgRecipients = setMsgRecipients; window.getMsgRecipients = getMsgRecipients;
+
         function updateMsgTargetUI() {
             const type = document.getElementById('msg-target-type').value;
             document.getElementById('msg-target-user-container').style.display = (type === 'USER') ? 'block' : 'none';
@@ -8261,7 +8308,7 @@
         function replyToMessage(targetEmail, origSubject) {
             document.getElementById('msg-target-type').value = 'USER';
             updateMsgTargetUI();
-            document.getElementById('msg-target-user').value = targetEmail;
+            setMsgRecipients([targetEmail]);
             document.getElementById('msg-subject').value = origSubject.startsWith('YNT: ') ? origSubject : 'YNT: ' + origSubject;
             document.getElementById('msg-body').focus();
             showNotification("Alıcı bilgileri otomatik dolduruldu.", "info", 2000);
@@ -8477,7 +8524,7 @@
             switchPortalSubTab('messages');
             document.getElementById('msg-target-type').value = 'USER';
             updateMsgTargetUI();
-            document.getElementById('msg-target-user').value = studentEmail;
+            setMsgRecipients([studentEmail]);
             document.getElementById('msg-subject').value = `Bilgilendirme: ${subject}`;
             document.getElementById('msg-body').focus();
         }
@@ -11320,6 +11367,16 @@
                 });
             } else {
                 displayed = messages.filter(m => (m.fromEmail || '').toLowerCase() === currentEmail);
+                // Çoklu alıcıya giden mesajı tek kartta göster
+                const grpSeen = {}, grouped = [];
+                displayed.forEach(m => {
+                    if (!m.groupId) { grouped.push(m); return; }
+                    if (grpSeen[m.groupId]) { grpSeen[m.groupId]._labels.push(m.targetLabel || ''); return; }
+                    const c = Object.assign({}, m, { _labels: [m.targetLabel || ''] });
+                    grpSeen[m.groupId] = c; grouped.push(c);
+                });
+                grouped.forEach(c => { if (c._labels) c.targetLabel = '👥 ' + c._labels.join(', ') + ' (' + c._labels.length + ' kişi)'; });
+                displayed = grouped;
             }
 
             const inboxCountEl = document.getElementById('msg-inbox-count');
@@ -11394,81 +11451,120 @@
             });
         };
 
+        // ✉️ Ortak mesaj gönderim çekirdeği (elle gönderim + EcoMind AI aynı yolu kullanır)
+        // o: { targetType:'USER'|'ALL'|'GRADE', emails:[], grade:'', subject, body, viaAI }
+        window.bkvDispatchMessage = async function(o) {
+            const fromUser = sessionStorage.getItem('currentUser') || 'Anonim';
+            const fromEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase();
+            const fromGrade = sessionStorage.getItem('currentGrade') || 'Belirtilmedi';
+            const fromRole = sessionStorage.getItem('currentRole') || 'guest';
+            const esc2 = x => String(x == null ? '' : x).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const subject = esc2(o.subject).trim();
+            const body = esc2(o.body).trim();
+            if (!subject || !body) throw new Error('Konu ve mesaj metni boş olamaz');
+
+            const users = (typeof window.getSafeUsers === 'function' ? window.getSafeUsers() : []);
+            let targets = [];
+            if (o.targetType === 'ALL') {
+                if (fromRole !== 'admin') throw new Error('Tüm kulübe toplu mesaj gönderme yetkisi yalnızca yöneticilere/öğretmenlere aittir');
+                targets.push({ type: 'ALL', value: 'ALL', label: '📢 Tüm Kulüp Üyeleri' });
+            } else if (o.targetType === 'GRADE') {
+                const g = String(o.grade || '').trim();
+                if (!g) throw new Error('Hedef sınıf/şube belirtilmedi');
+                targets.push({ type: 'GRADE', value: g, label: `🏫 Sınıf: ${g}` });
+            } else {
+                const seen = new Set();
+                (o.emails || []).forEach(em => {
+                    em = String(em || '').toLowerCase();
+                    if (!em || seen.has(em)) return;
+                    seen.add(em);
+                    const uo = users.find(u => (u.email || '').toLowerCase() === em);
+                    targets.push({ type: 'USER', value: em, label: uo ? `${uo.username} (${uo.grade || 'Üye'})` : em });
+                });
+                if (!targets.length) throw new Error('Alıcı seçilmedi');
+            }
+
+            const now = Date.now();
+            const groupId = targets.length > 1 ? ('grp_' + now) : null;
+            const msgs = targets.map((t, i) => {
+                const m = {
+                    id: String(now) + '_' + i,
+                    fromUser, fromEmail, fromGrade, fromRole,
+                    targetType: t.type, targetValue: t.value, targetLabel: t.label,
+                    subject, body,
+                    date: new Date().toLocaleDateString('tr-TR'),
+                    time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+                    readBy: [fromEmail],
+                    createdAt: now + i
+                };
+                if (groupId) m.groupId = groupId;
+                if (o.viaAI) m.viaAI = true;
+                return m;
+            });
+
+            let messages = window.getSafeMessages();
+            msgs.slice().reverse().forEach(m => messages.unshift(m));
+            localStorage.setItem('bkvMessages', JSON.stringify(messages));
+            window.loadPortalMessages();
+
+            let failed = 0, lastErr = '';
+            await Promise.all(msgs.map(async (m) => {
+                try {
+                    const { id, ...dataToSend } = m;
+                    const docRef = await addDoc(collection(db, "messages"), dataToSend);
+                    let cur = window.getSafeMessages();
+                    const item = cur.find(x => String(x.id) === m.id);
+                    if (item) item.id = docRef.id;
+                    localStorage.setItem('bkvMessages', JSON.stringify(cur));
+                } catch (err) {
+                    failed++; lastErr = err.message || String(err);
+                    console.error("Firestore mesaj gönderme hatası:", err);
+                }
+            }));
+            window.loadPortalMessages();
+            return { total: msgs.length, failed, lastErr, labels: targets.map(t => t.label), label: targets.length > 1 ? `${targets.length} kişi` : targets[0].label };
+        };
+
         window.sendPortalMessage = async function() {
             if (typeof checkMemberActionPermission === 'function' && !checkMemberActionPermission()) return;
 
             const targetType = document.getElementById('msg-target-type').value;
             const subject = document.getElementById('msg-subject').value.trim();
             const body = document.getElementById('msg-body').value.trim();
+            const fromRole = sessionStorage.getItem('currentRole') || 'guest';
 
             if (!subject || !body) {
                 return showNotification("Lütfen mesaj konusu ve içeriğini eksiksiz yazın!", "warning");
             }
 
-            const fromUser = sessionStorage.getItem('currentUser') || 'Anonim';
-            const fromEmail = (sessionStorage.getItem('currentEmail') || '').toLowerCase();
-            const fromGrade = sessionStorage.getItem('currentGrade') || 'Belirtilmedi';
-            const fromRole = sessionStorage.getItem('currentRole') || 'guest';
-
-            let targetValue = '';
-            let targetLabel = '';
-
+            const opts = { targetType, subject, body };
             if (targetType === 'USER') {
-                targetValue = document.getElementById('msg-target-user').value;
-                if (!targetValue) return showNotification("Lütfen bir alıcı üye seçin!", "warning");
-                const targetUserObj = (typeof window.getSafeUsers === 'function' ? window.getSafeUsers() : []).find(u => u.email.toLowerCase() === targetValue.toLowerCase());
-                targetLabel = targetUserObj ? `${targetUserObj.username} (${targetUserObj.grade || 'Üye'})` : targetValue;
+                opts.emails = (typeof window.getMsgRecipients === 'function') ? window.getMsgRecipients() : [];
+                if (!opts.emails.length) return showNotification("Lütfen en az bir alıcı seçin!", "warning");
             } else if (targetType === 'ALL') {
                 if (fromRole !== 'admin') {
                     return showNotification("Tüm kulübe toplu mesaj gönderme yetkisi yalnızca yöneticilere/öğretmenlere aittir!", "warning");
                 }
-                targetValue = 'ALL';
-                targetLabel = '📢 Tüm Kulüp Üyeleri';
             } else if (targetType === 'GRADE') {
-                targetValue = document.getElementById('msg-target-grade').value.trim();
-                if (!targetValue) return showNotification("Lütfen hedef sınıf/şube bilgisini yazın!", "warning");
-                targetLabel = `🏫 Sınıf: ${targetValue}`;
+                opts.grade = document.getElementById('msg-target-grade').value.trim();
+                if (!opts.grade) return showNotification("Lütfen hedef sınıf/şube bilgisini yazın!", "warning");
             }
-
-            const tempId = Date.now().toString();
-            const newMsg = {
-                id: tempId,
-                fromUser: fromUser,
-                fromEmail: fromEmail,
-                fromGrade: fromGrade,
-                fromRole: fromRole,
-                targetType: targetType,
-                targetValue: targetValue,
-                targetLabel: targetLabel,
-                subject: subject,
-                body: body,
-                date: new Date().toLocaleDateString('tr-TR'),
-                time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
-                readBy: [fromEmail],
-                createdAt: Date.now()
-            };
-
-            let messages = window.getSafeMessages();
-            messages.unshift(newMsg);
-            localStorage.setItem('bkvMessages', JSON.stringify(messages));
 
             document.getElementById('msg-subject').value = '';
             document.getElementById('msg-body').value = '';
-            window.loadPortalMessages();
-
             try {
-                const { id, ...dataToSend } = newMsg;
-                const docRef = await addDoc(collection(db, "messages"), dataToSend);
-                let currentList = window.getSafeMessages();
-                const item = currentList.find(m => String(m.id) === tempId);
-                if (item) item.id = docRef.id;
-                localStorage.setItem('bkvMessages', JSON.stringify(currentList));
-                window.loadPortalMessages();
-                showNotification(`Mesaj başarıyla gönderildi: ${targetLabel}`, "success");
-            } catch(err) {
-                console.error("Firestore mesaj gönderme hatası:", err);
-                showNotification("Mesaj yerel kaydedildi ancak buluta iletilemedi: " + err.message, "warning");
+                const r = await window.bkvDispatchMessage(opts);
+                if (r.failed === 0) showNotification(`Mesaj başarıyla gönderildi: ${r.label}`, "success");
+                else showNotification(`Mesaj yerel kaydedildi ancak ${r.failed}/${r.total} alıcı için buluta iletilemedi: ` + r.lastErr, "warning");
+            } catch (err) {
+                showNotification("Mesaj gönderilemedi: " + err.message, "warning");
             }
+        };
+
+        // 🧠 EcoMind AI köprüsü: mesaj gönder (onay AI tarafında alınır)
+        window.bkvAiSendMessage = async function(o) {
+            bkvAiMemberGate();
+            return await window.bkvDispatchMessage(Object.assign({ viaAI: true }, o || {}));
         };
 
         window.markMessageAsRead = async function(msgId) {
@@ -11497,11 +11593,15 @@
             }
             showCustomConfirm("Mesajı Sil", "Bu mesajı silmek istediğinize emin misiniz?", async () => {
                 let messages = window.getSafeMessages();
-                messages = messages.filter(m => String(m.id) !== String(msgId));
+                const baseMsg = messages.find(m => String(m.id) === String(msgId));
+                const delIds = (baseMsg && baseMsg.groupId && window.currentMsgView === 'sent')
+                    ? messages.filter(m => m.groupId === baseMsg.groupId && m.fromEmail === baseMsg.fromEmail).map(m => String(m.id))
+                    : [String(msgId)];
+                messages = messages.filter(m => !delIds.includes(String(m.id)));
                 localStorage.setItem('bkvMessages', JSON.stringify(messages));
                 window.loadPortalMessages();
                 try {
-                    await deleteDoc(doc(db, "messages", String(msgId)));
+                    for (const did of delIds) { await deleteDoc(doc(db, "messages", did)); }
                     showNotification("Mesaj silindi.", "info");
                 } catch(err) {
                     console.error("Firestore mesaj silme hatası:", err);
@@ -14782,6 +14882,39 @@ function marulConfirm(text){
 // ============================================================
 // YETKİ & YARDIMCI FONKSİYONLAR
 // ============================================================
+// ✉️ Mesaj onay penceresi: kullanıcı göndermeden önce alıcı/konu/metni görür, istersen düzenler
+function marulConfirmMessage(info){
+  return new Promise(function(resolve){
+    var old=document.getElementById('marul-confirm'); if(old) old.remove();
+    var ov=document.createElement('div'); ov.id='marul-confirm';
+    ov.style.cssText='position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(2,30,60,.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);';
+    var box=document.createElement('div');
+    box.style.cssText='width:100%;max-width:440px;max-height:92vh;overflow:auto;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.9);border-radius:20px;box-shadow:0 20px 50px rgba(1,87,155,.3);padding:18px 18px 14px;font-family:inherit;color:#01579b;';
+    var h=document.createElement('div'); h.textContent=marulT('🧠 EcoMind AI mesaj göndermek için onayını istiyor','🧠 EcoMind AI needs your approval to send a message'); h.style.cssText='font-weight:800;font-size:15px;margin-bottom:10px;';
+    var to=document.createElement('div'); to.style.cssText='font-size:13.5px;color:#263238;margin-bottom:10px;line-height:1.45;';
+    var tl=document.createElement('b'); tl.textContent=marulT('Alıcı: ','To: '); to.appendChild(tl); to.appendChild(document.createTextNode(info.to));
+    var fs='width:100%;box-sizing:border-box;border:1px solid #b3d4ec;border-radius:10px;padding:8px 10px;font-size:16px;font-family:inherit;color:#263238;background:#fff;margin:3px 0 10px;';
+    var sl=document.createElement('div'); sl.textContent=marulT('Konu','Subject'); sl.style.cssText='font-size:12px;font-weight:700;';
+    var si=document.createElement('input'); si.type='text'; si.maxLength=120; si.value=info.subject; si.style.cssText=fs;
+    var bl=document.createElement('div'); bl.textContent=marulT('Mesaj','Message'); bl.style.cssText='font-size:12px;font-weight:700;';
+    var bi=document.createElement('textarea'); bi.rows=7; bi.maxLength=2000; bi.value=info.body; bi.style.cssText=fs+'resize:vertical;';
+    var hint=document.createElement('div'); hint.textContent=marulT('İstersen göndermeden önce konuyu ve metni burada düzenleyebilirsin. Onaylamadan mesaj gitmez.','You can edit the subject and text before sending. Nothing is sent until you confirm.'); hint.style.cssText='font-size:12px;color:#546e7a;margin-bottom:12px;';
+    var row=document.createElement('div'); row.style.cssText='display:flex;gap:8px;justify-content:flex-end;';
+    function mk(label,bg,fg,fn){var x=document.createElement('button');x.type='button';x.textContent=label;x.style.cssText='border:none;cursor:pointer;border-radius:12px;padding:9px 18px;font-weight:700;font-size:13.5px;background:'+bg+';color:'+fg+';';x.onclick=fn;return x;}
+    function done(v){document.removeEventListener('keydown',kd,true);ov.remove();resolve(v);}
+    function kd(e){if(e.key==='Escape'){e.preventDefault();done(null);}}
+    document.addEventListener('keydown',kd,true);
+    ov.addEventListener('click',function(e){if(e.target===ov)done(null);});
+    row.appendChild(mk(marulT('İptal','Cancel'),'#eceff1','#455a64',function(){done(null);}));
+    row.appendChild(mk(marulT('✉️ Onayla ve Gönder','✉️ Confirm & Send'),'linear-gradient(135deg,#2ecc71,#27ae60)','#fff',function(){
+      var sv=si.value.trim(), bv=bi.value.trim();
+      if(!sv||!bv){hint.textContent=marulT('⚠️ Konu ve mesaj metni boş olamaz.','⚠️ Subject and message cannot be empty.');hint.style.color='#c62828';return;}
+      done({subject:sv,body:bv,edited:(sv!==info.subject||bv!==info.body)});
+    }));
+    box.appendChild(h);box.appendChild(to);box.appendChild(sl);box.appendChild(si);box.appendChild(bl);box.appendChild(bi);box.appendChild(hint);box.appendChild(row);ov.appendChild(box);document.body.appendChild(ov);
+  });
+}
+
 function marulIsAdmin(){ return (typeof window.bkvAiIsAdmin==='function') && window.bkvAiIsAdmin(); }
 function marulToday(){var d=new Date(),m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(x<10?'0':'')+x;}
 function marulNorm(t){return String(t||'').toLocaleLowerCase('tr').replace(/\s+/g,' ').trim();}
@@ -14880,6 +15013,9 @@ function marulLimits(){
 // ============================================================
 // ARAÇ LİSTESİ — Role göre dinamik
 // ============================================================
+MARUL_RULES_ADMIN += "\n- MESAJ GÖNDERME: «Ali ve Ayşe'ye ... diye mesaj at», «10-A sınıfına duyur», «yöneticilere yaz», «herkese duyur» gibi anlık mesaj isteklerinde send_message çağır (audience: users=kişi adları recipients dizisinde, birden fazla kişi olabilir; grade=sınıf/şube; admins=tüm yöneticiler; all=tüm kulüp). Kullanıcı mesajı kabaca anlatır ya da biçim/üslup tarif ederse («resmi bir dille», «kısa ve samimi», «şu şu maddeleri yaz») konuyu ve metni SEN yaz; kullanıcının verdiği bilgileri eksiksiz kullan, olmayan tarih/saat/yer uydurma. Alıcı belli değilse ÖNCE sor. Araç, göndermeden önce kullanıcıya alıcı/konu/metni gösteren bir onay penceresi açar (kullanıcı metni düzenleyebilir); onay gelmeden mesaj GİTMEZ, bu yüzden ayrıca «göndereyim mi?» diye sorma, direkt aracı çağır. Sonuç {cancelled:true} ise «mesaj gönderilmedi» de. ok:true ise kime gittiğini söyle; kullanıcı metni değiştirdiyse (duzenlendi:true) son halini belirt. {error} ise işlemin yapılmadığını söyle. ASLA araç çağırmadan «gönderdim» deme; aynı mesajı iki kez gönderme. Mesaj kullanıcının hesabından gider. Zamanlı/ileri tarihli mesajlar için create_reminder kullan.";
+MARUL_RULES_MEMBER += "\n- MESAJ GÖNDERME: «Ali'ye şunu yaz», «10-A sınıfına mesaj at», «yöneticilere yaz» gibi isteklerde send_message çağır (audience: users=kişi adları recipients dizisinde, birden fazla kişi olabilir; grade=sınıf/şube; admins=yöneticiler). Tüm kulübe toplu duyuru (audience:all) YALNIZCA yöneticilere aittir, öğrenci isterse reddet. Kullanıcı mesajı kabaca anlatır ya da üslup tarif ederse konuyu ve metni SEN yaz; verilen bilgileri eksiksiz kullan, bilgi uydurma. Alıcı belli değilse ÖNCE sor. Araç göndermeden önce kullanıcıya alıcı/konu/metni gösteren onay penceresi açar (düzenleyebilir); onay gelmeden mesaj GİTMEZ, ayrıca sorma. {cancelled:true} ise «mesaj gönderilmedi» de; ok:true ise alıcıları söyle; araç çağırmadan «gönderdim» deme.";
+
 function marulTool(name,desc,props,req){return {type:'function',function:{name:name,description:desc,parameters:{type:'object',properties:props||{},required:req||[]}}};}
 function marulTools(){
   var S={type:'string'}, N={type:'number'}, B={type:'boolean'};
@@ -14889,6 +15025,7 @@ function marulTools(){
     marulTool('get_weather','Panelin hava durumu menüsünde veri yoksa veya kullanıcı farklı bir şehir istiyorsa bu aracı çağır. Panel context\'inde hava durumu varsa bu aracı ÇAĞIRMA, direkt context\'teki veriyi kullan.',{city:{type:'string',description:'Şehir adı, örn. İstanbul. Boş bırakılırsa paneldeki kayıtlı şehir kullanılır.'},days:{type:'integer',description:'Kaç günlük tahmin (1-7, varsayılan 3)'}}),
     marulTool('add_note','Ortak not defterine YENİ not ekler.',{text:{type:'string',description:'Not metni'}},['text']),
     marulTool('add_shopping_item','Alınacaklar (alışveriş) listesine ürün ekler. Miktar verilmezse 1, birim fiyat verilmezse 0 kullan.',{name:{type:'string',description:'Ürün adı'},quantity:{type:'number',description:'Miktar (varsayılan 1)'},unit_price:{type:'number',description:'Birim fiyat ₺ (varsayılan 0)'}},['name']),
+    marulTool('send_message','Panelin gelen kutusuna ANLIK mesaj gönderir (kullanıcı adına). Kullanıcıya önce alıcı/konu/metni gösteren bir onay penceresi açar; onay gelmeden mesaj gitmez. Kullanıcı mesajı kabaca tarif ederse konuyu ve metni sen yaz. Birden fazla kişiye aynı anda gönderilebilir.',{audience:{type:'string',enum:['users','grade','admins','all'],description:'users=adı verilen kişi(ler) (varsayılan), grade=sınıf/şube, admins=tüm yöneticiler, all=tüm kulüp (yalnızca yönetici)'},recipients:{type:'array',items:{type:'string'},description:'audience=users için alıcı üye adları (birden fazla olabilir)'},grade:{type:'string',description:'audience=grade için sınıf/şube, örn. 10-A veya 9'},subject:{type:'string',description:'Mesaj konusu (kısa)'},body:{type:'string',description:'Mesaj metni (son hali; kullanıcının istediği üslupta)'}},['subject','body']),
     marulTool('create_reminder','Zamanlı hatırlatma mesajı kurar: belirlenen gün/saatte EcoMind AI adına gelen kutusuna otomatik mesaj düşer. «her Perşembe bana hatırlat», «yarın 09:00\'da yoklama hatırlat» gibi isteklerde kullan. Saat belirtilmediyse önce kullanıcıya sor.',{title:{type:'string',description:'Kısa konu başlığı, örn. Yoklama ve kazanım defteri'},text:{type:'string',description:'Mesaj metni (boşsa başlık kullanılır)'},recurrence:{type:'string',enum:['once','daily','weekly'],description:'once=tek sefer, daily=her gün, weekly=haftalık'},days:{type:'array',items:{type:'integer'},description:'Yalnızca weekly için günler: 0=Pazar,1=Pazartesi,2=Salı,3=Çarşamba,4=Perşembe,5=Cuma,6=Cumartesi'},time:{type:'string',description:'Saat HH:MM, örn. 09:00'},date:{type:'string',description:'Yalnızca once için tarih YYYY-MM-DD'},target:{type:'string',description:'me=kullanıcının kendisi (varsayılan), admins=tüm yöneticiler, all=tüm kulüp, ya da üye adı. Üye için yalnızca me kullanılabilir.'}},['title','recurrence','time']),
     marulTool('list_reminders','Kurulu aktif hatırlatıcıları listeler (yönetici hepsini, üye yalnızca kendisininkileri görür).',{}),
     marulTool('remove_duplicate_reminders','Birebir aynı (kopya) hatırlatıcıları bulur, en eskisini tutup fazlalıkları siler (onay ister). YALNIZCA kullanıcı «kopyaları temizle / fazlalıkları sil / her birinden bir tane kalsın» derse çağır. Kullanıcı belirli birini silmek istiyorsa BUNU ÇAĞIRMA, delete_reminder ile hangisini sileyim diye sor.',{}),
@@ -15107,6 +15244,47 @@ async function marulRunTool(name,a){
   if(name==='get_task_summary') return marulTaskSummary(a.member_name);
 
   // ---------- Üyelerin de kullanabildiği yazma araçları (kilit/işlem saati kontrolü ile) ----------
+  if(name==='send_message'){
+    var gm=marulGate(); if(gm) return gm;
+    var msubj=String(a.subject||'').trim().slice(0,120), mbody=String(a.body||'').trim().slice(0,2000);
+    if(!msubj) return {error:'Mesaj konusu boş olamaz.'};
+    if(!mbody) return {error:'Mesaj metni boş olamaz.'};
+    var maud=String(a.audience||'users').toLowerCase();
+    var mopts={subject:msubj,body:mbody}, mtoText='', mnames=[];
+    if(maud==='all'){
+      if(!me.admin) return {error:'Tüm kulübe toplu duyuru göndermek yalnızca yöneticilere aittir.'};
+      mopts.targetType='ALL'; mtoText='📢 Tüm kulüp üyeleri (toplu duyuru)';
+    } else if(maud==='grade'){
+      var mg=String(a.grade||'').trim(); if(!mg) return {error:'Hangi sınıf/şubeye gönderileceği belirtilmedi.'};
+      mopts.targetType='GRADE'; mopts.grade=mg; mtoText='🏫 Sınıf/Şube: '+mg;
+    } else if(maud==='admins'){
+      var madm=marulUsers().filter(function(u){return u&&u.email&&u.role==='admin'&&String(u.email).toLowerCase()!==me.email;});
+      if(!madm.length) return {error:'Mesaj gönderilebilecek başka bir yönetici yok.'};
+      mopts.targetType='USER'; mopts.emails=madm.map(function(u){return String(u.email).toLowerCase();}); mnames=madm.map(function(u){return u.username;}); mtoText='👑 Yöneticiler: '+mnames.join(', ');
+    } else {
+      var rin=[]; if(Array.isArray(a.recipients)) rin=rin.concat(a.recipients); if(a.recipient) rin=rin.concat(String(a.recipient).split(/\s*[,;&]\s*|\s+ve\s+/i));
+      rin=rin.map(function(x){return String(x||'').trim();}).filter(Boolean);
+      if(!rin.length) return {error:'Alıcı belirtilmedi: mesaj kime gönderilsin? Kullanıcıya sor.'};
+      var memails=[];
+      for(var ri=0;ri<rin.length;ri++){
+        var fr=marulFind(rin[ri]); if(fr.error) return {error:fr.error};
+        var fe=String(fr.user.email).toLowerCase();
+        if(fe===me.email) return {error:'Mesajı kendine gönderemezsin ('+fr.user.username+').'};
+        if(memails.indexOf(fe)<0){ memails.push(fe); mnames.push(fr.user.username); }
+      }
+      mopts.targetType='USER'; mopts.emails=memails; mtoText='👤 '+mnames.join(', ')+(mnames.length>1?' ('+mnames.length+' kişi)':'');
+    }
+    var mc=await marulConfirmMessage({to:mtoText,subject:msubj,body:mbody});
+    if(!mc) return {cancelled:true};
+    mopts.subject=mc.subject; mopts.body=mc.body;
+    var mr;
+    try{ mr=await window.bkvAiSendMessage(mopts); }catch(e){ return {error:'Mesaj gönderilemedi: '+e.message}; }
+    if(mr.failed>=mr.total) return {error:'Mesaj buluta iletilemedi: '+mr.lastErr+' (yerel kayıt yapıldı, bağlantıyı kontrol et).'};
+    var mres={ok:true,alici:mtoText,alici_sayisi:mr.total,konu:mc.subject,mesaj:'Mesaj gönderildi.'};
+    if(mc.edited){ mres.duzenlendi=true; mres.gonderilen_metin=mc.body; }
+    if(mr.failed>0) mres.uyari=mr.failed+' alıcı için buluta iletilemedi: '+mr.lastErr;
+    return mres;
+  }
   if(name==='add_note'){
     var gn=marulGate(); if(gn) return gn;
     var nt=String(a.text||'').trim(); if(!nt) return {error:'Not metni boş olamaz.'};
@@ -15338,6 +15516,7 @@ MARUL_KB.push(
  {"id":"marul_kisisel_zeka","t":"EcoMind AI: Kişisel Zeka (Ayarlar > Yapay Zeka Ayarları)","k":["kisisel zeka","yapay zeka ayarlari","ai ayarlari","egit","egitim","ogret","ozel bilgi","kulup bilgisi ekle","ecomind ayar","bilgi ekle"],"a":true,"x":"🧠 Kişisel Zeka (yalnızca yönetici): Ayarlar sekmesi > \"🧠 Yapay Zeka Ayarları\" bölümündeki \"Kişisel Zeka\" kutusuna kulüp hakkında HERKES için geçerli bilgileri (kurallar, etkinlik/toplantı günleri, kulüp geleneği, sık sorulan sorular vb.) yazıp \"💾 Kaydet ve Herkese Öğret\" düğmesine basarsın. Metin buluta kaydedilir ve hem öğrenci hem yönetici tüm kullanıcıların EcoMind AI'ı sayfa yenilemeden bu bilgilerle eğitilmiş olur. Şifre, kişisel veri veya gizli bilgi yazma: herkes için geçerlidir. \"Temizle\" ile bilgiler silinir. En fazla 6000 karakter."}
 );
 MARUL_KB.push({"id":"marul_ayar","t":"EcoMind AI: kullanım ayarları (aç/kapat, cevap tarzı, günlük limit)","k":["ayar","kapat","ac kapat","limit","gunluk limit","soru limiti","hak","cevap tarzi","uzunluk","kisa cevap","resmi","samimi","ton","emoji miktar","ogrenciye kapat","kota"],"a":true,"x":"⚙️ Yönetici: Ayarlar > 🧠 Yapay Zeka Ayarları > \"EcoMind AI Kullanım Ayarları\" kartı: (1) öğrenciler için EcoMind AI'ı aç/kapat (kapalıyken yalnızca yöneticiler kullanır), (2) cevap uzunluğu: Kısa / Normal / Detaylı, (3) ton: Samimi / Resmî, (4) emoji: Hiç / Az / Çok, (5) öğrencilerin kullanabileceği yapay zeka modelleri: Terra ve/veya Terra Lite (ikisi açıksa öğrenci sohbetten seçer, biri açıksa o model otomatik kullanılır, en az biri açık olmalı), (6) öğrenci başına günlük soru limiti (0 = sınırsız; yöneticiler etkilenmez; her gün sıfırlanır). \"Ayarları Kaydet ve Uygula\" ile tüm cihazlarda anında geçerli olur. Limit sayacı cihazdaki tarayıcı kaydında tutulur."});
+MARUL_KB.push({"id": "marul_mesaj_gonder", "t": "EcoMind AI ile mesaj gönderme (onaylı) ve çoklu alıcı", "k": ["mesaj at", "mesaj gonder", "mesaj yaz", "ilet", "duyur", "coklu alici", "birden fazla kisi", "birkac kisiye", "sinifa mesaj", "yoneticilere yaz", "onay", "taslak", "mesaj hazirla"], "a": false, "x": "✉️ Mesajlar sekmesinde alıcı türü \"Bireysel\" iken artık birden fazla kişi seçilebilir: isim/sınıf arama kutusu, her kişinin yanında onay kutusu, \"Görünenleri Seç\" ve \"Temizle\" düğmeleri ve \"N kişi seçili\" sayacı vardır. Çoklu mesaj her alıcıya ayrı özel mesaj olarak düşer (herkes yalnızca kendi kopyasını görür, ↩️ Yanıtla çalışır); Gönderilenler'de tek kartta \"👥 Ali, Ayşe (2 kişi)\" olarak görünür, yönetici silince tüm kopyalar silinir.\nEcoMind AI ile: \"Ali ve Ayşe'ye yarınki sera nöbetini resmi bir dille yaz\", \"10-A sınıfına kısa ve samimi bir duyuru at\", \"yöneticilere toplantı hatırlatması gönder\" gibi söyle; EcoMind AI konuyu ve metni üslubuna göre yazar ve göndermeden ÖNCE bir onay penceresi açar: alıcılar, konu ve metin görünür, istersen düzenleyebilirsin; ✉️ Onayla ve Gönder'e basmadan (veya İptal/Esc) mesaj gitmez. Tüm kulübe toplu duyuru (audience: all) yalnızca yöneticidedir. Mesaj senin hesabından gider. İleri tarihli/zamanlı mesaj için hatırlatıcı kur."});
 MARUL_KB.push({"id":"marul_hatirlatici","t":"EcoMind AI: zamanlı hatırlatıcılar","k":["hatirlat","hatirlatici","hatirlatma","hatirlatma kur","her persembe","her gun","her hafta","zamanli mesaj","otomatik mesaj","alarm","zamanlayici","bana mesaj at","mesaj at","ecomind mesaj"],"a":false,"x":"⏰ EcoMind AI zamanlı hatırlatma kurabilir. Örnek: \"Her Perşembe 09:00'da bana yoklama ve kazanım defterini hatırlat\", \"Yarın 15:00'te herkese duyur: ...\", \"Cuma günleri yöneticilere not tutmayı hatırlat\". Zamanı gelince EcoMind AI adına 💬 gelen kutusuna mesaj düşer (bildirim izni açıksa cihaz bildirimi de çıkar). Yönetici kendine, tüm yöneticilere, tüm kulübe veya tek bir üyeye kurabilir; standart üye yalnızca kendine kurabilir. \"Hatırlatıcılarımı listele\" ve \"... hatırlatıcısını iptal et\" komutları da çalışır. Not: sunucu tarafı zamanlayıcı yoktur; mesaj, panel o saatte herhangi bir cihazda açıksa saatinde, kapalıysa paneli ilk açan kişinin cihazından (en geç 36 saat içinde) gönderilir. Aynı hatırlatma yalnızca bir kez gönderilir."});
 var MARUL_KB_RULES = '\n\nYAZILIM VE KULÜP BİLGİSİ KURALLARI:\n- "Şu nerede / nasıl yapılır / ne işe yarar / hangi sekme / kurucu kim / kulübün amacı ne / tohumlar nasıl saklanır / bokashi seyreltme" gibi YAZILIM ve KULÜP sorularında aşağıdaki YAZILIM VE KULÜP BİLGİSİ bölümünü esas al; sekme, düğme, tesis ve kulüp bilgilerini eksiksiz, samimi ve net aktar. Gerekli adımları numaralandır (1️⃣ 2️⃣ 3️⃣).\n- Bilgi bölümünde olmayan bir özelliği UYDURMA; "Kulüp kılavuzunda bu konuda bilgi bulamadım" de ve ilgili konuyu öner.\n- Kullanıcının yetkisi bir işlemi yapmaya yetmiyorsa (yönetici olmayan) o işlemi adım adım anlatma; "bu işlem yalnızca yöneticilere açık" de ve yöneticiye başvurmasını öner.\n- BAĞLAM: Önceki konuşma sana ayrı mesajlar olarak verilir. "bu", "şu", "onu", "peki ya...", "devam et", "bir önceki" gibi atıfları o mesajlardan çöz; kullanıcının daha önce söylediği bilgileri (adı, ürünü, kova/tohum adı, tercihi) tekrar sorma, cevabında tutarlı kal.\n- Yazılımın hangi ekranında olduğunu söylerken kullanıcının arayüzünü (Klasik üst menü / Yan Menü) ve telefonda ☰ çekmecesini unutma.';
 function marulKbTokens(q){
@@ -15474,7 +15653,7 @@ async function marulAsk(q,where,inputEl){
         for(var c=0;c<m.tool_calls.length;c++){
           var tc=m.tool_calls[c], args={}, res;
           try{args=JSON.parse(tc.function.arguments||'{}');}catch(e){}
-          var toolLabel={'get_weather':'🌤️ hava durumuna bakıyor','take_attendance':'📋 yoklama kaydediyor','add_task':'✅ görev ekliyor','auto_assign_tasks':'🔄 görevleri dağıtıyor','get_attendance_report':'📊 rapor hazırlıyor','get_task_summary':'📝 görev özeti hazırlıyor','complete_task':'✅ görevi işaretliyor','update_attendance':'📋 yoklamayı güncelliyor','edit_task':'✏️ görevi düzenliyor','delete_task':'🗑️ görevi siliyor','remove_duplicate_tasks':'🧹 kopya görevleri temizliyor','add_note':'📝 not ekliyor','edit_note':'✏️ notu düzenliyor','delete_note':'🗑️ notu siliyor','add_shopping_item':'🛒 listeye ekliyor','delete_shopping_item':'🗑️ listeden siliyor','create_reminder':'⏰ hatırlatıcı kuruyor','list_reminders':'⏰ hatırlatıcılara bakıyor','delete_reminder':'🗑️ hatırlatıcıyı siliyor','remove_duplicate_reminders':'🧹 kopya hatırlatıcıları temizliyor'};
+          var toolLabel={'get_weather':'🌤️ hava durumuna bakıyor','take_attendance':'📋 yoklama kaydediyor','add_task':'✅ görev ekliyor','auto_assign_tasks':'🔄 görevleri dağıtıyor','get_attendance_report':'📊 rapor hazırlıyor','get_task_summary':'📝 görev özeti hazırlıyor','complete_task':'✅ görevi işaretliyor','update_attendance':'📋 yoklamayı güncelliyor','edit_task':'✏️ görevi düzenliyor','delete_task':'🗑️ görevi siliyor','remove_duplicate_tasks':'🧹 kopya görevleri temizliyor','send_message':'✉️ mesaj hazırlıyor','add_note':'📝 not ekliyor','edit_note':'✏️ notu düzenliyor','delete_note':'🗑️ notu siliyor','add_shopping_item':'🛒 listeye ekliyor','delete_shopping_item':'🗑️ listeden siliyor','create_reminder':'⏰ hatırlatıcı kuruyor','list_reminders':'⏰ hatırlatıcılara bakıyor','delete_reminder':'🗑️ hatırlatıcıyı siliyor','remove_duplicate_reminders':'🧹 kopya hatırlatıcıları temizliyor'};
           wait.textContent='🧠 '+(toolLabel[tc.function.name]||'işlem yapıyor')+'...';
           try{res=await marulRunTool(tc.function.name,args);}catch(e){res={error:'İşlem başarısız: '+e.message};}
           msgs.push({role:'tool',tool_call_id:tc.id,content:JSON.stringify(res).slice(0,4000)});
