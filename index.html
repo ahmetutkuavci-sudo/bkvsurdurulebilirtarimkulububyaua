@@ -11263,6 +11263,18 @@
                             showNotification("Hesap yetkiniz güncellendi: " + (activeUser.role === 'admin' ? "Yönetici" : "Normal Üye"), "info");
                         }
                     }
+                // 🔄 Ad / sınıf başka cihazdan değiştiyse bu cihazda da anında güncelle
+                try {
+                    const cloudName = activeUser.username || '';
+                    const cloudGrade = activeUser.grade || 'Belirtilmedi';
+                    if ((cloudName && cloudName !== sessionStorage.getItem('currentUser')) || cloudGrade !== sessionStorage.getItem('currentGrade')) {
+                        if (cloudName) sessionStorage.setItem('currentUser', cloudName);
+                        sessionStorage.setItem('currentGrade', cloudGrade);
+                        if (typeof applyUserRoleUI === 'function') applyUserRoleUI();
+                        const pn = document.getElementById('prof-name'); if (pn && cloudName) pn.innerText = cloudName;
+                        const pg = document.getElementById('prof-grade'); if (pg) pg.innerText = cloudGrade;
+                    }
+                } catch(e) { console.warn('Ad/sınıf eşitleme hatası', e); }
                 }
             }
         }, (err) => {
