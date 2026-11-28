@@ -6784,10 +6784,11 @@
             let prod = products.find(p => String(p.barcode) === String(barcode));
             if (!prod) return;
             const currentStock = (prod.stock !== undefined && prod.stock !== null) ? prod.stock : 0;
-            const inputVal = prompt(`"${prod.name}" için yeni stok miktarını giriniz:`, currentStock);
-            if (inputVal !== null && inputVal.trim() !== '') {
-                setProductStock(barcode, inputVal.trim());
-            }
+            showCustomPrompt('📦 Stok Güncelle', `"${prod.name}" için yeni stok miktarını giriniz:`, String(currentStock), function(inputVal) {
+                if (inputVal !== null && String(inputVal).trim() !== '') {
+                    setProductStock(barcode, String(inputVal).trim());
+                }
+            });
         }
 
         function adjustStock(barcode, delta) {
@@ -10022,9 +10023,10 @@
             return _ecoKnowWrite(text, "🧠 Kişisel Zeka kaydedildi: EcoMind AI artık herkes için bu bilgilerle eğitildi!");
         };
         window.clearEcoKnowledge = function() {
-            if (!confirm("Kişisel Zeka bilgilerinin tamamı silinsin mi? EcoMind AI bu bilgileri herkes için unutur.")) return;
-            const el = document.getElementById('eco-knowledge-input'); if (el) el.value = '';
-            return _ecoKnowWrite('', "🗑️ Kişisel Zeka temizlendi.");
+            showCustomConfirm('Kişisel Zekayı Temizle', "Kişisel Zeka bilgilerinin tamamı silinsin mi? EcoMind AI bu bilgileri herkes için unutur.", function() {
+                const el = document.getElementById('eco-knowledge-input'); if (el) el.value = '';
+                _ecoKnowWrite('', "🗑️ Kişisel Zeka temizlendi.");
+            });
         };
 
         // ========================================================
@@ -14199,17 +14201,21 @@
         }
         function kullan(id) {
             const s = oku().find(r => r.id === id); if (!s) return;
-            const v = prompt('Ekimde kullanılan miktar (' + (s.unit || '') + '):', '');
-            if (v == null) return; const n = Number(String(v).replace(',', '.'));
-            if (isNaN(n) || n <= 0) return showNotification('⚠️ Geçerli bir miktar girin.', 'warning');
-            guncelle(id, { quantity: Math.max(0, Math.round(((sayi(s.quantity) || 0) - n) * 100) / 100) });
-            showNotification('📉 Stoktan ' + fmt(n) + ' ' + (s.unit || '') + ' düşüldü.', 'info');
+            showCustomPrompt('📉 Stoktan Düş', 'Ekimde kullanılan miktar (' + (s.unit || '') + '):', '', function(v) {
+                const n = Number(String(v == null ? '' : v).replace(',', '.'));
+                if (isNaN(n) || n <= 0) return showNotification('⚠️ Geçerli bir miktar girin.', 'warning');
+                guncelle(id, { quantity: Math.max(0, Math.round(((sayi(s.quantity) || 0) - n) * 100) / 100) });
+                showNotification('📉 Stoktan ' + fmt(n) + ' ' + (s.unit || '') + ' düşüldü.', 'info');
+            });
         }
         function test(id) {
-            const v = prompt('Yeni çimlenme testi sonucu (% olarak 0-100):', '');
-            if (v == null) return; const n = Number(String(v).replace(',', '.'));
-            if (isNaN(n) || n < 0 || n > 100) return showNotification('⚠️ 0 ile 100 arasında bir değer girin.', 'warning');
-            guncelle(id, { germRate: n, germDate: bugun() });
+            showCustomPrompt('🧪 Çimlenme Testi', 'Yeni çimlenme testi sonucu (% olarak 0-100):', '', function(v) {
+                const t = String(v == null ? '' : v).trim().replace(',', '.');
+                const n = Number(t);
+                if (t === '' || isNaN(n) || n < 0 || n > 100) return showNotification('⚠️ 0 ile 100 arasında bir değer girin.', 'warning');
+                guncelle(id, { germRate: n, germDate: bugun() });
+                showNotification('🧪 Çimlenme oranı %' + fmt(n) + ' olarak kaydedildi.', 'success');
+            });
         }
 
         function render() {
@@ -14512,9 +14518,9 @@
                 // iOS veya doğrudan tarayıcı yönlendirmesi
                 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
                 if (isIOS) {
-                    alert('📲 iOS için Yükleme: Safari tarayıcınızın altındaki "Paylaş" (Share) simgesine dokunun ve ardından "Ana Ekrana Ekle" seçeneğini seçin.');
+                    showNotification('📲 iOS için Yükleme: Safari tarayıcınızın altındaki "Paylaş" (Share) simgesine dokunun ve ardından "Ana Ekrana Ekle" seçeneğini seçin.', 'info', 9000);
                 } else {
-                    alert('📲 Uygulamayı yüklemek için tarayıcınızın sağ üstündeki menüden (üç nokta) "Uygulamayı Yükle" veya "Ana Ekrana Ekle" seçeneğine tıklayabilirsiniz.');
+                    showNotification('📲 Uygulamayı yüklemek için tarayıcınızın sağ üstündeki menüden (üç nokta) "Uygulamayı Yükle" veya "Ana Ekrana Ekle" seçeneğine tıklayabilirsiniz.', 'info', 9000);
                 }
             }
         };
@@ -16848,8 +16854,9 @@ try{
   };
 
   window.bkvRemoveAvatar = async function(){
-    if(!confirm('Profil fotoğrafınız kaldırılsın mı?')) return;
-    if(await savePhoto('')) notify('🗑️ Profil fotoğrafı kaldırıldı.', 'success');
+    showCustomConfirm('Profil Fotoğrafı', 'Profil fotoğrafınız kaldırılsın mı?', async function(){
+      if(await savePhoto('')) notify('🗑️ Profil fotoğrafı kaldırıldı.', 'success');
+    });
   };
 
   document.addEventListener('DOMContentLoaded', () => { try{ window.bkvApplyAvatar(); }catch(e){} });
