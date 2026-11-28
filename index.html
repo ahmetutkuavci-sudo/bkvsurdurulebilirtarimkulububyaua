@@ -997,6 +997,24 @@
         body.theme-pink .task-checkbox { accent-color: #be185d; }
         body.theme-pink .task-assignee { color: #831843; }
 
+        /* ========================================================
+           🎨 ÇOK RENKLİ BUTONLAR: Mavi dışındaki temalarda da
+           Düzenle (sarı), Sil (kırmızı), Excel (yeşil) vb. korunur
+           ======================================================== */
+        body[class*="theme-"] .aero-btn.btn-green  { background: linear-gradient(to bottom, #ffffff 0%, #c8e6c9 45%, #a5d6a7 50%, #66bb6a 100%); border-color: #2e7d32; color: #1b5e20; }
+        body[class*="theme-"] .aero-btn.btn-green:hover  { background: linear-gradient(to bottom, #ffffff 0%, #e8f5e9 45%, #c8e6c9 50%, #81c784 100%); }
+        body[class*="theme-"] .aero-btn.btn-red    { background: linear-gradient(to bottom, #ffffff 0%, #ffcdd2 45%, #ef9a9a 50%, #ef5350 100%); border-color: #c62828; color: #b71c1c; }
+        body[class*="theme-"] .aero-btn.btn-red:hover    { background: linear-gradient(to bottom, #ffffff 0%, #ffebee 45%, #ffcdd2 50%, #e57373 100%); }
+        body[class*="theme-"] .aero-btn.btn-yellow { background: linear-gradient(to bottom, #ffffff 0%, #fff9c4 45%, #fff59d 50%, #ffee58 100%); border-color: #fbc02d; color: #f57f17; }
+        body[class*="theme-"] .aero-btn.btn-yellow:hover { background: linear-gradient(to bottom, #ffffff 0%, #fffde7 45%, #fff9c4 50%, #fff176 100%); }
+        body[class*="theme-"] .aero-btn.btn-orange { background: linear-gradient(to bottom, #ffffff 0%, #ffe0b2 45%, #ffcc80 50%, #ffa726 100%); border-color: #ef6c00; color: #e65100; }
+        body[class*="theme-"] .aero-btn.btn-orange:hover { background: linear-gradient(to bottom, #ffffff 0%, #fff3e0 45%, #ffe0b2 50%, #ffb74d 100%); }
+        body[class*="theme-"] .aero-btn.btn-pink   { background: linear-gradient(to bottom, #ffffff 0%, #fce4ec 45%, #f8bbd0 50%, #f06292 100%); border-color: #d81b60; color: #880e4f; }
+        body[class*="theme-"] .aero-btn.btn-pink:hover   { background: linear-gradient(to bottom, #ffffff 0%, #fff0f5 45%, #fce4ec 50%, #f48fb1 100%); }
+        /* Alınacaklar tablosu alt satırı: mavideki gibi açık zemin + kırmızı toplam */
+        body[class*="theme-"] tfoot th { background: rgba(255,255,255,0.5) !important; color: #000 !important; }
+        body[class*="theme-"] tfoot th#shopping-grand-total { color: #d84315 !important; }
+
         @media print {
             body { background: white !important; color: black !important; }
             header, .tabs, .bottom-bar, .aero-btn, .excel-upload, .hide-on-print { display: none !important; }
