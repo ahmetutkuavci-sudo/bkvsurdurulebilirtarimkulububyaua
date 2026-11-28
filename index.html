@@ -16276,7 +16276,7 @@ async function marulAsk(q,where,inputEl){
         for(var c=0;c<m.tool_calls.length;c++){
           var tc=m.tool_calls[c], args={}, res;
           try{args=JSON.parse(tc.function.arguments||'{}');}catch(e){}
-          var toolLabel={'get_weather':'🌤️ hava durumuna bakıyor','take_attendance':'📋 yoklama kaydediyor','add_task':'✅ görev ekliyor','auto_assign_tasks':'🔄 görevleri dağıtıyor','get_attendance_report':'📊 rapor hazırlıyor','get_task_summary':'📝 görev özeti hazırlıyor','complete_task':'✅ görevi işaretliyor','update_attendance':'📋 yoklamayı güncelliyor','edit_task':'✏️ görevi düzenliyor','delete_task':'🗑️ görevi siliyor','remove_duplicate_tasks':'🧹 kopya görevleri temizliyor','send_message':'✉️ mesaj hazırlıyor','add_note':'📝 not ekliyor','edit_note':'✏️ notu düzenliyor','delete_note':'🗑️ notu siliyor','add_shopping_item':'🛒 listeye ekliyor','delete_shopping_item':'🗑️ listeden siliyor','create_reminder':'⏰ hatırlatıcı kuruyor','list_reminders':'⏰ hatırlatıcılara bakıyor','delete_reminder':'🗑️ hatırlatıcıyı siliyor','remove_duplicate_reminders':'🧹 kopya hatırlatıcıları temizliyor'};
+          var toolLabel={'get_weather':'🌤️ hava durumuna bakıyor','take_attendance':'📋 yoklama kaydediyor','add_task':'✅ görev ekliyor','auto_assign_tasks':'🔄 görevleri dağıtıyor','get_attendance_report':'📊 rapor hazırlıyor','get_task_summary':'📝 görev özeti hazırlıyor','complete_task':'✅ görevi işaretliyor','update_attendance':'📋 yoklamayı güncelliyor','edit_task':'✏️ görevi düzenliyor','delete_task':'🗑️ görevi siliyor','remove_duplicate_tasks':'🧹 kopya görevleri temizliyor','send_message':'✉️ mesaj hazırlıyor','add_note':'📝 not ekliyor','edit_note':'✏️ notu düzenliyor','delete_note':'🗑️ notu siliyor','add_shopping_item':'🛒 listeye ekliyor','delete_shopping_item':'🗑️ listeden siliyor','create_reminder':'⏰ hatırlatıcı kuruyor','list_reminders':'⏰ hatırlatıcılara bakıyor','delete_reminder':'🗑️ hatırlatıcıyı siliyor','remove_duplicate_reminders':'🧹 kopya hatırlatıcıları temizliyor','search_seed_bank':'🌰 tohum bankasına bakıyor','get_messages':'✉️ mesajlara bakıyor','get_club_data':'📚 kayıtlara bakıyor','add_seed':'🌰 tohum kaydı hazırlıyor','update_seed_stock':'📦 stoğu güncelliyor','edit_seed':'✏️ tohum kaydını düzenliyor','delete_seed':'🗑️ tohumu siliyor'};
           wait.textContent='🧠 '+(toolLabel[tc.function.name]||'işlem yapıyor')+'...';
           try{res=await marulRunTool(tc.function.name,args);}catch(e){res={error:'İşlem başarısız: '+e.message};}
           msgs.push({role:'tool',tool_call_id:tc.id,content:JSON.stringify(res).slice(0,4000)});
@@ -17603,5 +17603,431 @@ window.marulApplyImgGen();
 })();
 
 </script>
+<script>
+/* ============================================================
+ 🧠 EcoMind AI — TÜM MENÜLERE OKUMA ERİŞİMİ
+ Okur; tohum bankası için ayrıca (onaylı) yazar. Ana EcoMind AI betiğinden sonra çalışır ve
+ marulTools / marulRunTool / marulCtx / marulNeedsTools işlevlerini sarmalar.
+ Metin sohbeti ve Terra Live (sesli) aynı işlevleri kullandığı için ikisi de otomatik destek alır.
+ Eklenen araçlar:
+   • search_seed_bank  → Tohum Bankası (var mı? tüm ayrıntılar, uyarılar, ekim zamanı)
+   • get_messages      → Mesajlar (son gelen/giden, okunmamışlar, arama)
+   • get_club_data     → Bokashi, Üretimlerim, Ürün/Stok, Satış, Talepler, Kulüp Günlüğü, Notlar, Alınacaklar, Duyuru, Genel Bakış
+ Yetki: kişi yalnızca kendi mesajlarını görür; satış geçmişi yalnızca yöneticilere; öğrenci yalnızca kendi taleplerini görür.
+ ============================================================ */
+(function(){
+  if(typeof marulTools!=='function'||typeof marulRunTool!=='function'||typeof marulMe!=='function'){
+    console.warn('EcoMind okuma araçları: ana betik bulunamadı, eklenti devre dışı.'); return;
+  }
+  var AYLAR=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  var READ_TOOLS={search_seed_bank:1,get_messages:1,get_club_data:1};
+  var WRITE_TOOLS={add_seed:1,update_seed_stock:1,edit_seed:1,delete_seed:1};
+
+  function S(v){return v==null?'':String(v);}
+  function cut(v,n){v=S(v);return v.length>n?v.slice(0,n)+'…':v;}
+  function jget(k){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?[]:v;}catch(e){return [];}}
+  function arr(k){var v=jget(k);return Array.isArray(v)?v:[];}
+  function num(v){return (v===''||v==null||isNaN(v))?null:Number(v);}
+  function fold(t){return marulFold(t);}
+  function un(s){return (typeof marulUnesc==='function')?marulUnesc(s):S(s);}
+  function clean(o){Object.keys(o).forEach(function(k){if(o[k]===''||o[k]==null)delete o[k];});return o;}
+  function lim(v,d,mx){v=parseInt(v);return (v>=1)?Math.min(v,mx):d;}
+  // Sonucu araç cevabı sınırına (~4000 karakter) sığdır: listeyi sondan kısalt
+  function fit(obj,key){
+    var s=JSON.stringify(obj);
+    while(s.length>3600&&obj[key]&&obj[key].length>1){obj[key].pop();obj.kisaltildi=true;s=JSON.stringify(obj);}
+    if(obj.kisaltildi) obj.not='Liste uzun olduğu için kısaltıldı; daha dar bir arama (ad, sayı sınırı) ile devam edilebilir.';
+    return obj;
+  }
+  // Türkçe çekim eklerine tolerans: «domatesler/domatesi» → «domates» (en fazla 4 harf kırp, en az 4 harf kalsın)
+  function has(hay,w){
+    if(hay.indexOf(w)>-1) return true;
+    for(var k=1;k<=4&&w.length-k>=4;k++){ if(hay.indexOf(w.slice(0,w.length-k))>-1) return true; }
+    return false;
+  }
+  function wordsMatch(hay,q){
+    var ws=fold(q).split(' ').filter(Boolean); if(!ws.length) return true;
+    return ws.every(function(w){return has(hay,w);});
+  }
+  function slim(o){
+    var r={};
+    Object.keys(o||{}).forEach(function(k){
+      var v=o[k]; if(v==null||v==='') return;
+      if(typeof v==='string'){ if(/^data:/.test(v)) return; r[k]=cut(un(v),200); }
+      else if(typeof v==='object'){ var js=JSON.stringify(v); r[k]=js.length>240?cut(js,240):v; }
+      else r[k]=v;
+    });
+    return r;
+  }
+  function stamp(r){return Number(r.createdAt)||Date.parse(r.date||r.tarih||'')||Number(r.id)||0;}
+
+  /* ---------- 🌰 TOHUM BANKASI ---------- */
+  function sowNow(s,ay){var a=num(s.sowFrom),b=num(s.sowTo);if(!a||!b)return null;return a<=b?(ay>=a&&ay<=b):(ay>=a||ay<=b);}
+  function seedInfo(s){
+    var up=[],o={};
+    var q=num(s.quantity),m=num(s.minQty),g=num(s.germRate),raf=num(s.shelfYears);
+    if(s.storeDate&&raf){
+      var bit=new Date(s.storeDate);
+      if(!isNaN(bit)){
+        bit.setFullYear(bit.getFullYear()+raf);
+        var gun=Math.round((bit-new Date())/86400000);
+        o.son_kullanma=bit.toISOString().slice(0,10);
+        if(gun<0) up.push('raf ömrü doldu'); else if(gun<=90) up.push('raf ömrüne '+gun+' gün kaldı');
+      }
+    }
+    if(g!=null&&g<70) up.push('düşük çimlenme oranı (%'+g+')');
+    if(q!=null&&m!=null&&q<=m) up.push('stok az (asgari '+m+')');
+    o.uyarilar=up; return o;
+  }
+  function seedFull(s){
+    var inf=seedInfo(s), ay=new Date().getMonth()+1, sn=sowNow(s,ay);
+    var o={
+      ad:s.name, cesit_yore:s.variety, tur:s.kind, kategori:s.category, temin_kaynagi:s.source,
+      saklama_tarihi:s.storeDate, saklama_yeri:s.location, raf_omru_yil:num(s.shelfYears), son_kullanma:inf.son_kullanma,
+      stok:(num(s.quantity)!=null?num(s.quantity)+' '+(s.unit||''):''), asgari_stok:num(s.minQty),
+      cimlenme_orani_yuzde:num(s.germRate), cimlenme_testi_tarihi:s.germDate,
+      ideal_ekim:(num(s.sowFrom)&&num(s.sowTo))?(AYLAR[s.sowFrom-1]+' – '+AYLAR[s.sowTo-1]):'',
+      su_an_ekim_zamani_mi:(sn===null?'':(sn?'evet':'hayır')),
+      hasada_kadar_gun:num(s.harvestDays), not:cut(un(s.note),200),
+      uyarilar:inf.uyarilar.length?inf.uyarilar:''
+    };
+    return clean(o);
+  }
+  function seedCompact(s){
+    var inf=seedInfo(s);
+    return clean({ad:s.name,cesit:s.variety,stok:(num(s.quantity)!=null?num(s.quantity)+' '+(s.unit||''):''),uyarilar:inf.uyarilar.length?inf.uyarilar:''});
+  }
+  function seedSearch(a){
+    var all=arr('bkvSeeds');
+    if(!all.length) return {ok:true,toplam_kayit:0,bulundu:false,mesaj:'Tohum Bankası\'nda kayıtlı tohum yok (ya da veri henüz yüklenmedi).'};
+    var ay=new Date().getMonth()+1, q=S(a.query).trim(), res=all.slice(), approx=false;
+    if(q){
+      var hayOf=function(s){return fold([s.name,s.variety,s.category,s.kind,s.source,s.location,s.note].join(' '));};
+      var strict=all.filter(function(s){return wordsMatch(hayOf(s),q);});
+      if(strict.length) res=strict;
+      else{
+        var ws=fold(q).split(' ').filter(function(w){return w.length>=4;});
+        res=all.filter(function(s){var h=hayOf(s);return ws.some(function(w){return has(h,w);});});
+        approx=res.length>0;
+      }
+    }
+    if(a.category){var c=fold(a.category);res=res.filter(function(s){return fold(s.category).indexOf(c)>-1;});}
+    if(a.only_sowable_now) res=res.filter(function(s){return sowNow(s,ay)===true;});
+    if(a.only_warnings) res=res.filter(function(s){return seedInfo(s).uyarilar.length>0;});
+    var out={ok:true,toplam_kayit:all.length,eslesen:res.length,bulundu:res.length>0,bugun_ay:AYLAR[ay-1]};
+    if(q) out.aranan=q;
+    if(approx) out.not='Tam eşleşme yok; adı benzeyen kayıtlar gösteriliyor, kullanıcıya bunu belirt.';
+    if(!res.length){out.mesaj=q?('«'+q+'» ile eşleşen tohum kayıtlı değil.'):'Bu filtrelere uyan tohum yok.';return out;}
+    var full=res.length<=5||a.detailed===true;
+    out.gorunum=full?'tam ayrıntı':'kısa liste (bir tohumun ayrıntısı için adıyla tekrar ara)';
+    out.tohumlar=res.slice(0,full?8:30).map(full?seedFull:seedCompact);
+    return fit(out,'tohumlar');
+  }
+
+  /* ---------- ✉️ MESAJLAR ---------- */
+  function msgScope(){
+    var me=marulMe(), em=S(me.email).toLowerCase(), gr=S(sessionStorage.getItem('currentGrade')).toLowerCase();
+    var all=arr('bkvMessages').slice().sort(function(x,y){return (Number(y.id)||0)-(Number(x.id)||0);});
+    function mine(m){
+      if(S(m.fromEmail).toLowerCase()===em) return false;
+      var tv=S(m.targetValue).toLowerCase();
+      if(m.targetType==='ALL') return true;
+      if(m.targetType==='USER'&&tv===em) return true;
+      if(m.targetType==='GRADE'&&tv&&gr.indexOf(tv)>-1) return true;
+      if(m.targetType==='ADMINS'&&me.admin) return true;
+      return false;
+    }
+    return {em:em,inbox:all.filter(mine),sent:all.filter(function(m){return S(m.fromEmail).toLowerCase()===em;})};
+  }
+  function msgView(m,dir,em){
+    var o={yon:dir==='in'?'gelen':'giden',konu:cut(un(m.subject),120),metin:cut(un(m.body),700),tarih:m.date,saat:m.time};
+    if(dir==='in'){o.kimden=S(m.fromUser)+(m.fromGrade&&m.fromGrade!=='Belirtilmedi'?' ('+m.fromGrade+')':'');o.okundu=!!(m.readBy&&m.readBy.indexOf(em)>-1);if(m.targetType==='ALL')o.tur='toplu duyuru';else if(m.targetType==='GRADE')o.tur=S(m.targetLabel);}
+    else{o.kime=S(m.targetLabel);o.okuyan_sayisi=Math.max(0,(m.readBy?m.readBy.length:1)-1);}
+    return clean(o);
+  }
+  function getMessages(a){
+    var sc=msgScope(), box=S(a.box||'both').toLowerCase(), n=lim(a.count,1,10), qf=a.search?S(a.search):'', ff=a.from?fold(a.from):'';
+    var inb=sc.inbox, snt=sc.sent;
+    var unreadAll=inb.filter(function(m){return !(m.readBy&&m.readBy.indexOf(sc.em)>-1);}).length;
+    function filt(l,dir){
+      if(a.unread_only&&dir==='in') l=l.filter(function(m){return !(m.readBy&&m.readBy.indexOf(sc.em)>-1);});
+      if(ff) l=l.filter(function(m){return fold(dir==='in'?m.fromUser:m.targetLabel).indexOf(ff)>-1;});
+      if(qf) l=l.filter(function(m){return wordsMatch(fold(un(m.subject)+' '+un(m.body)),qf);});
+      return l;
+    }
+    var out={ok:true,gelen_toplam:inb.length,okunmamis_gelen:unreadAll,giden_toplam:snt.length};
+    if(box==='inbox'||box==='both') out.gelen=filt(inb,'in').slice(0,n).map(function(m){return msgView(m,'in',sc.em);});
+    if(box==='sent'||box==='both') out.giden=filt(snt,'out').slice(0,n).map(function(m){return msgView(m,'out',sc.em);});
+    if((!out.gelen||!out.gelen.length)&&(!out.giden||!out.giden.length)) out.mesaj='Bu ölçütlere uyan mesaj bulunamadı.';
+    out.not='Mesajlar yeniden eskiye sıralıdır. Bu araç mesajı okundu olarak İŞARETLEMEZ. Kullanıcı yalnızca «son mesajım» dediyse hem son gelen hem son giden mesajı kısaca belirt.';
+    // iki liste birlikte büyürse sığdır
+    var s=JSON.stringify(out);
+    while(s.length>3600){ if(out.gelen&&out.gelen.length>1)out.gelen.pop(); else if(out.giden&&out.giden.length>1)out.giden.pop(); else break; s=JSON.stringify(out);}
+    return out;
+  }
+
+  /* ---------- 📚 DİĞER MENÜLER ---------- */
+  function clubData(a){
+    var me=marulMe(), sec=S(a.section).toLowerCase(), q=S(a.query).trim(), n=lim(a.limit,8,15), qf=function(r){return !q||wordsMatch(fold(JSON.stringify(r)),q);};
+    if(sec==='overview'){
+      var msc=msgScope();
+      var o={ok:true,genel_bakis:{
+        tohum_bankasi_cesit:arr('bkvSeeds').length,
+        bokashi_kayit:(arr('bkvBokashi').length||arr('bkvBokashiRecords').length),
+        uretim_donemi:arr('bkvUretimDonem').length, uretim_hareketi:arr('bkvUretim').length,
+        urun:arr('bkvProducts').length, ortak_not:arr('bkvNotesShared').length, alinacaklar_kalem:arr('shoppingList').length,
+        kulup_gunlugu_kaydi:arr('clubLogs').length, gelen_mesaj:msc.inbox.length,
+        okunmamis_mesaj:msc.inbox.filter(function(m){return !(m.readBy&&m.readBy.indexOf(msc.em)>-1);}).length}};
+      if(me.admin){o.genel_bakis.satis_kaydi=arr('bkvSalesHistory').length;o.genel_bakis.bekleyen_talep=arr('bkvStudentRequests').filter(function(r){return r.status==='pending';}).length;}
+      o.not='Görevler, yoklama, hava durumu ve hatırlatıcılar için kendi araçları kullanılır.';
+      return o;
+    }
+    if(sec==='bokashi'){
+      var bk=(arr('bkvBokashi').length?arr('bkvBokashi'):arr('bkvBokashiRecords')), kg=0;
+      bk.forEach(function(b){kg+=Number(b.kg||b.amount||0)||0;});
+      var l=bk.filter(qf).slice().sort(function(x,y){return stamp(y)-stamp(x);}).slice(0,n).map(slim);
+      return fit({ok:true,bolum:'Bokashi Takip',toplam_kayit:bk.length,fermantasyonda:bk.filter(function(b){return !b.completed;}).length,tamamlanan:bk.filter(function(b){return !!b.completed;}).length,toplam_organik_atik_kg:Math.round(kg*10)/10,kayitlar:l},'kayitlar');
+    }
+    if(sec==='production'){
+      var d=arr('bkvUretimDonem'), r=arr('bkvUretim');
+      var dl=d.filter(qf).slice().sort(function(x,y){return stamp(y)-stamp(x);}).slice(0,n).map(slim);
+      var rl=r.filter(qf).slice().sort(function(x,y){return stamp(y)-stamp(x);}).slice(0,Math.min(n,8)).map(slim);
+      var out={ok:true,bolum:'Üretimlerim (Sera & Bahçe)',toplam_donem:d.length,aktif_donem:d.filter(function(x){return x.status==='devam'||x.status==='plan';}).length,toplam_hareket:r.length,donemler:dl,son_hareketler:rl};
+      var s=JSON.stringify(out); while(s.length>3600&&(out.son_hareketler.length||out.donemler.length>1)){ if(out.son_hareketler.length)out.son_hareketler.pop(); else out.donemler.pop(); out.kisaltildi=true; s=JSON.stringify(out);} return out;
+    }
+    if(sec==='products'){
+      var p=arr('bkvProducts');
+      var l2=p.filter(qf).slice(0,n).map(function(x){return clean({ad:x.name,barkod:x.barcode,stok:x.stock,fiyat:(x.price!=null?x.price+' ₺':''),kategori:x.category});});
+      var biten=p.filter(function(x){return Number(x.stock)<=0;}).map(function(x){return x.name;}).slice(0,15);
+      return fit({ok:true,bolum:'Barkod/Satış — Ürünler',toplam_urun:p.length,eslesen:p.filter(qf).length,stokta_olmayan:biten,urunler:l2},'urunler');
+    }
+    if(sec==='sales'){
+      if(!me.admin) return {error:'Satış geçmişi yalnızca yöneticilere açıktır.'};
+      var sh=arr('bkvSalesHistory'), tot=0; sh.forEach(function(x){tot+=Number(x.total)||0;});
+      var sl=sh.filter(qf).slice(0,Math.min(n,10)).map(function(x){return {tarih:x.date,toplam:(Number(x.total)||0).toFixed(2)+' ₺',urunler:(x.items||[]).slice(0,6).map(function(i){return (i.name||i.barcode||'?')+' x'+(i.qty||1);}).join(', ')};});
+      return fit({ok:true,bolum:'Barkod/Satış — Satış Geçmişi',toplam_satis_sayisi:sh.length,toplam_ciro:Math.round(tot*100)/100+' ₺',son_satislar:sl},'son_satislar');
+    }
+    if(sec==='requests'){
+      var rq=arr('bkvStudentRequests'), em=S(me.email).toLowerCase();
+      if(!me.admin) rq=rq.filter(function(x){return S(x.studentEmail).toLowerCase()===em;});
+      var cnt={pending:0,approved:0,rejected:0}; rq.forEach(function(x){if(cnt[x.status]!=null)cnt[x.status]++;});
+      var rl2=rq.filter(qf).slice(0,n).map(function(x){return clean({tur:x.type,baslik:cut(un(x.title),100),ogrenci:me.admin?S(x.studentName)+(x.studentGrade?' ('+x.studentGrade+')':''):'',detay:cut(un(x.details),300),durum:({pending:'bekliyor',approved:'onaylandı',rejected:'reddedildi'})[x.status]||x.status,yonetici_notu:cut(un(x.adminNote),200),tarih:x.date});});
+      return fit({ok:true,bolum:me.admin?'Öğrenci Talepleri':'Taleplerin',toplam:rq.length,bekleyen:cnt.pending,onaylanan:cnt.approved,reddedilen:cnt.rejected,talepler:rl2},'talepler');
+    }
+    if(sec==='club_logs'){
+      var lg=arr('clubLogs'), ll=lg.filter(qf).slice(0,n).map(function(x){return clean({tarih:x.date,baslik:cut(un(x.title),120),aciklama:cut(un(x.desc),400)});});
+      return fit({ok:true,bolum:'Kulüp Günlüğü',toplam_kayit:lg.length,kayitlar:ll},'kayitlar');
+    }
+    if(sec==='notes'){
+      var nt=arr('bkvNotesShared'), nl=nt.filter(qf).slice(-n).reverse().map(function(x){return clean({not:cut(un(x.text),300),yazan:x.author,tarih:x.date});});
+      return fit({ok:true,bolum:'Ortak Not Defteri',toplam_not:nt.length,notlar_yeniden_eskiye:nl},'notlar_yeniden_eskiye');
+    }
+    if(sec==='shopping'){
+      var sp=arr('shoppingList'), tot2=0; sp.forEach(function(x){tot2+=(x.total!==undefined?Number(x.total):(x.qty||1)*(x.price||0))||0;});
+      var spl=sp.filter(qf).slice(0,Math.max(n,15)).map(function(x){return clean({urun:un(x.name),miktar:x.qty,birim_fiyat:x.price,toplam:x.total});});
+      return fit({ok:true,bolum:'Alınacaklar Listesi',kalem:sp.length,genel_toplam:Math.round(tot2*100)/100+' ₺',liste:spl},'liste');
+    }
+    if(sec==='announcement'){
+      return {ok:true,bolum:'Duyuru bandı',duyuru:cut(localStorage.getItem('bkvTickerText')||'',500)||'Duyuru yok.'};
+    }
+    return {error:'Bilinmeyen bölüm: '+sec+'. Geçerli bölümler: overview, bokashi, production, products, sales, requests, club_logs, notes, shopping, announcement.'};
+  }
+
+
+  /* ---------- ✍️ TOHUM BANKASI — YAZMA (onaylı) ---------- */
+  var KATS=[['sebze','🥬 Sebze'],['meyve','🍎 Meyve'],['tahil','🌾 Tahıl'],['baklagil','🫘 Baklagil'],['cicek','🌸 Çiçek / Süs'],['suy','🌸 Çiçek / Süs'],['aromatik','🌿 Aromatik / Şifalı'],['sifali','🌿 Aromatik / Şifalı'],['diger','📦 Diğer']];
+  function normKat(v){var f=fold(v);for(var i=0;i<KATS.length;i++){if(f.indexOf(KATS[i][0])>-1)return KATS[i][1];}return null;}
+  function normKind(v){var f=fold(v);if(f.indexOf('atalik')>-1||f.indexOf('yerel')>-1)return 'Atalık / Yerel';if(f.indexOf('hibrit')>-1)return 'Hibrit';if(f.indexOf('standart')>-1)return 'Standart';return null;}
+  function normUnit(v){var f=fold(v);if(f==='g'||f==='gr'||f==='gram')return 'g';if(f==='adet'||f==='tane')return 'adet';if(f==='paket')return 'paket';return null;}
+  function okDate(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)&&!isNaN(new Date(d));}
+  function seedStore(l){localStorage.setItem('bkvSeeds',JSON.stringify(l));}
+  function seedPush(rec){
+    try{ if(typeof window.renderTohum==='function') window.renderTohum(); }catch(e){}
+    if(typeof window._firebaseTohumKaydet==='function') return window._firebaseTohumKaydet(rec);
+  }
+  // Alanları doğrula ve kayıt biçimine çevir. Hata varsa {error} döner.
+  function seedFields(a,isNew){
+    var r={}, v;
+    if(a.name!=null){v=S(a.name).trim();if(!v)return {error:'Tohum adı boş olamaz.'};r.name=cut(v,80);}
+    if(a.variety!=null) r.variety=cut(S(a.variety).trim(),100);
+    if(a.kind!=null){v=normKind(a.kind);if(!v)return {error:'Tür Atalık / Yerel, Standart veya Hibrit olmalı.'};r.kind=v;}
+    if(a.category!=null){v=normKat(a.category);if(!v)return {error:'Kategori: Sebze, Meyve, Tahıl, Baklagil, Çiçek/Süs, Aromatik/Şifalı veya Diğer olmalı.'};r.category=v;}
+    if(a.source!=null) r.source=cut(S(a.source).trim(),100);
+    if(a.location!=null) r.location=cut(S(a.location).trim(),100);
+    if(a.note!=null) r.note=cut(S(a.note).trim(),300);
+    if(a.store_date!=null&&a.store_date!==''){v=S(a.store_date).trim();if(!okDate(v))return {error:'Saklama tarihi YYYY-AA-GG biçiminde olmalı.'};r.storeDate=v;}
+    if(a.germ_date!=null&&a.germ_date!==''){v=S(a.germ_date).trim();if(!okDate(v))return {error:'Çimlenme testi tarihi YYYY-AA-GG biçiminde olmalı.'};r.germDate=v;}
+    var nums=[['shelf_years','shelfYears',0,100],['quantity','quantity',0,1e9],['min_qty','minQty',0,1e9],['germ_rate','germRate',0,100],['harvest_days','harvestDays',0,1000]];
+    for(var i=0;i<nums.length;i++){
+      var k=nums[i][0]; if(a[k]==null||a[k]==='') continue;
+      var n=Number(String(a[k]).replace(',','.')); if(isNaN(n)||n<nums[i][2]||n>nums[i][3]) return {error:k+' için geçerli bir sayı gerekli ('+nums[i][2]+'–'+nums[i][3]+').'};
+      r[nums[i][1]]=n;
+    }
+    if(a.unit!=null){v=normUnit(a.unit);if(!v)return {error:'Birim g, adet veya paket olmalı (kg ise grama çevir).'};r.unit=v;}
+    var sf=a.sow_from, st=a.sow_to;
+    if((sf!=null&&sf!=='')||(st!=null&&st!=='')){
+      sf=parseInt(sf);st=parseInt(st);
+      if(!(sf>=1&&sf<=12&&st>=1&&st<=12)) return {error:'İdeal ekim için başlangıç ve bitiş ayı birlikte (1-12) verilmeli.'};
+      r.sowFrom=String(sf); r.sowTo=String(st);
+    }
+    if(isNew){ if(!r.name) return {error:'Tohum adı gerekli.'}; if(r.quantity==null) return {error:'Stok miktarı gerekli.'}; if(!r.unit) r.unit='g'; if(!r.kind) r.kind='Atalık / Yerel'; if(!r.category) r.category='📦 Diğer'; }
+    return {rec:r};
+  }
+  function seedLine(r){return r.name+(r.variety?' ('+r.variety+')':'')+' — '+(r.quantity!=null?r.quantity+' '+(r.unit||''):'');}
+  // Adı verilen tohumu bul: tek eşleşme → ok; çoksa/yoksa açıklayıcı hata
+  function seedFind(txt){
+    var all=arr('bkvSeeds'), q=S(txt).trim(); if(!q) return {error:'Hangi tohum? Adını söyle.'};
+    var f=fold(q), exact=all.filter(function(s){return fold(s.name)===f||fold((s.name||'')+' '+(s.variety||''))===f;});
+    if(exact.length===1) return {seed:exact[0]};
+    var m=exact.length?exact:all.filter(function(s){return wordsMatch(fold([s.name,s.variety].join(' ')),q);});
+    if(m.length===1) return {seed:m[0]};
+    if(!m.length) return {error:'«'+q+'» adında kayıtlı tohum bulunamadı. Önce search_seed_bank ile kontrol et; yoksa yeni eklemek ister mi diye sor.'};
+    return {error:'«'+q+'» için birden fazla tohum var. HİÇBİRİNİ DEĞİŞTİRME; kullanıcıya adayları söyleyip hangisi olduğunu SOR.',ambiguous:true,adaylar:m.slice(0,8).map(seedLine)};
+  }
+  function ayAd(r){return (num(r.sowFrom)&&num(r.sowTo))?AYLAR[r.sowFrom-1]+'–'+AYLAR[r.sowTo-1]:'';}
+  async function seedWrite(name,a){
+    var me=marulMe(), g=marulGate(); if(g) return g;
+    var user=S(sessionStorage.getItem('currentUser'))||me.name||'Kullanıcı';
+    if(name==='add_seed'){
+      var f=seedFields(a,true); if(f.error) return f;
+      var rec=f.rec, all=arr('bkvSeeds');
+      var dup=all.filter(function(s){return fold(s.name)===fold(rec.name)&&fold(s.variety)===fold(rec.variety||'');});
+      if(dup.length&&!a.allow_duplicate) return {error:'Bu tohum zaten kayıtlı: '+seedLine(dup[0])+'. Stok eklemek/azaltmak için update_seed_stock kullan. Kullanıcı yine de ayrı kayıt isterse allow_duplicate:true ile tekrar çağır.',zaten_var:true};
+      var det=[rec.kind,rec.category,rec.location?'yer: '+rec.location:'',rec.germRate!=null?'çimlenme %'+rec.germRate:'',ayAd(rec)?'ekim: '+ayAd(rec):''].filter(Boolean).join(', ');
+      if(!(await marulConfirm('Tohum Bankası\'na yeni kayıt eklenecek:\n• '+seedLine(rec)+(det?'\n• '+det:'')+'\n\nOnaylıyor musun?'))) return {cancelled:true,mesaj:'Tohum eklenmedi.'};
+      rec.id='s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); rec.author=user; rec.createdAt=Date.now();
+      var l=arr('bkvSeeds'); l.push(rec); seedStore(l); await seedPush(rec);
+      return {ok:true,mesaj:'Tohum Bankası\'na eklendi.',kayit:seedFull(rec)};
+    }
+    var fd=seedFind(a.seed); if(fd.error) return fd; var s=fd.seed;
+    if(name==='update_seed_stock'){
+      var mode=S(a.mode||'subtract').toLowerCase(), amt=Number(String(a.amount).replace(',','.'));
+      if(['add','subtract','set'].indexOf(mode)<0) return {error:'mode add, subtract veya set olmalı.'};
+      if(isNaN(amt)||amt<0||(mode!=='set'&&amt===0)) return {error:'Geçerli bir miktar gerekli.'};
+      var cur=num(s.quantity)||0, nw=mode==='add'?cur+amt:(mode==='subtract'?cur-amt:amt);
+      if(nw<0) return {error:'Stok yetersiz: '+seedLine(s)+' (mevcut '+cur+' '+(s.unit||'')+'), '+amt+' düşülemez. Kullanıcıya mevcut stoğu söyle.'};
+      nw=Math.round(nw*100)/100;
+      if(!(await marulConfirm('Stok güncellenecek:\n• '+s.name+(s.variety?' ('+s.variety+')':'')+'\n• '+cur+' → '+nw+' '+(s.unit||'')+(mode==='subtract'?' ('+amt+' düşülüyor)':mode==='add'?' ('+amt+' ekleniyor)':'')+'\n\nOnaylıyor musun?'))) return {cancelled:true,mesaj:'Stok değiştirilmedi.'};
+      return await seedApply(s.id,{quantity:nw},'Stok güncellendi: '+cur+' → '+nw+' '+(s.unit||'')+'.');
+    }
+    if(name==='edit_seed'){
+      var b=Object.assign({},a); delete b.seed; if(a.new_name!=null) b.name=a.new_name; else delete b.name;
+      delete b.quantity; // stok değişimi yalnızca update_seed_stock ile
+      var fe=seedFields(b,false); if(fe.error) return fe;
+      var ch=fe.rec; if(!Object.keys(ch).length) return {error:'Değiştirilecek bir alan verilmedi.'};
+      if(ch.germRate!=null&&!ch.germDate) ch.germDate=marulToday();
+      var lines=Object.keys(ch).map(function(k){return '• '+k+': '+S(s[k])+' → '+S(ch[k]);}).join('\n');
+      if(!(await marulConfirm('Tohum kaydı düzenlenecek: '+s.name+(s.variety?' ('+s.variety+')':'')+'\n'+lines+'\n\nOnaylıyor musun?'))) return {cancelled:true,mesaj:'Kayıt değiştirilmedi.'};
+      return await seedApply(s.id,ch,'Tohum kaydı güncellendi.');
+    }
+    if(name==='delete_seed'){
+      if(!me.admin) return marulDeny('tohum silme');
+      if(!(await marulConfirm('Tohum Bankası\'ndan SİLİNECEK:\n• '+seedLine(s)+'\n\nBu işlem geri alınamaz. Onaylıyor musun?'))) return {cancelled:true,mesaj:'Tohum silinmedi.'};
+      seedStore(arr('bkvSeeds').filter(function(r){return r.id!==s.id;}));
+      try{ if(typeof window.renderTohum==='function') window.renderTohum(); }catch(e){}
+      if(typeof window._firebaseTohumSil==='function') await window._firebaseTohumSil(s.id);
+      return {ok:true,mesaj:'Tohum silindi: '+seedLine(s)};
+    }
+    return {error:'Bilinmeyen araç: '+name};
+  }
+  async function seedApply(id,ch,msg){
+    var l=arr('bkvSeeds'), rec=null;
+    l=l.map(function(r){if(r.id===id){rec=Object.assign({},r,ch,{updatedAt:Date.now()});return rec;}return r;});
+    if(!rec) return {error:'Kayıt artık bulunamadı (başka biri silmiş olabilir).'};
+    seedStore(l); await seedPush(rec);
+    return {ok:true,mesaj:msg,kayit:seedFull(rec)};
+  }
+
+  /* ---------- 🔌 BAĞLANTILAR ---------- */
+  var _tools=marulTools;
+  marulTools=function(){
+    var t=_tools.apply(this,arguments)||[];
+    var have={}; t.forEach(function(x){if(x&&x.function)have[x.function.name]=1;});
+    if(!have.search_seed_bank) t.push(marulTool('search_seed_bank',
+      'TOHUM BANKASI menüsündeki kayıtları arar ve TÜM ayrıntıları döndürür (çeşit/yöre, tür, kategori, stok, saklama tarihi/yeri, raf ömrü, çimlenme oranı, ideal ekim ayları, hasada kadar gün, not, uyarılar). «Tohum bankasında X var mı», «domates tohumunun bilgileri», «şu an ne ekilir», «stoğu azalan tohumlar» gibi her tohum sorusunda ÖNCE bunu çağır; tahmin etme. query alanına yalnızca tohumun adını/çeşidini yaz (örn. «domates»), «tohum», «var mı» gibi dolgu sözcükleri yazma. Hiç filtre vermezsen tüm tohumların kısa listesi gelir.',
+      {query:{type:'string',description:'Tohum adı veya çeşit/yöre (örn. domates, ayvalık). Tümünü listelemek için boş bırak.'},
+       category:{type:'string',description:'Kategori filtresi: Sebze, Meyve, Tahıl, Baklagil, Çiçek, Aromatik, Diğer'},
+       only_sowable_now:{type:'boolean',description:'true ise yalnızca şu an ekim zamanı olanlar'},
+       only_warnings:{type:'boolean',description:'true ise yalnızca uyarısı olanlar (raf ömrü, düşük çimlenme, az stok)'},
+       detailed:{type:'boolean',description:'true ise çok sonuç olsa da tam ayrıntı ver'}}));
+    if(!have.get_messages) t.push(marulTool('get_messages',
+      'MESAJLAR menüsünü okur (yalnızca konuşan kişinin KENDİ gelen kutusu ve gönderdikleri). «Son mesajımı göster», «son gelen mesaj», «kimden mesaj var», «okunmamış mesajlarım» için kullan. Mesajı okundu İŞARETLEMEZ. box=both ise hem son gelen hem son giden gelir; kullanıcı «son mesajım» derse ikisini de kısaca söyle.',
+      {box:{type:'string',enum:['both','inbox','sent'],description:'both=gelen+giden (varsayılan), inbox=gelen kutusu, sent=gönderilenler'},
+       count:{type:'integer',description:'Kaç mesaj (1-10, varsayılan 1)'},
+       unread_only:{type:'boolean',description:'true ise yalnızca okunmamış gelen mesajlar'},
+       from:{type:'string',description:'Gönderen (gelen) veya alıcı (giden) adına göre filtre'},
+       search:{type:'string',description:'Konu/metinde aranacak sözcükler'}}));
+    if(!have.get_club_data) t.push(marulTool('get_club_data',
+      'Panelin DİĞER menülerindeki kayıtları okur: bokashi (Bokashi Takip), production (Üretimlerim: dönemler ve hareketler), products (Barkod/Satış ürünleri ve stok), sales (satış geçmişi, yalnızca yönetici), requests (öğrenci talepleri), club_logs (kulüp günlüğü), notes (ortak not defteri), shopping (alınacaklar), announcement (duyuru bandı), overview (hangi menüde kaç kayıt var). Bu menülerle ilgili her soruda tahmin yürütme, önce bunu çağır.',
+      {section:{type:'string',enum:['overview','bokashi','production','products','sales','requests','club_logs','notes','shopping','announcement'],description:'Okunacak menü/bölüm'},
+       query:{type:'string',description:'Bölüm içinde aranacak sözcük (isteğe bağlı)'},
+       limit:{type:'integer',description:'Kaç kayıt (1-15, varsayılan 8)'}},['section']));
+    var adminNow=false; try{adminNow=!!marulIsAdmin();}catch(e){}
+
+    if(!have.add_seed){
+      var SF={variety:{type:'string',description:'Çeşit / yöre, örn. Kalp domates – Ayvalık'},kind:{type:'string',enum:['Atalık / Yerel','Standart','Hibrit'],description:'Tür (varsayılan Atalık / Yerel)'},category:{type:'string',description:'Sebze, Meyve, Tahıl, Baklagil, Çiçek / Süs, Aromatik / Şifalı, Diğer'},source:{type:'string',description:'Temin kaynağı: bağış, köylü, takas…'},store_date:{type:'string',description:'Saklama tarihi YYYY-AA-GG'},location:{type:'string',description:'Saklama yeri: dolap, kavanoz, buzdolabı…'},shelf_years:{type:'number',description:'Raf ömrü (yıl)'},unit:{type:'string',enum:['g','adet','paket'],description:'Stok birimi (varsayılan g; kg söylenirse grama çevir)'},min_qty:{type:'number',description:'Asgari stok (uyarı eşiği)'},germ_rate:{type:'number',description:'Çimlenme oranı % (0-100)'},germ_date:{type:'string',description:'Çimlenme testi tarihi YYYY-AA-GG'},sow_from:{type:'integer',description:'İdeal ekim başlangıç ayı (1-12)'},sow_to:{type:'integer',description:'İdeal ekim bitiş ayı (1-12)'},harvest_days:{type:'number',description:'Tahmini hasada kadar gün'},note:{type:'string',description:'Not: ekim derinliği, aralık vb.'}};
+      var addP=Object.assign({name:{type:'string',description:'Tohum adı, örn. Domates'},quantity:{type:'number',description:'Stok miktarı'}},SF,{allow_duplicate:{type:'boolean',description:'Aynı ad+çeşit zaten varsa yine de ayrı kayıt aç (yalnızca kullanıcı açıkça isterse)'}});
+      t.push(marulTool('add_seed','TOHUM BANKASI\'na YENİ tohum kaydı ekler. Kullanıcı «şu tohumu sisteme ekle / kaydet» derse kullan. Zorunlu: name ve quantity; söylenmeyen alanları UYDURMA, boş bırak (yalnızca ad veya miktar eksikse kullanıcıya sor). Önce search_seed_bank ile zaten kayıtlı mı bak; kayıtlıysa yeni kayıt açma, update_seed_stock öner. Aracı çağırınca kullanıcıya onay penceresi açılır; onay gelmeden kayıt yapılmaz, ayrıca «ekleyeyim mi» diye sorma.',addP,['name','quantity']));
+      t.push(marulTool('update_seed_stock','Var olan bir tohumun STOĞUNU değiştirir: subtract=ekimde/kullanımda düş («5 gram kullandık»), add=stok ekle («20 gram daha geldi»), set=stoğu şu değere ayarla. Onay penceresi açar.',{seed:{type:'string',description:'Tohumun adı (gerekirse çeşidiyle)'},mode:{type:'string',enum:['subtract','add','set'],description:'subtract (varsayılan), add veya set'},amount:{type:'number',description:'Miktar (tohumun kendi biriminde)'}},['seed','amount']));
+      var edP=Object.assign({seed:{type:'string',description:'Düzenlenecek tohumun adı (gerekirse çeşidiyle)'},new_name:{type:'string',description:'Yeni ad (adı değiştirmek için)'}},SF);
+      t.push(marulTool('edit_seed','Var olan tohum kaydının bilgilerini (çeşit, saklama yeri, çimlenme oranı, ekim ayları, not vb.) değiştirir. Stok için update_seed_stock kullan. Çimlenme oranı verilirse test tarihi bugün olur. Onay penceresi açar.',edP,['seed']));
+    }
+    if(adminNow&&!have.delete_seed) t.push(marulTool('delete_seed','Tohum Bankası\'ndan bir tohum kaydını SİLER (yalnızca yönetici; onay ister, geri alınamaz). Yalnızca kullanıcı açıkça silmeyi isterse çağır.',{seed:{type:'string',description:'Silinecek tohumun adı (gerekirse çeşidiyle)'}},['seed']));
+    return t;
+  };
+
+  var _run=marulRunTool;
+  marulRunTool=async function(name,a){
+    if(READ_TOOLS[name]){
+      try{
+        a=a||{};
+        if(name==='search_seed_bank') return seedSearch(a);
+        if(name==='get_messages') return getMessages(a);
+        return clubData(a);
+      }catch(e){ console.error('EcoMind okuma aracı hatası:',e); return {error:'Veri okunamadı: '+e.message}; }
+    }
+    if(WRITE_TOOLS[name]){
+      try{ return await seedWrite(name,a||{}); }
+      catch(e){ console.error('EcoMind tohum yazma hatası:',e); return {error:'İşlem yapılamadı: '+e.message}; }
+    }
+    return _run.apply(this,arguments);
+  };
+
+  // Araç tanımları yalnızca eylem/okuma gerektiren mesajlarda gönderilir: tohum, mesaj, stok vb. kelimeler de tetiklesin
+  try{
+    var extra='tohum|[çc]imlen|ekim|saklama|bokashi|[üu]retim|d[öo]nem|[üu]r[üu]n|stok|fiyat|sat[ıi][şs]|talep|[ıi]stek|g[üu]nl[üu][ğg]|duyuru|gelen kutu|g[öo]ster|goster|var m[ıi]|yok mu|ka[çc] (?:tane|adet|kay[ıi]t)|neler|bak|son (?:mesaj|gelen)|seed|germinat|stock|product|inbox|show|log|request|do we have|how many|latest|last message|unread|okunmam[ıi][şs]|kay[ıi]tl[ıi]|envanter|inventory|d[üu][şs]|azalt|art[ıi]r|[çc][ıi]kar|kullan|ayarla|add|seed';
+    if(typeof MARUL_ACTION_RE!=='undefined'&&MARUL_ACTION_RE&&MARUL_ACTION_RE.source) MARUL_ACTION_RE=new RegExp(MARUL_ACTION_RE.source+'|'+extra,'i');
+  }catch(e){ console.warn('EcoMind: araç tetikleyici genişletilemedi',e); }
+
+  // Sistem istemine kural ekle
+  var RULE="\n- PANEL VERİSİ OKUMA: Panelin HERHANGİ bir menüsündeki bilgi sorulduğunda tahmin yürütme veya «bilgim yok» deme; ilgili okuma aracını çağır ve cevabı aracın döndürdüğü veriyle ver. Tohum Bankası → search_seed_bank (tohumun adı varsa query'ye yalnızca adı yaz; sonuç «bulundu:false» ise «kayıtlı değil» de, uydurma). Mesajlar («son mesajımı göster», «okunmamış mesajım var mı») → get_messages. Bokashi, Üretimlerim, ürün/stok, satış, talepler, kulüp günlüğü, notlar, alınacaklar, duyuru → get_club_data. Tohum ayrıntısını verirken stok, çimlenme oranı, ideal ekim ayları, saklama yeri/tarihi ve varsa uyarıları kısaca söyle. Mesaj gösterirken kimden/kime, konu, metin ve tarihi ver. Bu araçlar yalnızca okur; veri değiştirmek için ilgili işlem araçlarını kullan. Araç «yalnızca yöneticilere açık» derse bunu nazikçe aktar.\n- TOHUM YAZMA: «şu tohumu sisteme ekle» → önce search_seed_bank ile kayıtlı mı bak, değilse add_seed (söylenmeyen bilgiyi uydurma; yalnızca ad veya miktar eksikse sor). «X gram kullandık/düş» → update_seed_stock (subtract), «stok ekle» → add, «stoğu N yap» → set. Bilgi değişikliği → edit_seed. Silme → delete_seed (yalnızca yönetici). Bu araçlar onay penceresi açar; onay gelmeden kayıt yapılmaz, ayrıca sorma. ok:true görmeden «yaptım/ekledim» deme; cancelled:true ise yapılmadığını söyle; {error} ise nedenini söyle. Birden fazla tohum eşleşirse hangisi olduğunu sor.";
+  try{ if(typeof MARUL_RULES_ADMIN==='string') MARUL_RULES_ADMIN+=RULE; if(typeof MARUL_RULES_MEMBER==='string') MARUL_RULES_MEMBER+=RULE; }catch(e){}
+
+  // Bağlama kısa özet: okunmamış mesaj sayısı + araç ipucu (veri olarak değil, yönlendirme olarak)
+  if(typeof marulCtx==='function'){
+    var _ctx=marulCtx;
+    marulCtx=function(){
+      var c=_ctx.apply(this,arguments)||'';
+      try{
+        var sc=msgScope(), un_=sc.inbox.filter(function(m){return !(m.readBy&&m.readBy.indexOf(sc.em)>-1);}).length;
+        c+='\nMESAJLAR: '+sc.inbox.length+' gelen ('+un_+' okunmamış), '+sc.sent.length+' gönderilen. İçerik için get_messages aracını kullan.';
+        c+='\nTOHUM/MENÜ AYRINTILARI için search_seed_bank ve get_club_data araçlarını kullan (yukarıdaki liste kısaltılmıştır).';
+      }catch(e){}
+      return c;
+    };
+  }
+
+  // Yetki metnine tohum işlemlerini ekle (sistem istemindeki «yapabildikleri» listesiyle çelişmesin)
+  if(typeof marulLimits==='function'){
+    var _lim=marulLimits;
+    marulLimits=function(){
+      var t=_lim.apply(this,arguments)||''; var adm=false; try{adm=!!marulIsAdmin();}catch(e){}
+      return t+'\nTOHUM BANKASI: '+(adm?'tohum ekleyebilir, stok düşüp artırabilir, bilgisini düzenleyebilir ve silebilirsin (hepsi onay penceresiyle).':'tohum ekleyebilir, stok düşüp artırabilir ve bilgisini düzenleyebilirsin (onay penceresiyle). Tohum SİLMEK yalnızca yöneticilere açıktır.');
+    };
+  }
+  console.info('🧠 EcoMind AI: tüm menülere okuma erişimi etkin (tohum bankası, mesajlar, bokashi, üretim, ürün, satış, talepler, günlük, notlar, alınacaklar).');
+})();
+</script>
+
 </body>
 </html>
