@@ -5130,7 +5130,7 @@
                             <div class="mp-head">
                 <div class="mp-av">🧠</div>
                 <div class="mp-title"><b>EcoMind AI</b><small>Kulüp asistanın 🌱</small></div>
-                <button type="button" class="marul-lang-btn" title="Dil / Language" onclick="marulLangToggle()">TR</button><button type="button" class="marul-tts-btn" title="Sesli cevap" onclick="marulTtsToggle()">🔊</button><button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button>
+                <button type="button" class="marul-lang-btn" title="Dil / Language" onclick="marulLangToggle()">TR</button><button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button>
             </div>
                             <div class="marul-answer" id="marul-dash-answer"></div>
                             <div class="marul-compose">
@@ -6099,7 +6099,17 @@
                                             <span class="aero-toggle-track"></span>
                                         </div>
                                     </label>
-                                    <div style="font-size:11.5px; opacity:.8; margin-top:4px;">Birden fazlası açıksa öğrenci sohbet penceresinden seçer; yalnızca biri açıksa o model otomatik kullanılır. En az biri açık olmalı. Yöneticiler etkilenmez.</div>
+                                    <label class="aero-switch-item" for="eco-cfg-model-live" style="margin-top:6px;">
+                                        <div class="aero-switch-text">
+                                            <span class="aero-switch-title">🎙️ Terra Live</span>
+                                            <span class="aero-switch-desc">Mikrofonla sesli canlı sohbet (Google Gemini Live). Model seçimi değil, ek özelliktir.</span>
+                                        </div>
+                                        <div class="aero-toggle-switch">
+                                            <input type="checkbox" id="eco-cfg-model-live" class="toggle-blue">
+                                            <span class="aero-toggle-track"></span>
+                                        </div>
+                                    </label>
+                                    <div style="font-size:11.5px; opacity:.8; margin-top:4px;">Birden fazlası açıksa öğrenci sohbet penceresinden seçer; yalnızca biri açıksa o model otomatik kullanılır. En az bir yazılı model açık olmalı. Terra Live ayrıca açılır ve öğrencide varsayılan olarak kapalıdır. Yöneticiler etkilenmez.</div>
                                 </div>
                                 <div>
                                     <label for="eco-cfg-limit" style="font-size:13px; font-weight:700; display:block; margin-bottom:4px;">🔢 Öğrenci başına günlük soru limiti</label>
@@ -6170,7 +6180,7 @@
             <div class="mp-head">
                 <div class="mp-av">🧠</div>
                 <div class="mp-title"><b>EcoMind AI</b><small>Kulüp asistanın 🌱</small></div>
-                <button type="button" class="marul-lang-btn" title="Dil / Language" onclick="marulLangToggle()">TR</button><button type="button" class="marul-tts-btn" title="Sesli cevap" onclick="marulTtsToggle()">🔊</button><button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button><button type="button" title="Kapat" onclick="marulClose()">✕</button>
+                <button type="button" class="marul-live-hbtn" title="Terra Live — sesli sohbet" aria-label="Terra Live" onclick="marulLiveOpen()" style="display:none">🎙️</button><button type="button" class="marul-lang-btn" title="Dil / Language" onclick="marulLangToggle()">TR</button><button type="button" title="Yeni sohbet" onclick="marulNewChat()">➕</button><button type="button" title="Sohbet geçmişi" onclick="marulHistOpen(this)">📜</button><button type="button" title="Kapat" onclick="marulClose()">✕</button>
             </div>
             <div class="marul-answer" id="marul-pop-answer"></div>
             <div class="marul-modelbar" style="display:none">
@@ -6179,6 +6189,7 @@
                     <button type="button" data-m="flash" onclick="marulModelPick('flash')"><b>⚡ Terra</b><small>Daha güçlü, işlem komutları için</small><i>✓</i></button>
                     <button type="button" data-m="lite" onclick="marulModelPick('lite')"><b>🪶 Terra Lite</b><small>Daha hızlı ve ekonomik</small><i>✓</i></button>
                     <button type="button" data-m="lettuce" onclick="marulModelPick('lettuce')"><b>🥬 Terra Lettuce</b><small>Groq altyapısı, çok hızlı</small><i>✓</i></button>
+                    <button type="button" data-m="live" onclick="marulLiveOpen()"><b>🎙️ Terra Live</b><small>Sesli sohbet: konuş, sesli cevap versin</small><i></i></button>
                 </div>
                 <button type="button" class="marul-model-btn" title="Yapay zeka modeli" onclick="marulModelMenu(event)">⚡ Terra ⌄</button>
             </div>
@@ -10033,7 +10044,8 @@
               set('eco-cfg-model-auto', el => el.checked = sm.indexOf('auto') > -1);
               set('eco-cfg-model-flash', el => el.checked = sm.indexOf('flash') > -1);
               set('eco-cfg-model-lite', el => el.checked = sm.indexOf('lite') > -1);
-              set('eco-cfg-model-lettuce', el => el.checked = sm.indexOf('lettuce') > -1); }
+              set('eco-cfg-model-lettuce', el => el.checked = sm.indexOf('lettuce') > -1);
+               set('eco-cfg-model-live', el => el.checked = sm.indexOf('live') > -1); }
             const m = document.getElementById('eco-cfg-meta'); if (m && meta) m.textContent = meta;
         }
         onSnapshot(doc(db, "system_settings", "ecomind_config"), (docSnap) => {
@@ -10054,7 +10066,8 @@
             if (g('eco-cfg-model-flash').checked) sModels.push('flash');
             if (g('eco-cfg-model-lite').checked) sModels.push('lite');
             if (g('eco-cfg-model-lettuce') && g('eco-cfg-model-lettuce').checked) sModels.push('lettuce');
-            if (!sModels.length) { showNotification("Öğrenciler için en az bir yapay zeka modeli seçili olmalı. (Hiç kullanım istemiyorsanız 'Öğrenciler EcoMind AI'ı kullanabilsin' anahtarını kapatın.)", "warning"); return; }
+            if (g('eco-cfg-model-live') && g('eco-cfg-model-live').checked) sModels.push('live');
+            if (!sModels.filter(x => x !== 'live').length) { showNotification("Öğrenciler için en az bir yapay zeka modeli seçili olmalı. (Hiç kullanım istemiyorsanız 'Öğrenciler EcoMind AI'ı kullanabilsin' anahtarını kapatın.)", "warning"); return; }
             const cfg = {
                 studentModels: sModels,
                 studentsEnabled: !!g('eco-cfg-students').checked,
@@ -15112,6 +15125,8 @@ var MARUL_LETTUCE_PICK=false, MARUL_AUTO_PICK=false; try{ var _mt=localStorage.g
 function marulModelIsLite(){return /lite/i.test(String(MARUL_MODEL||''));}
 // Öğrencilere izin verilen modeller (yönetici ayarı). Tanımsız = Terra ve Terra Lite serbest.
 function marulStudentAllowed(){ var a=marulCfg().studentModels; if(!Array.isArray(a)) return ['flash','lite']; a=a.filter(function(x){return x==='auto'||x==='flash'||x==='lite'||x==='lettuce';}); return a.length?a:['flash','lite']; }
+// 🎙️ Terra Live: yönetici her zaman; öğrenci yalnızca yönetici açtıysa (varsayılan kapalı)
+function marulLiveAllowed(){ try{ if(sessionStorage.getItem('isUnlocked')!=='true') return false; if(marulIsAdminNow()) return true; var a=marulCfg().studentModels; return Array.isArray(a)&&a.indexOf('live')>-1; }catch(e){ return false; } }
 function marulIsAdminNow(){ try{ return (sessionStorage.getItem('isUnlocked')==='true') && (typeof marulIsAdmin==='function') && marulIsAdmin(); }catch(e){ return false; } }
 // Bu kullanıcının fiilen kullanacağı katman: 'auto' | 'flash' | 'lite' | 'lettuce' (öğrenci için izin listesine uyar)
 function marulEffectiveTier(){
@@ -15129,13 +15144,19 @@ function marulEffectiveModel(){
   return t==='lite'?MARUL_MODEL_LITE:MARUL_MODEL_FLASH;
 }
 function marulModelPaint(){
-  var show=false; try{ show=marulIsAdminNow() || (sessionStorage.getItem('isUnlocked')==='true' && marulStudentAllowed().length>1); }catch(e){}
+  var live=false; try{ live=marulLiveAllowed(); }catch(e){}
+  var show=false; try{ show=marulIsAdminNow() || (sessionStorage.getItem('isUnlocked')==='true' && (marulStudentAllowed().length>1 || live)); }catch(e){}
   var tier=marulEffectiveTier();
   var label={auto:'🤖 Terra Otomatik',flash:'⚡ Terra',lite:'🪶 Terra Lite',lettuce:'🥬 Terra Lettuce'}[tier]||'⚡ Terra';
   document.querySelectorAll('.marul-modelbar').forEach(function(bar){ bar.style.display=show?'':'none'; });
   document.querySelectorAll('.marul-model-btn').forEach(function(b){ b.textContent=label+' ⌄'; });
+  document.querySelectorAll('.marul-live-hbtn').forEach(function(b){ b.style.display=live?'':'none'; });
   var al=marulIsAdminNow()?['auto','flash','lite','lettuce']:marulStudentAllowed();
-  document.querySelectorAll('.marul-model-menu button').forEach(function(b){ var d=b.getAttribute('data-m'); b.classList.toggle('sel',d===tier); b.style.display=(al.indexOf(d)>-1)?'':'none'; });
+  document.querySelectorAll('.marul-model-menu button').forEach(function(b){
+    var d=b.getAttribute('data-m');
+    if(d==='live'){ b.classList.remove('sel'); b.style.display=live?'':'none'; return; }
+    b.classList.toggle('sel',d===tier); b.style.display=(al.indexOf(d)>-1)?'':'none';
+  });
   if(!show){ var m=document.getElementById('marul-model-menu'); if(m) m.classList.remove('open'); }
 }
 function marulModelMenu(e){ if(e) e.stopPropagation(); var m=document.getElementById('marul-model-menu'); if(m) m.classList.toggle('open'); }
@@ -15162,12 +15183,12 @@ function marulAuthOk(){
   if(ls && window.getComputedStyle(ls).display!=='none') return false; // giriş ekranı görünüyorsa AI kapalı
   return true;
 }
-function marulSyncAuth(){var ok=marulAuthOk();try{marulModelPaint();}catch(e){}document.body.classList.toggle('bkv-auth',ok);if(!ok){var p=document.getElementById('marul-pop');if(p)p.classList.remove('open');try{marulStopSpeak();}catch(e){}}return ok;}
+function marulSyncAuth(){var ok=marulAuthOk();try{marulModelPaint();}catch(e){}document.body.classList.toggle('bkv-auth',ok);if(!ok){var p=document.getElementById('marul-pop');if(p)p.classList.remove('open');try{marulStopSpeak();}catch(e){}try{if(window.marulLiveEnd)marulLiveEnd();}catch(e){}}return ok;}
 setInterval(marulSyncAuth,250);marulSyncAuth();document.addEventListener('DOMContentLoaded',marulSyncAuth);
 function marulOpen(){if(!marulSyncAuth())return;var p=document.getElementById('marul-pop');if(!p)return;p.classList.add('open');marulWelcome('pop');var mi=document.getElementById('mh-marul-input');var pi=document.getElementById('marul-pop-input');if(pi){if(mi&&mi.value&&!pi.value){pi.value=mi.value;}setTimeout(function(){pi.focus();},120);}}
 function marulToggle(){if(!marulSyncAuth())return;var p=document.getElementById('marul-pop');if(p&&p.classList.contains('open'))marulClose();else marulOpen();}
 document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&(e.key==='k'||e.key==='K'||e.key==='m'||e.key==='M')){e.preventDefault();marulToggle();}if(e.key==='Escape'){var p=document.getElementById('marul-pop');if(p&&p.classList.contains('open'))marulClose();}});
-function marulClose(){marulStopSpeak();document.getElementById('marul-pop').classList.remove('open');}
+function marulClose(){try{if(window.marulLiveEnd)marulLiveEnd();}catch(e){}marulStopSpeak();document.getElementById('marul-pop').classList.remove('open');}
 function marulClean(t){return String(t||'').replace(/\*\*(.+?)\*\*/g,'$1').replace(/__(.+?)__/g,'$1').replace(/^\s{0,3}#{1,6}\s*/gm,'').replace(/^(\s*)[-*]\s+/gm,'$1• ').replace(/\*{1,2}/g,'');}
 function marulTime(){var d=new Date();return d.getHours()+':'+('0'+d.getMinutes()).slice(-2);}
 function marulAdd(box,cls,text){
@@ -16274,6 +16295,440 @@ async function marulAsk(q,where,inputEl){
 
 marulWelcome('dash');
 document.addEventListener('focusin',function(e){if(e.target&&e.target.id==='marul-dash-input')marulWelcome('dash');});
+</script>
+<script>
+/* ============================================================
+   🎙️ TERRA LIVE — Gemini Live API ile sesli sohbet (EcoMind AI)
+   Mikrofon → 16 kHz PCM → WebSocket → Gemini → 24 kHz PCM → hoparlör
+   Mevcut EcoMind AI araçlarını (yoklama, görev, not, mesaj...) ve kulüp bilgi bankasını kullanır.
+   ============================================================ */
+(function(){
+'use strict';
+if(window.__marulLiveLoaded) return; window.__marulLiveLoaded=true;
+
+var WS_URL='wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent';
+var VOICES=['Kore','Puck','Aoede','Charon','Fenrir','Leda'];
+var IDLE_MS=120000;      // 2 dk sessizlikte oturum kapanır (mikrofon açık unutulmasın)
+var WORKLET_SRC="class P extends AudioWorkletProcessor{constructor(){super();this.b=[];this.n=0;}process(i){var c=i[0]&&i[0][0];if(c){this.b.push(new Float32Array(c));this.n+=c.length;if(this.n>=2048){var o=new Float32Array(this.n),p=0;for(var k=0;k<this.b.length;k++){o.set(this.b[k],p);p+=this.b[k].length;}this.b=[];this.n=0;this.port.postMessage(o,[o.buffer]);}}return true;}}registerProcessor('bkv-live-mic',P);";
+
+var L={state:'idle',phase:'connect',sid:0,ws:null,ctx:null,stream:null,src:null,node:null,mute:null,out:null,
+  muted:false,gotSetup:false,modelIdx:0,playHead:0,sources:[],uText:'',mText:'',uDone:false,uEl:null,aEl:null,
+  lvIn:0,lvOut:0,lastAct:0,tick:null,setupT:null,hideT:null,errs:[],turnDone:true,goAway:false,el:null,toolLabel:''};
+
+function T(tr,en){ try{return marulT(tr,en);}catch(e){return tr;} }
+function note(msg,type,ms){ try{ showNotification(msg,type||'info',ms||4500); }catch(e){ console.log(msg); } }
+
+/* ---------- saf yardımcılar (test edilebilir) ---------- */
+function toPcm16k(f32,inRate){
+  var ratio=inRate/16000, n=Math.floor(f32.length/ratio), out=new Int16Array(n);
+  for(var i=0;i<n;i++){
+    var a=Math.floor(i*ratio), b=Math.min(f32.length,Math.max(a+1,Math.floor((i+1)*ratio))), s=0, c=0;
+    for(var j=a;j<b;j++){ s+=f32[j]; c++; }
+    var v=c?s/c:0; if(v>1)v=1; else if(v<-1)v=-1;
+    out[i]=v<0?v*32768:v*32767;
+  }
+  return out;
+}
+function b64(i16){
+  var u=new Uint8Array(i16.buffer,i16.byteOffset,i16.byteLength), s='', CH=0x8000;
+  for(var i=0;i<u.length;i+=CH) s+=String.fromCharCode.apply(null,u.subarray(i,i+CH));
+  return btoa(s);
+}
+function decodePcm(b64s){
+  var bin=atob(b64s), n=bin.length>>1, f=new Float32Array(n);
+  for(var i=0;i<n;i++){ var v=(bin.charCodeAt(2*i+1)<<8)|bin.charCodeAt(2*i); if(v>=0x8000) v-=0x10000; f[i]=v/32768; }
+  return f;
+}
+function cleanSchema(s){
+  if(!s||typeof s!=='object') return {type:'STRING'};
+  var t=String(s.type||'string').toUpperCase(), o={type:t};
+  if(s.description) o.description=String(s.description).slice(0,400);
+  if(s.enum && t==='STRING') o.enum=s.enum.map(String);
+  if(t==='OBJECT'){
+    o.properties={}; var ks=Object.keys(s.properties||{});
+    ks.forEach(function(k){ o.properties[k]=cleanSchema(s.properties[k]); });
+    if(!ks.length) o.properties={value:{type:'STRING'}};
+    if(s.required&&s.required.length){ var r=s.required.filter(function(k){return o.properties[k];}); if(r.length) o.required=r; }
+  }
+  if(t==='ARRAY') o.items=cleanSchema(s.items||{type:'string'});
+  return o;
+}
+window.__marulLive={toPcm16k:toPcm16k,b64:b64,decodePcm:decodePcm,cleanSchema:cleanSchema};
+
+/* ---------- ayarlar ---------- */
+function liveModels(){
+  var m=[];
+  try{ var o=(window.ENV_CONFIG&&window.ENV_CONFIG.GEMINI_LIVE_MODEL)||localStorage.getItem('GEMINI_LIVE_MODEL'); if(o) m.push(o); }catch(e){}
+  ['gemini-3.1-flash-live-preview','gemini-2.5-flash-native-audio-preview-12-2025'].forEach(function(x){ if(m.indexOf(x)<0) m.push(x); });
+  return m;
+}
+function getVoice(){ try{ var v=localStorage.getItem('marulLiveVoice'); if(VOICES.indexOf(v)>-1) return v; }catch(e){} return 'Kore'; }
+
+/* ---------- görünüm ---------- */
+var CSS=
+"#marul-live{display:none;position:absolute;inset:0;z-index:40;flex-direction:column;align-items:center;padding:14px 16px 12px;color:#eafff4;overflow:hidden;font-family:inherit;--lv:0;background:radial-gradient(120% 70% at 50% 18%,rgba(52,211,153,.30),transparent 62%),linear-gradient(165deg,#06261f 0%,#0a3a4d 58%,#0b2740 100%)}"+
+"#marul-live.open{display:flex}"+
+"#marul-live .ml-top{width:100%;display:flex;align-items:center;gap:8px}"+
+"#marul-live .ml-title{flex:1;font-weight:800;font-size:15px}"+
+"#marul-live .ml-x{border:none;cursor:pointer;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:15px;padding:0}"+
+"#marul-live .ml-voice{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;border-radius:999px;padding:5px 8px;font-size:12px;font-weight:700;max-width:110px}"+
+"#marul-live .ml-voice option{color:#0b2740}"+
+"#marul-live .ml-stage{flex:1 1 auto;min-height:150px;width:100%;display:flex;align-items:center;justify-content:center}"+
+"#marul-live .ml-orb{position:relative;width:132px;height:132px;border-radius:50%;transform:scale(calc(1 + var(--lv)*.32));transition:transform .09s linear}"+
+"#marul-live .ml-orb b{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d1fae5,#34d399 42%,#0d9488 100%);box-shadow:0 0 40px rgba(52,211,153,.55),inset 0 -8px 18px rgba(0,0,0,.25)}"+
+"#marul-live .ml-orb i{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(110,231,183,.55);opacity:0;animation:mlRing 2.6s ease-out infinite}"+
+"#marul-live .ml-orb i:nth-child(2){animation-delay:.85s}#marul-live .ml-orb i:nth-child(3){animation-delay:1.7s}"+
+"@keyframes mlRing{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.9);opacity:0}}"+
+"@keyframes mlGlow{from{filter:brightness(.9)}to{filter:brightness(1.25)}}"+
+"#marul-live.st-speak .ml-orb b{background:radial-gradient(circle at 35% 30%,#e0f2fe,#60a5fa 42%,#6366f1 100%);box-shadow:0 0 44px rgba(96,165,250,.6),inset 0 -8px 18px rgba(0,0,0,.25)}"+
+"#marul-live.st-speak .ml-orb i{border-color:rgba(147,197,253,.6)}"+
+"#marul-live.st-think .ml-orb b{background:radial-gradient(circle at 35% 30%,#fef3c7,#fbbf24 45%,#d97706 100%);box-shadow:0 0 40px rgba(251,191,36,.5);animation:mlGlow 1.1s ease-in-out infinite alternate}"+
+"#marul-live.st-connect .ml-orb b{animation:mlGlow 1s ease-in-out infinite alternate;opacity:.8}"+
+"#marul-live.st-muted .ml-orb b{background:radial-gradient(circle at 35% 30%,#e5e7eb,#9ca3af 50%,#4b5563 100%);box-shadow:none}"+
+"#marul-live.st-muted .ml-orb i{animation:none}"+
+"#marul-live .ml-status{font-weight:800;font-size:14px;text-align:center;min-height:20px}"+
+"#marul-live .ml-cap{width:100%;flex:0 1 auto;max-height:34%;overflow:auto;text-align:center;margin-top:8px;font-size:13.5px;line-height:1.45}"+
+"#marul-live .ml-u{opacity:.65;font-size:12.5px;margin-bottom:6px}"+
+"#marul-live .ml-a{font-weight:600}"+
+"#marul-live .ml-ctl{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:12px}"+
+"#marul-live .ml-mute{width:52px;height:52px;border-radius:50%;border:none;font-size:22px;cursor:pointer;background:rgba(255,255,255,.16);color:#fff;padding:0}"+
+"#marul-live .ml-end{border:none;cursor:pointer;border-radius:999px;padding:14px 26px;font-weight:800;font-size:14px;background:linear-gradient(135deg,#f87171,#dc2626);color:#fff;box-shadow:0 8px 20px rgba(220,38,38,.35)}"+
+"#marul-live button:focus-visible,#marul-live select:focus-visible{outline:3px solid #fde68a;outline-offset:2px}"+
+"#marul-live .ml-note{margin-top:10px;font-size:11px;opacity:.7;text-align:center}"+
+"@media (prefers-reduced-motion:reduce){#marul-live .ml-orb i,#marul-live .ml-orb b{animation:none!important}#marul-live .ml-orb{transition:none}}";
+
+function build(){
+  if(L.el && document.body.contains(L.el)) return L.el;
+  var pop=document.getElementById('marul-pop'); if(!pop) return null;
+  if(!document.getElementById('marul-live-css')){ var st=document.createElement('style'); st.id='marul-live-css'; st.textContent=CSS; document.head.appendChild(st); }
+  var d=document.createElement('div'); d.id='marul-live'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','Terra Live');
+  d.innerHTML=
+    '<div class="ml-top"><button type="button" class="ml-x" data-a="end" aria-label="Kapat">✕</button><div class="ml-title">🎙️ Terra Live</div><select class="ml-voice" aria-label="Ses"></select></div>'+
+    '<div class="ml-stage"><div class="ml-orb"><i></i><i></i><i></i><b></b></div></div>'+
+    '<div class="ml-status" aria-live="polite"></div>'+
+    '<div class="ml-cap"><div class="ml-u"></div><div class="ml-a"></div></div>'+
+    '<div class="ml-ctl"><button type="button" class="ml-mute" data-a="mute"></button><button type="button" class="ml-end" data-a="end"></button></div>'+
+    '<div class="ml-note"></div>';
+  pop.appendChild(d); L.el=d;
+  var sel=d.querySelector('.ml-voice');
+  VOICES.forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o); });
+  sel.value=getVoice();
+  sel.onchange=function(){ try{localStorage.setItem('marulLiveVoice',sel.value);}catch(e){} if(L.state!=='idle') note(T('Ses, bir sonraki canlı sohbette değişir.','The voice changes in the next live session.'),'info'); };
+  d.addEventListener('click',function(e){
+    var b=e.target.closest?e.target.closest('[data-a]'):null; if(!b) return;
+    var a=b.getAttribute('data-a'); if(a==='end') end(); else if(a==='mute') toggleMute();
+  });
+  return d;
+}
+function paint(){
+  var d=L.el; if(!d) return;
+  var ph=(L.muted&&L.phase==='listen')?'muted':L.phase;
+  d.className='open st-'+ph;
+  var txt={connect:T('Bağlanıyor…','Connecting…'),listen:T('Dinliyorum, konuşabilirsin','Listening, go ahead'),speak:T('Terra konuşuyor…','Terra is speaking…'),
+           think:L.toolLabel||T('İşlem yapıyor…','Working on it…'),muted:T('Mikrofon kapalı','Microphone is off')}[ph];
+  d.querySelector('.ml-status').textContent=txt||'';
+  var mb=d.querySelector('.ml-mute'); mb.textContent=L.muted?'🔇':'🎤'; mb.setAttribute('aria-label',L.muted?T('Mikrofonu aç','Unmute'):T('Mikrofonu kapat','Mute')); mb.title=mb.getAttribute('aria-label');
+  d.querySelector('.ml-end').textContent='⏹ '+T('Bitir','End');
+  d.querySelector('.ml-note').textContent=T('Kulaklıkla daha net çalışır. Yapay zeka yanılabilir.','Works best with headphones. AI can make mistakes.');
+  d.querySelector('.ml-x').setAttribute('aria-label',T('Kapat','Close'));
+}
+function setPhase(p,label){ L.phase=p; L.toolLabel=label||''; paint(); }
+function caption(){
+  var d=L.el; if(!d) return;
+  d.querySelector('.ml-u').textContent=L.uText.trim();
+  var a=d.querySelector('.ml-a'); a.textContent=L.mText.trim();
+  var c=d.querySelector('.ml-cap'); c.scrollTop=c.scrollHeight;
+}
+
+/* ---------- sohbet geçmişine yazma ---------- */
+function chatBox(){ return document.getElementById('marul-pop-answer'); }
+function commitUser(){
+  var u=L.uText.trim(); if(!u) return;
+  if(!L.uDone){ L.uEl=marulAdd(chatBox(),'u',u); L.uDone=true; }
+  else if(L.uEl) L.uEl.textContent=u;     // transkript geç tamamlanırsa balon güncellenir
+}
+function showAns(){ commitUser(); if(!L.aEl) L.aEl=marulAdd(chatBox(),'a',''); L.aEl.textContent=marulClean(L.mText.trim()); var b=chatBox(); if(b) b.scrollTop=b.scrollHeight; }
+function resetTurn(){ L.uText=''; L.mText=''; L.uDone=false; L.uEl=null; L.aEl=null; }
+function endTurn(){
+  commitUser();
+  var u=L.uText.trim(), a=L.mText.trim();
+  if(a && L.aEl) L.aEl.textContent=marulClean(a);
+  if(u&&a){
+    marulHistory.push({role:'user',text:u},{role:'model',text:a});
+    if(marulHistory.length>40) marulHistory=marulHistory.slice(-40);
+    try{ marulCtxSave(); }catch(e){}
+  }
+  resetTurn();
+}
+
+/* ---------- sistem talimatı ve araçlar ---------- */
+function sysText(){
+  var adm=marulIsAdminNow(), c=marulCfg(), ui=marulLang();
+  var sp=adm?MARUL_SYSTEM_ADMIN:MARUL_SYSTEM_MEMBER, rules=adm?MARUL_RULES_ADMIN:MARUL_RULES_MEMBER;
+  var s='\n\nSESLİ KONUŞMA MODU — TERRA LIVE (bu bölüm yukarıdaki tüm biçim, emoji ve uzunluk kurallarını geçersiz kılar):\n'+
+    '- Şu an kullanıcıyla CANLI SESLİ konuşuyorsun; cevapların hoparlörden okunacak. Kısa, doğal, konuşma diliyle cümleler kur; bir cevapta en fazla 3-4 cümle (kullanıcı ayrıntı isterse uzat).\n'+
+    '- Emoji, markdown, yıldız, madde işareti, numaralı liste, tablo ve bağlantı KULLANMA; sayıları ve saatleri okunacak biçimde söyle.\n'+
+    '- Varsayılan dilin '+(ui==='en'?'English':'Türkçe')+'. Kullanıcı hangi dilde konuşursa o dilde cevap ver; dili ortada değiştirirse sen de değiştir. Türkçe ve yabancı sözcükleri doğru telaffuz et.\n'+
+    '- Kullanıcı sözünü keserse hemen sus ve onu dinle. Ses net anlaşılmadıysa tahmin yürütme, kısaca tekrar iste.\n'+
+    '- İşlem araçlarını (yoklama, görev, not, mesaj, hatırlatıcı vb.) yalnızca kullanıcı açıkça isterse çağır ve sonucu kısaca sözlü bildir. Araç sonucunda ok:true görmeden «yaptım» deme.\n'+
+    '- Kulüp ve panel kullanımı (ne nerede, nasıl yapılır), kurallar ve tarım bilgisi için önce search_panel_guide aracını çağır.\n';
+  s+= c.tone==='formal'?'- Ton: resmî ve saygılı, «siz» hitabı.\n':'- Ton: samimi, sıcak, arkadaşça.\n';
+  s+= c.length==='short'?'- Uzunluk: en fazla 1-2 kısa cümle.\n':(c.length==='detailed'?'- Uzunluk: kullanıcı isterse ayrıntılı ve adım adım anlat.\n':'');
+  var ctx=''; try{ ctx=marulCtx()||''; }catch(e){}
+  return sp+MARUL_IDENTITY+marulPersonal()+rules+marulLimits()+s+(ctx?'\n\nPanel bilgisi (canlı veri, oturum başında alındı):\n'+ctx.slice(0,9000):'');
+}
+function buildDecls(){
+  var out=[];
+  try{
+    marulTools().forEach(function(t){
+      var f=t&&t.function; if(!f||!f.name) return;
+      var d={name:f.name,description:String(f.description||'').slice(0,700)};
+      var p=f.parameters;
+      if(p&&p.properties&&Object.keys(p.properties).length) d.parameters=cleanSchema(p);
+      out.push(d);
+    });
+  }catch(e){ console.warn('Terra Live araçları hazırlanamadı:',e); }
+  out.push({name:'search_panel_guide',description:'Kulüp bilgisi, kurallar, tarım bilgisi ve panelin kullanımı (ne nerede, nasıl yapılır) için bilgi bankasında arama yapar. Bu tür sorularda önce bunu çağır.',
+    parameters:{type:'OBJECT',properties:{query:{type:'STRING',description:'Kullanıcının sorusu veya anahtar kelimeler'}},required:['query']}});
+  return out;
+}
+async function onToolCall(sid,calls){
+  var resp=[];
+  for(var i=0;i<calls.length;i++){
+    var c=calls[i], res, args=c.args||{};
+    L.turnDone=false;
+    setPhase('think',T('İşlem yapıyor: ','Working: ')+c.name);
+    try{
+      if(c.name==='search_panel_guide'){
+        var kb=marulKnowledge(String(args.query||''),marulIsAdminNow());
+        res={bilgi:((kb&&kb.body)||'').slice(0,7000)||'Bilgi bankasında eşleşme bulunamadı.'};
+      } else res=await marulRunTool(c.name,args);
+    }catch(e){ res={error:'İşlem başarısız: '+((e&&e.message)||e)}; }
+    var js=''; try{ js=JSON.stringify(res); }catch(e){ js='{}'; }
+    var fr=(res&&res.error)?{error:String(res.error)}:{result:(js.length>6000?js.slice(0,6000):res)};
+    resp.push({id:c.id,name:c.name,response:fr});
+  }
+  if(L.sid!==sid||!L.ws||L.ws.readyState!==1) return;
+  L.ws.send(JSON.stringify({toolResponse:{functionResponses:resp}}));
+  L.lastAct=Date.now();
+  setPhase('speak');
+}
+
+/* ---------- ses çıkışı ---------- */
+function enqueue(b64s,rate){
+  if(!L.ctx) return;
+  var f=decodePcm(b64s); if(!f.length) return;
+  var s=0; for(var i=0;i<f.length;i+=8) s+=f[i]*f[i]; L.lvOut=Math.max(L.lvOut,Math.sqrt(s/(f.length/8)));
+  var buf=L.ctx.createBuffer(1,f.length,rate||24000);
+  if(buf.copyToChannel) buf.copyToChannel(f,0); else buf.getChannelData(0).set(f);
+  var src=L.ctx.createBufferSource(); src.buffer=buf; src.connect(L.out);
+  var now=L.ctx.currentTime; if(L.playHead<now+0.03) L.playHead=now+0.07;
+  src.start(L.playHead); L.playHead+=buf.duration;
+  L.sources.push(src);
+  src.onended=function(){ var k=L.sources.indexOf(src); if(k>-1) L.sources.splice(k,1); };
+  L.lastAct=Date.now();
+}
+function stopPlayback(){
+  L.sources.forEach(function(s){ try{ s.onended=null; s.stop(); }catch(e){} });
+  L.sources=[]; L.playHead=0;
+}
+
+/* ---------- mikrofon ---------- */
+function onMic(f32){
+  if(L.state!=='live'||L.muted) return;
+  var s=0, n=0; for(var i=0;i<f32.length;i+=4){ s+=f32[i]*f32[i]; n++; }
+  var rms=Math.sqrt(s/(n||1)); L.lvIn=Math.max(L.lvIn,rms); if(rms>0.015) L.lastAct=Date.now();
+  var ws=L.ws; if(!ws||ws.readyState!==1||!L.gotSetup||ws.bufferedAmount>524288) return;
+  ws.send(JSON.stringify({realtimeInput:{audio:{data:b64(toPcm16k(f32,L.ctx.sampleRate)),mimeType:'audio/pcm;rate=16000'}}}));
+}
+async function startMic(sid){
+  var ctx=L.ctx, node=null;
+  L.src=ctx.createMediaStreamSource(L.stream);
+  if(ctx.audioWorklet && window.AudioWorkletNode){
+    try{
+      var url=URL.createObjectURL(new Blob([WORKLET_SRC],{type:'application/javascript'}));
+      await ctx.audioWorklet.addModule(url); URL.revokeObjectURL(url);
+      if(L.sid!==sid) return;
+      node=new AudioWorkletNode(ctx,'bkv-live-mic',{numberOfInputs:1,numberOfOutputs:1,channelCount:1});
+      node.port.onmessage=function(e){ onMic(e.data); };
+    }catch(e){ console.warn('AudioWorklet kullanılamadı, yedek yönteme geçildi:',e); node=null; }
+  }
+  if(!node){
+    node=ctx.createScriptProcessor(4096,1,1);
+    node.onaudioprocess=function(e){ onMic(new Float32Array(e.inputBuffer.getChannelData(0))); };
+  }
+  L.node=node; L.mute=ctx.createGain(); L.mute.gain.value=0;
+  L.src.connect(node); node.connect(L.mute); L.mute.connect(ctx.destination);
+}
+function toggleMute(){
+  if(L.state!=='live') return;
+  L.muted=!L.muted;
+  if(L.stream) L.stream.getAudioTracks().forEach(function(t){ t.enabled=!L.muted; });
+  if(L.muted && L.ws && L.ws.readyState===1 && L.gotSetup){ try{ L.ws.send(JSON.stringify({realtimeInput:{audioStreamEnd:true}})); }catch(e){} }
+  L.lastAct=Date.now(); paint();
+}
+
+/* ---------- bağlantı ---------- */
+function closeWs(){
+  clearTimeout(L.setupT);
+  var ws=L.ws; L.ws=null; L.gotSetup=false;
+  if(ws){ ws.onopen=ws.onmessage=ws.onerror=ws.onclose=null; try{ ws.close(1000); }catch(e){} }
+}
+function explain(code,reason){
+  var r=String(reason||'');
+  if(/api key|api_key|permission|unauthent|forbidden|denied|invalid/i.test(r)) return T('🔑 EcoMind AI’ın API anahtarı geçersiz ya da Live API için yetkisiz görünüyor. Lütfen yöneticiye haber ver.','🔑 EcoMind AI’s API key looks invalid or not allowed for the Live API. Please tell an administrator.');
+  if(/quota|exhaust|rate|429|billing/i.test(r)) return T('⏳ Terra Live’ın kullanım kotası doldu. Biraz sonra tekrar dener misin?','⏳ Terra Live’s quota is used up. Please try again in a bit.');
+  if(code===1006) return T('📡 Terra Live’a bağlanılamadı. İnternet bağlantını kontrol edip tekrar dener misin?','📡 Could not reach Terra Live. Check your connection and try again.');
+  return T('⏳ Terra Live şu an başlatılamadı. Birkaç saniye sonra tekrar dener misin?','⏳ Terra Live could not start right now. Please try again in a few seconds.');
+}
+function beforeSetupFail(sid,code,reason){
+  if(L.sid!==sid) return;
+  var models=liveModels(); L.errs.push((models[L.modelIdx]||'?')+': '+code+' '+(reason||''));
+  var fatal=/api key|api_key|permission|unauthent|forbidden|quota|exhaust|billing/i.test(String(reason||''))||code===1006;
+  if(!fatal && L.modelIdx<models.length-1){ closeWs(); L.modelIdx++; connect(); return; }
+  fail(explain(code,reason));
+}
+function fail(msg){
+  var errs=L.errs.slice(); end();
+  note(msg,'warning',7000);
+  try{ marulAdd(chatBox(),'a',msg+((marulIsAdminNow()&&errs.length)?'\n\n🔧 Teknik (sadece yönetici): '+errs.join(' | '):'')); }catch(e){}
+}
+function connect(){
+  var sid=L.sid, model=liveModels()[L.modelIdx];
+  if(!model){ fail(explain(0,'')); return; }
+  var ws;
+  try{ ws=new WebSocket(WS_URL+'?key='+encodeURIComponent(MARUL_KEY)); }catch(e){ L.errs.push('ws: '+e.message); fail(explain(1006,'')); return; }
+  ws.binaryType='arraybuffer'; L.ws=ws; L.gotSetup=false;
+  ws.onopen=function(){
+    if(L.sid!==sid) return;
+    var setup={model:'models/'+model,
+      generationConfig:{responseModalities:['AUDIO'],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:getVoice()}}}},
+      systemInstruction:{parts:[{text:sysText()}]},
+      inputAudioTranscription:{},outputAudioTranscription:{}};
+    var decls=buildDecls(); if(decls.length) setup.tools=[{functionDeclarations:decls}];
+    ws.send(JSON.stringify({setup:setup}));
+    L.setupT=setTimeout(function(){ if(L.sid===sid&&!L.gotSetup) beforeSetupFail(sid,0,'zaman aşımı'); },12000);
+  };
+  ws.onmessage=function(ev){ if(L.sid!==sid) return; try{ onMsg(sid,ev.data); }catch(e){ console.error('Terra Live mesaj hatası:',e); } };
+  ws.onerror=function(){ /* ayrıntı onclose'da */ };
+  ws.onclose=function(ev){
+    if(L.sid!==sid) return;
+    var code=ev&&ev.code, reason=(ev&&ev.reason)||'';
+    if(!L.gotSetup){ beforeSetupFail(sid,code,reason); return; }
+    var wasGoAway=L.goAway; end();
+    if(!wasGoAway) note(T('Terra Live bağlantısı kapandı.','The Terra Live connection closed.')+(reason&&marulIsAdminNow()?' ('+reason+')':''),'warning');
+  };
+}
+function onMsg(sid,data){
+  var txt=(typeof data==='string')?data:new TextDecoder('utf-8').decode(data);
+  var m=JSON.parse(txt);
+  if(m.setupComplete){
+    L.gotSetup=true; clearTimeout(L.setupT); L.lastAct=Date.now();
+    startMic(sid).then(function(){ if(L.sid===sid) setPhase('listen'); }).catch(function(e){ if(L.sid===sid){ L.errs.push('mic: '+e.message); fail(T('Mikrofon başlatılamadı.','Could not start the microphone.')); } });
+    return;
+  }
+  if(m.goAway){ L.goAway=true; note(T('Oturum süresi dolmak üzere; canlı sohbet birazdan kapanacak.','The session is about to expire; live chat will close shortly.'),'info'); }
+  if(m.toolCall&&m.toolCall.functionCalls&&m.toolCall.functionCalls.length){ onToolCall(sid,m.toolCall.functionCalls); }
+  var sc=m.serverContent; if(!sc) return;
+  if(sc.interrupted){ stopPlayback(); L.turnDone=true; endTurn(); setPhase('listen'); }
+  if(sc.inputTranscription&&sc.inputTranscription.text){
+    L.uText+=sc.inputTranscription.text; L.lastAct=Date.now(); caption();
+    if(L.uDone) commitUser();
+  }
+  var parts=sc.modelTurn&&sc.modelTurn.parts;
+  if(parts){
+    parts.forEach(function(p){
+      var id=p.inlineData; if(!id||!id.data) return;
+      if(L.turnDone){ L.turnDone=false; }
+      if(L.phase!=='speak') setPhase('speak');
+      var r=/rate=(\d+)/.exec(id.mimeType||''); enqueue(id.data,r?parseInt(r[1],10):24000);
+    });
+  }
+  if(sc.outputTranscription&&sc.outputTranscription.text){
+    L.turnDone=false; L.mText+=sc.outputTranscription.text; caption(); showAns();
+  }
+  if(sc.turnComplete){ L.turnDone=true; endTurn(); }
+}
+
+/* ---------- yaşam döngüsü ---------- */
+function tick(){
+  if(L.state!=='live'||!L.el) return;
+  var lv=(L.phase==='speak')?L.lvOut:L.lvIn; L.lvIn*=0.7; L.lvOut*=0.8;
+  L.el.style.setProperty('--lv',Math.min(1,lv*4).toFixed(2));
+  if(L.phase==='speak' && L.turnDone && L.ctx && !L.sources.length && L.ctx.currentTime>=L.playHead-0.02) setPhase('listen');
+  if(Date.now()-L.lastAct>IDLE_MS){ end(); note(T('Uzun süre sessiz kalındığı için canlı sohbet kapatıldı.','Live chat was closed after a long silence.'),'info'); }
+}
+async function start(){
+  try{ var mm=document.getElementById('marul-model-menu'); if(mm) mm.classList.remove('open'); }catch(e){}
+  if(L.state!=='idle'){ if(L.el) L.el.classList.add('open'); return; }
+  if(!marulSyncAuth()) return;
+  var adm=marulIsAdminNow(), cfg=marulCfg();
+  if(!MARUL_KEY || MARUL_KEY.indexOf('BURAYA')===0){ note(T('EcoMind AI henüz kurulmadı (anahtar eklenmemiş).','EcoMind AI is not configured yet.'),'warning'); return; }
+  if(!adm && cfg.studentsEnabled===false){ note(T('🔒 EcoMind AI şu an öğrenciler için kapalı.','🔒 EcoMind AI is currently turned off for students.'),'warning'); return; }
+  if(!adm && !marulLiveAllowed()){ note(T('🔒 Terra Live şu an öğrenciler için kapalı.','🔒 Terra Live is currently turned off for students.'),'warning'); return; }
+  if(!adm && Number(cfg.dailyLimit)>0 && marulQCount()>=Number(cfg.dailyLimit)){ note(T('⏳ Bugünkü soru hakkın doldu (günde '+Number(cfg.dailyLimit)+').','⏳ You have used all your questions for today.'),'warning'); return; }
+  var AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC||!window.WebSocket||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.isSecureContext){
+    note(T('Bu tarayıcı veya bağlantı sesli sohbeti desteklemiyor. Chrome, Edge veya Safari ile güvenli (https) bağlantı kullan.','This browser or connection does not support voice chat. Use Chrome, Edge or Safari over https.'),'warning'); return;
+  }
+  marulOpen(); try{ marulCtxRestore(); }catch(e){} try{ marulStopSpeak(); }catch(e){}
+  var d=build(); if(!d) return;
+  L.state='starting'; L.sid++; var sid=L.sid;
+  resetTurn(); L.muted=false; L.gotSetup=false; L.modelIdx=0; L.errs=[]; L.goAway=false; L.lastAct=Date.now(); L.playHead=0; L.sources=[]; L.turnDone=true; L.lvIn=0; L.lvOut=0;
+  try{                                   // kullanıcı dokunuşu sırasında oluştur (iOS Safari ses kısıtı)
+    L.ctx=new AC(); L.out=L.ctx.createGain(); L.out.connect(L.ctx.destination);
+    if(L.ctx.state==='suspended') L.ctx.resume();
+  }catch(e){ L.state='idle'; note(T('Ses sistemi başlatılamadı.','Could not start the audio system.'),'warning'); return; }
+  d.querySelector('.ml-u').textContent=''; d.querySelector('.ml-a').textContent='';
+  setPhase('connect');
+  try{
+    var st=await navigator.mediaDevices.getUserMedia({audio:{channelCount:1,echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+    if(L.sid!==sid){ st.getTracks().forEach(function(t){ t.stop(); }); return; }
+    L.stream=st;
+  }catch(e){
+    if(L.sid!==sid) return;
+    var denied=e&&(e.name==='NotAllowedError'||e.name==='SecurityError');
+    fail(denied?T('Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden mikrofona izin ver.','Microphone permission denied. Allow the mic from the lock icon in the address bar.')
+                :T('Mikrofon bulunamadı veya açılamadı.','No microphone found or it could not be opened.'));
+    return;
+  }
+  if(!adm){ try{ marulQInc(); }catch(e){} }  // canlı oturum, günlük soru hakkından 1 sayılır
+  L.state='live';
+  clearInterval(L.tick); L.tick=setInterval(tick,80);
+  connect();
+}
+function end(){
+  if(L.state==='idle') return;
+  L.state='idle'; L.sid++;
+  clearInterval(L.tick); clearTimeout(L.hideT);
+  try{ endTurn(); }catch(e){}
+  closeWs();
+  stopPlayback();
+  try{ if(L.node){ if(L.node.port) L.node.port.onmessage=null; L.node.onaudioprocess=null; L.node.disconnect(); } }catch(e){}
+  try{ if(L.src) L.src.disconnect(); }catch(e){}
+  try{ if(L.stream) L.stream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){}
+  try{ if(L.ctx) L.ctx.close(); }catch(e){}
+  L.node=L.src=L.stream=L.ctx=L.out=L.mute=null; L.muted=false;
+  if(L.el){ L.el.className=''; L.el.style.setProperty('--lv','0'); }
+}
+document.addEventListener('visibilitychange',function(){
+  clearTimeout(L.hideT);
+  if(document.hidden && L.state!=='idle'){
+    L.hideT=setTimeout(function(){ if(document.hidden&&L.state!=='idle'){ end(); note(T('Uygulama arka plana alındığı için canlı sohbet kapatıldı.','Live chat was closed because the app went to the background.'),'info'); } },25000);
+  }
+});
+window.addEventListener('pagehide',function(){ end(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape' && L.state!=='idle'){ e.stopPropagation(); end(); } },true);
+
+window.marulLiveOpen=start;
+window.marulLiveEnd=function(){ end(); };
+
+/* ---------- bilgi bankası: EcoMind AI Terra Live'ı da bilsin ---------- */
+try{
+  MARUL_KB.push({"id":"marul_live","t":"EcoMind AI: Terra Live (sesli canlı sohbet)","k":["terra live","live","canli","sesli sohbet","sesli konus","konusarak","mikrofon","konusabilir","sesle","gemini live","telefonla konus","sesli asistan"],"a":false,
+    "x":"🎙️ Terra Live: EcoMind AI ile mikrofonla KONUŞARAK sohbet etme modudur (Google Gemini Live altyapısı). Başlatmak için EcoMind AI penceresinde ⚡ Terra ⌄ model menüsünden 🎙️ Terra Live'ı seç veya başlıktaki 🎙️ düğmesine bas; tarayıcı mikrofon izni ister. Sonra normal biçimde konuşursun, EcoMind sesli cevap verir; lafını kesersen susar. Konuşmaların yazıya dökülüp sohbet geçmişine eklenir. Ekrandaki 🎤 düğmesi mikrofonu geçici kapatır, ⏹ Bitir görüşmeyi sonlandırır; sağ üstteki listeden ses seçilebilir. Terra Live da yazılı sohbetle aynı yetkilerle çalışır (yönetici yoklama, görev, not, mesaj vb. komutları sesle verebilir; öğrenci yalnızca kendi yetki sınırı içinde işlem yapar). 2 dakika sessiz kalınırsa veya uygulama arka plana alınırsa oturum otomatik kapanır. Öğrenciler için yönetici Ayarlar > Yapay Zeka Ayarları > \"Terra Live\" anahtarıyla açıp kapatır (varsayılan kapalı); her canlı oturum günlük soru limitinden 1 hak sayılır. Yankı olmaması için kulaklık önerilir. Chrome, Edge ve Safari'de çalışır, güvenli (https) bağlantı gerekir."});
+}catch(e){ console.warn('Terra Live KB eklenemedi:',e); }
+})();
 </script>
 <script>
 // ========================================================
